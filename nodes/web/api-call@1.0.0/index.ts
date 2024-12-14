@@ -42,8 +42,8 @@ export default class ApiCall extends BlueprintNode {
 			// @ts-ignore
 			if (
 				custom_var &&
-				result.errors === undefined &&
-				result.error === undefined
+				(result as ParamsDictionary).errors === undefined &&
+				(result as ParamsDictionary).error === undefined
 			) {
 				if (ctx.vars === undefined) ctx.vars = {};
 				ctx.vars[custom_var] = result;

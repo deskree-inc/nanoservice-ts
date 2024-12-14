@@ -16,6 +16,7 @@
 	},
 	"dependencies": {
 		"@deskree/blueprint-shared": "0.0.21",
+		"nanoservice-ts-runner": "workspace:*",
 		"lodash": "^4.17.21"
 	}
 }
