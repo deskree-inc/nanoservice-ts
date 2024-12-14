@@ -2,5 +2,5 @@
 	"watch": ["src"],
 	"ext": ".ts,.js",
 	"ignore": [],
-	"exec": "npx ts-node ./src/index.ts"
+	"exec": "yarn run build && npx ts-node ./src/index.ts"
 }

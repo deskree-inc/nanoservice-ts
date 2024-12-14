@@ -1,6 +1,6 @@
 packages:
 - "core/*"
-- "nodes/*"
+- "nodes/**/**"
 - "triggers/*"
 - "workflows/*"
 - "cli/*"

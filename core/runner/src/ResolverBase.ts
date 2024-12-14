@@ -3,9 +3,10 @@ import type {
 	LoggerContext,
 } from "@deskree/blueprint-shared";
 import DefaultLogger from "./DefaultLogger";
+import type Config from "./types/Config";
 
 abstract class ResolverBase {
-	abstract get(name: string): Promise<string | undefined>;
+	abstract get(name: string): Promise<Config>;
 
 	createContext(logger?: LoggerContext): BlueprintContext {
 		const ctx: BlueprintContext = {

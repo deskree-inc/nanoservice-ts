@@ -46,6 +46,34 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
 
+  nodes/web/api-call@1.0.0:
+    dependencies:
+      '@deskree/blueprint-shared':
+        specifier: 0.0.21
+        version: 0.0.21
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      nanoservice-ts-runner:
+        specifier: workspace:*
+        version: link:../../../core/runner
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.14.196
+        version: 4.17.13
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.2
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.2(@types/node@22.10.2)(typescript@5.7.2)
+      typescript:
+        specifier: ^5.1.3
+        version: 5.7.2
+
   triggers/http:
     dependencies:
       '@deskree/blueprint-shared':
@@ -200,6 +228,9 @@ packages:
 
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
+
+  '@types/lodash@4.17.13':
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
 
   '@types/mime@1.3.5':
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
@@ -1070,6 +1101,8 @@ snapshots:
       '@types/serve-static': 1.15.7
 
   '@types/http-errors@2.0.4': {}
+
+  '@types/lodash@4.17.13': {}
 
   '@types/mime@1.3.5': {}
 

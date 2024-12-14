@@ -28,19 +28,16 @@ export default class Configuration implements Config {
 		this.trigger = {};
 	}
 
-	public async init(workflowNameInPath?: string) {
+	public async init(workflowNameInPath: string) {
 		try {
 			if (workflowNameInPath === undefined)
 				throw new Error("Workflow name must be provided");
 			const resolver = new ConfigurationResolver();
 
+			this.workflow = await resolver.get("local", workflowNameInPath as string);
+
 			if (!this.workflow)
-				this.workflow = await resolver.get(
-					"local",
-					workflowNameInPath as string,
-				);
-			if (!this.workflow)
-				throw new Error(`No blueprint found with path '${workflowNameInPath}'`);
+				throw new Error(`No workflow found with path '${workflowNameInPath}'`);
 
 			this.steps = await this.getSteps(this.workflow.steps as RunnerNode[]);
 			this.nodes = await this.getNodes(this.workflow.nodes);
@@ -58,10 +55,12 @@ export default class Configuration implements Config {
 	): Promise<BlueprintNode[]> {
 		const nodes: RunnerNode[] = [];
 
-		if (blueprint_steps === undefined)
+		if (blueprint_steps === undefined) {
 			throw new Error("Blueprint must have at least one step");
-		if (blueprint_steps.length === 0)
+		}
+		if (blueprint_steps.length === 0) {
 			throw new Error("Blueprint must have at least one step");
+		}
 
 		for (let i = 0; i < blueprint_steps.length; i++) {
 			const step: RunnerNode = blueprint_steps[i];
@@ -184,6 +183,8 @@ export default class Configuration implements Config {
 	// }
 
 	protected async nodeResolver(node: RunnerNode): Promise<RunnerNode> {
-		return new (await import(node.node)).default() as Promise<RunnerNode>;
+		const path = `${process.env.NODES_PATH}/${node.node}`;
+		console.log("NODES_PATH", path);
+		return new (await import(path)).default() as Promise<RunnerNode>;
 	}
 }

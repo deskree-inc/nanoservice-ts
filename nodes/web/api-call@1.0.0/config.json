@@ -1,0 +1,85 @@
+{
+	"name": "api-call",
+	"version": "1.0.0",
+	"description": "This node allows you to make an API call to any API endpoint",
+	"group": "API",
+	"config": {
+		"type": "object",
+		"properties": {
+			"inputs": {
+				"type": "object",
+				"properties": {
+					"properties": {
+						"type": "object",
+						"properties": {
+							"url": {
+								"type": "string",
+								"default": "https://host.com/api/v1/endpoint",
+								"description": "The URL of the API endpoint"
+							},
+							"method": {
+								"type": "string",
+								"default": "POST",
+								"description": "The HTTP method to use"
+							},
+							"headers": {
+								"type": "object",
+								"description": "The headers to send with the request"
+							},
+							"body": {
+								"type": "object",
+								"description": "The body to send with the request"
+							},
+							"responseType": {
+								"type": "string",
+								"description": "the response type of the request"
+							}
+						},
+						"required": ["url", "method"]
+					}
+				},
+				"required": ["properties"]
+			}
+		},
+		"required": ["inputs"],
+		"example": {
+			"inputs": {
+				"properties": {
+					"url": "https://countriesnow.space/api/v0.1/countries/capital",
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"data": "Hello World"
+					}
+				}
+			}
+		}
+	},
+	"input": {
+		"anyOf": [
+			{
+				"type": "object"
+			},
+			{
+				"type": "array"
+			},
+			{
+				"type": "string"
+			}
+		],
+		"description": "This node accepts an object as input from the previous node or request body"
+	},
+	"output": {
+		"type": "object",
+		"description": "The response from the API call"
+	},
+	"steps": {
+		"type": "boolean",
+		"default": true
+	},
+	"functions": {
+		"type": "array"
+	}
+}
