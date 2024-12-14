@@ -12,7 +12,7 @@ import { handleDynamicRoute, validateRoute } from "./Util";
 
 export default class HttpTrigger extends TriggerBase {
 	private app: Express = express();
-	private port: string | number = process.env.RUNNER_PORT || 4000;
+	private port: string | number = process.env.PORT || 4000;
 	private initializer = 0;
 
 	constructor() {
@@ -30,11 +30,7 @@ export default class HttpTrigger extends TriggerBase {
 			this.app.use(bodyParser.text({ limit: "150mb" }));
 			this.app.use(bodyParser.urlencoded({ extended: true }));
 			this.app.use(bodyParser.json({ limit: "150mb" }));
-			this.app.use(
-				cors({
-					exposedHeaders: ["blueprint_runner_logs"],
-				}),
-			);
+			this.app.use(cors());
 
 			this.app.use(
 				["/:blueprint", "/"],
@@ -42,9 +38,7 @@ export default class HttpTrigger extends TriggerBase {
 					const id: string =
 						(req.query?.requestId as string) || (uuid() as string);
 					req.query.requestId = undefined;
-					const blueprintNameInPath: string =
-						req.params.blueprint ||
-						req.body?.message?.attributes?._deskree_webhook_blueprint;
+					const blueprintNameInPath: string = req.params.blueprint;
 
 					try {
 						const memoryUsage = new MemoryUsage();
@@ -109,7 +103,6 @@ export default class HttpTrigger extends TriggerBase {
 
 						res.status(200).send(ctx.response.data);
 					} catch (e: unknown) {
-						console.log(e);
 						res.setHeader("blueprint_runner_id", `${id}`);
 						if (e instanceof BlueprintError) {
 							const error_context = e as BlueprintError;
