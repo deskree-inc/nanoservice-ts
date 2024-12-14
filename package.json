@@ -1,0 +1,21 @@
+{
+	"name": "nanoservice-ts",
+	"version": "1.0.0",
+	"description": "",
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"scripts": {
+		"prepare": "husky"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.2.11"
+	},
+	"lint-staged": {
+		"*": [
+			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+		]
+	}
+}

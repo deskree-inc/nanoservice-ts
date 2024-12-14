@@ -1,0 +1,7 @@
+packages:
+- "core/*"
+- "nodes/*"
+- "triggers/*"
+- "workflows/*"
+- "templates/*"
+- "cli/*"
