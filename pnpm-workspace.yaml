@@ -3,5 +3,4 @@ packages:
 - "nodes/*"
 - "triggers/*"
 - "workflows/*"
-- "templates/*"
 - "cli/*"

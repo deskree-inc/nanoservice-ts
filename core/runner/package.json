@@ -1,8 +1,12 @@
 {
-	"name": "nanoservice-ts-shared-lib",
+	"name": "nanoservice-ts-runner",
 	"version": "1.0.0",
-	"description": "Base class and types",
+	"description": "",
+	"engines": {
+		"node": ">=18.0.0"
+	},
 	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
@@ -17,5 +21,10 @@
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"zod": "^3.24.1",
+		"@deskree/blueprint-shared": "^0.0.21",
+		"uuid": "^11.0.3"
 	}
 }

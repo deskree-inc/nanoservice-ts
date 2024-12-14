@@ -1,0 +1,28 @@
+{
+	"name": "ts-template",
+	"version": "1.0.0",
+	"description": "",
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
+	"author": "Marco A. Castillo Della Sera",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"start:dev": "npx nodemon",
+		"build": "rimraf ./dist && tsc"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.2",
+		"nodemon": "^3.1.9",
+		"rimraf": "^6.0.1",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"zod": "^3.24.1"
+	}
+}

@@ -1,0 +1,3 @@
+type ErrorResponse = {
+	error: string;
+};
