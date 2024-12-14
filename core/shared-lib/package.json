@@ -2,13 +2,14 @@
   "name": "nanoservice-ts-shared-lib",
   "version": "1.0.0",
   "description": "Base class and types",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
   "author": "Marco A. Castillo Della Sera",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "nodemon --watch '*.ts' --exec 'ts-node' ./src/index.ts",
+    "start:dev": "npx nodemon",
+    "build": "rimraf ./dist && tsc",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -17,12 +18,13 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "nodemon": "^3.1.9",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-  "typescript": "^5.7.2"
+    "typescript": "^5.7.2"
   },
   "lint-staged": {
     "*": [
       "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
     ]
-}
+  }
 }
