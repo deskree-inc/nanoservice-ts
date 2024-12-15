@@ -13,7 +13,7 @@
 	"private": false,
 	"scripts": {
 		"start:dev": "npx nodemon",
-		"build": "rimraf ./dist && tsc"
+		"build": "rimraf ./dist && tsc && pnpm --filter nanoservice-ts-trigger-http run reload"
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.2",

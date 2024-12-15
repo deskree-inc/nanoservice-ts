@@ -1,9 +1,4 @@
-import {
-	type BlueprintContext,
-	BlueprintNode,
-	type ResponseContext,
-	type Step,
-} from "@deskree/blueprint-shared";
+import { type BlueprintContext, BlueprintNode, type ResponseContext, type Step } from "@deskree/blueprint-shared";
 
 export default abstract class RunnerNode extends BlueprintNode implements Step {
 	public node = "";

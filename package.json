@@ -6,12 +6,14 @@
 	"author": "",
 	"license": "MIT",
 	"scripts": {
-		"prepare": "husky"
+		"prepare": "husky",
+		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"husky": "^9.1.7",
-		"lint-staged": "^15.2.11"
+		"lint-staged": "^15.2.11",
+		"nx": "20.2.2"
 	},
 	"lint-staged": {
 		"*": [

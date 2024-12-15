@@ -8,13 +8,10 @@ export default class LocalStorage extends ResolverBase {
 		const workflowPathJson = `${rootPath}/json/${name}.json`;
 		const workflowPathHelper = `${rootPath}/helper/${name}.js`;
 
-		console.log(workflowPathJson, workflowPathHelper);
-
 		const jsonExists = fs.existsSync(workflowPathJson);
 		const helperExists = fs.existsSync(workflowPathHelper);
 
-		if (jsonExists)
-			return await JSON.parse(fs.readFileSync(workflowPathJson, "utf8"));
+		if (jsonExists) return await JSON.parse(fs.readFileSync(workflowPathJson, "utf8"));
 		if (helperExists) {
 			// @ts-ignore
 			return new (await import(workflowPathHelper)).default().getJson();

@@ -12,8 +12,8 @@
 	"steps": [
 		{
 			"name": "get-countries-api",
-			"node": "web/api-call@1.0.0",
-			"type": "local"
+			"node": "@nanoservice/api-call",
+			"type": "module"
 		}
 	],
 	"nodes": {

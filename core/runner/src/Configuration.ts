@@ -6,6 +6,7 @@ import type RunnerNodeBase from "./RunnerNodeBase";
 import type Condition from "./types/Condition";
 import type Config from "./types/Config";
 import type Flow from "./types/Flow";
+import type GlobalOptions from "./types/GlobalOptions";
 import type Mapper from "./types/Mapper";
 import type Node from "./types/Node";
 import type Trigger from "./types/Trigger";
@@ -19,6 +20,7 @@ export default class Configuration implements Config {
 	public nodes: Node;
 	public trigger: Trigger;
 	public static loaded_nodes: Node = <Node>{};
+	public globalOptions: GlobalOptions | undefined;
 
 	constructor() {
 		this.steps = [];
@@ -28,18 +30,23 @@ export default class Configuration implements Config {
 		this.trigger = {};
 	}
 
-	public async init(workflowNameInPath: string) {
+	public async init(workflowNameInPath: string, opts?: GlobalOptions) {
+		if (this.globalOptions === undefined && opts !== undefined) {
+			this.globalOptions = opts;
+		}
+
 		try {
-			if (workflowNameInPath === undefined)
-				throw new Error("Workflow name must be provided");
+			if (workflowNameInPath === undefined) throw new Error("Workflow name must be provided");
 			const resolver = new ConfigurationResolver();
 
 			this.workflow = await resolver.get("local", workflowNameInPath as string);
 
-			if (!this.workflow)
-				throw new Error(`No workflow found with path '${workflowNameInPath}'`);
+			if (!this.workflow) throw new Error(`No workflow found with path '${workflowNameInPath}'`);
 
+			// Instances of the Nano Services
 			this.steps = await this.getSteps(this.workflow.steps as RunnerNode[]);
+
+			// Configuration of the Nano Services
 			this.nodes = await this.getNodes(this.workflow.nodes);
 			this.version = this.workflow.version;
 			this.name = this.workflow.name;
@@ -50,9 +57,7 @@ export default class Configuration implements Config {
 		}
 	}
 
-	protected async getSteps(
-		blueprint_steps: RunnerNode[],
-	): Promise<BlueprintNode[]> {
+	protected async getSteps(blueprint_steps: RunnerNode[]): Promise<BlueprintNode[]> {
 		const nodes: RunnerNode[] = [];
 
 		if (blueprint_steps === undefined) {
@@ -79,32 +84,27 @@ export default class Configuration implements Config {
 		return nodes;
 	}
 
-	protected async getNodes(blueprint_nodes: Node): Promise<Node> {
+	protected async getNodes(workflow_nodes: Node): Promise<Node> {
 		const nodes: Node = <Node>{};
 
-		if (blueprint_nodes !== undefined) {
-			const keys = Object.keys(blueprint_nodes);
+		if (workflow_nodes !== undefined) {
+			const keys = Object.keys(workflow_nodes);
 
 			for (let i = 0; i < keys.length; i++) {
 				const key = keys[i];
-				const currentNode = blueprint_nodes[key] as RunnerNodeBase;
+				const currentNode = workflow_nodes[key] as RunnerNodeBase;
 
-				const isFlow =
-					currentNode.steps !== undefined && Array.isArray(currentNode.steps);
-				const isConditions =
-					currentNode.conditions !== undefined &&
-					Array.isArray(currentNode.conditions);
-				const isFlowWithProperties =
-					isFlow && Object.keys(blueprint_nodes[key]).length > 1;
+				const isFlow = currentNode.steps !== undefined && Array.isArray(currentNode.steps);
+				const isConditions = currentNode.conditions !== undefined && Array.isArray(currentNode.conditions);
+				const isFlowWithProperties = isFlow && Object.keys(workflow_nodes[key]).length > 1;
 				const hasOutputs = currentNode.mapper !== undefined;
 
 				if (isFlowWithProperties) {
 					const steps = currentNode.steps as unknown as RunnerNode[];
 					nodes[key] = await this.getFlow(steps);
-					const copyBlueprintNode = {
-						...blueprint_nodes[key],
-					} as RunnerNodeBase;
+					const copyBlueprintNode = { ...workflow_nodes[key] } as RunnerNodeBase;
 					(copyBlueprintNode as unknown as Flow).steps = [];
+
 					nodes[key] = { ...nodes[key], ...copyBlueprintNode };
 				} else if (isFlow) {
 					const steps = currentNode.steps as unknown as RunnerNode[];
@@ -114,12 +114,13 @@ export default class Configuration implements Config {
 					for (let j = 0; j < conditions.length; j++) {
 						const condition = conditions[j];
 						const steps = condition.steps as unknown as RunnerNode[];
-						conditions[j].steps = (await this.getFlow(steps)).steps;
+						const tempSteps = (await this.getFlow(steps)).steps;
+						conditions[j].steps = [...tempSteps];
 					}
 
 					nodes[key] = { conditions };
 				} else if (
-					typeof blueprint_nodes[key] === "object" &&
+					typeof workflow_nodes[key] === "object" &&
 					currentNode.try &&
 					(currentNode.try as unknown as Flow).steps &&
 					currentNode.catch &&
@@ -127,27 +128,17 @@ export default class Configuration implements Config {
 				) {
 					(nodes[key] as TryCatch) = {
 						try: await this.getFlow((currentNode.try as unknown as Flow).steps),
-						catch: await this.getFlow(
-							(currentNode.catch as unknown as Flow).steps,
-						),
+						catch: await this.getFlow((currentNode.catch as unknown as Flow).steps),
 					};
 				} else {
-					nodes[key] = { ...blueprint_nodes[key] };
+					nodes[key] = { ...workflow_nodes[key] };
 				}
 
 				// Resolves the internal mapper
 				if (hasOutputs) {
 					const step: RunnerNode = currentNode.mapper as unknown as RunnerNode;
-					if (
-						typeof step === "object" &&
-						step.name &&
-						step.node &&
-						step.type &&
-						step.node.startsWith("mapper@")
-					) {
-						(nodes[key] as Mapper).mapper = (
-							await this.getFlow([step])
-						).steps[0];
+					if (typeof step === "object" && step.name && step.node && step.type && step.node.startsWith("mapper@")) {
+						(nodes[key] as Mapper).mapper = (await this.getFlow([step])).steps[0];
 					}
 				}
 			}
@@ -183,8 +174,24 @@ export default class Configuration implements Config {
 	// }
 
 	protected async nodeResolver(node: RunnerNode): Promise<RunnerNode> {
-		const path = `${process.env.NODES_PATH}/${node.node}`;
-		console.log("NODES_PATH", path);
-		return new (await import(path)).default() as Promise<RunnerNode>;
+		if (node.type === "module") {
+			const nodeHandler = this.globalOptions?.nodes?.getNode(node.node);
+
+			if (!nodeHandler) {
+				throw new Error(`Node ${node.node} not found`);
+			}
+
+			console.time("NodeResolver");
+			const clone = Object.assign(Object.create(Object.getPrototypeOf(nodeHandler)), nodeHandler);
+			console.timeEnd("NodeResolver");
+			return clone as RunnerNode;
+		}
+
+		if (node.type === "local") {
+			const path = `${process.env.NODES_PATH}/${node.node}`;
+			return new (await import(path)).default() as Promise<RunnerNode>;
+		}
+
+		throw new Error(`Node type ${node.type} not found`);
 	}
 }
