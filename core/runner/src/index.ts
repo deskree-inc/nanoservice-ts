@@ -8,10 +8,12 @@ import TriggerBase from "./TriggerBase";
 
 // types
 
+import NodeMap from "./NodeMap";
 import Condition from "./types/Condition";
 import Conditions from "./types/Conditions";
 import Config from "./types/Config";
 import Flow from "./types/Flow";
+import GlobalOptions from "./types/GlobalOptions";
 import Inputs from "./types/Inputs";
 import Node from "./types/Node";
 import ParamsDictionary from "./types/ParamsDictionary";
@@ -41,4 +43,6 @@ export {
 	TriggerHttp,
 	Triggers,
 	ParamsDictionary,
+	GlobalOptions,
+	NodeMap,
 };

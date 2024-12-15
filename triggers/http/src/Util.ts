@@ -1,6 +1,6 @@
 import type { BlueprintNode, Step } from "@deskree/blueprint-shared";
 import type { Request } from "express";
-import type { ParamsDictionary } from "nanoservice-ts-runner";
+import type { ParamsDictionary } from "nanoservice-ts-runner/src";
 
 export function validateRoute(dynamicRoute: string, actualRoute: string) {
 	if (!dynamicRoute || !actualRoute) return false;
@@ -16,19 +16,12 @@ export function validateRoute(dynamicRoute: string, actualRoute: string) {
 	return dynamicRouteRegExp.test(actualRoute);
 }
 
-export function handleDynamicRoute(
-	dynamicRoute: string,
-	req: Request,
-): ParamsDictionary {
+export function handleDynamicRoute(dynamicRoute: string, req: Request): ParamsDictionary {
 	// Extract the parameter names from the dynamic route pattern
-	const paramNames = dynamicRoute
-		.match(/:(\w+)/g)
-		?.map((name: string) => name.substring(1));
+	const paramNames = dynamicRoute.match(/:(\w+)/g)?.map((name: string) => name.substring(1));
 	if (paramNames) {
 		// Create a new RegExp to match the dynamic route pattern
-		const dynamicRouteRegExp = new RegExp(
-			`^${dynamicRoute.replace(/:\w+/g, "([^\\/]+)")}$`,
-		);
+		const dynamicRouteRegExp = new RegExp(`^${dynamicRoute.replace(/:\w+/g, "([^\\/]+)")}$`);
 		// Test the actual route against the dynamic route pattern
 		const match = req.path.match(dynamicRouteRegExp);
 		if (match) {
@@ -42,8 +35,7 @@ export function handleDynamicRoute(
 			const params = req.path.split("/");
 			const dynamicRouteSplitted = dynamicRoute.split("/");
 			dynamicRouteSplitted.forEach((name: string, i: number) => {
-				if (name.startsWith(":"))
-					req.params[name.replace(":", "").replace("?", "")] = params[i];
+				if (name.startsWith(":")) req.params[name.replace(":", "").replace("?", "")] = params[i];
 			});
 		}
 	}

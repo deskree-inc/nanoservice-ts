@@ -1,7 +1,7 @@
 {
-	"name": "@nanoservice/api-call",
+	"name": "@nanoservice/if-else",
 	"version": "1.0.0",
-	"description": "Blueprint runner",
+	"description": "nanoservice if-else",
 	"author": "Deskree Inc",
 	"scripts": {
 		"start:dev": "npx nodemon",

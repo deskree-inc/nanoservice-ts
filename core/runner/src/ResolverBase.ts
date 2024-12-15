@@ -1,7 +1,4 @@
-import type {
-	BlueprintContext,
-	LoggerContext,
-} from "@deskree/blueprint-shared";
+import type { BlueprintContext, LoggerContext } from "@deskree/blueprint-shared";
 import DefaultLogger from "./DefaultLogger";
 import type Config from "./types/Config";
 

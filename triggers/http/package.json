@@ -13,6 +13,7 @@
 	"private": false,
 	"scripts": {
 		"start:dev": "npx nodemon",
+		"reload": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
 		"build": "rimraf ./dist && tsc"
 	},
 	"devDependencies": {
@@ -30,6 +31,7 @@
 		"@deskree/blueprint-shared": "^0.0.21",
 		"uuid": "^11.0.3",
 		"nanoservice-ts-runner": "workspace:*",
+		"@nanoservice/api-call": "workspace:*",
 		"body-parser": "1.20.3",
 		"express": "4.21.2",
 		"cors": "2.8.5"

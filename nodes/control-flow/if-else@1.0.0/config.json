@@ -1,0 +1,116 @@
+{
+	"name": "if-else",
+	"version": "1.0.0",
+	"description": "Conditional statement to check if a property is equal to a value",
+	"group": "FLOW_CONTROL",
+	"config": {
+		"type": "object",
+		"properties": {
+			"conditions": {
+				"type": "array",
+				"description": "List of conditions to check",
+				"items": [
+					{
+						"type": "object",
+						"properties": {
+							"type": {
+								"type": "string",
+								"default": "if",
+								"description": "Type of the condition"
+							},
+							"condition": {
+								"type": "string",
+								"description": "Condition to check",
+								"default": "data !== undefined"
+							},
+							"steps": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string",
+											"description": "Name of the step"
+										},
+										"node": {
+											"type": "string",
+											"description": "Node of the step"
+										},
+										"type": {
+											"type": "string",
+											"description": "Type of the step",
+											"default": "local"
+										}
+									},
+									"required": ["name", "node", "type"]
+								},
+								"description": "List of steps to execute if the condition is true"
+							}
+						},
+						"required": ["type", "condition", "steps"]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"type": {
+								"type": "string"
+							},
+							"steps": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string",
+											"description": "Name of the step"
+										},
+										"node": {
+											"type": "string",
+											"description": "Node of the step"
+										},
+										"type": {
+											"type": "string",
+											"description": "Type of the step",
+											"default": "local"
+										}
+									},
+									"required": ["name", "node", "type"]
+								}
+							}
+						},
+						"required": ["type", "steps"]
+					}
+				]
+			}
+		},
+		"required": ["conditions"],
+		"example": {
+			"conditions": [
+				{
+					"type": "if",
+					"condition": "data !== undefined",
+					"steps": []
+				},
+				{
+					"type": "else",
+					"steps": []
+				}
+			]
+		}
+	},
+	"inputs": {
+		"type": "any",
+		"description": "This node accept an anything as input"
+	},
+	"output": {
+		"type": "any",
+		"description": "This node return the result of the steps"
+	},
+	"steps": {
+		"type": "boolean"
+	},
+	"functions": {
+		"type": "array",
+		"items": {}
+	}
+}

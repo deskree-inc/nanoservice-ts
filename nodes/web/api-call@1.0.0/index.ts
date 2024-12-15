@@ -16,9 +16,7 @@ export default class ApiCall extends BlueprintNode {
 		try {
 			this.validate(ctx);
 			const config = _.cloneDeep(ctx.config) as ConfigContext;
-			let opts = (config as ParamsDictionary)[
-				this.name
-			] as unknown as NodeOptions;
+			let opts = (config as ParamsDictionary)[this.name] as unknown as NodeOptions;
 
 			opts = this.blueprintMapper(opts, ctx, data);
 
@@ -31,13 +29,7 @@ export default class ApiCall extends BlueprintNode {
 
 			if (!body) body = data;
 
-			const result = await this.runApiCall(
-				url,
-				method,
-				headers,
-				body,
-				responseType,
-			);
+			const result = await this.runApiCall(url, method, headers, body, responseType);
 
 			// @ts-ignore
 			if (
@@ -51,7 +43,11 @@ export default class ApiCall extends BlueprintNode {
 				response.data = result;
 			}
 		} catch (error: unknown) {
-			response.error = this.setError(error as Error);
+			response.error = this.setError({
+				message: (error as Error).message,
+				stack: (error as Error).stack,
+				code: 500,
+			});
 			response.success = false;
 		}
 
@@ -88,21 +84,16 @@ export default class ApiCall extends BlueprintNode {
 		} else {
 			parsedResponse = await response.text();
 		}
-		if (!response.ok) throw parsedResponse;
+		if (!response.ok) throw new Error(parsedResponse as string);
 		return parsedResponse;
 	};
 
 	validate(ctx: BlueprintContext) {
-		if (ctx.config === undefined)
-			throw new Error(`${this.name} node requires a config`);
-		const opts = (ctx.config as ParamsDictionary)[
-			this.name
-		] as unknown as NodeOptions;
+		if (ctx.config === undefined) throw new Error(`${this.name} node requires a config`);
+		const opts = (ctx.config as ParamsDictionary)[this.name] as unknown as NodeOptions;
 
-		if (opts?.inputs?.url === undefined)
-			throw new Error(`${this.name} requires a valid url`);
-		if (opts?.inputs?.method === undefined)
-			throw new Error(`${this.name} requires a valid method`);
+		if (opts?.inputs?.url === undefined) throw new Error(`${this.name} requires a valid url`);
+		if (opts?.inputs?.method === undefined) throw new Error(`${this.name} requires a valid method`);
 	}
 }
 

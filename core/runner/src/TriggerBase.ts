@@ -1,8 +1,4 @@
-import {
-	type BlueprintContext,
-	BlueprintTrigger,
-	type LoggerContext,
-} from "@deskree/blueprint-shared";
+import { type BlueprintContext, BlueprintTrigger, type LoggerContext } from "@deskree/blueprint-shared";
 import { v4 as uuid } from "uuid";
 import Configuration from "./Configuration";
 import DefaultLogger from "./DefaultLogger";
@@ -31,11 +27,7 @@ export default abstract class TriggerBase extends BlueprintTrigger {
 		return await runner.run(ctx);
 	}
 
-	createContext(
-		logger?: LoggerContext,
-		blueprintName?: string,
-		id?: string,
-	): BlueprintContext {
+	createContext(logger?: LoggerContext, blueprintName?: string, id?: string): BlueprintContext {
 		const requestId: string = id || uuid();
 		const ctx: BlueprintContext = {
 			id: requestId,

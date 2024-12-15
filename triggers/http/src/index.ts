@@ -15,8 +15,7 @@ class Main {
 
 	async run() {
 		this.trigger_initializer = await this.httpTrigger.listen();
-		this.initializer =
-			performance.now() - this.initializer + this.trigger_initializer;
+		this.initializer = performance.now() - this.initializer + this.trigger_initializer;
 
 		console.log(`Runner initialized in ${(this.initializer).toFixed(2)}ms`);
 
