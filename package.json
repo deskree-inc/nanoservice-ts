@@ -19,5 +19,9 @@
 		"*": [
 			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
 		]
-	}
+	},
+	"engines": {
+		"pnpm": ">=9.15.0"
+	},
+	"packageManager": "pnpm@9.15.0"
 }
