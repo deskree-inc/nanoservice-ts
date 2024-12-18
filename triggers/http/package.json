@@ -12,7 +12,8 @@
 	"license": "MIT",
 	"private": false,
 	"scripts": {
-		"start:dev": "npx nodemon",
+		"dev": "npx nodemon",
+		"start": "node dist/index.js",
 		"reload": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
 		"build": "rimraf ./dist && tsc"
 	},
