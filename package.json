@@ -7,7 +7,8 @@
 	"license": "MIT",
 	"scripts": {
 		"prepare": "husky",
-		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+		"test": "nx run-many -t test"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
@@ -17,7 +18,8 @@
 	},
 	"lint-staged": {
 		"*": [
-			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+			"biome check --unsafe --write --no-errors-on-unmatched --files-ignore-unknown=true",
+			"pnpm run test"
 		]
 	},
 	"engines": {
