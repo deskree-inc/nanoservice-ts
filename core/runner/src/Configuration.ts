@@ -37,7 +37,7 @@ export default class Configuration implements Config {
 
 		try {
 			if (workflowNameInPath === undefined) throw new Error("Workflow name must be provided");
-			const resolver = new ConfigurationResolver();
+			const resolver = new ConfigurationResolver(opts as GlobalOptions);
 
 			this.workflow = await resolver.get("local", workflowNameInPath as string);
 
@@ -181,9 +181,7 @@ export default class Configuration implements Config {
 				throw new Error(`Node ${node.node} not found`);
 			}
 
-			console.time("NodeResolver");
 			const clone = Object.assign(Object.create(Object.getPrototypeOf(nodeHandler)), nodeHandler);
-			console.timeEnd("NodeResolver");
 			return clone as RunnerNode;
 		}
 

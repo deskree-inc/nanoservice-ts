@@ -8,6 +8,7 @@ import { v4 as uuid } from "uuid";
 import MemoryUsage from "./MemoryUsage";
 import nodes from "./Nodes";
 import { handleDynamicRoute, validateRoute } from "./Util";
+import workflows from "./Workflows";
 
 export default class HttpTrigger extends TriggerBase {
 	private app: Express = express();
@@ -20,6 +21,7 @@ export default class HttpTrigger extends TriggerBase {
 
 		this.initializer = this.startCounter();
 		this.loadNodes();
+		this.loadWorkflows();
 	}
 
 	loadNodes() {
@@ -28,6 +30,10 @@ export default class HttpTrigger extends TriggerBase {
 		for (const key of nodeKeys) {
 			this.nodeMap.nodes.addNode(key, nodes[key]);
 		}
+	}
+
+	loadWorkflows() {
+		this.nodeMap.workflows = workflows;
 	}
 
 	getApp(): Express {
