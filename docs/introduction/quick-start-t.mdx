@@ -1,0 +1,106 @@
+---
+title: Using Templates
+---
+
+## 🔧 Quick Start
+Get started in minutes with pre-built templates:
+
+* HTTP APIs: Ready-to-use projects with Node.js and Express.
+* Scheduled Jobs: CRON-style workflows for task automation.
+
+Run the CLI:
+```bash
+npx nanoservice-cli create project
+```
+
+Select your template, and start coding!
+
+## 💡 Programmatic Workflow Creation
+YOu can also use TypeScript helper classes to build workflows programmatically:
+
+```TypeScript
+Workflow("my-workflow")
+  .trigger("http", config)
+  .addStep(apiFetchNode)
+  .addStep(customNode)
+  .response("json");
+```
+
+## Templates Folder
+The Templates Folder in nanoservice-ts simplifies starting new projects by providing pre-configured setups for common use cases.
+
+### 🚀 Available Templates
+
+<AccordionGroup>
+  <Accordion title="HTTP API">
+    * A Node.js + Express project ready for HTTP-based workflows.
+    * Includes folder structure, dependencies, and basic endpoints.
+    * Ideal for creating RESTful APIs with custom Nano Services.
+  </Accordion>
+
+  <Accordion title="Scheduled Jobs">
+    * A CRON-style setup for automating scheduled workflows.
+    * Example use cases: backups, batch processes, or automated reporting.
+  </Accordion>
+
+  <Accordion title="Custom Nodes">
+    * A project template for building and sharing reusable Nano Service nodes.
+    * Fully compatible with npm for publishing and reusing nodes across projects.
+  </Accordion>
+</AccordionGroup>
+
+### 🛠️ How to Use Templates
+
+Run the CLI to initialize a project with the desired template:
+
+``` bash
+npx nanoservice-cli create project
+```
+Follow the prompts to:
+
+<Steps>
+  <Step title="Select a template">
+  </Step>
+  <Step title="Name your project">
+  </Step>
+  <Step title="Set up the project folder">
+  </Step>
+</Steps>
+
+The selected template will be cloned locally with all required configurations ready to use.
+
+### 📂 Folder Structure Example
+For the HTTP API template, the default structure looks like this:
+
+```plaintext
+my-http-api/
+│
+├── nodes/           # Custom Nano Services
+├── workflows/       # Workflow JSON definitions
+├── package.json     # Project dependencies
+├── index.ts        # Application entry point
+└── README.md        # Project documentation
+```
+
+### 🎯 Benefits of Templates
+<CardGroup cols={3}>
+  <Card title="Save Time" icon="square-1">
+    Skip boilerplate setup and focus on building your logic
+  </Card>
+  <Card title="Best Practices" icon="square-2">
+    Templates include best practices for folder structure, coding, and workflow organization
+  </Card>
+  <Card title="Customization" icon="square-3">
+    Modify templates to suit your project's needs
+  </Card>
+</CardGroup>
+
+### 🌐 Explore and Contribute
+The templates folder is community-driven! Share your custom templates or contribute improvements to existing ones:
+
+<CardGroup cols={2}>
+  <Card title="Github Repository" icon="github" href="https://github.com/deskree-inc/nanoservice-ts">
+  </Card>
+  <Card title="Join us on Discord" icon="discord" href="https://discord.com/invite/u3BZUkMK">
+  </Card>
+</CardGroup>

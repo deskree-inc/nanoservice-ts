@@ -1,0 +1,95 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Nanoservice-ts Docs",
+  "logo": {
+    "dark": "/docs/logo/dark.svg",
+    "light": "/docs/logo/light.svg"
+  },
+  "favicon": "/docs/favicon.svg",
+  "colors": {
+    "primary": "#39C068",
+    "light": "#39C068",
+    "dark": "#73D997",
+    "anchors": {
+      "from": "#000000",
+      "to": "#39C068"
+    }
+  },
+  "sidebar": {
+    "items": "border"
+  },
+  "feedback": {
+    "raiseIssue": true,
+    "suggestEdit": true,
+    "thumbsRating": true
+  },
+  "font": {
+    "headings": {
+      "family": "Space Grotesk"
+    },
+    "body": {
+      "family": "Space Grotesk"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Deskree Docs",
+      "url": "https://docs.deskree.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "GitHub Repo",
+    "url": "https://github.com/deskree-inc/nanoservice-ts"
+  },
+  "anchors": [
+    {
+      "name": "Github",
+      "icon": "GitHub",
+      "url": "https://github.com/deskree-inc/nanoservice-ts"
+    },
+    {
+      "name": "Discord",
+      "icon": "discord",
+      "url": "https://discord.com/invite/u3BZUkMK"
+    },
+    {
+      "name": "Reddit",
+      "icon": "Reddit",
+      "url": "https://www.reddit.com/r/nanoservice/"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Introduction",
+      "pages": [
+        "/docs/introduction/welcome",
+        {
+          "group": "Getting Started",
+          "pages": [
+            "/docs/introduction/quick-start-t",
+            "/docs/introduction/quick-start-p"
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "socials": {
+      "x": "https://x.com/deskree_backend",
+      "github": "https://github.com/deskree-inc",
+      "linkedin": "https://linkedin.com/company/deskree",
+      "discord": "https://discord.com/invite/u3BZUkMK"
+    },
+    "links": [
+      {
+        "title": "With ❤️ by ",
+        "links": [
+          {
+            "label": "With ❤️ by Deskree",
+            "url": "https://deskree.com"
+          }
+        ]
+      }
+    ]
+  }
+}
