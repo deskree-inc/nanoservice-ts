@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice/runner",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
@@ -9,7 +9,6 @@
 	"types": "dist/index.d.ts",
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
-	"private": false,
 	"scripts": {
 		"build": "rm -rf dist && npx tsc",
 		"build:dev": "tsc --watch",
@@ -33,5 +32,6 @@
 		"uuid": "^11.0.3",
 		"jsonschema": "^1.4.1",
 		"lodash": "^4.17.21"
-	}
+	},
+	"private": true
 }

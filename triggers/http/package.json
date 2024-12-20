@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice/trigger-http",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "Trigger for HTTP requests",
 	"engines": {
 		"node": ">=22.11.0"
@@ -10,7 +10,6 @@
 	"repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
-	"private": false,
 	"scripts": {
 		"dev": "npx nodemon",
 		"start": "node dist/index.js",
@@ -37,5 +36,6 @@
 		"body-parser": "1.20.3",
 		"express": "4.21.2",
 		"cors": "2.8.5"
-	}
+	},
+	"private": true
 }

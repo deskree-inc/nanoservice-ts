@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice/api-call",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "Blueprint runner",
 	"author": "Deskree Inc",
 	"scripts": {
@@ -21,5 +21,6 @@
 		"@deskree/blueprint-shared": "0.0.21",
 		"@nanoservice/runner": "workspace:*",
 		"lodash": "^4.17.21"
-	}
+	},
+	"private": true
 }

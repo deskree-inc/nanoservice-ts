@@ -6,6 +6,7 @@
 	"author": "",
 	"license": "MIT",
 	"scripts": {
+		"ci:publish": "pnpm publish -r",
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
 		"test": "nx run-many -t test",
@@ -21,8 +22,8 @@
 		"nodes:build": "pnpm --filter @nanoservice/api-call --filter @nanoservice/if-else --parallel -r run build:dev"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.27.10",
 		"@biomejs/biome": "1.9.4",
+		"@changesets/cli": "^2.27.11",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.2.11",
 		"nx": "20.2.2"
@@ -36,5 +37,6 @@
 	"engines": {
 		"pnpm": ">=9.15.0"
 	},
-	"packageManager": "pnpm@9.15.0"
+	"packageManager": "pnpm@9.15.0",
+	"private": true
 }

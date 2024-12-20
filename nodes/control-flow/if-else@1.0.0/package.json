@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice/if-else",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "nanoservice if-else",
 	"author": "Deskree Inc",
 	"scripts": {
@@ -22,5 +22,6 @@
 		"@nanoservice/runner": "workspace:*",
 		"@nanoservice/helper": "workspace:*",
 		"lodash": "^4.17.21"
-	}
+	},
+	"private": true
 }

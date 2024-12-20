@@ -1,6 +1,6 @@
 {
 	"name": "node-name",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "",
 	"author": "",
 	"scripts": {
@@ -19,5 +19,6 @@
 		"@deskree/blueprint-shared": "0.0.21",
 		"@nanoservice/runner": "workspace:*",
 		"@nanoservice/helper": "workspace:*"
-	}
+	},
+	"private": true
 }

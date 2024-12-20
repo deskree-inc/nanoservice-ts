@@ -10,7 +10,6 @@
 	"repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
-	"private": false,
 	"scripts": {
 		"start:dev": "npx nodemon",
 		"build": "rimraf ./dist && tsc"
@@ -24,5 +23,6 @@
 	},
 	"dependencies": {
 		"zod": "^3.24.1"
-	}
+	},
+	"private": true
 }
