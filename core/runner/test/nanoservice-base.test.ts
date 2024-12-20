@@ -1,6 +1,7 @@
 import type { BlueprintContext, ResponseContext } from "@deskree/blueprint-shared";
 import { beforeAll, expect, test } from "vitest";
 import NanoService from "../src/NanoService";
+import NanoServiceResponse, { type INanoServiceResponse } from "../src/NanoServiceResponse";
 import type JsonLikeObject from "../src/types/JsonLikeObject";
 
 let context = <BlueprintContext>{};
@@ -24,12 +25,12 @@ beforeAll(() => {
 
 test("Execute nanoService implementation", async () => {
 	const nano = new AddCreatedAtProperty();
-	const response = await nano.run(context);
+	const response = ((await nano.run(context)) as NanoServiceResponse).data as JsonLikeObject;
 
 	expect(response.success).toBe(true);
 	expect(response.data).toHaveProperty("name");
 	expect(response.data).toHaveProperty("createdAt");
-	expect(response.data.createdAt).toBe(true);
+	expect((response.data as JsonLikeObject).createdAt).toBe(true);
 	expect(response.error).toBe(null);
 });
 
@@ -70,9 +71,12 @@ class AddCreatedAtProperty extends NanoService {
 		};
 	}
 
-	public async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<JsonLikeObject> {
+	public async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService[]> {
+		const response = new NanoServiceResponse();
 		const data = inputs.data as JsonLikeObject;
 		data.createdAt = true;
-		return data;
+		response.setSuccess(data);
+
+		return response;
 	}
 }

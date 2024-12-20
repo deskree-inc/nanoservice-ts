@@ -1,5 +1,5 @@
 import type { BlueprintNode, Step } from "@deskree/blueprint-shared";
-import type { ParamsDictionary } from "@nanoservice/runner";
+import type { ParamsDictionary } from "@nanoservice-ts/runner";
 import type { Request } from "express";
 
 export function validateRoute(dynamicRoute: string, actualRoute: string) {

@@ -87,7 +87,7 @@ importers:
       '@deskree/blueprint-shared':
         specifier: ^0.0.21
         version: 0.0.21
-      '@nanoservice/helper':
+      '@nanoservice-ts/helper':
         specifier: workspace:*
         version: link:../workflow-helper
       jsonschema:
@@ -146,10 +146,10 @@ importers:
       '@deskree/blueprint-shared':
         specifier: 0.0.21
         version: 0.0.21
-      '@nanoservice/helper':
+      '@nanoservice-ts/helper':
         specifier: workspace:*
         version: link:../../../core/workflow-helper
-      '@nanoservice/runner':
+      '@nanoservice-ts/runner':
         specifier: workspace:*
         version: link:../../../core/runner
       lodash:
@@ -180,7 +180,7 @@ importers:
       '@deskree/blueprint-shared':
         specifier: 0.0.21
         version: 0.0.21
-      '@nanoservice/runner':
+      '@nanoservice-ts/runner':
         specifier: workspace:*
         version: link:../../../core/runner
       lodash:
@@ -211,10 +211,10 @@ importers:
       '@deskree/blueprint-shared':
         specifier: 0.0.21
         version: 0.0.21
-      '@nanoservice/helper':
+      '@nanoservice-ts/helper':
         specifier: workspace:*
         version: link:../../core/workflow-helper
-      '@nanoservice/runner':
+      '@nanoservice-ts/runner':
         specifier: workspace:*
         version: link:../../core/runner
     devDependencies:
@@ -255,13 +255,13 @@ importers:
       '@deskree/blueprint-shared':
         specifier: ^0.0.21
         version: 0.0.21
-      '@nanoservice/api-call':
+      '@nanoservice-ts/api-call':
         specifier: workspace:*
         version: link:../../nodes/web/api-call@1.0.0
-      '@nanoservice/helper':
+      '@nanoservice-ts/helper':
         specifier: workspace:*
         version: link:../../core/workflow-helper
-      '@nanoservice/runner':
+      '@nanoservice-ts/runner':
         specifier: workspace:*
         version: link:../../core/runner
       body-parser:

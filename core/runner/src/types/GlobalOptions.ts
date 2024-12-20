@@ -1,4 +1,4 @@
-import type { HelperResponse } from "@nanoservice/helper";
+import type { HelperResponse } from "@nanoservice-ts/helper";
 import type NodeMap from "../NodeMap";
 
 type GlobalOptions = {
