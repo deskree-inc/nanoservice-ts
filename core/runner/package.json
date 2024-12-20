@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice/runner",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
@@ -34,5 +34,5 @@
 		"jsonschema": "^1.4.1",
 		"lodash": "^4.17.21"
 	},
-	"private": true
+	"private": false
 }
