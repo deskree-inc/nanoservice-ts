@@ -9,7 +9,10 @@
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
 		"test": "nx run-many -t test",
-		"cli:build": "pnpm --filter nanoctl --parallel -r run build:dev",
+		"cli:dev": "pnpm --filter nanoctl --parallel -r run build:dev",
+		"cli:test:dev": "pnpm --filter nanoctl --parallel -r run test:dev",
+		"cli:test": "pnpm --filter nanoctl --parallel -r run test",
+		"build:cli": "pnpm --filter nanoctl --parallel -r run build",
 		"runner:test": "pnpm --filter @nanoservice/runner --parallel -r run test:dev",
 		"runner:dev": "pnpm --filter @nanoservice/runner --parallel -r run build:dev",
 		"helper:test": "pnpm --filter @nanoservice/helper --parallel -r run test:dev",
@@ -18,6 +21,7 @@
 		"nodes:build": "pnpm --filter @nanoservice/api-call --filter @nanoservice/if-else --parallel -r run build:dev"
 	},
 	"devDependencies": {
+		"@changesets/cli": "^2.27.10",
 		"@biomejs/biome": "1.9.4",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.2.11",

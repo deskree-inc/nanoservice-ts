@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { Command, type OptionValues } from "commander";
 import { createNode } from "./commands/create/node.js";
 import { createProject } from "./commands/create/project.js";
 import { getPackageVersion } from "./services/utils.js";
@@ -20,15 +20,17 @@ async function main() {
 		const project = program
 			.command("project")
 			.description("Create a new Project")
-			.action(() => {
-				createProject();
+			.option("-n, --name <value>", "Create a default Project")
+			.action((options: OptionValues) => {
+				createProject(options);
 			});
 
 		const node = program
 			.command("node")
 			.description("Create a new Node")
-			.action(() => {
-				createNode();
+			.option("-n, --name <value>", "Create a default Node")
+			.action((options: OptionValues) => {
+				createNode(options);
 			});
 
 		create.addCommand(project);

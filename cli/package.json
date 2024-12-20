@@ -12,6 +12,8 @@
 	"scripts": {
 		"build": "rm -rf dist && npx tsc",
 		"build:dev": "tsc --watch",
+		"test:dev": "vitest",
+		"test": "vitest run",
 		"typecheck": "tsc --noEmit --incremental"
 	},
 	"keywords": ["nanoctl", "cli", "nanoservice", "workflow"],
@@ -36,6 +38,7 @@
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.7.2"
+		"typescript": "^5.7.2",
+		"vitest": "^2.1.8"
 	}
 }
