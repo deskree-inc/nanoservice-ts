@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: 
       - main
-      - "nanoctl-cicd"
+      - nanoctl-cicd
     paths:
       - 'cli/**'
       - '.github/workflows/test-cli.yml'
@@ -30,9 +30,7 @@ jobs:
         run: pnpm install
 
       - name: Build packages
-        run: pnpm pnpm build:cli
+        run: pnpm run build:cli
 
       - name: Run CLI tests
-        run: pnpm cli:test
-        env:
-          NODE_OPTIONS: '--max_old_space_size=8096'
+        run: pnpm run cli:test
