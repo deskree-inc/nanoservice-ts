@@ -1,4 +1,4 @@
-import { type BlueprintContext, BlueprintTrigger, type LoggerContext } from "@deskree/blueprint-shared";
+import { type BlueprintContext, BlueprintError, BlueprintTrigger, type LoggerContext } from "@deskree/blueprint-shared";
 import { v4 as uuid } from "uuid";
 import Configuration from "./Configuration";
 import DefaultLogger from "./DefaultLogger";
@@ -23,8 +23,16 @@ export default abstract class TriggerBase extends BlueprintTrigger {
 	}
 
 	async run(ctx: BlueprintContext): Promise<BlueprintContext> {
-		const runner: Runner = await this.getRunner();
-		return await runner.run(ctx);
+		try {
+			const runner: Runner = await this.getRunner();
+			return await runner.run(ctx);
+		} catch (e: unknown) {
+			if (e instanceof BlueprintError) {
+				throw e;
+			}
+
+			throw e;
+		}
 	}
 
 	createContext(logger?: LoggerContext, blueprintName?: string, id?: string): BlueprintContext {

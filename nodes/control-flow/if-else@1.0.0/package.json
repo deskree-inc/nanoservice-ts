@@ -5,7 +5,8 @@
 	"author": "Deskree Inc",
 	"scripts": {
 		"start:dev": "npx nodemon",
-		"build": "rimraf ./dist && tsc"
+		"build": "rimraf ./dist && tsc",
+		"build:dev": "tsc --watch"
 	},
 	"license": "MIT",
 	"devDependencies": {
@@ -19,6 +20,7 @@
 	"dependencies": {
 		"@deskree/blueprint-shared": "0.0.21",
 		"nanoservice-ts-runner": "workspace:*",
+		"nanoservice-ts-helper": "workspace:*",
 		"lodash": "^4.17.21"
 	}
 }

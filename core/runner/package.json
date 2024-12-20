@@ -19,6 +19,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.2",
+		"@types/lodash": "^4.14.196",
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
@@ -29,6 +30,8 @@
 		"zod": "^3.24.1",
 		"@deskree/blueprint-shared": "^0.0.21",
 		"nanoservice-ts-helper": "workspace:*",
-		"uuid": "^11.0.3"
+		"uuid": "^11.0.3",
+		"jsonschema": "^1.4.1",
+		"lodash": "^4.17.21"
 	}
 }

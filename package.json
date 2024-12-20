@@ -8,7 +8,11 @@
 	"scripts": {
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
-		"test": "nx run-many -t test"
+		"test": "nx run-many -t test",
+		"runner:test": "pnpm --filter nanoservice-ts-runner --parallel -r run test:dev",
+		"runner:dev": "pnpm --filter nanoservice-ts-runner --parallel -r run build:dev",
+		"http:dev": "pnpm --filter nanoservice-ts-trigger-http --parallel -r run dev",
+		"nodes:build": "pnpm --filter @nanoservice/api-call --filter @nanoservice/if-else --parallel -r run build:dev"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
