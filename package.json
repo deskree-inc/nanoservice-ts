@@ -9,6 +9,7 @@
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
 		"test": "nx run-many -t test",
+		"cli:build": "pnpm --filter nanoctl --parallel -r run build:dev",
 		"runner:test": "pnpm --filter @nanoservice/runner --parallel -r run test:dev",
 		"runner:dev": "pnpm --filter @nanoservice/runner --parallel -r run build:dev",
 		"helper:test": "pnpm --filter @nanoservice/helper --parallel -r run test:dev",

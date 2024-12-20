@@ -33,7 +33,7 @@ export async function createProject() {
 	);
 	console.log("");
 
-	p.intro(color.inverse(" Initializing Nano Service Project "));
+	p.intro(color.inverse(" Create a new Project "));
 
 	const nanoctlProject = await p.group(
 		{
