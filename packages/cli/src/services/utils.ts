@@ -4,7 +4,9 @@ import fs from "fs-extra";
 import type { PackageJson } from "type-fest";
 
 export async function getPackageVersion() {
+	// @ts-ignore
 	const __filename = fileURLToPath(import.meta.url);
+
 	const __dirname = dirname(__filename);
 	const pkgJsonPath = path.join(__dirname, "..", "..", "package.json");
 

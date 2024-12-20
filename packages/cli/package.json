@@ -1,10 +1,13 @@
 {
 	"name": "nanoctl",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"license": "MIT",
 	"description": "cli for nanoservice-ts",
-	"type": "module",
+	"engines": {
+		"node": ">=18.0.0"
+	},
 	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"bin": {
 		"nanoctl": "./dist/index.js"
 	},
@@ -16,7 +19,7 @@
 		"test": "vitest run",
 		"typecheck": "tsc --noEmit --incremental"
 	},
-	"keywords": ["nanoctl", "cli", "nanoservice", "workflow"],
+	"keywords": ["nanoctl", "cli", "nanoservice", "nanoservice-ts"],
 	"author": "Marco A. Castillo Della Sera",
 	"dependencies": {
 		"@clack/prompts": "^0.8.2",
@@ -41,5 +44,5 @@
 		"typescript": "^5.7.2",
 		"vitest": "^2.1.8"
 	},
-	"private": true
+	"private": false
 }
