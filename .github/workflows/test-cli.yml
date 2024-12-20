@@ -2,7 +2,9 @@ name: CLI Tests
 
 on:
   pull_request:
-    branches: [main, "nanoctl-cicd"]
+    branches: 
+      - main
+      - "nanoctl-cicd"
     paths:
       - 'cli/**'
       - '.github/workflows/test-cli.yml'
