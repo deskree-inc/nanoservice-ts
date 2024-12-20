@@ -1,6 +1,6 @@
 {
 	"name": "nanoctl",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"license": "MIT",
 	"description": "cli for nanoservice-ts",
 	"engines": {
@@ -11,6 +11,7 @@
 	"bin": {
 		"nanoctl": "./dist/index.js"
 	},
+	"type": "module",
 	"files": ["dist", "node_modules"],
 	"scripts": {
 		"build": "rm -rf dist && npx tsc",
