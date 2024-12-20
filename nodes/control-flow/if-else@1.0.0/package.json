@@ -1,6 +1,6 @@
 {
-	"name": "@nanoservice/if-else",
-	"version": "0.0.3",
+	"name": "@nanoservice-ts/if-else",
+	"version": "0.0.4",
 	"description": "nanoservice if-else",
 	"author": "Deskree Inc",
 	"scripts": {
@@ -19,8 +19,8 @@
 	},
 	"dependencies": {
 		"@deskree/blueprint-shared": "0.0.21",
-		"@nanoservice/runner": "workspace:*",
-		"@nanoservice/helper": "workspace:*",
+		"@nanoservice-ts/runner": "workspace:*",
+		"@nanoservice-ts/helper": "workspace:*",
 		"lodash": "^4.17.21"
 	},
 	"private": true

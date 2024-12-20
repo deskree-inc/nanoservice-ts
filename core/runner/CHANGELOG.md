@@ -1,5 +1,13 @@
 # @nanoservice/runner
 
+## 0.1.3
+
+### Patch Changes
+
+- Changed the module scope to nanoservice-ts
+- Updated dependencies
+  - @nanoservice-ts/helper@0.1.2
+
 ## 0.1.2
 
 ### Patch Changes
