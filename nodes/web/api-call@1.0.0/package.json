@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice/api-call",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Blueprint runner",
 	"author": "Deskree Inc",
 	"scripts": {
