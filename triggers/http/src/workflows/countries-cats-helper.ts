@@ -1,4 +1,4 @@
-import { AddElse, AddIf, Workflow } from "nanoservice-ts-helper";
+import { AddElse, AddIf, Workflow } from "@nanoservice/helper";
 
 const step = Workflow({
 	name: "World Countries",

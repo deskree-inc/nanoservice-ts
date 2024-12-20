@@ -1,38 +1,15 @@
 {
-	"name": "api-call",
+	"name": "node-name",
 	"version": "1.0.0",
-	"description": "This node allows you to make an API call to any API endpoint",
+	"description": "",
 	"group": "API",
 	"config": {
 		"type": "object",
 		"properties": {
 			"inputs": {
 				"type": "object",
-				"properties": {
-					"url": {
-						"type": "string",
-						"default": "",
-						"description": "The URL of the API endpoint"
-					},
-					"method": {
-						"type": "string",
-						"default": "",
-						"description": "The HTTP method GET, POST, PUT, PATCH AND DELETE"
-					},
-					"headers": {
-						"type": "object",
-						"description": "The headers to send with the request"
-					},
-					"body": {
-						"type": "object",
-						"description": "The body to send with the request"
-					},
-					"responseType": {
-						"type": "string",
-						"description": "the response type of the request"
-					}
-				},
-				"required": ["url", "method"]
+				"properties": {},
+				"required": []
 			}
 		},
 		"required": ["inputs"],
@@ -71,7 +48,7 @@
 	},
 	"steps": {
 		"type": "boolean",
-		"default": true
+		"default": false
 	},
 	"functions": {
 		"type": "array"

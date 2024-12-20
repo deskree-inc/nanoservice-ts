@@ -21,5 +21,5 @@ export const inputSchema = {
 			type: "string",
 		},
 	},
-	required: ["url", "method", "responseType"],
+	required: ["url", "method"],
 };

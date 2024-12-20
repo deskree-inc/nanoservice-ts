@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { before, describe, it } from "node:test";
 import type { BlueprintContext, ConfigContext } from "@deskree/blueprint-shared";
-import type { ParamsDictionary } from "nanoservice-ts-runner";
+import type { ParamsDictionary } from "@nanoservice/runner";
 import Node, { type NodeOptions } from "../index";
 
 function generateCtx(name: string): BlueprintContext {

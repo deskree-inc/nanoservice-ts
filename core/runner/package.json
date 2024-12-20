@@ -1,5 +1,5 @@
 {
-	"name": "nanoservice-ts-runner",
+	"name": "@nanoservice/runner",
 	"version": "1.0.0",
 	"description": "",
 	"engines": {
@@ -29,7 +29,7 @@
 	"dependencies": {
 		"zod": "^3.24.1",
 		"@deskree/blueprint-shared": "^0.0.21",
-		"nanoservice-ts-helper": "workspace:*",
+		"@nanoservice/helper": "workspace:*",
 		"uuid": "^11.0.3",
 		"jsonschema": "^1.4.1",
 		"lodash": "^4.17.21"

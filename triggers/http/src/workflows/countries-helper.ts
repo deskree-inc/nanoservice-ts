@@ -1,4 +1,4 @@
-import { Workflow } from "nanoservice-ts-helper";
+import { Workflow } from "@nanoservice/helper";
 
 const step1Inputs = {
 	url: "https://countriesnow.space/api/v0.1/countries/capital",

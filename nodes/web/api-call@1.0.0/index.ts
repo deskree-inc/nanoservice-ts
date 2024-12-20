@@ -1,10 +1,5 @@
 import type { BlueprintContext } from "@deskree/blueprint-shared";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "nanoservice-ts-runner";
+import { type INanoServiceResponse, type JsonLikeObject, NanoService, NanoServiceResponse } from "@nanoservice/runner";
 import { inputSchema } from "./inputSchema";
 import { runApiCall } from "./util";
 

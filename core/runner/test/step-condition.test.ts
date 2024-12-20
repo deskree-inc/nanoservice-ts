@@ -1,4 +1,4 @@
-import { AddElse, AddIf, Workflow } from "nanoservice-ts-helper";
+import { AddElse, AddIf, Workflow } from "@nanoservice/helper";
 import { beforeAll, expect, test } from "vitest";
 import LocalStorage from "../src/LocalStorage";
 import type { WorkflowLocator } from "../src/types/GlobalOptions";
