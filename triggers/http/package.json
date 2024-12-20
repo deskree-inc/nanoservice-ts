@@ -1,5 +1,5 @@
 {
-	"name": "nanoservice-ts-trigger-http",
+	"name": "@nanoservice/trigger-http",
 	"version": "1.0.0",
 	"description": "Trigger for HTTP requests",
 	"engines": {
@@ -31,11 +31,11 @@
 		"zod": "^3.24.1",
 		"@deskree/blueprint-shared": "^0.0.21",
 		"uuid": "^11.0.3",
-		"nanoservice-ts-runner": "workspace:*",
+		"@nanoservice/runner": "workspace:*",
+		"@nanoservice/helper": "workspace:*",
 		"@nanoservice/api-call": "workspace:*",
 		"body-parser": "1.20.3",
 		"express": "4.21.2",
-		"cors": "2.8.5",
-		"nanoservice-ts-helper": "workspace:*"
+		"cors": "2.8.5"
 	}
 }

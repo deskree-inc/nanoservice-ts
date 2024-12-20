@@ -1,5 +1,5 @@
 {
-	"name": "nanoservice-ts-helper",
+	"name": "@nanoservice/helper",
 	"version": "1.0.0",
 	"description": "",
 	"engines": {

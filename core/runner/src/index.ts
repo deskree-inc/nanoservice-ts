@@ -2,6 +2,7 @@ import Configuration from "./Configuration";
 import ConfigurationResolver from "./ConfigurationResolver";
 import DefaultLogger from "./DefaultLogger";
 import LocalStorage from "./LocalStorage";
+import MemoryUsage from "./MemoryUsage";
 import ResolverBase from "./ResolverBase";
 import Runner from "./Runner";
 import TriggerBase from "./TriggerBase";
@@ -12,6 +13,7 @@ import NanoService from "./NanoService";
 import NanoServiceResponse, { INanoServiceResponse } from "./NanoServiceResponse";
 import NodeMap from "./NodeMap";
 import RunnerSteps from "./RunnerSteps";
+import Average from "./types/Average";
 import Condition from "./types/Condition";
 import Conditions from "./types/Conditions";
 import Config from "./types/Config";
@@ -54,4 +56,6 @@ export {
 	NanoServiceResponse,
 	INanoServiceResponse,
 	RunnerSteps,
+	MemoryUsage,
+	Average,
 };

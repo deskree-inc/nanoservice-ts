@@ -1,6 +1,6 @@
 import type { BlueprintContext, BlueprintNode } from "@deskree/blueprint-shared";
-import type { ConditionOpts } from "nanoservice-ts-helper";
-import { type Condition, type INanoServiceResponse, type JsonLikeObject, NanoService } from "nanoservice-ts-runner";
+import type { ConditionOpts } from "@nanoservice/helper";
+import { type Condition, type INanoServiceResponse, type JsonLikeObject, NanoService } from "@nanoservice/runner";
 
 export default class IfElse extends NanoService {
 	constructor() {

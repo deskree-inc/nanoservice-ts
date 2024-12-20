@@ -1,0 +1,23 @@
+{
+	"name": "node-name",
+	"version": "1.0.0",
+	"description": "",
+	"author": "",
+	"scripts": {
+		"test:dev": "vitest",
+		"test": "vitest run",
+		"build": "rm -rf dist && tsc",
+		"build:dev": "tsc --watch"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^22.10.2",
+		"typescript": "^5.1.3",
+		"vitest": "^2.1.8"
+	},
+	"dependencies": {
+		"@deskree/blueprint-shared": "0.0.21",
+		"@nanoservice/runner": "workspace:*",
+		"@nanoservice/helper": "workspace:*"
+	}
+}

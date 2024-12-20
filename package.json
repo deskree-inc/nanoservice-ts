@@ -9,8 +9,10 @@
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
 		"test": "nx run-many -t test",
-		"runner:test": "pnpm --filter nanoservice-ts-runner --parallel -r run test:dev",
-		"runner:dev": "pnpm --filter nanoservice-ts-runner --parallel -r run build:dev",
+		"runner:test": "pnpm --filter @nanoservice/runner --parallel -r run test:dev",
+		"runner:dev": "pnpm --filter @nanoservice/runner --parallel -r run build:dev",
+		"helper:test": "pnpm --filter @nanoservice/helper --parallel -r run test:dev",
+		"helper:dev": "pnpm --filter @nanoservice/helper --parallel -r run build:dev",
 		"http:dev": "pnpm --filter nanoservice-ts-trigger-http --parallel -r run dev",
 		"nodes:build": "pnpm --filter @nanoservice/api-call --filter @nanoservice/if-else --parallel -r run build:dev"
 	},
