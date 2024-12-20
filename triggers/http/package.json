@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/trigger-http",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "Trigger for HTTP requests",
 	"engines": {
 		"node": ">=22.11.0"
