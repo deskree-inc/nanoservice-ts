@@ -1,5 +1,10 @@
 import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
-import { type INanoServiceResponse, type JsonLikeObject, NanoService, NanoServiceResponse } from "@nanoservice/runner";
+import {
+	type INanoServiceResponse,
+	type JsonLikeObject,
+	NanoService,
+	NanoServiceResponse,
+} from "@nanoservice-ts/runner";
 
 // This is the main class that will be exported
 // This class will be used to create a new instance of the node

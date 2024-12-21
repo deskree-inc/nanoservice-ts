@@ -1,4 +1,4 @@
-import { MemoryUsage } from "@nanoservice/runner";
+import { MemoryUsage } from "@nanoservice-ts/runner";
 import HttpTrigger from "./HttpTrigger";
 
 class Main {

@@ -1,15 +1,15 @@
 {
-	"name": "@nanoservice/helper",
-	"version": "1.0.0",
+	"name": "@nanoservice-ts/helper",
+	"version": "0.1.3",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
 	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
+	"files": ["dist"],
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
-	"private": false,
 	"scripts": {
 		"build": "rm -rf dist && npx tsc",
 		"build:dev": "tsc --watch",
@@ -24,5 +24,6 @@
 	},
 	"dependencies": {
 		"zod": "^3.24.1"
-	}
+	},
+	"private": false
 }

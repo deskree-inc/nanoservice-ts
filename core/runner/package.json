@@ -1,15 +1,15 @@
 {
-	"name": "@nanoservice/runner",
-	"version": "1.0.0",
+	"name": "@nanoservice-ts/runner",
+	"version": "0.1.4",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
 	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
+	"files": ["dist"],
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
-	"private": false,
 	"scripts": {
 		"build": "rm -rf dist && npx tsc",
 		"build:dev": "tsc --watch",
@@ -29,9 +29,10 @@
 	"dependencies": {
 		"zod": "^3.24.1",
 		"@deskree/blueprint-shared": "^0.0.21",
-		"@nanoservice/helper": "workspace:*",
+		"@nanoservice-ts/helper": "workspace:*",
 		"uuid": "^11.0.3",
 		"jsonschema": "^1.4.1",
 		"lodash": "^4.17.21"
-	}
+	},
+	"private": false
 }

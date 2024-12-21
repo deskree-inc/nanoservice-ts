@@ -2,6 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import * as p from "@clack/prompts";
+import type { OptionValues } from "commander";
 import figlet from "figlet";
 import fsExtra from "fs-extra";
 import color from "picocolors";
@@ -21,55 +22,61 @@ const options: Partial<SimpleGitOptions> = {
 
 const git: SimpleGit = simpleGit(options);
 
-export async function createProject() {
-	console.log(
-		figlet.textSync("nanoservice-ts CLI".toUpperCase(), {
-			font: "Digital",
-			horizontalLayout: "default",
-			verticalLayout: "default",
-			width: 100,
-			whitespaceBreak: true,
-		}),
-	);
-	console.log("");
+export async function createProject(opts: OptionValues) {
+	const isDefault = opts.name !== undefined;
+	let projectName: string = opts.name ? opts.name : "";
+	let trigger = "http";
 
-	p.intro(color.inverse(" Create a new Project "));
+	if (!isDefault) {
+		console.log(
+			figlet.textSync("nanoservice-ts CLI".toUpperCase(), {
+				font: "Digital",
+				horizontalLayout: "default",
+				verticalLayout: "default",
+				width: 100,
+				whitespaceBreak: true,
+			}),
+		);
+		console.log("");
+		p.intro(color.inverse(" Create a new Project "));
 
-	const nanoctlProject = await p.group(
-		{
-			projectName: () =>
-				p.text({
-					message: "Assign a name to the project",
-					placeholder: "nano-service",
-					defaultValue: "nano-service",
-				}),
-			trigger: () =>
-				p.multiselect({
-					message: "Choose the trigger to install",
-					options: [
-						{ label: "HTTP", value: "http", hint: "recommended" },
-						//{ label: "CRON", value: "cron" }
-					],
-				}),
-		},
-		{
-			onCancel: () => {
-				p.cancel("Operation cancelled.");
-				process.exit(0);
+		const nanoctlProject = await p.group(
+			{
+				projectName: () =>
+					p.text({
+						message: "Assign a name to the project",
+						placeholder: "nano-service",
+						defaultValue: "nano-service",
+					}),
+				trigger: () =>
+					p.select({
+						message: "Choose the trigger to install",
+						options: [
+							{ label: "HTTP", value: "http", hint: "recommended" },
+							//{ label: "CRON", value: "cron" }
+						],
+					}),
 			},
-		},
-	);
+			{
+				onCancel: () => {
+					p.cancel("Operation cancelled.");
+					process.exit(0);
+				},
+			},
+		);
+
+		projectName = nanoctlProject.projectName;
+		trigger = nanoctlProject.trigger;
+	}
 
 	const s = p.spinner();
-	s.start("Creating project...");
-
-	const { projectName, trigger } = nanoctlProject;
+	if (!isDefault) s.start("Creating project...");
 
 	try {
 		// Prepare the project
 		const dirPath = path.join(process.cwd(), projectName);
 
-		s.message("Collecting project files");
+		if (!isDefault) s.message("Collecting project files");
 
 		const githubLocalExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (githubLocalExists) {
@@ -77,7 +84,7 @@ export async function createProject() {
 		}
 		await git.clone(GITHUB_REPO_REMOTE, GITHUB_REPO_LOCAL);
 
-		s.message("Copying project files");
+		if (!isDefault) s.message("Copying project files");
 
 		/// Copy the project files
 		const projectDirExists = fsExtra.existsSync(dirPath);
@@ -85,7 +92,7 @@ export async function createProject() {
 
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/triggers/${trigger}`, dirPath);
 
-		s.message("Installing the examples of workflows and nodes");
+		if (!isDefault) s.message("Installing the examples of workflows and nodes");
 		const nodesDir = `${dirPath}/nodes`;
 		const workflowsDir = `${dirPath}/workflows`;
 		fs.unlinkSync(nodesDir);
@@ -94,10 +101,11 @@ export async function createProject() {
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/workflows`, workflowsDir);
 
 		// Create a new project
-		s.stop("Project created successfully");
+		if (!isDefault) s.stop("Project created successfully");
 		console.log(`Project Name: ${projectName}`);
 		console.log(`Trigger: ${trigger}`);
 	} catch (error) {
-		s.stop((error as Error).message);
+		if (!isDefault) s.stop((error as Error).message);
+		if (isDefault) console.log((error as Error).message);
 	}
 }
