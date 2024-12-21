@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-import { Command, type OptionValues } from "commander";
+import { Command } from "commander";
 import { createNode } from "./commands/create/node.js";
 import { createProject } from "./commands/create/project.js";
 import { getPackageVersion } from "./services/utils.js";
@@ -22,7 +22,7 @@ async function main() {
 			.command("project")
 			.description("Create a new Project")
 			.option("-n, --name <value>", "Create a default Project")
-			.action((options: OptionValues) => {
+			.action((options) => {
 				createProject(options);
 			});
 
@@ -30,7 +30,7 @@ async function main() {
 			.command("node")
 			.description("Create a new Node")
 			.option("-n, --name <value>", "Create a default Node")
-			.action((options: OptionValues) => {
+			.action((options) => {
 				createNode(options);
 			});
 
@@ -39,7 +39,7 @@ async function main() {
 
 		program.parse(process.argv);
 	} catch (err) {
-		console.log((err as Error).message);
+		console.log(err.message);
 	}
 }
 

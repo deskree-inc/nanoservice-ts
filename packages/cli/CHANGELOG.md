@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.6
+
+### Patch Changes
+
+- Fixed issue with npx compatibility
+
 ## 0.0.4
 
 ### Patch Changes
