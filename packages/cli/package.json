@@ -1,6 +1,6 @@
 {
 	"name": "nanoctl",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"license": "MIT",
 	"description": "cli for nanoservice-ts",
 	"engines": {
@@ -8,9 +8,6 @@
 	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"bin": {
-		"nanoctl": "./dist/index.js"
-	},
 	"type": "module",
 	"files": ["dist", "node_modules"],
 	"scripts": {
@@ -18,7 +15,8 @@
 		"build:dev": "tsc --watch",
 		"test:dev": "vitest",
 		"test": "vitest run",
-		"typecheck": "tsc --noEmit --incremental"
+		"typecheck": "tsc --noEmit --incremental",
+		"clean": "rm -rf dist && rm -rf node_modules"
 	},
 	"keywords": ["nanoctl", "cli", "nanoservice", "nanoservice-ts"],
 	"author": "Marco A. Castillo Della Sera",

@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.4
+
+### Patch Changes
+
+- Alpha test for Mac
+
 ## 0.0.3
 
 ### Patch Changes
