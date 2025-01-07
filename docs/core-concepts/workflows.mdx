@@ -1,0 +1,247 @@
+---
+title: Workflows
+---
+
+In nanoservices, a workflow is defined as a JSON file that outlines the sequence of **nodes** (execution steps), their configuration, data flow, and the **trigger** that starts the workflow.
+
+---
+
+## Key Elements of a Workflow JSON  
+
+### `name`  
+- The name of the workflow, used to identify it.  
+- Example: `"World Countries"`  
+
+### `description`  
+- A brief explanation of what the workflow does.  
+- Example: `"Workflow description"`  
+
+### `version`  
+- The version of the workflow, useful for managing updates.  
+- Example: `"1.0.0"`  
+
+### `trigger`  
+Defines how the workflow is initiated. Currently, only **HTTP triggers** are supported.  
+
+The HTTP trigger includes:  
+- **`method`**: HTTP method for the trigger (e.g., `GET`, `POST`).  
+- **`path`**: Endpoint path where the workflow is accessible.  
+- **`accept`**: Specifies the acceptable response content type (e.g., `application/json`).  
+
+**Example**:  
+```json
+"trigger": {
+  "http": {
+    "method": "GET",
+    "path": "/",
+    "accept": "application/json"
+  }
+}
+```
+
+### `steps`
+An array of steps representing the sequence of nodes to execute.
+
+Each step includes:
+
+- **`name`**: A unique identifier for the step.
+- **`node`**: The module or custom node to execute.
+- **`type`**: Specifies the type of node, such as module for pre-built nodes.
+
+**Example**:  
+```json
+"steps": [
+  {
+    "name": "get-countries-api",
+    "node": "@nanoservice/api-call",
+    "type": "module"
+  }
+]
+```
+
+### `nodes`
+A configuration block for individual nodes used in the workflow.
+
+Each node is defined by its unique name and includes various properties specified by the node creator.
+
+**Example**:  
+```json
+"nodes": {
+  "get-countries-api": {
+    "inputs": {
+      "url": "https://countriesnow.space/api/v0.1/countries/capital",
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "responseType": "application/json"
+    }
+  }
+}
+```
+
+## Full Workflow Example
+Here’s the complete workflow JSON:__  
+```json
+{
+  "name": "World Countries",
+  "description": "Workflow description",
+  "version": "1.0.0",
+  "trigger": {
+    "http": {
+      "method": "GET",
+      "path": "/",
+      "accept": "application/json"
+    }
+  },
+  "steps": [
+    {
+      "name": "get-countries-api",
+      "node": "@nanoservice/api-call",
+      "type": "module"
+    }
+  ],
+  "nodes": {
+    "get-countries-api": {
+      "inputs": {
+        "url": "https://countriesnow.space/api/v0.1/countries/capital",
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "responseType": "application/json"
+      }
+    }
+  }
+} 
+```
+
+## Explanation of the Example  
+
+This section breaks down the provided workflow JSON example to explain its key components and how they work together.  
+
+### Workflow Name and Description  
+- **`name`**: `"World Countries"`  
+  - This is the name of the workflow, used for identification.  
+- **`description`**: `"Workflow description"`  
+  - A short description of what the workflow does.  
+
+### HTTP Trigger  
+The workflow is triggered via an HTTP request. The trigger configuration specifies:  
+- **`method`**: `"GET"`  
+  - The HTTP method used to access the workflow.  
+- **`path`**: `"/"`  
+  - The endpoint where the workflow is exposed.  
+- **`accept`**: `"application/json"`  
+  - Specifies the expected response format for the HTTP request.  
+
+This means that a `GET` request to the root endpoint (`/`) with an `Accept` header of `application/json` will activate the workflow.  
+
+### Steps  
+The `steps` array outlines the sequence of execution for the workflow:  
+- **`name`**: `"get-countries-api"`  
+  - A unique identifier for this step.  
+- **`node`**: `"@nanoservice/api-call"`  
+  - The module or custom nanoservice being executed.  
+- **`type`**: `"module"`  
+  - Indicates the type of the node, which in this case is a pre-built module.  
+
+In this example, the workflow has one step that makes an API call to fetch country data.  
+
+### Node Configuration  
+Each node in the workflow has a corresponding configuration in the `nodes` object.  
+- **`inputs`**: Parameters passed to the node for execution.  
+  - **`url`**: `"https://countriesnow.space/api/v0.1/countries/capital"`  
+    - The API endpoint to fetch data from.  
+  - **`method`**: `"GET"`  
+    - Specifies the HTTP method for the API request.  
+  - **`headers`**:  
+    - Includes a `Content-Type` header to indicate the type of data being sent or requested.  
+  - **`responseType`**: `"application/json"`  
+    - Indicates the expected format of the API response.  
+
+---
+
+## Customizing the Workflow  
+
+You can adapt and extend workflows to meet the needs of your application.  
+
+### Adding More Steps  
+To enhance the workflow, include additional steps in the `steps` array. Each new step should have:  
+- A unique `name`.  
+- A reference to a node (`node`).  
+- A `type` specifying whether it’s a module or custom node.  
+
+Update the `nodes` object to configure the newly added steps.  
+
+**Example**: Adding a data transformation step.  
+```json
+"steps": [
+  {
+    "name": "get-countries-api",
+    "node": "@nanoservice/api-call",
+    "type": "module"
+  },
+  {
+    "name": "transform-data",
+    "node": "@nanoservice/transform",
+    "type": "module"
+  }
+],
+"nodes": {
+  "get-countries-api": {
+    "inputs": {
+      "url": "https://countriesnow.space/api/v0.1/countries/capital",
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "responseType": "application/json"
+    }
+  },
+  "transform-data": {
+    "inputs": {
+      "mapping": { "country": "name", "capital": "capital" }
+    }
+  }
+}
+```
+
+### Modifying Triggers
+Change the `trigger` to suit your requirements. For instance, modify the path to make the workflow accessible at a different endpoint:
+
+```json
+"trigger": {
+  "http": {
+    "method": "POST",
+    "path": "/countries",
+    "accept": "application/json"
+  }
+}
+```
+
+### Using Custom Nodes
+You can replace pre-built modules with custom nanoservices to handle unique business logic.
+
+Example: Replace `@nanoservice/api-call` with a custom node named `custom-fetch-node`:
+
+```json
+"steps": [
+  {
+    "name": "fetch-data",
+    "node": "custom-fetch-node",
+    "type": "custom"
+  }
+],
+"nodes": {
+  "fetch-data": {
+    "inputs": {
+      "url": "https://example.com/api/data",
+      "authToken": "Bearer <your-token>"
+    }
+  }
+}
+```
+
+### Combining Multiple Workflows
+Workflows can also invoke other workflows, enabling you to build complex, multi-stage processes. Simply add a step that calls another workflow.

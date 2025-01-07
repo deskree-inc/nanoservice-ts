@@ -64,7 +64,8 @@
       "pages": [
         "/docs/introduction/welcome",
         "/docs/introduction/nanoservices-concept",
-        "/docs/introduction/atomic-computing-and-nanoservices"
+        "/docs/introduction/atomic-computing-and-nanoservices",
+        "/docs/introduction/nanoservices-microservices-monoliths"
       ]
     },
     {
@@ -85,12 +86,12 @@
       "group": "Core Concepts",
       "pages": [
         "/docs/core-concepts/workflows",
-        "/docs/core-concepts/steps-and-nodes",
+        "/docs/core-concepts/ctx",
         "/docs/core-concepts/executing-workflows"
       ]
     },
     {
-      "group": "Creation custom nodes",
+      "group": "Creating custom nodes",
       "pages": [
         "/docs/creating-custom-nodes/introduction",
         "/docs/creating-custom-nodes/directory-structure",

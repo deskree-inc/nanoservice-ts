@@ -1,0 +1,149 @@
+---
+title: CTX
+---
+
+## Understanding CTX in nanoservice-ts Workflows  
+
+In nanoservice-ts, **CTX** (short for **Context**) enables dynamic data flow within a workflow by providing shared access to request data, node outputs, and workflow variables. This example demonstrates how CTX is used to control workflow behavior based on incoming request parameters.  
+
+---
+
+### Example: CTX in Action  
+
+Here’s a workflow called **"Movies or Countries"** that uses CTX to decide whether to fetch country data or a random fact based on a query parameter in an HTTP request.  
+
+```json
+{
+  "name": "Movies or Countries",
+  "description": "Workflow description",
+  "version": "1.0.0",
+  "trigger": {
+    "http": {
+      "method": "GET",
+      "path": "/",
+      "accept": "application/json"
+    }
+  },
+  "steps": [
+    {
+      "name": "filter-request",
+      "node": "control-flow/if-else@1.0.0",
+      "type": "local"
+    }
+  ],
+  "nodes": {
+    "filter-request": {
+      "conditions": [
+        {
+          "type": "if",
+          "steps": [
+            {
+              "name": "get-countries",
+              "node": "@nanoservice-ts/api-call",
+              "type": "module"
+            }
+          ],
+          "condition": "ctx.request.query.countries === \"true\""
+        },
+        {
+          "type": "else",
+          "steps": [
+            {
+              "name": "get-facts",
+              "node": "@nanoservice-ts/api-call",
+              "type": "module"
+            }
+          ]
+        }
+      ]
+    },
+    "get-facts": {
+      "inputs": {
+        "url": "https://catfact.ninja/fact",
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "responseType": "application/json"
+      }
+    },
+    "get-countries": {
+      "inputs": {
+        "url": "https://countriesnow.space/api/v0.1/countries/capital",
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "responseType": "application/json"
+      }
+    }
+  }
+}
+```
+
+### Explanation of the Workflow  
+
+1. **Workflow Name and Description**:  
+   - **`name`**: `"Movies or Countries"`  
+   - **`description`**: Describes the workflow’s purpose, which is to fetch either country data or a random fact based on the incoming query parameter.  
+
+2. **Trigger**:  
+   - **HTTP Trigger**: The workflow is triggered by a `GET` request to the `/` endpoint.  
+   - **Accept Header**: The response type is set to `application/json`.  
+
+3. **Steps**:  
+   - The first step, **`filter-request`**, uses an `if-else` control flow node to decide what to do based on the value of the query parameter `countries`.  
+
+4. **Conditions in CTX**:  
+   - The **condition** `ctx.request.query.countries === "true"` evaluates whether the query parameter `countries` is equal to `"true"`.  
+   - If true, the workflow executes the `get-countries` node to fetch country data.  
+   - If false, it executes the `get-facts` node to fetch a random fact.  
+
+5. **Nodes**:  
+   - **`get-countries`**:  
+     - Fetches a list of countries and their capitals from an external API.  
+     - Uses CTX variables like `ctx.request.query.countries` to dynamically control workflow behavior.  
+   - **`get-facts`**:  
+     - Fetches a random fact from the `catfact.ninja` API.  
+
+---
+
+### CTX Usage in This Workflow  
+
+1. **Dynamic Decision-Making**:  
+   - The workflow dynamically evaluates the incoming request using CTX (`ctx.request.query.countries`) to decide which node to execute.  
+
+2. **Data Access**:  
+   - CTX provides access to query parameters from the incoming HTTP request (`ctx.request.query`).  
+   - This makes the workflow adaptable to runtime inputs.  
+
+3. **Control Flow**:  
+   - The `if-else` node uses CTX to implement conditional logic, routing the workflow based on the condition result.  
+
+---
+
+### Benefits of Using CTX  
+
+1. **Dynamic Workflows**:  
+   CTX allows workflows to adapt to runtime inputs, enabling more flexible and reusable designs.  
+
+2. **Simplified Logic**:  
+   Instead of hardcoding conditions, CTX enables workflows to handle dynamic data such as query parameters, headers, or payloads.  
+
+3. **Improved Maintainability**:  
+   By centralizing data access, CTX reduces duplication and simplifies node configurations.  
+
+---
+
+### Real-World Applications  
+
+1. **API Gateways**:  
+   Use CTX to dynamically route requests to different services based on query parameters or headers.  
+
+2. **Content Filtering**:  
+   Dynamically fetch different datasets (e.g., countries or facts) based on user preferences.  
+
+3. **Workflow Customization**:  
+   Enable workflows to respond differently based on user inputs or trigger data.  
+
+CTX makes nanoservice workflows highly dynamic and adaptable, enabling powerful conditional logic with minimal configuration.
