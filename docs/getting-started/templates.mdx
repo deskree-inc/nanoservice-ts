@@ -2,34 +2,29 @@
 title: Using Templates
 ---
 
-## 🔧 Quick Start
-Get started in minutes with pre-built templates:
+Templates in **nanoservice-ts** help you get started quickly by providing pre-configured setups for common use cases like HTTP APIs, scheduled jobs, and custom node development. With just a few commands, you’ll have a working project ready for your custom workflows.  
 
-* HTTP APIs: Ready-to-use projects with Node.js and Express.
-* Scheduled Jobs: CRON-style workflows for task automation.
+---
 
-Run the CLI:
+## Quick Start
+Start your project in minutes using the CLI: 
+
 ```bash
 npx nanoservice-cli create project
 ```
+Follow the prompts to:
 
-Select your template, and start coding!
+1. Select a template.
+2. Name your project.
+3. Set up the project folder.
 
-## 💡 Programmatic Workflow Creation
-YOu can also use TypeScript helper classes to build workflows programmatically:
+Once complete, your project will include all the necessary configurations to start coding immediately.
 
-```TypeScript
-Workflow("my-workflow")
-  .trigger("http", config)
-  .addStep(apiFetchNode)
-  .addStep(customNode)
-  .response("json");
-```
 
 ## Templates Folder
-The Templates Folder in nanoservice-ts simplifies starting new projects by providing pre-configured setups for common use cases.
+The Templates Folder simplifies starting new projects with pre-built configurations tailored for specific use cases.
 
-### 🚀 Available Templates
+### Available Templates
 
 <AccordionGroup>
   <Accordion title="HTTP API">
@@ -49,7 +44,7 @@ The Templates Folder in nanoservice-ts simplifies starting new projects by provi
   </Accordion>
 </AccordionGroup>
 
-### 🛠️ How to Use Templates
+### How to Use Templates
 
 Run the CLI to initialize a project with the desired template:
 
@@ -69,7 +64,7 @@ Follow the prompts to:
 
 The selected template will be cloned locally with all required configurations ready to use.
 
-### 📂 Folder Structure Example
+### Folder Structure Example
 For the HTTP API template, the default structure looks like this:
 
 ```plaintext
@@ -82,20 +77,7 @@ my-http-api/
 └── README.md        # Project documentation
 ```
 
-### 🎯 Benefits of Templates
-<CardGroup cols={3}>
-  <Card title="Save Time" icon="square-1">
-    Skip boilerplate setup and focus on building your logic
-  </Card>
-  <Card title="Best Practices" icon="square-2">
-    Templates include best practices for folder structure, coding, and workflow organization
-  </Card>
-  <Card title="Customization" icon="square-3">
-    Modify templates to suit your project's needs
-  </Card>
-</CardGroup>
-
-### 🌐 Explore and Contribute
+### Explore and Contribute
 The templates folder is community-driven! Share your custom templates or contribute improvements to existing ones:
 
 <CardGroup cols={2}>

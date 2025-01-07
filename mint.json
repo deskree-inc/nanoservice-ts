@@ -63,13 +63,40 @@
       "group": "Introduction",
       "pages": [
         "/docs/introduction/welcome",
+        "/docs/introduction/nanoservices-concept",
+        "/docs/introduction/atomic-computing-and-nanoservices"
+      ]
+    },
+    {
+      "group": "Getting Started",
+      "pages": [
         {
-          "group": "Getting Started",
+          "group": "Initialization",
           "pages": [
-            "/docs/introduction/quick-start-t",
-            "/docs/introduction/quick-start-p"
+            "/docs/getting-started/templates",
+            "/docs/getting-started/npx",
+            "/docs/getting-started/ts-helpers"
           ]
-        }
+        },
+        "/docs/getting-started/project-structure"
+      ]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": [
+        "/docs/core-concepts/workflows",
+        "/docs/core-concepts/steps-and-nodes",
+        "/docs/core-concepts/executing-workflows"
+      ]
+    },
+    {
+      "group": "Creation custom nodes",
+      "pages": [
+        "/docs/creating-custom-nodes/introduction",
+        "/docs/creating-custom-nodes/directory-structure",
+        "/docs/creating-custom-nodes/creating-a-node",
+        "/docs/creating-custom-nodes/testing-and-debugging",
+        "/docs/creating-custom-nodes/publishing-a-node"
       ]
     }
   ],
