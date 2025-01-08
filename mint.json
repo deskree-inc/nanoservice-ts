@@ -58,6 +58,9 @@
       "url": "https://www.reddit.com/r/nanoservice/"
     }
   ],
+  "primaryTab": {
+    "name": "For Users"
+  },
   "tabs": [
     {
       "name": "For Users",
@@ -69,7 +72,7 @@
     },
     {
       "name": "Changelog",
-      "url": "/docs"
+      "url": "https://github.com/deskree-inc/nanoservice-ts/releases"
     }
   ],
   "navigation": [
@@ -136,12 +139,6 @@
         "/docs/c/contribution/triggers",
         "/docs/c/contribution/cli",
         "/docs/c/contribution/ts-helpers"
-      ]
-    },
-    {
-      "group": "Changelog",
-      "pages": [
-        "/docs/changelog"
       ]
     }
   ],

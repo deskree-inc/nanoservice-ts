@@ -12,7 +12,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/deskree-inc/nanoservice-ts">
-    <img src="docs/logo/dark.svg" alt="Logo" height="80">
+    <img src="docs/assets/logo/dark.svg" alt="Logo" height="80">
   </a>
 
   <h3 align="center">Nanoservice.ts</h3>
