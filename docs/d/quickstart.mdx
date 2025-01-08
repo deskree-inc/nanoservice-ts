@@ -1,0 +1,227 @@
+---
+title: Create & Run
+---
+
+In this short guide we will showcase how to instantiate the nanoservice-ts framework and run a simple workflow. 
+
+In this example we will create an API that will get the list of all space launches that happened in the year a person was born. The API will accept one parameter `dob: string` as date of birth and return a `json` list of space launches.
+
+---
+
+# Initialilizing
+<Tip> The npx Package for nanoservice-ts is a command-line tool designed to simplify the creation and setup of NanoService projects. It enables developers to quickly initialize ready-to-use project structures with minimal configuration. </Tip>
+
+To initialize the project, simply run the following command and follow the instructions of the interactive setup:
+
+<Steps>
+  <Step title="Run the command">
+  ```bash
+  npx nanoctl@latest create project
+  ```
+  </Step>
+  <Step title="Follow the interactive prompts">
+   ```plaintext
+    Select a template: HTTP API
+    Project Name: my-api-project
+    Install dependencies and start coding:
+   ```
+  </Step>
+  <Step title="Install dependencies and start coding">
+   ```bash
+    cd my-api-project
+    npm install
+    npm run dev
+    ```
+  </Step>
+</Steps>
+After creating a project using the npx package, your folder might look like this:
+
+```plaintext
+my-api-project/
+├── package.json
+├── workflows/
+│   └── example-workflow.json
+├── nodes/
+└── src/
+    └── index.ts
+```
+Key Directories:
+* `workflows/`: Contains your nanoservice workflow definitions.
+* `nodes/`: Contains custom nodes that extend functionality.
+* `src/`: Your project’s main logic and entry point.
+
+---
+
+# Creating nodes
+### Setup
+<Tip> A Node in nanoservice-ts allows developers to extend the platform's capabilities by creating reusable logic that can be executed as part of workflows. Each node represents a specific action or process, such as API calls, data transformation, or custom operations. </Tip>
+
+To create your first node, run the following command:
+
+<Steps>
+  <Step title="Run the command">
+  ```bash
+  npx nanoctl@latest create node
+  ```
+  </Step>
+  <Step title="Follow the interactive prompts">
+   ```plaintext
+    Assign a name to the node: space-launch
+   ```
+  </Step>
+    <Step title="Install dependencies and start coding">
+   ```bash
+    cd nodes/space-launch
+    npm install
+    ```
+  </Step>
+</Steps>
+After running the command, a new directory was added to the `nodes/` folder under the new node's name with all the necessary files to start coding your custom node:
+
+```plaintext
+my-api-project/
+├── package.json
+├── workflows/
+│   └── example-workflow.json
+├── nodes/
+│   └── space-launch/
+│    ├── test/
+│    │   └── index.test.ts
+│    ├── config.json
+│    ├── index.ts
+│    ├── nodemon.json
+│    ├── package.json
+│    ├── README.md
+│    └── tsconfig.json
+└── src/
+    └── index.ts
+```
+---
+
+### Defining node logic
+In the `index.ts` file, implement the logic for your custom node. 
+Here we will create a node that will fetch data from [The Space Dev's](https://thespacedevs.com/) API filtered by the space launch year. The node will accept a data of birth as a string parameter, extract a year of birth and use it to make an API call with `?year=yearOfBirth` query parameter.
+
+```typescript
+import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
+import {
+	type INanoServiceResponse,
+	type JsonLikeObject,
+	NanoService,
+	NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+
+// This is the main class that will be exported
+// This class will be used to create a new instance of the node
+// This class must be created using the extends NanoService
+export default class Node extends NanoService {
+	constructor() {
+		super();
+
+		// Set the input "JSON Schema Format" here for automated validation
+		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+		this.inputSchema = {};
+
+		// Set the output "JSON Schema Format" here for automated validation
+		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+		this.outputSchema = {};
+	}
+
+	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+		// Create a new instance of the response
+		const response: NanoServiceResponse = new NanoServiceResponse();
+
+		try {
+			const data = await fetch(`https://ll.thespacedevs.com/2.3.0/launches/?format=json&year=${inputs.dob}`);
+			response.setSuccess({ message: "Hello World from Node!" }); // Set the success
+		} catch (error: unknown) {
+			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
+			nodeError.setCode(500);
+			nodeError.setStack((error as Error).stack);
+			nodeError.setName(this.name);
+			nodeError.setJson(undefined); // Return a custom JSON object here
+
+			response.setError(nodeError); // Set the error
+		}
+
+		return response;
+	}
+}
+```
+### Add node configuration
+In the `config.json` file, define the expected inputs for your custom node. For example:
+
+```json
+{
+	"name": "api",
+	"version": "1.0.0",
+	"description": "",
+	"group": "API",
+	"config": {
+		"type": "object",
+		"properties": {
+			"inputs": {
+				"type": "object",
+				"properties": {},
+				"required": []
+			}
+		},
+		"required": ["inputs"],
+		"example": {
+			"inputs": {
+				"properties": {}
+			}
+		}
+	},
+	"input": {
+		"anyOf": [
+			{
+				"type": "object"
+			},
+			{
+				"type": "array"
+			},
+			{
+				"type": "string"
+			}
+		],
+		"description": "This node accepts an object as input from the previous node or request body"
+	},
+	"output": {
+		"type": "object",
+		"description": "The response from the API call"
+	},
+	"steps": {
+		"type": "boolean",
+		"default": false
+	},
+	"functions": {
+		"type": "array"
+	}
+}
+```
+# Creating a workflow
+<Tip>A workflow is a JSON file that defines the sequence of tasks (nodes) to be executed. Think about it as a set of instructions to the run on how to put your nodes together.</Tip>
+
+Let's create a simple workflow from the node we've made in the previous step:
+
+```json{
+  "name": "example-workflow",
+  "trigger": {
+    "http": {
+      "method": "GET",
+      "path": "/example"
+    }
+  },
+  "steps": [
+    {
+      "name": "api",
+      "node": "api-fetch-node",
+      "inputs": {
+        "url": "https://api.example.com/data"
+      }
+    }
+  ]
+}
+```
+# Running & Testing

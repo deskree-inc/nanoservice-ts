@@ -2,10 +2,10 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Nanoservice-ts Docs",
   "logo": {
-    "dark": "/docs/logo/dark.svg",
-    "light": "/docs/logo/light.svg"
+    "dark": "/docs/assets/logo/dark.svg",
+    "light": "/docs/assets/logo/light.svg"
   },
-  "favicon": "/docs/favicon.svg",
+  "favicon": "/docs/assets/favicon.svg",
   "colors": {
     "primary": "#39C068",
     "light": "#39C068",
@@ -38,7 +38,7 @@
     }
   ],
   "topbarCtaButton": {
-    "name": "GitHub Repo",
+    "type": "github",
     "url": "https://github.com/deskree-inc/nanoservice-ts"
   },
   "anchors": [
@@ -58,14 +58,34 @@
       "url": "https://www.reddit.com/r/nanoservice/"
     }
   ],
+  "tabs": [
+    {
+      "name": "For Users",
+      "url": "/docs/d"
+    },
+    {
+      "name": "For Contributors",
+      "url": "/docs/c"
+    },
+    {
+      "name": "Changelog",
+      "url": "/docs"
+    }
+  ],
   "navigation": [
     {
       "group": "Introduction",
       "pages": [
-        "/docs/introduction/welcome",
-        "/docs/introduction/nanoservices-concept",
-        "/docs/introduction/atomic-computing-and-nanoservices",
-        "/docs/introduction/nanoservices-microservices-monoliths"
+        "/docs/d/introduction/welcome",
+        "/docs/d/introduction/nanoservices-concept",
+        "/docs/d/introduction/nanoservices-microservices-monoliths",
+        "/docs/d/introduction/atomic-computing-and-nanoservices"
+      ]
+    },
+    {
+      "group": "Quickstart",
+      "pages": [
+        "/docs/d/quickstart"
       ]
     },
     {
@@ -74,30 +94,54 @@
         {
           "group": "Initialization",
           "pages": [
-            "/docs/getting-started/templates",
-            "/docs/getting-started/npx",
-            "/docs/getting-started/ts-helpers"
+            "/docs/d/getting-started/templates",
+            "/docs/d/getting-started/npx",
+            "/docs/d/getting-started/ts-helpers"
           ]
         },
-        "/docs/getting-started/project-structure"
+        "/docs/d/getting-started/project-structure"
       ]
     },
     {
       "group": "Core Concepts",
       "pages": [
-        "/docs/core-concepts/workflows",
-        "/docs/core-concepts/ctx",
-        "/docs/core-concepts/executing-workflows"
+        "/docs/d/core-concepts/workflows",
+        "/docs/d/core-concepts/ctx",
+        "/docs/d/core-concepts/trigger",
+        "/docs/d/core-concepts/executing-workflows"
       ]
     },
     {
       "group": "Creating custom nodes",
       "pages": [
-        "/docs/creating-custom-nodes/introduction",
-        "/docs/creating-custom-nodes/directory-structure",
-        "/docs/creating-custom-nodes/creating-a-node",
-        "/docs/creating-custom-nodes/testing-and-debugging",
-        "/docs/creating-custom-nodes/publishing-a-node"
+        "/docs/d/creating-custom-nodes/introduction",
+        "/docs/d/creating-custom-nodes/directory-structure",
+        "/docs/d/creating-custom-nodes/creating-a-node",
+        "/docs/d/creating-custom-nodes/testing-and-debugging",
+        "/docs/d/creating-custom-nodes/publishing-a-node"
+      ]
+    },
+    {
+      "group": "Overview",
+      "pages": [
+        "/docs/c/overview/architecture",
+        "/docs/c/overview/runner",
+        "/docs/c/overview/faq"
+      ]
+    },
+    {
+      "group": "Areas of Contribution",
+      "pages": [
+        "/docs/c/contribution/nodes",
+        "/docs/c/contribution/triggers",
+        "/docs/c/contribution/cli",
+        "/docs/c/contribution/ts-helpers"
+      ]
+    },
+    {
+      "group": "Changelog",
+      "pages": [
+        "/docs/changelog"
       ]
     }
   ],

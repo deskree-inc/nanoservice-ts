@@ -13,9 +13,9 @@ Nanoservices embrace **containerization and isolation**, making them highly scal
 
 ## **It's About SRP, Not Size**  
 
-<Highlight>  
+<Tip>  
 The Single Responsibility Principle (SRP) states that every module, class, or service should have one reason to change—meaning it is responsible for only one thing.  
-</Highlight>  
+</Tip>  
 
 When applied to nanoservices, this means:  
 - A nanoservice is responsible for **one well-defined task or logic**, such as sending an email, processing a payment, or validating user input.  
@@ -27,17 +27,20 @@ When applied to nanoservices, this means:
 
 ## Benefits of SRP in Nanoservices  
 
-### 1. **Modularity and Reusability**  
-Each nanoservice is self-contained and modular, making it easy to reuse across workflows and projects without duplicating logic.  
-
-### 2. **Ease of Maintenance**  
-By isolating responsibilities, developers can troubleshoot, update, or replace a nanoservice without affecting others in the system.  
-
-### 3. **Scalability**  
-Nanoservices scale independently, allowing resources to be allocated precisely where needed, improving performance and reducing waste.  
-
-### 4. **Enhanced Collaboration**  
-With clearly defined responsibilities, teams can work on individual nanoservices without stepping on each other's toes.  
+<CardGroup cols={2}>
+  <Card title="Modularity and Reusability" icon="square-1">
+   Each nanoservice is self-contained and modular, making it easy to reuse across workflows and projects without duplicating logic.  
+  </Card>
+  <Card title="Ease of Maintenance" icon="square-2">
+    By isolating responsibilities, developers can troubleshoot, update, or replace a nanoservice without affecting others in the system.  
+  </Card>
+  <Card title="Scalability" icon="square-3">
+   Nanoservices scale independently, allowing resources to be allocated precisely where needed, improving performance and reducing waste.  
+  </Card>
+  <Card title="Enhanced Collaboratio" icon="square-4">
+    With clearly defined responsibilities, teams can work on individual nanoservices without stepping on each other's toes.  
+  </Card>
+</CardGroup>
 
 ## How Nanoservices Differ from Other Architectures  
 
