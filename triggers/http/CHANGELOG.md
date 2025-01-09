@@ -1,5 +1,28 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/if-else@0.0.8
+  - @nanoservice-ts/api-call@0.1.7
+
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/if-else@0.0.7
+  - @nanoservice-ts/api-call@0.1.6
+
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/api-call@0.1.5
+
 ## 0.0.5
 
 ### Patch Changes

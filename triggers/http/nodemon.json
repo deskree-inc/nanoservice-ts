@@ -1,6 +1,6 @@
 {
 	"watch": ["src"],
-	"ext": ".ts,.js",
-	"ignore": ["dist", "node_modules"],
+	"ext": "ts",
+	"ignore": ["src/**/*.test.ts"],
 	"exec": "node -r ts-node/register --env-file=.env.local ./src/index.ts"
 }

@@ -1,6 +1,7 @@
 import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
-import { type GlobalOptions, MemoryUsage, NodeMap } from "@nanoservice-ts/runner";
+import { type GlobalOptions, MemoryUsage } from "@nanoservice-ts/runner";
 import { TriggerBase } from "@nanoservice-ts/runner";
+import { NodeMap } from "@nanoservice-ts/runner";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
