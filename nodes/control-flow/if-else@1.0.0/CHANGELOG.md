@@ -1,5 +1,11 @@
 # @nanoservice-ts/if-else
 
+## 0.0.7
+
+### Patch Changes
+
+- Added main property to package.json
+
 ## 0.0.6
 
 ### Patch Changes

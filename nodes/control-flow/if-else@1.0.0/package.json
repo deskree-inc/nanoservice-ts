@@ -1,8 +1,13 @@
 {
 	"name": "@nanoservice-ts/if-else",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "nanoservice if-else",
+	"engines": {
+		"node": ">=18.0.0"
+	},
 	"author": "Deskree Inc",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"scripts": {
 		"start:dev": "npx nodemon",
 		"build": "rimraf ./dist && tsc",
