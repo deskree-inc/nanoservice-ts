@@ -2,5 +2,5 @@
 	"watch": ["src"],
 	"ext": "ts",
 	"ignore": ["src/**/*.test.ts"],
-	"exec": "npx ts-node ./src/index.ts"
+	"exec": "node -r ts-node/register --env-file=.env.local ./src/index.ts"
 }
