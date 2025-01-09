@@ -9,7 +9,7 @@ In this example we will create an API that will get the list of all space launch
 ---
 
 # Initialilizing
-<Tip> The npx Package for nanoservice-ts is a command-line tool designed to simplify the creation and setup of NanoService projects. It enables developers to quickly initialize ready-to-use project structures with minimal configuration. </Tip>
+<Tip> The npx Package for nanoservice-ts is a command-line tool designed to simplify the creation and setup of nanoservice projects. It enables developers to quickly initialize ready-to-use project structures with minimal configuration. </Tip>
 
 To initialize the project, simply run the following command and follow the instructions of the interactive setup:
 
@@ -53,8 +53,13 @@ Key Directories:
 ---
 
 # Creating nodes
+<Tip> **Node** is designed to perform a specific, reusable task within a workflow. </Tip>
+
+For this project, we will create 2 custom nodes:
+* `api-call` - a node for fetching data from an external API.
+* `get-year` - a node for extracting the year from a date of birth.
+
 ### Setup
-<Tip> A Node in nanoservice-ts allows developers to extend the platform's capabilities by creating reusable logic that can be executed as part of workflows. Each node represents a specific action or process, such as API calls, data transformation, or custom operations. </Tip>
 
 To create your first node, run the following command:
 
@@ -66,12 +71,12 @@ To create your first node, run the following command:
   </Step>
   <Step title="Follow the interactive prompts">
    ```plaintext
-    Assign a name to the node: space-launch
+    Assign a name to the node: api-call
    ```
   </Step>
     <Step title="Install dependencies and start coding">
    ```bash
-    cd nodes/space-launch
+    cd nodes/api-call
     npm install
     ```
   </Step>
@@ -84,7 +89,7 @@ my-api-project/
 ├── workflows/
 │   └── example-workflow.json
 ├── nodes/
-│   └── space-launch/
+│   └── api-call/
 │    ├── test/
 │    │   └── index.test.ts
 │    ├── config.json
@@ -96,11 +101,15 @@ my-api-project/
 └── src/
     └── index.ts
 ```
+
+Repeat the process for the second node with a name `get-year`. After running the `npx nanoctl@latest create node` and providing the `get-year` name, a new directory will be created in the `nodes/` folder with the same structure as the first node.
+
 ---
 
 ### Defining node logic
-In the `index.ts` file, implement the logic for your custom node. 
-Here we will create a node that will fetch data from [The Space Dev's](https://thespacedevs.com/) API filtered by the space launch year. The node will accept a data of birth as a string parameter, extract a year of birth and use it to make an API call with `?year=yearOfBirth` query parameter.
+<Tip> The `index.ts` file is the main file for your custom node. It contains the logic that will be executed by the node during workflow invocation.</Tip>
+
+In the `nodes/api-call/index.ts` we will create a node that will fetch data from an external API. For the simplicity of this example it will be hardcoded for only `GET` requests with headers set to `application/json`, will receive a URL as an input and return the response.
 
 ```typescript
 import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
@@ -120,11 +129,17 @@ export default class Node extends NanoService {
 
 		// Set the input "JSON Schema Format" here for automated validation
 		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
-		this.inputSchema = {};
+		this.inputSchema = {
+      type: "string",
+      title: "url",
+    };
 
 		// Set the output "JSON Schema Format" here for automated validation
 		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
-		this.outputSchema = {};
+		this.outputSchema = {
+      type: "object",
+      title: "response",
+    };
 	}
 
 	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
@@ -132,8 +147,8 @@ export default class Node extends NanoService {
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
 		try {
-			const data = await fetch(`https://ll.thespacedevs.com/2.3.0/launches/?format=json&year=${inputs.dob}`);
-			response.setSuccess({ message: "Hello World from Node!" }); // Set the success
+			const data = await fetch(inputs.url, {method: "GET", headers: {"Content-Type": "application/json"}});
+			response.setSuccess(data.data); // Set the success
 		} catch (error: unknown) {
 			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
 			nodeError.setCode(500);
@@ -148,77 +163,148 @@ export default class Node extends NanoService {
 	}
 }
 ```
-### Add node configuration
-In the `config.json` file, define the expected inputs for your custom node. For example:
 
-```json
-{
-	"name": "api",
-	"version": "1.0.0",
-	"description": "",
-	"group": "API",
-	"config": {
-		"type": "object",
-		"properties": {
-			"inputs": {
-				"type": "object",
-				"properties": {},
-				"required": []
-			}
-		},
-		"required": ["inputs"],
-		"example": {
-			"inputs": {
-				"properties": {}
-			}
+Now, let's create the second node `get-year` that will extract the year from the date of birth. In the `nodes/get-year/index.ts` file, implement the logic for your custom node. 
+
+
+```typescript
+import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
+import {
+	type INanoServiceResponse,
+	type JsonLikeObject,
+	NanoService,
+	NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+
+// This is the main class that will be exported
+// This class will be used to create a new instance of the node
+// This class must be created using the extends NanoService
+export default class Node extends NanoService {
+	constructor() {
+		super();
+
+		// Set the input "JSON Schema Format" here for automated validation
+		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+		this.inputSchema = {
+      type: "string",
+      title: "date",
+    };
+
+		// Set the output "JSON Schema Format" here for automated validation
+		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+		this.outputSchema = {
+      type: "integer",
+      title: "year",
+    };
+	}
+
+	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+		// Create a new instance of the response
+		const response: NanoServiceResponse = new NanoServiceResponse();
+
+		try {
+      const date = new Date(inputs.date);
+      const year = date.getYear();
+			response.setSuccess(yeara); // Set the success
+		} catch (error: unknown) {
+			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
+			nodeError.setCode(500);
+			nodeError.setStack((error as Error).stack);
+			nodeError.setName(this.name);
+			nodeError.setJson(undefined); // Return a custom JSON object here
+
+			response.setError(nodeError); // Set the error
 		}
-	},
-	"input": {
-		"anyOf": [
-			{
-				"type": "object"
-			},
-			{
-				"type": "array"
-			},
-			{
-				"type": "string"
-			}
-		],
-		"description": "This node accepts an object as input from the previous node or request body"
-	},
-	"output": {
-		"type": "object",
-		"description": "The response from the API call"
-	},
-	"steps": {
-		"type": "boolean",
-		"default": false
-	},
-	"functions": {
-		"type": "array"
+
+		return response;
 	}
 }
 ```
+
+### Add node configuration
+<Tip> The `config.json` file is used to define the expected inputs and outputs for your custom nodes. It provides a structured way to specify the input and output formats, required fields, and other data. </Tip>
+
+Let's set up `config.json` files for both of the nodes we've created. For the simplicity of this example, we will define only inputs and outputs, but you can learn more about the advanced configuration options in the [Node Configurations](https://nanoservice-ts.github.io/docs/).
+
+For the `api-call` node, the `config.json` file should look like this:
+
+```json
+{
+  "name": "api-call",
+  "version": "1.0.0",
+  "description": "",
+  "group": "API",
+  "config": {},
+  "input": {
+    "type": "string",
+    "description": "The URL to fetch data from"
+  },
+  "output": {
+    "type": "object",
+    "description": "The response from the API call"
+  },
+  "steps": {
+    "type": "boolean",
+    "default": false
+  },
+  "functions": {
+    "type": "array"
+  }
+}
+```
+For the `get-year` node, the `config.json` file should look like this:
+```json
+{
+  "name": "get-year",
+  "version": "1.0.0",
+  "description": "",
+  "group": "Utility",
+  "config": {},
+  "input": {
+    "type": "string",
+    "description": "The date to extract the year from"
+  },
+  "output": {
+    "type": "integer",
+    "description": "The year extracted from the date"
+  },
+  "steps": {
+    "type": "boolean",
+    "default": false
+  },
+  "functions": {
+    "type": "array"
+  }
+}
+```
+
 # Creating a workflow
-<Tip>A workflow is a JSON file that defines the sequence of tasks (nodes) to be executed. Think about it as a set of instructions to the run on how to put your nodes together.</Tip>
+<Tip>**Workflow** is a JSON file that defines the sequence of tasks (nodes) to be executed. Think about it as a set of instructions to the run on how to put your nodes together.</Tip>
 
-Let's create a simple workflow from the node we've made in the previous step:
+Now let's create a workflow that will use the nodes we've created. Create a new file in the `workflows` directory called `launches-by-year.json`. To learn more about the workflow JSON structure, visit the [Workflow](/docs/d/core-concepts/workflows).
 
-```json{
-  "name": "example-workflow",
+```json
+{
+  "name": "launches-by-year",
   "trigger": {
     "http": {
       "method": "GET",
-      "path": "/example"
+      "path": "/space"
     }
   },
   "steps": [
     {
       "name": "api",
-      "node": "api-fetch-node",
+      "node": "get-year",
       "inputs": {
-        "url": "https://api.example.com/data"
+        "date": "{{ctx.response.query.dob}}"
+      }
+    },
+    {
+      "name": "api",
+      "node": "api-call",
+      "inputs": {
+        "url": "https://ll.thespacedevs.com/2.3.0/launches/?format=json&year={{get-year}}"
       }
     }
   ]
