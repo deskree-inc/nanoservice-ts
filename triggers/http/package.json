@@ -1,13 +1,12 @@
 {
 	"name": "@nanoservice-ts/trigger-http",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "Trigger for HTTP requests",
 	"engines": {
 		"node": ">=22.11.0"
 	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
 	"scripts": {
@@ -30,9 +29,9 @@
 		"zod": "^3.24.1",
 		"@deskree/blueprint-shared": "^0.0.21",
 		"uuid": "^11.0.3",
-		"@nanoservice-ts/runner": "workspace:*",
-		"@nanoservice-ts/helper": "workspace:*",
-		"@nanoservice-ts/api-call": "workspace:*",
+		"@nanoservice-ts/runner": "^0.1.4",
+		"@nanoservice-ts/helper": "^0.1.3",
+		"@nanoservice-ts/api-call": "^0.1.5",
 		"body-parser": "1.20.3",
 		"express": "4.21.2",
 		"cors": "2.8.5"

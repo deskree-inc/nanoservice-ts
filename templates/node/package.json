@@ -17,8 +17,8 @@
 	},
 	"dependencies": {
 		"@deskree/blueprint-shared": "0.0.21",
-		"@nanoservice-ts/runner": "workspace:*",
-		"@nanoservice-ts/helper": "workspace:*"
+		"@nanoservice-ts/runner": "^0.1.4",
+		"@nanoservice-ts/helper": "^0.1.3"
 	},
 	"private": true
 }

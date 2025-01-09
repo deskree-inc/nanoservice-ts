@@ -1,5 +1,11 @@
 # @nanoservice-ts/api-call
 
+## 0.1.5
+
+### Patch Changes
+
+- Publishing those packages to npmjs
+
 ## 0.1.4
 
 ### Patch Changes

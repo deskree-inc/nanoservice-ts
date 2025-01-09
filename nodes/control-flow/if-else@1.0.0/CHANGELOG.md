@@ -1,5 +1,11 @@
 # @nanoservice-ts/if-else
 
+## 0.0.6
+
+### Patch Changes
+
+- Publishing those packages to npmjs
+
 ## 0.0.5
 
 ### Patch Changes
