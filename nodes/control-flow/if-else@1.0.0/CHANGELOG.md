@@ -1,5 +1,11 @@
 # @nanoservice-ts/if-else
 
+## 0.0.8
+
+### Patch Changes
+
+- Fixed build version
+
 ## 0.0.7
 
 ### Patch Changes
