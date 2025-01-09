@@ -106,11 +106,12 @@
       ]
     },
     {
-      "group": "Core Concepts",
+      "group": "Definitions",
       "pages": [
         "/docs/d/core-concepts/workflows",
         "/docs/d/core-concepts/nodes",
         "/docs/d/core-concepts/trigger",
+        "/docs/d/core-concepts/npx",
         "/docs/d/core-concepts/executing-workflows"
       ]
     },
