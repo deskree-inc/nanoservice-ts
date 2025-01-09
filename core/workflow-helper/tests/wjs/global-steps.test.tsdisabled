@@ -1,0 +1,40 @@
+
+import { describe, it, expect } from "vitest";
+import { compileWjsToJson } from "../../src/WjsParser";
+
+describe("Parser - Global Step with if-else", () => {
+    it("should parse global reusable steps correctly", () => {
+        const workflow = compileWjsToJson("global-step.wjs");
+
+        expect(workflow).toEqual({
+            name: "Global Step Workflow",
+            version: "1.0.0",
+            steps: [
+                {
+                    node: "recordExists",
+                    type: "module",
+                },
+                {
+                    name: "createRecord",
+                    node: "@nanoservice/api-call",
+                    type: "module",
+                },
+            ],
+            nodes: {
+                recordExists: {
+                    inputs: {
+                        operation: "find",
+                        collection: "records",
+                        query: "${ctx.input.query}",
+                    },
+                },
+                "@nanoservice/api-call": {
+                    inputs: {
+                        operation: "insert",
+                        data: "${ctx.input.data}",
+                    },
+                },
+            },
+        });
+    });
+});

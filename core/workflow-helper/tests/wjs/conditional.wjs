@@ -1,0 +1,31 @@
+set name = "Conditional Workflow";
+set version = "1.0.0";
+
+addStep<control-flow/if-else@1.0.0> {
+  set name = "conditionalExecution";
+
+  addCondition<if> {
+    set condition = "ctx.request.query.action === 'create'";
+    addStep<apiCall> {
+      set name = "createRecord";
+      set node = "@nanoservice/api-call";
+      set type = "module";
+      set inputs {
+        set operation = "insert";
+        set data = "${ctx.input.data}";
+      }
+    }
+  }
+
+  addCondition<else> {
+    addStep<apiCall> {
+      set name = "deleteRecord";
+      set node = "@nanoservice/api-call";
+      set type = "module";
+      set inputs {
+        set operation = "delete";
+        set query = "${ctx.input.query}";
+      }
+    }
+  }
+}

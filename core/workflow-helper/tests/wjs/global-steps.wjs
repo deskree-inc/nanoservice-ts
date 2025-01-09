@@ -1,0 +1,24 @@
+set name = "Global Step Workflow";
+set version = "1.0.0";
+
+defineStep<recordExists> {
+    set node = "@nanoservice/mongodb";
+    set type = "module";
+    set inputs {
+        set operation = "find";
+        set collection = "records";
+        set query = "${ctx.input.query}";
+    }
+}
+
+addStep<ref:recordExists>;
+
+addStep<apiCall> {
+    set name = "createRecord";
+    set node = "@nanoservice/api-call";
+    set type = "module";
+    set inputs {
+        set operation = "insert";
+        set data = "${ctx.input.data}";
+    }
+}

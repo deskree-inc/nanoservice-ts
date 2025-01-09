@@ -15,16 +15,7 @@
 		"required": ["inputs"],
 		"example": {
 			"inputs": {
-				"properties": {
-					"url": "https://countriesnow.space/api/v0.1/countries/capital",
-					"method": "POST",
-					"headers": {
-						"Content-Type": "application/json"
-					},
-					"body": {
-						"data": "Hello World"
-					}
-				}
+				"properties": {}
 			}
 		}
 	},

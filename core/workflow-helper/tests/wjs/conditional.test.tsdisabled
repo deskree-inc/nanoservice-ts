@@ -1,0 +1,50 @@
+import { describe, it, expect } from "vitest";
+import { compileWjsToJson } from "../../src/WjsParser";
+
+describe("Parser - Complex Step with if-else", () => {
+    it("should parse an if-else step correctly", () => {
+        const workflow = compileWjsToJson("conditional.wjs");
+        expect(workflow).toEqual({
+            name: "Conditional Workflow",
+            version: "1.0.0",
+            steps: [
+                {
+                    name: "conditionalExecution",
+                    node: "control-flow/if-else@1.0.0",
+                    type: "module",
+                    conditions: [
+                        {
+                            type: "if",
+                            condition: "ctx.request.query.action === 'create'",
+                            steps: [
+                                {
+                                    name: "createRecord",
+                                    node: "@nanoservice/api-call",
+                                    type: "module",
+                                },
+                            ],
+                        },
+                        {
+                            type: "else",
+                            steps: [
+                                {
+                                    name: "deleteRecord",
+                                    node: "@nanoservice/api-call",
+                                    type: "module",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+            nodes: {
+                "@nanoservice/api-call": {
+                    inputs: {
+                        operation: "delete",
+                        query: "${ctx.input.query}",
+                    },
+                },
+            },
+        });
+    });
+});

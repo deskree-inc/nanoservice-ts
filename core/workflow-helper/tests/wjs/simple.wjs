@@ -1,0 +1,23 @@
+set name = "World Countries";
+set description = "Workflow description";
+set version = "1.0.0";
+
+setTrigger<http> {
+  set method = "GET";
+  set path = "/";
+  set accept = "application/json";
+}
+
+addStep {
+  set name = "get-countries-api";
+  set node = "@nanoservice-ts/api-call";
+  set type = "module";
+  set inputs {
+    set url = "https://countriesnow.space/api/v0.1/countries/capital";
+    set method = "GET";
+    set headers {
+      set "Content-Type" = "application/json";
+    }
+    set responseType = "application/json";
+  }
+}
