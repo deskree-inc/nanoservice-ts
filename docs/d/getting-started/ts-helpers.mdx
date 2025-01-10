@@ -1,0 +1,17 @@
+---
+title: TS Helpers
+---
+
+In addition to templates, nanoservice-ts provides TypeScript helpers for programmatic workflow creation.
+
+Here’s an example of defining a workflow:
+
+```TypeScript
+Workflow("my-workflow")
+  .trigger("http", config)
+  .addStep(apiFetchNode)
+  .addStep(customNode)
+  .response("json");
+```
+
+This approach allows you to define workflows dynamically and leverage the power of TypeScript for better maintainability and flexibility.

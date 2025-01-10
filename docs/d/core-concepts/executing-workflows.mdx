@@ -1,0 +1,99 @@
+---
+title: Executing Workflows
+---
+
+Workflows in `nanoservice-ts` are the backbone of backend logic execution. Once a workflow is defined, it can be triggered and executed seamlessly in the local development environment using HTTP triggers or other configured methods.
+
+---
+
+
+## What Does Workflow Execution Mean?
+
+Workflow execution refers to the process of running a sequence of steps (nodes) defined in a workflow file. Each step is executed based on the configured flow, and outputs are passed to subsequent nodes.
+
+## Workflow Execution Overview
+
+1. **Execution Through Triggers**  
+   Workflows begin execution through Triggers, which define how and when the workflow is started.
+   
+   For local development, workflows are executed using HTTP Triggers:
+   
+   Start the local development server by running the following command:
+   
+   ```plaintext
+   npm run dev
+   ```
+   
+   Use tools like POSTMAN, curl, or any HTTP client to test workflows.
+   
+   The local development server listens on `http://localhost:3000` or the port defined in your project. The workflow's path is accessible at:
+   
+   ```plaintext
+   http://localhost:3000/{workflow-name}
+   ```
+
+   Example: If your workflow is named countries, the trigger URL will be:
+   
+   ```plaintext
+   http://localhost:3000/countries
+   ```
+
+2. **Nodes Perform Tasks**  
+   Nodes within the workflow are executed sequentially or conditionally, depending on their configuration.
+   
+   Built-in nodes like API Fetch, Mappers, or FOREACH execute specific tasks.
+   
+   Custom nodes extend functionality for unique requirements.
+
+3. **Context Object (ctx) Stores Data**  
+   The context object (`ctx`) keeps track of inputs, outputs, and workflow states as execution progresses.
+   
+   Example:
+   ```plaintext
+   "${ctx.node-name.output}"
+   ```
+
+4. **Output is Returned**  
+   Once all steps are executed, the workflow produces a final result. This result is typically returned as an HTTP response.
+   
+   Example response for an HTTP trigger:
+   ```json
+   {
+     "status": "success",
+     "data": { ... }
+   }
+   ```
+
+## Key Execution Features
+
+| Feature                | Description                                                       |
+|-----------------------|-------------------------------------------------------------------|
+| **Sequential Execution** | Nodes execute step-by-step in the order they are defined.       |
+| **Conditional Execution** | Workflows support conditional branching (e.g., IF-ELSE).         |
+| **Error Handling**       | Failures in nodes can trigger fallback or alternative paths.      |
+| **Real-Time Logs**      | Track node execution, inputs, and outputs in real-time.          |
+
+## Workflow Execution Example
+
+### Local Development Steps
+
+1. **Run the Development Server:** Start your project in development mode:
+   ```plaintext
+   npm run dev
+   ```
+
+2. **Test with POSTMAN or curl:** Send an HTTP request to the workflow trigger URL.
+   
+   Example:
+   ```plaintext
+   curl -X GET http://localhost:3000/countries
+   ```
+
+3. **Inspect Outputs:** Check the HTTP response and workflow logs to verify execution.
+
+## Best Practices for Workflow Execution
+
+- **Test Locally First:** Execute workflows locally to catch errors early.
+- **Use HTTP Clients:** Tools like POSTMAN or curl make it easy to test triggers.
+- **Log Execution Details:** Enable logging to monitor node inputs, outputs, and execution times.
+- **Optimize Nodes:** Ensure nodes perform efficiently, especially for production execution.

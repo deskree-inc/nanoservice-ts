@@ -1,0 +1,103 @@
+---
+title: Testing & debugging
+---
+
+Testing and debugging your custom nodes ensures they work reliably and integrate seamlessly into workflows. This guide covers testing your nodes using the provided template and debugging techniques for faster development.
+
+---
+
+## 1. Testing a Node
+Custom node templates include a `test` folder and a sample test file (`index.test.ts`) to validate your node's logic.
+
+### Folder Structure
+```plaintext
+node-template/
+├── test/
+│   └── index.test.ts
+├── index.ts
+├── config.json
+└── package.json
+```
+
+### Writing Test Cases
+Use tools like *Jest* or *Mocha* (based on the provided template). The default `template` includes a basic example to validate your node logic.
+
+Example of `index.test.ts`:
+
+``` typescript
+import { beforeAll, expect, test } from "vitest";
+import Node from "../index";
+import ctx from "./helper";
+
+let node: Node;
+
+beforeAll(() => {
+	node = new Node();
+	node.name = "api-call";
+});
+
+// Validate Hello World from Node
+test("Hello World from Node", async () => {
+	const response = await node.handle(ctx(), {});
+	expect({ message: "Hello World from Node!" }, response.data);
+});
+```
+### Running Tests
+Run the following command to execute tests:
+
+```bash
+npm run test
+This ensures your node performs as expected.
+```
+
+## 2. Debugging a Node
+For debugging, the template uses `nodemon` to enable live reloading during development.
+
+### Running Your Node in Development Mode
+To debug your node while actively coding, use the following command:
+
+```bash
+npm run test:dev
+This command uses nodemon to restart your node every time you save a change, simplifying the development process.
+```
+
+## 3. Debugging Techniques
+### Logging Output
+Use `console.log()` statements to log variables or responses during execution.
+
+#### Example:
+
+```typescript
+console.log("API Response:", result);
+```
+
+### Inspecting Errors
+If an error occurs, the `BlueprintNode` class captures the stack trace and returns a structured error. Check the error logs to locate issues:
+
+```typescript
+try {
+    // logic
+} catch (error) {
+    console.error("Error:", error.message);
+}
+```
+
+### Manual Testing
+Use tools like **Postman** or **cURL** to trigger the workflow that includes your custom node and observe responses:
+
+```bash
+curl -X POST http://localhost:3000/workflow -H "Content-Type: application/json" -d '{}'
+```
+
+## 4. Tips for Effective Testing
+
+*Write unit tests for edge cases.
+
+*Test API integration with mock tools.
+
+*Validate node inputs and outputs thoroughly.
+
+*Use descriptive test names and logging to ease debugging.
+
+## 5. Final Notes
+Testing and debugging are critical for ensuring your custom nodes meet quality standards. With the tools and practices provided in the template, you can confidently develop and troubleshoot nodes to enhance your workflows.
