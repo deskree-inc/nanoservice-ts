@@ -6,22 +6,37 @@
 	"author": "",
 	"license": "MIT",
 	"scripts": {
+		"ci:publish": "pnpm publish -r --access public",
 		"prepare": "husky",
-		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+		"test": "nx run-many -t test",
+		"cli:dev": "pnpm --filter nanoctl --parallel -r run build:dev",
+		"cli:test:dev": "pnpm --filter nanoctl --parallel -r run test:dev",
+		"cli:test": "pnpm --filter nanoctl --parallel -r run test",
+		"build:cli": "pnpm --filter nanoctl --parallel -r run build",
+		"runner:test": "pnpm --filter @nanoservice-ts/runner --parallel -r run test:dev",
+		"runner:dev": "pnpm --filter @nanoservice-ts/runner --parallel -r run build:dev",
+		"helper:test": "pnpm --filter @nanoservice-ts/helper --parallel -r run test:dev",
+		"helper:dev": "pnpm --filter @nanoservice-ts/helper --parallel -r run build:dev",
+		"http:dev": "pnpm --filter @nanoservice-ts/trigger-http --parallel -r run dev",
+		"nodes:build": "pnpm --filter @nanoservice-ts/api-call --filter @nanoservice-ts/if-else --parallel -r run build:dev"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@changesets/cli": "^2.27.11",
 		"husky": "^9.1.7",
-		"lint-staged": "^15.2.11",
+		"lint-staged": "^15.3.0",
 		"nx": "20.2.2"
 	},
 	"lint-staged": {
 		"*": [
-			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+			"biome check --unsafe --write --no-errors-on-unmatched --files-ignore-unknown=true",
+			"pnpm run test"
 		]
 	},
 	"engines": {
 		"pnpm": ">=9.15.0"
 	},
-	"packageManager": "pnpm@9.15.0"
+	"packageManager": "pnpm@9.15.0",
+	"private": true
 }

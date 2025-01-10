@@ -1,10 +1,10 @@
-import type { BlueprintNode } from "@deskree/blueprint-shared";
-import ApiCall from "@nanoservice/api-call";
+import ApiCall from "@nanoservice-ts/api-call";
+import IfElse from "@nanoservice-ts/if-else";
+import type Nodes from "./types/Nodes";
 
-const nodes: {
-	[key: string]: BlueprintNode;
-} = {
-	"@nanoservice/api-call": new ApiCall() as BlueprintNode,
+const nodes: Nodes = {
+	"@nanoservice-ts/api-call": new ApiCall(),
+	"@nanoservice-ts/if-else": new IfElse(),
 };
 
 export default nodes;

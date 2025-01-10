@@ -1,30 +1,38 @@
 {
-	"name": "nanoservice-ts-runner",
-	"version": "1.0.0",
+	"name": "@nanoservice-ts/runner",
+	"version": "0.1.4",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
 	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
+	"files": ["dist"],
 	"author": "Marco A. Castillo Della Sera",
 	"license": "MIT",
-	"private": false,
 	"scripts": {
-		"start:dev": "npx nodemon",
-		"build": "rimraf ./dist && tsc && pnpm --filter nanoservice-ts-trigger-http run reload"
+		"build": "rm -rf dist && npx tsc",
+		"build:dev": "tsc --watch",
+		"test:dev": "vitest",
+		"test": "vitest run",
+		"typecheck": "tsc --noEmit --incremental"
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.2",
+		"@types/lodash": "^4.14.196",
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.7.2"
+		"typescript": "^5.7.2",
+		"vitest": "^2.1.8"
 	},
 	"dependencies": {
 		"zod": "^3.24.1",
 		"@deskree/blueprint-shared": "^0.0.21",
-		"uuid": "^11.0.3"
-	}
+		"@nanoservice-ts/helper": "workspace:*",
+		"uuid": "^11.0.3",
+		"jsonschema": "^1.4.1",
+		"lodash": "^4.17.21"
+	},
+	"private": false
 }

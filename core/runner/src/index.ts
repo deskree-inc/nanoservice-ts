@@ -2,19 +2,25 @@ import Configuration from "./Configuration";
 import ConfigurationResolver from "./ConfigurationResolver";
 import DefaultLogger from "./DefaultLogger";
 import LocalStorage from "./LocalStorage";
+import MemoryUsage from "./MemoryUsage";
 import ResolverBase from "./ResolverBase";
 import Runner from "./Runner";
 import TriggerBase from "./TriggerBase";
 
 // types
 
+import NanoService from "./NanoService";
+import NanoServiceResponse, { INanoServiceResponse } from "./NanoServiceResponse";
 import NodeMap from "./NodeMap";
+import RunnerSteps from "./RunnerSteps";
+import Average from "./types/Average";
 import Condition from "./types/Condition";
 import Conditions from "./types/Conditions";
 import Config from "./types/Config";
 import Flow from "./types/Flow";
 import GlobalOptions from "./types/GlobalOptions";
 import Inputs from "./types/Inputs";
+import JsonLikeObject from "./types/JsonLikeObject";
 import Node from "./types/Node";
 import ParamsDictionary from "./types/ParamsDictionary";
 import Properties from "./types/Properties";
@@ -45,4 +51,11 @@ export {
 	ParamsDictionary,
 	GlobalOptions,
 	NodeMap,
+	JsonLikeObject,
+	NanoService,
+	NanoServiceResponse,
+	INanoServiceResponse,
+	RunnerSteps,
+	MemoryUsage,
+	Average,
 };

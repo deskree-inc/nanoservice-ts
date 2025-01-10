@@ -1,20 +1,22 @@
 import fs from "node:fs";
 import ResolverBase from "./ResolverBase";
 import type Config from "./types/Config";
+import type { WorkflowLocator } from "./types/GlobalOptions";
 
 export default class LocalStorage extends ResolverBase {
-	async get(name: string): Promise<Config> {
-		const rootPath = process.env.WORKFLOWS_PATH;
+	async get(name: string, workflowLocator: WorkflowLocator): Promise<Config> {
+		const rootPath = process.env.VITE_WORKFLOWS_PATH || process.env.WORKFLOWS_PATH;
 		const workflowPathJson = `${rootPath}/json/${name}.json`;
-		const workflowPathHelper = `${rootPath}/helper/${name}.js`;
 
 		const jsonExists = fs.existsSync(workflowPathJson);
-		const helperExists = fs.existsSync(workflowPathHelper);
-
 		if (jsonExists) return await JSON.parse(fs.readFileSync(workflowPathJson, "utf8"));
-		if (helperExists) {
-			// @ts-ignore
-			return new (await import(workflowPathHelper)).default().getJson();
+
+		if (workflowLocator !== undefined) {
+			const helperExists = workflowLocator[name] !== undefined;
+			if (helperExists) {
+				const json = JSON.parse(workflowLocator[name].toJson());
+				return json as Config;
+			}
 		}
 
 		throw new Error(`Workflow not found: ${name}`);

@@ -1,13 +1,14 @@
 import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
+import { type GlobalOptions, MemoryUsage } from "@nanoservice-ts/runner";
+import { TriggerBase } from "@nanoservice-ts/runner";
+import { NodeMap } from "@nanoservice-ts/runner";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
-import { type GlobalOptions, NodeMap } from "nanoservice-ts-runner";
-import TriggerBase from "nanoservice-ts-runner/src/TriggerBase";
 import { v4 as uuid } from "uuid";
-import MemoryUsage from "./MemoryUsage";
 import nodes from "./Nodes";
 import { handleDynamicRoute, validateRoute } from "./Util";
+import workflows from "./Workflows";
 
 export default class HttpTrigger extends TriggerBase {
 	private app: Express = express();
@@ -20,6 +21,7 @@ export default class HttpTrigger extends TriggerBase {
 
 		this.initializer = this.startCounter();
 		this.loadNodes();
+		this.loadWorkflows();
 	}
 
 	loadNodes() {
@@ -28,6 +30,10 @@ export default class HttpTrigger extends TriggerBase {
 		for (const key of nodeKeys) {
 			this.nodeMap.nodes.addNode(key, nodes[key]);
 		}
+	}
+
+	loadWorkflows() {
+		this.nodeMap.workflows = workflows;
 	}
 
 	getApp(): Express {
@@ -91,16 +97,24 @@ export default class HttpTrigger extends TriggerBase {
 					res.status(200).send(ctx.response.data);
 				} catch (e: unknown) {
 					res.setHeader("blueprint_runner_id", `${id}`);
+
 					if (e instanceof BlueprintError) {
 						const error_context = e as BlueprintError;
-						if (error_context.context.code === undefined) error_context.setCode(500);
-						const code = error_context.context.code as number;
 
-						if (error_context.hasJson()) {
-							res.status(code).json(error_context.context.json);
+						if (error_context.context.message === "{}" && error_context.context.json instanceof DOMException) {
+							res
+								.status(500)
+								.json({ origin: error_context.context.name, error: (error_context.context.json as Error).toString() });
 						} else {
-							console.log("error_context", error_context);
-							res.status(code).json({ error: error_context.message });
+							if (error_context.context.code === undefined) error_context.setCode(500);
+							const code = error_context.context.code as number;
+
+							if (error_context.hasJson()) {
+								res.status(code).json(error_context.context.json);
+							} else {
+								console.log("error_context", error_context);
+								res.status(code).json({ error: error_context.message });
+							}
 						}
 					} else {
 						res.status(500).json({ error: (e as Error).message });

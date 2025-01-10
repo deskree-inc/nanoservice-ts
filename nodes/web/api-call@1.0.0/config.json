@@ -9,36 +9,30 @@
 			"inputs": {
 				"type": "object",
 				"properties": {
-					"properties": {
+					"url": {
+						"type": "string",
+						"default": "",
+						"description": "The URL of the API endpoint"
+					},
+					"method": {
+						"type": "string",
+						"default": "",
+						"description": "The HTTP method GET, POST, PUT, PATCH AND DELETE"
+					},
+					"headers": {
 						"type": "object",
-						"properties": {
-							"url": {
-								"type": "string",
-								"default": "https://host.com/api/v1/endpoint",
-								"description": "The URL of the API endpoint"
-							},
-							"method": {
-								"type": "string",
-								"default": "POST",
-								"description": "The HTTP method to use"
-							},
-							"headers": {
-								"type": "object",
-								"description": "The headers to send with the request"
-							},
-							"body": {
-								"type": "object",
-								"description": "The body to send with the request"
-							},
-							"responseType": {
-								"type": "string",
-								"description": "the response type of the request"
-							}
-						},
-						"required": ["url", "method"]
+						"description": "The headers to send with the request"
+					},
+					"body": {
+						"type": "object",
+						"description": "The body to send with the request"
+					},
+					"responseType": {
+						"type": "string",
+						"description": "the response type of the request"
 					}
 				},
-				"required": ["properties"]
+				"required": ["url", "method"]
 			}
 		},
 		"required": ["inputs"],

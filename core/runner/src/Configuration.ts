@@ -1,6 +1,7 @@
 import { BlueprintNode } from "@deskree/blueprint-shared";
 import { z } from "zod";
 import ConfigurationResolver from "./ConfigurationResolver";
+import type NanoService from "./NanoService";
 import type RunnerNode from "./RunnerNode";
 import type RunnerNodeBase from "./RunnerNodeBase";
 import type Condition from "./types/Condition";
@@ -16,7 +17,7 @@ export default class Configuration implements Config {
 	public workflow: Config = <Config>{};
 	public name: string;
 	public version: string;
-	public steps: BlueprintNode[];
+	public steps: NanoService[];
 	public nodes: Node;
 	public trigger: Trigger;
 	public static loaded_nodes: Node = <Node>{};
@@ -35,30 +36,25 @@ export default class Configuration implements Config {
 			this.globalOptions = opts;
 		}
 
-		try {
-			if (workflowNameInPath === undefined) throw new Error("Workflow name must be provided");
-			const resolver = new ConfigurationResolver();
+		if (workflowNameInPath === undefined) throw new Error("Workflow name must be provided");
+		const resolver = new ConfigurationResolver(opts as GlobalOptions);
 
-			this.workflow = await resolver.get("local", workflowNameInPath as string);
+		this.workflow = await resolver.get("local", workflowNameInPath as string);
 
-			if (!this.workflow) throw new Error(`No workflow found with path '${workflowNameInPath}'`);
+		if (!this.workflow) throw new Error(`No workflow found with path '${workflowNameInPath}'`);
 
-			// Instances of the Nano Services
-			this.steps = await this.getSteps(this.workflow.steps as RunnerNode[]);
+		// Instances of the Nano Services
+		this.steps = await this.getSteps(this.workflow.steps as RunnerNode[]);
 
-			// Configuration of the Nano Services
-			this.nodes = await this.getNodes(this.workflow.nodes);
-			this.version = this.workflow.version;
-			this.name = this.workflow.name;
-			this.trigger = this.workflow.trigger;
-		} catch (err) {
-			console.log(err);
-			throw err;
-		}
+		// Configuration of the Nano Services
+		this.nodes = await this.getNodes(this.workflow.nodes);
+		this.version = this.workflow.version;
+		this.name = this.workflow.name;
+		this.trigger = this.workflow.trigger;
 	}
 
-	protected async getSteps(blueprint_steps: RunnerNode[]): Promise<BlueprintNode[]> {
-		const nodes: RunnerNode[] = [];
+	protected async getSteps(blueprint_steps: RunnerNode[]): Promise<NanoService[]> {
+		const nodes: NanoService[] = [];
 
 		if (blueprint_steps === undefined) {
 			throw new Error("Blueprint must have at least one step");
@@ -77,8 +73,7 @@ export default class Configuration implements Config {
 			node.name = step.name;
 			node.active = step.active !== undefined ? step.active : true;
 			node.stop = step.stop !== undefined ? step.stop : false;
-			// node.runSteps = this.runSteps;
-			nodes.push(node);
+			nodes.push(node as unknown as NanoService);
 		}
 
 		return nodes;
@@ -168,11 +163,6 @@ export default class Configuration implements Config {
 		return flows;
 	}
 
-	// protected async runSteps(steps: BlueprintNode[], ctx: BlueprintContext) {
-	//     let runner = new Runner(ctx.config, steps);
-	//     return (await runner.run(ctx)).response.data;
-	// }
-
 	protected async nodeResolver(node: RunnerNode): Promise<RunnerNode> {
 		if (node.type === "module") {
 			const nodeHandler = this.globalOptions?.nodes?.getNode(node.node);
@@ -181,9 +171,7 @@ export default class Configuration implements Config {
 				throw new Error(`Node ${node.node} not found`);
 			}
 
-			console.time("NodeResolver");
 			const clone = Object.assign(Object.create(Object.getPrototypeOf(nodeHandler)), nodeHandler);
-			console.timeEnd("NodeResolver");
 			return clone as RunnerNode;
 		}
 

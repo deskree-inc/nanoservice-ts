@@ -12,7 +12,7 @@
 	"steps": [
 		{
 			"name": "get-countries-api",
-			"node": "@nanoservice/api-call",
+			"node": "@nanoservice-ts/api-call",
 			"type": "module"
 		}
 	],

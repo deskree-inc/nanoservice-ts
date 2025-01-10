@@ -1,11 +1,17 @@
 {
-	"name": "@nanoservice/api-call",
-	"version": "1.0.0",
+	"name": "@nanoservice-ts/api-call",
+	"version": "0.1.7",
 	"description": "Blueprint runner",
+	"engines": {
+		"node": ">=18.0.0"
+	},
 	"author": "Deskree Inc",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"scripts": {
 		"start:dev": "npx nodemon",
-		"build": "rimraf ./dist && tsc"
+		"build": "rimraf ./dist && tsc",
+		"build:dev": "tsc --watch"
 	},
 	"license": "MIT",
 	"devDependencies": {
@@ -18,7 +24,8 @@
 	},
 	"dependencies": {
 		"@deskree/blueprint-shared": "0.0.21",
-		"nanoservice-ts-runner": "workspace:*",
+		"@nanoservice-ts/runner": "workspace:*",
 		"lodash": "^4.17.21"
-	}
+	},
+	"private": false
 }

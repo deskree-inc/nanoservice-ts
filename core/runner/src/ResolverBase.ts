@@ -1,9 +1,10 @@
 import type { BlueprintContext, LoggerContext } from "@deskree/blueprint-shared";
 import DefaultLogger from "./DefaultLogger";
 import type Config from "./types/Config";
+import type { WorkflowLocator } from "./types/GlobalOptions";
 
 abstract class ResolverBase {
-	abstract get(name: string): Promise<Config>;
+	abstract get(name: string, workflow: WorkflowLocator): Promise<Config>;
 
 	createContext(logger?: LoggerContext): BlueprintContext {
 		const ctx: BlueprintContext = {
