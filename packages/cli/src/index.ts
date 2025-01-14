@@ -1,20 +1,27 @@
 #! /usr/bin/env node
+import os from "node:os";
 import { Command, type OptionValues } from "commander";
+import fsExtra from "fs-extra";
 import { createNode } from "./commands/create/node.js";
 import { createProject } from "./commands/create/project.js";
+import { PosthogAnalytics } from "./services/posthog.js";
 import { getPackageVersion } from "./services/utils.js";
 
 async function main() {
 	try {
 		const program = new Command();
 		const version = await getPackageVersion();
-		program
-			.name("nanoctl")
-			.version(`${version}`, "-v, --version")
-			.description(`Nanoservice CLI ${version}`)
-			.action(() => {
-				console.log(`Nanoservice CLI: ${version}`);
-			});
+		const HOME_DIR = `${os.homedir()}/.nanoctl`;
+		const cliConfigPath = `${HOME_DIR}/nanoctl.json`;
+
+		fsExtra.ensureDirSync(HOME_DIR);
+
+		const analytics = new PosthogAnalytics({
+			version: version,
+			cliConfigPath: cliConfigPath,
+		});
+
+		program.version(`${version}`, "-v, --version").description(`Nanoservice CLI ${version}`);
 
 		const create = program.command("create").description("Create a new nanoservice component");
 
@@ -22,16 +29,28 @@ async function main() {
 			.command("project")
 			.description("Create a new Project")
 			.option("-n, --name <value>", "Create a default Project")
-			.action((options: OptionValues) => {
-				createProject(options);
+			.action(async (options: OptionValues) => {
+				await analytics.trackCommandExecution({
+					command: "create project",
+					args: options,
+					execution: async () => {
+						createProject(options);
+					},
+				});
 			});
 
 		const node = program
 			.command("node")
 			.description("Create a new Node")
 			.option("-n, --name <value>", "Create a default Node")
-			.action((options: OptionValues) => {
-				createNode(options);
+			.action(async (options: OptionValues) => {
+				await analytics.trackCommandExecution({
+					command: "create node",
+					args: options,
+					execution: async () => {
+						createNode(options);
+					},
+				});
 			});
 
 		create.addCommand(project);

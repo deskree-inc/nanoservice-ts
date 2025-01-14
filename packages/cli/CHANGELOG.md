@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.7
+
+### Patch Changes
+
+- Added Posthog metrics
+
 ## 0.0.6
 
 ### Patch Changes
