@@ -1,6 +1,6 @@
 {
 	"name": "nanoctl",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"license": "MIT",
 	"description": "cli for nanoservice-ts",
 	"engines": {
@@ -28,20 +28,20 @@
 	"dependencies": {
 		"@clack/prompts": "^0.8.2",
 		"commander": "^12.1.0",
+		"figlet": "^1.8.0",
+		"fs-extra": "^11.2.0",
 		"picocolors": "^1.1.1",
-		"posthog-node": "^4.3.1",
+		"posthog-node": "^4.3.2",
+		"simple-git": "^3.27.0",
+		"type-fest": "^4.30.0",
 		"typescript": "^5.5.4",
 		"yocto-spinner": "^0.1.1",
-		"zod": "^3.24.0",
-		"type-fest": "^4.30.0",
-		"fs-extra": "^11.2.0",
-		"figlet": "^1.8.0",
-		"simple-git": "^3.27.0"
+		"zod": "^3.24.0"
 	},
 	"devDependencies": {
+		"@types/figlet": "^1.7.0",
 		"@types/fs-extra": "^11.0.4",
 		"@types/node": "^22.10.2",
-		"@types/figlet": "^1.7.0",
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
