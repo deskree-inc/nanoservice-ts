@@ -1,7 +1,5 @@
 <a id="readme-top"></a>
 
-![GitHub Repo stars](https://img.shields.io/github/stars/deskree-inc/nanoservice-ts)
-![GitHub forks](https://img.shields.io/github/forks/deskree-inc/nanoservice-ts)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/deskree-inc/nanoservice-ts)
 ![GitHub License](https://img.shields.io/github/license/deskree-inc/nanoservice-ts)
 ![GitHub contributors](https://img.shields.io/github/contributors/deskree-inc/nanoservice-ts)

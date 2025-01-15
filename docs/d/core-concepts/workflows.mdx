@@ -1,5 +1,5 @@
 ---
-title: Workflows
+title: Overview
 ---
 
 In nanoservices, a workflow is defined as a JSON file that outlines the sequence of **nodes** (execution steps), their configuration, data flow, and the **trigger** that starts the workflow.
@@ -7,9 +7,6 @@ In nanoservices, a workflow is defined as a JSON file that outlines the sequence
 ---
 
 ## Workflow JSON Structure
-
-<RequestExample>
-
 ```json Workflow Example
 {
   "name": "World Countries",
@@ -43,8 +40,6 @@ In nanoservices, a workflow is defined as a JSON file that outlines the sequence
   }
 } 
 ```
-</RequestExample>
-
 <ParamField path="name" type="string">
   The name of the workflow, used to identify it.
 </ParamField>
@@ -55,17 +50,7 @@ In nanoservices, a workflow is defined as a JSON file that outlines the sequence
   The version of the workflow, useful for managing updates.
 </ParamField>
 <ResponseField name="trigger" type="trigger object">
-  <Expandable title="properties">
-    <ResponseField name="method" type="GET POST PATCH PUT DELETE">
-      HTTP method for the trigger
-    </ResponseField>
-    <ResponseField name="path" type="string">
-      Endpoint path where the workflow is accessible.
-    </ResponseField>
-    <ResponseField name="accept" type="string">
-      Specifies the acceptable response content type (e.g., `application/json`)
-    </ResponseField>
-  </Expandable>
+  Here you can define the trigger for the workflow. To see the list available triggers and how to use them, check the [Triggers](/docs/d/core-concepts/trigger) page.
 </ResponseField>
 <ResponseField name="steps" type="array of steps objects">
   <Expandable title="properties">
@@ -219,5 +204,10 @@ Workflows can also invoke other workflows, enabling you to build complex, multi-
 
 ### CTX
 
-<Tip> In nanoservice-ts, **CTX** (short for **Context**) enables dynamic data flow within a workflow by providing shared access to request data, node outputs, and workflow variables. This example demonstrates how CTX is used to control workflow behavior based on incoming request parameters.   </Tip>
-### Global Function
+**CTX** is a special object that contains the context of the workflow. It is used to pass data between nodes and steps as well as to extract information about the workflow itself. The structure of the object is defined on the trigger-level and can be modified when [creating custom trigger](/docs/c/contribution/triggers).
+
+* [HTTP CTX structure](/docs/d/core-concepts/trigger#ctx) 
+
+### Global Methods
+
+In addition to CTX, the data can be manipulated using global methods. These methods are available in all nodes and can be used to perform various operations on the data.

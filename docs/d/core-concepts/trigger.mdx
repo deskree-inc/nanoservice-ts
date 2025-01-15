@@ -1,3 +1,46 @@
 ---
-title: Trigger
+title: Triggers
 ---
+
+<Tip>Trigger is an event or condition that starts the execution of a workflow. Triggers are defined at the top of a [Workflow JSON](/docs/d/core-concepts/workflows.mdx).</Tip>
+
+# Available Triggers
+### HTTP
+The HTTP trigger listens for HTTP requests, making it ideal for creating APIs or responding to webhooks.
+#### Workflow setup
+```json GET Example
+"trigger": {
+    "http": {
+        "method": "GET",
+        "path": "/example",
+        "accept": "application/json"
+    }
+}
+```
+<ResponseField name="method" type="GET POST PATCH PUT DELETE">
+    HTTP method for the trigger
+</ResponseField>
+<ResponseField name="path" type="string">
+    Endpoint path where the workflow is accessible.
+</ResponseField>
+<ResponseField name="accept" type="string">
+    Specifies the acceptable response content type (e.g., `application/json`)
+</ResponseField>
+#### CTX
+### Scheduled
+A scheduled trigger runs workflows automatically at specific intervals, similar to cron jobs.
+#### Workflow setup
+```json Example to run every day at 12 AM
+"trigger": {
+    "schedule": {
+        "cron": "0 0 * * *"
+    }
+}
+```
+<ResponseField name="cron" type="string">
+    Cron expression for scheduling the job. To learn more about cron expressions, check [Cron Expression](https://crontab.guru/)
+</ResponseField>
+#### CTX
+# Custom Triggers
+
+If you want to extend the functionality via custom triggers, check out our contribution guidelines to learn how to create and share your [custom triggers](/docs/c/contribution/triggers.mdx) with the community.

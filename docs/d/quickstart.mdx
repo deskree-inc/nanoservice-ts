@@ -9,7 +9,7 @@ In this example we will create an API that will get the list of all space launch
 ---
 
 # Initialilizing
-<Tip> The npx package for nanoservice-ts is a command-line tool designed to simplify the creation and setup of nanoservice projects. It enables developers to quickly initialize ready-to-use project structures with minimal configuration. </Tip>
+<Tip> The `nanoctl` package for nanoservice-ts is a command-line tool designed to simplify the creation and setup of nanoservice projects. It enables developers to quickly initialize ready-to-use project structures with minimal configuration. To learn more about available commands, visit [nanoctl](/docs/d/core-concepts/nanoctl) </Tip>
 
 To initialize the project, simply run the following command and follow the instructions of the interactive setup:
 
@@ -53,7 +53,7 @@ Key Directories:
 ---
 
 # Creating nodes
-<Tip> **Node** is designed to perform a specific, reusable task within a workflow. </Tip>
+<Tip> **Node** is designed to perform a specific, reusable task within a workflow. To learn more, visit [nodes](/docs/d/core-concepts/nodes) </Tip>
 
 For this project, we will create 2 custom nodes:
 * `api-call` - a node for fetching data from an external API.
@@ -221,8 +221,9 @@ export default class Node extends NanoService {
 }
 ```
 
-### Add node configuration
+### Add node configuration (optional)
 <Tip> The `config.json` file is used to define the expected inputs and outputs for your custom nodes. It provides a structured way to specify the input and output formats, required fields, and other data. </Tip>
+<Info> Please note that the `config.json` file is optional as it is only used by the Deskree platform to connect nodes together. It will be used in the future for other purposes within the framework. Hence, we still recommend creating it as the best practice.</Info>
 
 Let's set up `config.json` files for both of the nodes we've created. For the simplicity of this example, we will define only inputs and outputs, but you can learn more about the advanced configuration options in the [Node Configurations](https://nanoservice-ts.github.io/docs/).
 
@@ -278,10 +279,29 @@ For the `get-year` node, the `config.json` file should look like this:
 }
 ```
 
-# Creating a workflow
-<Tip>**Workflow** is a JSON file that defines the sequence of tasks (nodes) to be executed. Think about it as a set of instructions to the run on how to put your nodes together.</Tip>
+### Registering nodes
 
-Now let's create a workflow that will use the nodes we've created. Create a new file in the `workflows` directory called `launches-by-year.json`. To learn more about the workflow JSON structure, visit the [Workflow](/docs/d/core-concepts/workflows).
+Each node needs to be registered in the `src/Nodes.ts` file to be used in the workflow. To do this, import the node and register it in the `nodes` object. 
+
+```typescript
+import ApiCall from "../nodes/api-call";
+import GetYear from "../nodes/get-year";
+import type Nodes from "./types/Nodes";
+
+const nodes: Nodes = {
+    "@nanoservice-ts/api-call": new ApiCall(),
+    "@nanoservice-ts/get-year": new GetYear(),
+};
+
+export default nodes;
+```
+
+Now the nodes can be used in the workflow.
+
+# Creating a workflow
+<Tip>**Workflow** is a JSON file that defines the sequence of tasks (nodes) to be executed. Think about it as a set of instructions to the run on how to put your nodes together. To learn more, visit [workflows](/docs/d/core-concepts/workflows.mdx)</Tip>
+
+Now let's create a workflow that will use the nodes we've created. Create a new file in the `workflows` directory called `launches-by-year.json`.
 
 ```json
 {
@@ -310,4 +330,9 @@ Now let's create a workflow that will use the nodes we've created. Create a new 
   ]
 }
 ```
+
+<Tip>**CTX** is a special object that contains the context of the workflow. It is used to pass data between nodes and steps. It is defined on the Trigger level. To learn more, visit [CTX](/docs/d/core-concepts/workflows#ctx)</Tip>
+
+Note that in this example we are using `ctx` to get the original request query parameter `dob` and pass it to the `get-year` node. The `get-year` node will extract the year from the date of birth and pass it to the final response.
+
 # Running & Testing

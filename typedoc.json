@@ -1,0 +1,11 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"entryPoints": [
+		"./core/runner/src/index.ts",
+		"./core/workflow-helper/src/secondary-entry.ts",
+		"./triggers/http/src/index.ts",
+		"./packages/cli/src/index.ts"
+	],
+	"plugin": ["typedoc-plugin-markdown"],
+	"out": "./docs/ref"
+}

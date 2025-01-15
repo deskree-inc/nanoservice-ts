@@ -19,14 +19,17 @@
 		"helper:test": "pnpm --filter @nanoservice-ts/helper --parallel -r run test:dev",
 		"helper:dev": "pnpm --filter @nanoservice-ts/helper --parallel -r run build:dev",
 		"http:dev": "pnpm --filter @nanoservice-ts/trigger-http --parallel -r run dev",
-		"nodes:build": "pnpm --filter @nanoservice-ts/api-call --filter @nanoservice-ts/if-else --parallel -r run build:dev"
+		"nodes:build": "pnpm --filter @nanoservice-ts/api-call --filter @nanoservice-ts/if-else --parallel -r run build:dev",
+		"docs:build": "typedoc --options typedoc.json"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@changesets/cli": "^2.27.11",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.3.0",
-		"nx": "20.2.2"
+		"nx": "20.2.2",
+		"typedoc": "^0.27.6",
+		"typedoc-plugin-markdown": "^4.4.1"
 	},
 	"lint-staged": {
 		"*": [

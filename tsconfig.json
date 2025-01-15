@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
 		/* Visit https://aka.ms/tsconfig to read more about this file */
-
 		/* Projects */
 		// "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
 		// "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
@@ -9,7 +8,6 @@
 		// "disableSourceOfProjectReferenceRedirect": true,  /* Disable preferring source files instead of declaration files when referencing composite projects. */
 		// "disableSolutionSearching": true,                 /* Opt a project out of multi-project reference checking when editing. */
 		// "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
-
 		/* Language and Environment */
 		"target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
 		// "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
@@ -23,7 +21,6 @@
 		// "noLib": true,                                    /* Disable including any library files, including the default lib.d.ts. */
 		// "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
 		// "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
-
 		/* Modules */
 		"module": "commonjs" /* Specify what module code is generated. */,
 		"rootDir": "./src" /* Specify the root folder within your source files. */,
@@ -46,12 +43,10 @@
 		// "resolveJsonModule": true,                        /* Enable importing .json files. */
 		// "allowArbitraryExtensions": true,                 /* Enable importing files with any extension, provided a declaration file is present. */
 		// "noResolve": true,                                /* Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project. */
-
 		/* JavaScript Support */
 		// "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
 		// "checkJs": true,                                  /* Enable error reporting in type-checked JavaScript files. */
 		// "maxNodeModuleJsDepth": 1,                        /* Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */
-
 		/* Emit */
 		"declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
 		// "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
@@ -74,7 +69,6 @@
 		// "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. */
 		// "preserveConstEnums": true,                       /* Disable erasing 'const enum' declarations in generated code. */
 		// "declarationDir": "./",                           /* Specify the output directory for generated declaration files. */
-
 		/* Interop Constraints */
 		// "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
 		// "verbatimModuleSyntax": true,                     /* Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting. */
@@ -83,7 +77,6 @@
 		"esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
 		// "preserveSymlinks": true,                         /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
 		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-
 		/* Type Checking */
 		"strict": true /* Enable all strict type-checking options. */,
 		// "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
@@ -105,11 +98,28 @@
 		// "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type. */
 		// "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
 		// "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
-
 		/* Completeness */
 		// "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
 		"skipLibCheck": true /* Skip type checking all .d.ts files. */
 	},
 	"compileOnSave": true,
 	"include": ["./src"]
+	/* "include": [
+		"./core/runner/src/index.ts",
+		"./core/workflow-helper/src/secondary-entry.ts",
+		"./triggers/http/src/index.ts",
+		"./packages/cli/src/index.ts",
+	],
+	"typedocOptions": {
+		"entryPoints": [
+			"./core/runner/src/index.ts",
+			"./core/workflow-helper/src/secondary-entry.ts",
+			"./triggers/http/src/index.ts",
+			"./packages/cli/src/index.ts",
+		],
+		"plugin": [
+			"typedoc-plugin-markdown"
+		],
+		"out": "./docs/ref"
+	} */
 }
