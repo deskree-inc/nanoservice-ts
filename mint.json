@@ -67,14 +67,6 @@
 			"url": "/docs/d"
 		},
 		{
-			"name": "For Contributors",
-			"url": "/docs/c"
-		},
-		{
-			"name": "Reference",
-			"url": "/docs/ref"
-		},
-		{
 			"name": "Changelog",
 			"url": "https://github.com/deskree-inc/nanoservice-ts/releases"
 		}
@@ -126,27 +118,6 @@
 				"/docs/d/core-concepts/nanoctl",
 				"/docs/d/core-concepts/deployment"
 			]
-		},
-		{
-			"group": "Overview",
-			"pages": [
-				"/docs/c/overview/architecture",
-				"/docs/c/overview/runner",
-				"/docs/c/overview/faq"
-			]
-		},
-		{
-			"group": "Areas of Contribution",
-			"pages": [
-				"/docs/c/contribution/nodes",
-				"/docs/c/contribution/triggers",
-				"/docs/c/contribution/cli",
-				"/docs/c/contribution/ts-helpers"
-			]
-		},
-		{
-			"group": "Reference",
-			"pages": ["/docs/ref/overview"]
 		}
 	],
 	"footer": {
