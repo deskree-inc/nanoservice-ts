@@ -26,7 +26,7 @@ Scheduled Jobs** (CRON-style workflows)
   </Step>
 </Steps>
 
-### Example Workflow
+**Example**:
 
 <Steps>
   <Step title="Run the command">
@@ -50,3 +50,13 @@ npx nanoservice-cli create project
   </Step>
 </Steps>
 
+### Create env
+
+Create `.env.local` file in the root directory with the following structure:
+```env
+PORT=3000
+WORKFLOWS_PATH=[PROJECT_PATH]/workflows
+NODES_PATH=[PROJECT_PATH]/nodes
+```
+
+Replace `[PROJECT_PATH]` with the real project path

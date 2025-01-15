@@ -84,24 +84,31 @@ With **nanoservice-ts**, backend development becomes modular, predictable, and f
 
 **nanoservice-ts** makes it easy to kickstart your backend development using pre-built templates, the `npx` CLI, and TypeScript helper methods. Follow the steps below to get started:
 
-### Templates
+1. Create project
+```bash
+npx nanoctl@latest create project
+```
+2. Install Packages
+```bash
+npm install
+```
+3. Create the file .env.local with the content:
+```env
+PORT=3000
+WORKFLOWS_PATH=[PROJECT_PATH]/workflows
+NODES_PATH=[PROJECT_PATH]/nodes
+```
+Replace `[PROJECT_PATH]` with the real project path
+4. Execute the project in dev mode
+```bash
+npm run dev
+```
+5. Test in the browser navigating to:
+http://localhost:3000/countries
 
-
-### NPX Package
-
-
-### TS Helpers
+To learn more, visit the [official documentation](https://nanoservice.xyz)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Running Workflows
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->

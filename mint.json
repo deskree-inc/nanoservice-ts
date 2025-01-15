@@ -99,9 +99,8 @@
 				{
 					"group": "Initialization",
 					"pages": [
-						"/docs/d/getting-started/templates",
 						"/docs/d/getting-started/nanoctl",
-						"/docs/d/getting-started/ts-helpers"
+						"/docs/d/getting-started/templates"
 					]
 				}
 			]
@@ -113,8 +112,7 @@
 					"group": "Nodes",
 					"pages": [
 						"/docs/d/core-concepts/nodes",
-						"/docs/d/core-concepts/nodes-built-in",
-						"/docs/d/core-concepts/nodes-complex"
+						"/docs/d/core-concepts/nodes-built-in"
 					]
 				},
 				{

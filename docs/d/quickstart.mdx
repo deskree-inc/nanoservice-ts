@@ -9,6 +9,8 @@ In this example we will create an API that will get the list of all space launch
 ---
 
 # Initialilizing
+
+### Create project
 <Tip> The `nanoctl` package for nanoservice-ts is a command-line tool designed to simplify the creation and setup of nanoservice projects. It enables developers to quickly initialize ready-to-use project structures with minimal configuration. To learn more about available commands, visit [nanoctl](/docs/d/core-concepts/nanoctl) </Tip>
 
 To initialize the project, simply run the following command and follow the instructions of the interactive setup:
@@ -49,6 +51,16 @@ Key Directories:
 * `workflows/`: Contains your nanoservice workflow definitions.
 * `nodes/`: Contains custom nodes that extend functionality.
 * `src/`: Your project’s main logic and entry point.
+
+### Create env
+
+Create `.env.local` file in the root directory with the following structure:
+```env
+PORT=3000
+WORKFLOWS_PATH=[PROJECT_PATH]/workflows
+NODES_PATH=[PROJECT_PATH]/nodes
+```
+Replace `[PROJECT_PATH]` with the real project path
 
 ---
 
@@ -335,4 +347,20 @@ Now let's create a workflow that will use the nodes we've created. Create a new 
 
 Note that in this example we are using `ctx` to get the original request query parameter `dob` and pass it to the `get-year` node. The `get-year` node will extract the year from the date of birth and pass it to the final response.
 
-# Running & Testing
+# Running Workflow
+
+To test our newly created workflow simply run a command `npm run dev` in the root directory of the project. This will start the server on the port specified in the `.env.local` file. By default, you should be able to access at port `3000`.
+
+Then make a GET API request to http://localhost:3000/launches-by-year either using a browser or a tool like Postman. The request should contain a query parameter `dob` with the date of birth in the format `YYYY-MM-DD`. For example:
+
+```bash
+curl -X GET http://localhost:3000/launches-by-year?dob=1990-01-01
+```
+
+The response should be a JSON object with the list of space launches that happened in the year 1990.
+
+<Tip> To learn more about workflow execution, visit [Executing Workflows](/docs/d/core-concepts/executing-workflows) </Tip>
+
+# Summary
+
+You have successfully created a simple API service using `nanoservice-ts`. You have learned how to create custom nodes, define a workflow, and run it.
