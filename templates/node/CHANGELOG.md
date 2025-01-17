@@ -1,5 +1,14 @@
 # node-name
 
+## 0.0.7
+
+### Patch Changes
+
+- Fixed issue with the cli node creation test
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.7
+  - @nanoservice-ts/shared@0.0.1
+
 ## 0.0.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.9
+
+### Patch Changes
+
+- Fixed issue with the cli node creation test
+
 ## 0.0.8
 
 ### Patch Changes

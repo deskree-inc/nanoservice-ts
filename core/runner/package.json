@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/runner",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"

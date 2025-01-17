@@ -1,5 +1,14 @@
 # @nanoservice-ts/api-call
 
+## 0.1.10
+
+### Patch Changes
+
+- Fixed issue with the cli node creation test
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.7
+  - @nanoservice-ts/shared@0.0.1
+
 ## 0.1.9
 
 ### Patch Changes
