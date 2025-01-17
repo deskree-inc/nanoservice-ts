@@ -2,5 +2,10 @@
 	"watch": ["src"],
 	"ext": "ts",
 	"ignore": ["src/**/*.test.ts"],
-	"exec": "node -r ts-node/register --env-file=.env.local ./src/index.ts"
+	"exec_simple": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
+	"exec_open_telemetry": "node -r ts-node/register -r ./src/open_telemetry.ts --env-file=.env.local ./src/index.ts",
+	"exec": "node -r ts-node/register -r ./src/prometheus.ts -r ./src/open_telemetry.ts --env-file=.env.local ./src/index.ts",
+	"env": {
+		"NODE_ENV": "local"
+	}
 }

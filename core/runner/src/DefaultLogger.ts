@@ -10,6 +10,7 @@ export default class DefaultLogger extends BlueprintLogger {
 	}
 
 	log(message: string) {
+		if (process.env.CONSOLE_LOG_ACTIVE === "false") return;
 		this.logs.push(message);
 		if (this.requestId) console.log(`[${this.requestId}] ${message}`);
 	}
