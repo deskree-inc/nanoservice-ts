@@ -138,5 +138,10 @@
 				]
 			}
 		]
+	},
+	"analytics": {
+		"ga4": {
+			"measurementId": "G-X860TC8VML"
+		}
 	}
 }

@@ -6,7 +6,6 @@
 ![Discord](https://img.shields.io/discord/1317176082268426240)
 
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/deskree-inc/nanoservice-ts">
@@ -27,9 +26,6 @@
   </p>
 </div>
 
-
-
-<!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -78,8 +74,6 @@ With **nanoservice-ts**, backend development becomes modular, predictable, and f
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- GETTING STARTED -->
 ## Getting Started
 
 **nanoservice-ts** makes it easy to kickstart your backend development using pre-built templates, the `npx` CLI, and TypeScript helper methods. Follow the steps below to get started:
@@ -110,8 +104,6 @@ To learn more, visit the [official documentation](https://nanoservice.xyz)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- CONTRIBUTING -->
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -125,16 +117,12 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<!-- LICENSE -->
 ## License
 
 Distributed under the Apache License 2.0. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- CONTACT -->
 ## Contact
 
 Discord: [Nanoservice](https://discord.gg/Y2bAmPqz)
