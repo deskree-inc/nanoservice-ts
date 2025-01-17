@@ -72,7 +72,13 @@ export async function createNode(opts: OptionValues) {
 
 		// Prepare the node
 		const currentNodesDir = `${currentDir}/nodes`;
-		fsExtra.ensureDirSync(currentNodesDir);
+		if (!isDefault) {
+			fsExtra.ensureDirSync(currentNodesDir);
+		} else {
+			const nodeDirExists = fsExtra.existsSync(currentNodesDir);
+			if (!nodeDirExists) throw new Error("ops1");
+		}
+
 		const dirPath = path.join(currentNodesDir, nodeName);
 
 		if (!isDefault) s.message("Copying project files");
