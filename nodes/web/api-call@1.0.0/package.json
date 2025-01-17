@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/api-call",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"description": "Blueprint runner",
 	"engines": {
 		"node": ">=18.0.0"

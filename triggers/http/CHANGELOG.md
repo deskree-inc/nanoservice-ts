@@ -1,5 +1,15 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.9
+
+### Patch Changes
+
+- e5225d2: Implemented open telemetry and prometheus metrics
+- Updated dependencies [e5225d2]
+  - @nanoservice-ts/runner@0.1.5
+  - @nanoservice-ts/if-else@0.0.9
+  - @nanoservice-ts/api-call@0.1.8
+
 ## 0.0.8
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.5
+
+### Patch Changes
+
+- e5225d2: Implemented open telemetry and prometheus metrics
+
 ## 0.1.4
 
 ### Patch Changes
