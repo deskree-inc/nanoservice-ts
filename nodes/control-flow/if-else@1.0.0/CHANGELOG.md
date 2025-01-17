@@ -1,5 +1,13 @@
 # @nanoservice-ts/if-else
 
+## 0.0.10
+
+### Patch Changes
+
+- Migrated and refactored shared library
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.6
+
 ## 0.0.9
 
 ### Patch Changes

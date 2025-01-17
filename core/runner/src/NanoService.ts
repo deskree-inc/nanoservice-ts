@@ -1,15 +1,11 @@
-import {
-	type BlueprintContext,
-	BlueprintNode,
-	type ConfigContext,
-	type ResponseContext,
-} from "@deskree/blueprint-shared";
+import { type ConfigContext, type Context, NodeBase, type ResponseContext } from "@nanoservice-ts/shared";
+import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
 import { type Schema, type ValidationError, Validator } from "jsonschema";
 import _ from "lodash";
 import type { INanoServiceResponse } from "./NanoServiceResponse";
 import type JsonLikeObject from "./types/JsonLikeObject";
 
-export default abstract class NanoService extends BlueprintNode {
+export default abstract class NanoService extends NodeBase {
 	public inputSchema: Schema;
 	public outputSchema: Schema;
 	private v: Validator;
@@ -33,7 +29,7 @@ export default abstract class NanoService extends BlueprintNode {
 		};
 	}
 
-	public async run(ctx: BlueprintContext): Promise<ResponseContext> {
+	public async run(ctx: Context): Promise<ResponseContext> {
 		const response: ResponseContext = { success: true, data: {}, error: null };
 
 		const config = _.cloneDeep(ctx.config) as ConfigContext;
@@ -42,7 +38,11 @@ export default abstract class NanoService extends BlueprintNode {
 		const inputs = opts.inputs || opts.conditions;
 
 		try {
-			opts = this.blueprintMapper(opts, ctx, data);
+			opts = this.blueprintMapper(
+				opts as unknown as ParamsDictionary,
+				ctx,
+				data as ParamsDictionary,
+			) as unknown as JsonLikeObject;
 			await this.validate(inputs as JsonLikeObject, this.inputSchema);
 
 			// Process node custom logic
@@ -62,7 +62,7 @@ export default abstract class NanoService extends BlueprintNode {
 		return response;
 	}
 
-	public abstract handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService[]>;
+	public abstract handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService[]>;
 
 	public async validate(obj: JsonLikeObject, schema: Schema): Promise<void> {
 		const result = this.v.validate(obj, schema);

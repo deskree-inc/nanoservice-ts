@@ -1,17 +1,17 @@
-import type { BlueprintNode } from "@deskree/blueprint-shared";
+import type { NodeBase } from "@nanoservice-ts/shared";
 
 export default class NodeMap {
-	public nodes: Map<string, BlueprintNode> = new Map<string, BlueprintNode>();
+	public nodes: Map<string, NodeBase> = new Map<string, NodeBase>();
 
-	public addNode(name: string, node: BlueprintNode): void {
+	public addNode(name: string, node: NodeBase): void {
 		this.nodes.set(name, node);
 	}
 
-	public getNode(name: string): BlueprintNode | undefined {
+	public getNode(name: string): NodeBase | undefined {
 		return this.nodes.get(name);
 	}
 
-	public getNodes(): Map<string, BlueprintNode> {
+	public getNodes(): Map<string, NodeBase> {
 		return this.nodes;
 	}
 }

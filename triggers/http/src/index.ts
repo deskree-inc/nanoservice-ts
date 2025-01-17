@@ -1,11 +1,9 @@
 import { env } from "node:process";
-import { MemoryUsage } from "@nanoservice-ts/runner";
 import { type Span, metrics, trace } from "@opentelemetry/api";
 import HttpTrigger from "./HttpTrigger";
 
 class Main {
 	private httpTrigger: HttpTrigger = <HttpTrigger>{};
-	protected memoryUsage: MemoryUsage;
 	protected trigger_initializer = 0;
 	protected initializer = 0;
 	protected tracer = trace.getTracer("trigger-http-server", "0.0.8");
@@ -16,7 +14,6 @@ class Main {
 	constructor() {
 		this.initializer = performance.now();
 		this.httpTrigger = new HttpTrigger();
-		this.memoryUsage = new MemoryUsage();
 	}
 
 	async run() {

@@ -1,8 +1,8 @@
-import type { BlueprintContext } from "@deskree/blueprint-shared";
 import type { ParamsDictionary } from "@nanoservice-ts/runner";
+import type { Context } from "@nanoservice-ts/shared";
 
-export default function ctx(): BlueprintContext {
-	const ctx: BlueprintContext = {
+export default function ctx(): Context {
+	const ctx: Context = {
 		response: {
 			data: null,
 			error: null,

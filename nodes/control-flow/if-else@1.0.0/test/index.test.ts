@@ -1,22 +1,22 @@
 import assert from "node:assert";
 import { before, describe, it } from "node:test";
-import type { BlueprintContext, ConfigContext } from "@deskree/blueprint-shared";
 import type { ParamsDictionary } from "@nanoservice-ts/runner";
+import type { ConfigContext, Context } from "@nanoservice-ts/shared";
 import Node, { type NodeOptions } from "../index";
 
-function generateCtx(name: string): BlueprintContext {
-	const ctx: BlueprintContext = {
+function generateCtx(name: string): Context {
+	const ctx: Context = {
 		response: {
 			data: null,
 			error: null,
 		},
 		request: {
-			body: null,
+			body: <ParamsDictionary>{},
 		},
 		config: {},
 		id: "",
 		error: {
-			message: undefined,
+			message: "",
 			code: undefined,
 			json: undefined,
 			stack: undefined,
@@ -73,7 +73,7 @@ function generateCtx(name: string): BlueprintContext {
 
 describe("IfElse", () => {
 	let node: Node;
-	let ctx: BlueprintContext;
+	let ctx: Context;
 
 	before(() => {
 		node = new Node();

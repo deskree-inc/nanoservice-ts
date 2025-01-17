@@ -65,11 +65,15 @@ export async function createNode(opts: OptionValues) {
 				"nanoservice-ts repository not found. Please run 'nanoctl create project' to clone the repository.",
 			);
 
-		const currentDir = `${process.cwd()}/nodes`;
+		// Validate the project
+		const currentDir = `${process.cwd()}/src`;
 		const nodeProjectDirExists = fsExtra.existsSync(currentDir);
 		if (!nodeProjectDirExists) throw new Error("ops1");
 
-		const dirPath = path.join(currentDir, nodeName);
+		// Prepare the node
+		const currentNodesDir = `${currentDir}/nodes`;
+		fsExtra.ensureDirSync(currentNodesDir);
+		const dirPath = path.join(currentNodesDir, nodeName);
 
 		if (!isDefault) s.message("Copying project files");
 

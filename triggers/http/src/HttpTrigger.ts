@@ -1,7 +1,7 @@
-import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
-import { type GlobalOptions, MemoryUsage } from "@nanoservice-ts/runner";
+import type { GlobalOptions } from "@nanoservice-ts/runner";
 import { TriggerBase } from "@nanoservice-ts/runner";
 import { NodeMap } from "@nanoservice-ts/runner";
+import { type Context, GlobalError, Metrics, type RequestContext } from "@nanoservice-ts/shared";
 import { type Span, SpanStatusCode, metrics, trace } from "@opentelemetry/api";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -55,7 +55,7 @@ export default class HttpTrigger extends TriggerBase {
 				const blueprintNameInPath: string = req.params.blueprint;
 
 				const workflow_execution = metrics.getMeter("default").createCounter(`workflow:${blueprintNameInPath}`, {
-					description: "Workflow execution",
+					description: "Workflow requests",
 				});
 
 				const workflow_runner_time = metrics.getMeter("default").createGauge(`workflow:${blueprintNameInPath}:time`, {
@@ -72,13 +72,13 @@ export default class HttpTrigger extends TriggerBase {
 
 				this.tracer.startActiveSpan(`${blueprintNameInPath}`, async (span: Span) => {
 					try {
-						const memoryUsage = new MemoryUsage();
-						memoryUsage.start();
+						const metrics = new Metrics();
+						metrics.start();
 						const start = performance.now();
 
 						await this.configuration.init(blueprintNameInPath, this.nodeMap);
 
-						let ctx: BlueprintContext = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
+						let ctx: Context = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
 						req.params = handleDynamicRoute(this.configuration.trigger.http.path, req);
 
 						ctx.logger.log(`Workflow name: "${this.configuration.name}", version: "${this.configuration.version}"`);
@@ -88,15 +88,16 @@ export default class HttpTrigger extends TriggerBase {
 						if (method && req.method.toLowerCase() !== method.toLowerCase()) throw new Error("Invalid HTTP method");
 						if (!validateRoute(path, req.path)) throw new Error("Invalid HTTP path");
 
-						ctx.request = req;
+						ctx.request = req as unknown as RequestContext;
 						ctx = await this.run(ctx);
 
-						memoryUsage.stop();
-						const average = await memoryUsage.getAverage();
+						metrics.stop();
+						const average = await metrics.getMetrics();
+
 						ctx.logger.log(
-							`Memory average: ${average.total.toFixed(2)}MB, min: ${average.min.toFixed(2)}MB, max: ${average.max.toFixed(2)}MB`,
+							`Memory average: ${average.memory.total.toFixed(2)}MB, min: ${average.memory.min.toFixed(2)}MB, max: ${average.memory.max.toFixed(2)}MB`,
 						);
-						memoryUsage.clear();
+						metrics.clear();
 
 						const end = performance.now();
 						ctx.logger.log(`Workflow Runner completed in ${(end - start).toFixed(2)}ms`);
@@ -110,13 +111,13 @@ export default class HttpTrigger extends TriggerBase {
 						span.setAttribute("workflow_elapsed_time", `${end - start}`);
 						span.setAttribute("workflow_version", `${this.configuration.version}`);
 						span.setAttribute("workflow_name", `${this.configuration.name}`);
-						span.setAttribute("workflow_memory_avg_mb", `${average.total}`);
-						span.setAttribute("workflow_memory_min_mb", `${average.min}`);
-						span.setAttribute("workflow_memory_max_mb", `${average.max}`);
-						span.setAttribute("workflow_cpu_percentage", `${average.cpu_percentage}`);
-						span.setAttribute("workflow_cpu_total", `${average.cpu_total}`);
-						span.setAttribute("workflow_cpu_usage", `${average.cpu_usage}`);
-						span.setAttribute("workflow_cpu_model", `${memoryUsage.cpu_model}`);
+						span.setAttribute("workflow_memory_avg_mb", `${average.memory.total}`);
+						span.setAttribute("workflow_memory_min_mb", `${average.memory.min}`);
+						span.setAttribute("workflow_memory_max_mb", `${average.memory.max}`);
+						span.setAttribute("workflow_cpu_percentage", `${average.cpu.average}`);
+						span.setAttribute("workflow_cpu_total", `${average.cpu.total}`);
+						span.setAttribute("workflow_cpu_usage", `${average.cpu.usage}`);
+						span.setAttribute("workflow_cpu_model", `${average.cpu.model}`);
 						span.setStatus({ code: SpanStatusCode.OK });
 
 						workflow_execution.add(1, {
@@ -135,25 +136,25 @@ export default class HttpTrigger extends TriggerBase {
 							workflow_name: `${this.configuration.name}`,
 						});
 
-						workflow_runner_mem.record(average.max, {
+						workflow_runner_mem.record(average.memory.max, {
 							pid: process.pid,
 							env: process.env.NODE_ENV,
 							workflow_request_id: `${ctx.id}`,
 							workflow_version: `${this.configuration.version}`,
 							workflow_name: `${this.configuration.name}`,
-							average: average.total,
-							min: average.min,
+							average: average.memory.total,
+							min: average.memory.min,
 						});
 
-						workflow_runner_cpu.record(average.cpu_usage, {
+						workflow_runner_cpu.record(average.cpu.usage, {
 							pid: process.pid,
 							env: process.env.NODE_ENV,
 							workflow_request_id: `${ctx.id}`,
 							workflow_version: `${this.configuration.version}`,
 							workflow_name: `${this.configuration.name}`,
-							cpu_percentage: average.cpu_percentage,
-							cpu_total: average.cpu_total,
-							cpu_model: memoryUsage.cpu_model,
+							cpu_percentage: average.cpu.average,
+							cpu_total: average.cpu.total,
+							cpu_model: average.cpu.model,
 						});
 
 						res.setHeader("Content-Type", ctx.response.contentType);
@@ -163,8 +164,8 @@ export default class HttpTrigger extends TriggerBase {
 						span.setAttribute("workflow_request_id", `${id}`);
 						span.recordException(e as Error);
 
-						if (e instanceof BlueprintError) {
-							const error_context = e as BlueprintError;
+						if (e instanceof GlobalError) {
+							const error_context = e as GlobalError;
 
 							if (error_context.context.message === "{}" && error_context.context.json instanceof DOMException) {
 								span.setStatus({

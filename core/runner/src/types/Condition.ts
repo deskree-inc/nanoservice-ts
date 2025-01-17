@@ -1,9 +1,9 @@
-import type { BlueprintNode } from "@deskree/blueprint-shared";
+import type { NodeBase } from "@nanoservice-ts/shared";
 
 type Condition = {
 	type?: string;
 	condition: string;
-	steps?: BlueprintNode[];
+	steps?: NodeBase[];
 	error?: string;
 };
 

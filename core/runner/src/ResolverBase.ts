@@ -1,4 +1,4 @@
-import type { BlueprintContext, LoggerContext } from "@deskree/blueprint-shared";
+import type { Context, GlobalLogger } from "@nanoservice-ts/shared";
 import DefaultLogger from "./DefaultLogger";
 import type Config from "./types/Config";
 import type { WorkflowLocator } from "./types/GlobalOptions";
@@ -6,8 +6,8 @@ import type { WorkflowLocator } from "./types/GlobalOptions";
 abstract class ResolverBase {
 	abstract get(name: string, workflow: WorkflowLocator): Promise<Config>;
 
-	createContext(logger?: LoggerContext): BlueprintContext {
-		const ctx: BlueprintContext = {
+	createContext(logger?: GlobalLogger): Context {
+		const ctx: Context = {
 			id: "",
 			config: {},
 			request: { body: {} },

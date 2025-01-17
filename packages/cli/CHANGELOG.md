@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.8
+
+### Patch Changes
+
+- Migrated and refactored shared library
+
 ## 0.0.7
 
 ### Patch Changes

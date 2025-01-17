@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.6
+
+### Patch Changes
+
+- Migrated and refactored shared library
+
 ## 0.1.5
 
 ### Patch Changes

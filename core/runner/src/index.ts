@@ -2,7 +2,6 @@ import Configuration from "./Configuration";
 import ConfigurationResolver from "./ConfigurationResolver";
 import DefaultLogger from "./DefaultLogger";
 import LocalStorage from "./LocalStorage";
-import MemoryUsage from "./MemoryUsage";
 import ResolverBase from "./ResolverBase";
 import Runner from "./Runner";
 import TriggerBase from "./TriggerBase";
@@ -56,6 +55,5 @@ export {
 	NanoServiceResponse,
 	INanoServiceResponse,
 	RunnerSteps,
-	MemoryUsage,
 	Average,
 };

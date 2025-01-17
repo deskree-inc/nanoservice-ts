@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/runner",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
@@ -28,7 +28,7 @@
 	},
 	"dependencies": {
 		"zod": "^3.24.1",
-		"@deskree/blueprint-shared": "^0.0.21",
+		"@nanoservice-ts/shared": "workspace:*",
 		"@nanoservice-ts/helper": "workspace:*",
 		"uuid": "^11.0.3",
 		"jsonschema": "^1.4.1",

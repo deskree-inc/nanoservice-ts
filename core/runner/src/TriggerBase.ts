@@ -1,10 +1,10 @@
-import { type BlueprintContext, BlueprintError, BlueprintTrigger, type LoggerContext } from "@deskree/blueprint-shared";
+import { type Context, GlobalError, type LoggerContext, Trigger } from "@nanoservice-ts/shared";
 import { v4 as uuid } from "uuid";
 import Configuration from "./Configuration";
 import DefaultLogger from "./DefaultLogger";
 import Runner from "./Runner";
 
-export default abstract class TriggerBase extends BlueprintTrigger {
+export default abstract class TriggerBase extends Trigger {
 	public configuration: Configuration;
 
 	constructor() {
@@ -22,12 +22,12 @@ export default abstract class TriggerBase extends BlueprintTrigger {
 		return new Runner(this.configuration.steps);
 	}
 
-	async run(ctx: BlueprintContext): Promise<BlueprintContext> {
+	async run(ctx: Context): Promise<Context> {
 		try {
 			const runner: Runner = await this.getRunner();
 			return await runner.run(ctx);
 		} catch (e: unknown) {
-			if (e instanceof BlueprintError) {
+			if (e instanceof GlobalError) {
 				throw e;
 			}
 
@@ -35,9 +35,9 @@ export default abstract class TriggerBase extends BlueprintTrigger {
 		}
 	}
 
-	createContext(logger?: LoggerContext, blueprintName?: string, id?: string): BlueprintContext {
+	createContext(logger?: LoggerContext, blueprintName?: string, id?: string): Context {
 		const requestId: string = id || uuid();
-		const ctx: BlueprintContext = {
+		const ctx: Context = {
 			id: requestId,
 			config: this.configuration.nodes,
 			request: { body: {} },

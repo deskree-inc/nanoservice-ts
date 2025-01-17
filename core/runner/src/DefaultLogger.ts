@@ -1,6 +1,6 @@
-import { BlueprintLogger } from "@deskree/blueprint-shared";
+import { GlobalLogger } from "@nanoservice-ts/shared";
 
-export default class DefaultLogger extends BlueprintLogger {
+export default class DefaultLogger extends GlobalLogger {
 	blueprintName: string | undefined = "";
 	requestId: string | undefined = "";
 	constructor(blueprintName?: string, requestId?: string) {

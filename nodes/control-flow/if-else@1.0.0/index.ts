@@ -1,6 +1,7 @@
-import type { BlueprintContext, BlueprintNode } from "@deskree/blueprint-shared";
 import type { ConditionOpts } from "@nanoservice-ts/helper";
 import { type Condition, type INanoServiceResponse, type JsonLikeObject, NanoService } from "@nanoservice-ts/runner";
+import type { Context, NodeBase } from "@nanoservice-ts/shared";
+import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
 
 export default class IfElse extends NanoService {
 	constructor() {
@@ -9,11 +10,8 @@ export default class IfElse extends NanoService {
 		this.contentType = "";
 	}
 
-	async handle(
-		ctx: BlueprintContext,
-		inputs: JsonLikeObject | Condition[],
-	): Promise<INanoServiceResponse | NanoService[]> {
-		let steps: BlueprintNode[] = [];
+	async handle(ctx: Context, inputs: JsonLikeObject | Condition[]): Promise<INanoServiceResponse | NanoService[]> {
+		let steps: NodeBase[] = [];
 		const conditions = inputs as Condition[];
 
 		const firstCondition = conditions[0] as ConditionOpts;
@@ -28,14 +26,14 @@ export default class IfElse extends NanoService {
 			const condition = conditions[i];
 
 			if (condition.condition !== undefined && condition.condition.trim() !== "") {
-				const result = this.runJs(condition.condition, ctx, ctx.response.data, {}, ctx.vars);
+				const result = this.runJs(condition.condition, ctx, ctx.response.data as ParamsDictionary, {}, ctx.vars);
 
 				if (result) {
-					steps = condition.steps as BlueprintNode[];
+					steps = condition.steps as NodeBase[];
 					break;
 				}
 			} else {
-				steps = condition.steps as BlueprintNode[];
+				steps = condition.steps as NodeBase[];
 				break;
 			}
 		}

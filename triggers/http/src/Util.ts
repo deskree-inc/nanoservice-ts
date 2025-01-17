@@ -1,5 +1,5 @@
-import type { BlueprintNode, Step } from "@deskree/blueprint-shared";
 import type { ParamsDictionary } from "@nanoservice-ts/runner";
+import type { NodeBase, Step } from "@nanoservice-ts/shared";
 import type { Request } from "express";
 
 export function validateRoute(dynamicRoute: string, actualRoute: string) {
@@ -43,6 +43,6 @@ export function handleDynamicRoute(dynamicRoute: string, req: Request): ParamsDi
 	return req.params;
 }
 
-export async function nodeResolver(node: Step): Promise<BlueprintNode> {
-	return new (await import(node.node)).default() as Promise<BlueprintNode>;
+export async function nodeResolver(node: Step): Promise<NodeBase> {
+	return new (await import(node.node)).default() as Promise<NodeBase>;
 }
