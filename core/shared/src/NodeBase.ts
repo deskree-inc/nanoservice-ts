@@ -1,6 +1,5 @@
 import _ from "lodash";
 import GlobalError from "./GlobalError";
-import { Metrics } from "./Metrics";
 import type Context from "./types/Context";
 import type ErrorContext from "./types/ErrorContext";
 import type FunctionContext from "./types/FunctionContext";
@@ -11,18 +10,13 @@ import type Step from "./types/Step";
 import type VarsContext from "./types/VarsContext";
 import mapper from "./utils/Mapper";
 
-export default abstract class RunnerNode {
+export default abstract class NodeBase {
 	public flow = false;
 	public name = "";
 	public contentType = "";
 	public active = true;
 	public stop = false;
 	public originalConfig: ParamsDictionary = {};
-	private metrics: Metrics;
-
-	constructor() {
-		this.metrics = new Metrics();
-	}
 
 	public async process(ctx: Context, step?: Step): Promise<ResponseContext> {
 		let response: ResponseContext = {
@@ -36,9 +30,7 @@ export default abstract class RunnerNode {
 			this.originalConfig = _.cloneDeep(config[this.name]);
 			this.blueprintMapper(config[this.name], ctx);
 
-			this.metrics.start();
 			response = await this.run(ctx);
-			this.metrics.stop();
 
 			if (response.error) response.success = false;
 			ctx.response = response;
@@ -51,11 +43,6 @@ export default abstract class RunnerNode {
 			response.error = this.setError(error as ErrorContext);
 			response.success = false;
 			ctx.response = response;
-		} finally {
-			this.getMetrics().then((metrics) => {
-				const duration = metrics.time?.duration || 0;
-				ctx.logger.log(`Step (${this.name}) completed in ${duration.toFixed(2)}ms`);
-			});
 		}
 
 		return response;
@@ -70,21 +57,13 @@ export default abstract class RunnerNode {
 
 		try {
 			const config: NodeConfigContext = ctx.config as unknown as NodeConfigContext;
-
 			this.blueprintMapper(config[this.name], ctx);
 
-			this.metrics.start();
 			response = await this.run(ctx);
-			this.metrics.stop();
 		} catch (error: unknown) {
 			response.error = this.setError(error as ErrorContext);
 			response.success = false;
 			ctx.response = response;
-		} finally {
-			this.getMetrics().then((metrics) => {
-				const duration = metrics.time?.duration || 0;
-				ctx.logger.log(`Step (${this.name}) completed in ${duration.toFixed(2)}ms`);
-			});
 		}
 
 		return response;
@@ -170,9 +149,5 @@ export default abstract class RunnerNode {
 		errorHandler.setName(this.name);
 
 		return errorHandler;
-	}
-
-	public getMetrics() {
-		return this.metrics.getMetrics();
 	}
 }

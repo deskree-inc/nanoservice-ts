@@ -19,7 +19,8 @@ export default abstract class RunnerSteps {
 				ctx.response.contentType = step.contentType;
 
 				if (!step.flow) {
-					ctx.response = (await step.process(ctx, step as unknown as Step)).data as NanoServiceResponse;
+					const model = await step.process(ctx, step as unknown as Step);
+					ctx.response = model.data as NanoServiceResponse;
 					if (ctx.response.error) throw ctx.response.error;
 				} else {
 					flow_steps = (await step.processFlow(ctx)).data as NanoService[];

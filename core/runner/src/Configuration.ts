@@ -57,10 +57,10 @@ export default class Configuration implements Config {
 		const nodes: NanoService[] = [];
 
 		if (blueprint_steps === undefined) {
-			throw new Error("Blueprint must have at least one step");
+			throw new Error("Workflow must have at least one step");
 		}
 		if (blueprint_steps.length === 0) {
-			throw new Error("Blueprint must have at least one step");
+			throw new Error("Workflow must have at least one step");
 		}
 
 		for (let i = 0; i < blueprint_steps.length; i++) {

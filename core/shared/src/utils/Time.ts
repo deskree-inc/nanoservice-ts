@@ -1,23 +1,23 @@
 import dayjs from "dayjs";
-import Metrics, { type TimeUsageType } from "./MetricsBase";
+import MetricsBase, { type TimeUsageType } from "./MetricsBase";
 
-export default class Time extends Metrics {
+export default class Time extends MetricsBase {
 	private startTime: string | null = null;
 	private endTime: string | null = null;
 	private performanceStart = 0;
 	private performanceEnd = 0;
 
-	public async start() {
+	public start() {
 		this.startTime = dayjs().format();
 		this.performanceStart = performance.now();
 	}
 
-	public async stop() {
+	public stop() {
 		this.endTime = dayjs().format();
 		this.performanceEnd = performance.now();
 	}
 
-	public async getMetrics() {
+	public getMetrics() {
 		return {
 			startTime: this.startTime,
 			endTime: this.endTime,

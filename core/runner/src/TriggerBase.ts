@@ -1,4 +1,4 @@
-import { type Context, GlobalError, type LoggerContext, Trigger } from "@nanoservice-ts/shared";
+import { type Context, type LoggerContext, Trigger } from "@nanoservice-ts/shared";
 import { v4 as uuid } from "uuid";
 import Configuration from "./Configuration";
 import DefaultLogger from "./DefaultLogger";
@@ -24,13 +24,10 @@ export default abstract class TriggerBase extends Trigger {
 
 	async run(ctx: Context): Promise<Context> {
 		try {
-			const runner: Runner = await this.getRunner();
+			const runner: Runner = this.getRunner();
 			return await runner.run(ctx);
 		} catch (e: unknown) {
-			if (e instanceof GlobalError) {
-				throw e;
-			}
-
+			console.log(e);
 			throw e;
 		}
 	}

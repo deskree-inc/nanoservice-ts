@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/trigger-http",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"description": "Trigger for HTTP requests",
 	"engines": {
 		"node": ">=18.0.0"
@@ -27,8 +27,8 @@
 	},
 	"dependencies": {
 		"@nanoservice-ts/shared": "workspace:*",
-		"@nanoservice-ts/api-call": "workspace:*",
 		"@nanoservice-ts/helper": "workspace:*",
+		"@nanoservice-ts/api-call": "workspace:*",
 		"@nanoservice-ts/if-else": "workspace:*",
 		"@nanoservice-ts/runner": "workspace:*",
 		"@opentelemetry/api": "^1.9.0",

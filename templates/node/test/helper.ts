@@ -8,12 +8,12 @@ export default function ctx(): Context {
 			error: null,
 		},
 		request: {
-			body: null,
+			body: {},
 		},
 		config: {},
 		id: "",
 		error: {
-			message: undefined,
+			message: "",
 			code: undefined,
 			json: undefined,
 			stack: undefined,

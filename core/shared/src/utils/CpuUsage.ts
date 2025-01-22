@@ -1,20 +1,20 @@
 import os, { type CpuInfo } from "node:os";
-import Metrics, { type CpuUsageType } from "./MetricsBase";
+import MetricsBase, { type CpuUsageType } from "./MetricsBase";
 
-export default class CpuMetrics extends Metrics {
+export default class CpuMetrics extends MetricsBase {
 	private numCPUs = 0;
 	private cpuModel = "";
 	private startUsage: MeasureCpuType = <MeasureCpuType>{};
 	private endUsage: MeasureCpuType = <MeasureCpuType>{};
 
-	public async start() {
+	public start() {
 		const cpus = os.cpus();
 		this.cpuModel = cpus[0].model;
 		this.numCPUs = cpus.length;
 		this.startUsage = this.measureCpu();
 	}
 
-	public async stop() {
+	public stop() {
 		this.endUsage = this.measureCpu();
 	}
 
@@ -26,7 +26,7 @@ export default class CpuMetrics extends Metrics {
 		return percentageCpu;
 	}
 
-	public async getMetrics() {
+	public getMetrics() {
 		const average = this.getAverage();
 		const usage = (average * this.numCPUs) / 100;
 		return {
@@ -56,12 +56,14 @@ export default class CpuMetrics extends Metrics {
 			idleMs += cpu.times.idle;
 		}
 
-		return {
-			idle: idleMs / cpus.length,
-			total: totalMs / cpus.length,
+		const model: MeasureCpuType = {
+			idle: idleMs / total,
+			total: totalMs / total,
 			model: cpus[0].model,
 			cpus: total,
 		};
+
+		return model;
 	}
 }
 

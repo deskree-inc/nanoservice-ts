@@ -237,11 +237,11 @@ importers:
         specifier: ^0.1.3
         version: 0.1.3
       '@nanoservice-ts/runner':
-        specifier: ^0.1.4
-        version: 0.1.4
+        specifier: ^0.1.7
+        version: 0.1.7
       '@nanoservice-ts/shared':
-        specifier: workspace:*
-        version: link:../../core/shared
+        specifier: ^0.0.1
+        version: 0.0.1
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -487,9 +487,6 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@deskree/blueprint-shared@0.0.21':
-    resolution: {integrity: sha512-TJVgb4+t8uPiwEHrpqzez0auSczRXta9NSnaF8J/IrQSrOQGq48rtKxOuGMPphD2QYIq1UEesyIhxDknfMAUPg==}
-
   '@emnapi/core@1.3.1':
     resolution: {integrity: sha512-pVGjBIt1Y6gg3EJN8jTcfpP/+uuRksIo055oE/OBkDNcjZqVbfkWCksG1Jp4yZnj3iKWyWX8fdG/j6UDYPbFog==}
 
@@ -683,9 +680,12 @@ packages:
     resolution: {integrity: sha512-ohwjvxvrSFGS0ciy1dQoyX1viPFtNlbmomn+hma9jtIw5LG0JPjQVRN1PtxUGeV6h6+tofBb0Tk7F1Jj+2u35g==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/runner@0.1.4':
-    resolution: {integrity: sha512-84Pb6A0pexcIZYspbkaKMG1LHnQ9VoM5sthjrZtGULTDgGkAhy3FKJ/6sE0Am6I7fFcVfR1xjmVywRmCHWZtZQ==}
+  '@nanoservice-ts/runner@0.1.7':
+    resolution: {integrity: sha512-F+HHxxEKqDKuhyLZbyFhvNyNZvY0nseKSKQ/vCEOZboGxlgGmDu0MJQmgiBCTG6BmMvkLGChwZt4+iwWaqEHHw==}
     engines: {node: '>=18.0.0'}
+
+  '@nanoservice-ts/shared@0.0.1':
+    resolution: {integrity: sha512-zNPcyB7/YCdCxHDWSerOOqhbwiaiqxueBTTFO6x0VIgomGVxEIk/KSh0IM0mzvXZopUA5mq6FW9MCGcShs4eVg==}
 
   '@napi-rs/wasm-runtime@0.2.4':
     resolution: {integrity: sha512-9zESzOO5aDByvhIAsOy9TbpZ0Ur2AJbUI7UT73kcUTS2mxAMHOBaa1st/jAymNoCtvrit99kkzT1FZuXVcgfIQ==}
@@ -3263,11 +3263,6 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@deskree/blueprint-shared@0.0.21':
-    dependencies:
-      dayjs: 1.11.13
-      lodash: 4.17.21
-
   '@emnapi/core@1.3.1':
     dependencies:
       '@emnapi/wasi-threads': 1.0.1
@@ -3414,14 +3409,19 @@ snapshots:
     dependencies:
       zod: 3.24.1
 
-  '@nanoservice-ts/runner@0.1.4':
+  '@nanoservice-ts/runner@0.1.7':
     dependencies:
-      '@deskree/blueprint-shared': 0.0.21
       '@nanoservice-ts/helper': 0.1.3
+      '@nanoservice-ts/shared': 0.0.1
       jsonschema: 1.5.0
       lodash: 4.17.21
       uuid: 11.0.4
       zod: 3.24.1
+
+  '@nanoservice-ts/shared@0.0.1':
+    dependencies:
+      dayjs: 1.11.13
+      lodash: 4.17.21
 
   '@napi-rs/wasm-runtime@0.2.4':
     dependencies:

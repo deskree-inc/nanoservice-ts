@@ -1,7 +1,7 @@
 export default abstract class MetricsBase {
-	public abstract start(ms?: number): Promise<void>;
-	public abstract stop(): Promise<void>;
-	public abstract getMetrics(): Promise<MemoryUsageType | TimeUsageType | CpuUsageType>;
+	public abstract start(ms?: number): void;
+	public abstract stop(): void;
+	public abstract getMetrics(): MemoryUsageType | TimeUsageType | CpuUsageType;
 }
 
 type MemoryUsageType = {

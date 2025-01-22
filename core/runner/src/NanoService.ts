@@ -34,7 +34,7 @@ export default abstract class NanoService extends NodeBase {
 
 		const config = _.cloneDeep(ctx.config) as ConfigContext;
 		let opts: JsonLikeObject = (config as JsonLikeObject)[this.name] as unknown as JsonLikeObject;
-		const data = ctx.response.data || ctx.request.body;
+		const data = ctx.response?.data || ctx.request?.body;
 		const inputs = opts.inputs || opts.conditions;
 
 		try {

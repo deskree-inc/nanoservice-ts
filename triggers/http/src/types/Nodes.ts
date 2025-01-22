@@ -1,7 +1,7 @@
-import type { BlueprintNode } from "@deskree/blueprint-shared";
+import type { NodeBase } from "@nanoservice-ts/shared";
 
 type Nodes = {
-	[key: string]: BlueprintNode;
+	[key: string]: NodeBase;
 };
 
 export default Nodes;

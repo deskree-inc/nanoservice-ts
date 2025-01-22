@@ -1,5 +1,16 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.12
+
+### Patch Changes
+
+- Fixed open telemetry issues and types
+- Updated dependencies
+  - @nanoservice-ts/if-else@0.0.12
+  - @nanoservice-ts/api-call@0.1.11
+  - @nanoservice-ts/runner@0.1.8
+  - @nanoservice-ts/shared@0.0.2
+
 ## 0.0.11
 
 ### Patch Changes

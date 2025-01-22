@@ -1,5 +1,14 @@
 # @nanoservice-ts/api-call
 
+## 0.1.11
+
+### Patch Changes
+
+- Fixed open telemetry issues and types
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.8
+  - @nanoservice-ts/shared@0.0.2
+
 ## 0.1.10
 
 ### Patch Changes

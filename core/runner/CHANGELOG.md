@@ -1,5 +1,13 @@
 # @nanoservice/runner
 
+## 0.1.8
+
+### Patch Changes
+
+- Fixed open telemetry issues and types
+- Updated dependencies
+  - @nanoservice-ts/shared@0.0.2
+
 ## 0.1.7
 
 ### Patch Changes

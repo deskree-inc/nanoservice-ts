@@ -1,4 +1,4 @@
-import { Workflow } from "@nanoservice-ts/helper";
+import { type Step, Workflow } from "@nanoservice-ts/helper";
 
 const step1Inputs = {
 	url: "https://countriesnow.space/api/v0.1/countries/capital",
@@ -9,7 +9,7 @@ const step1Inputs = {
 	responseType: "application/json",
 };
 
-const step = Workflow({
+const step: Step = Workflow({
 	name: "World Countries",
 	version: "1.0.0",
 	description: "Workflow description",

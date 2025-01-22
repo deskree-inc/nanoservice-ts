@@ -1,61 +1,41 @@
 import os from "node:os";
-import MetricsBase, { type MemoryUsageType } from "./MetricsBase";
+import MetricsBase from "./MetricsBase";
 
 export default class MemoryUsage extends MetricsBase {
-	public usages: number[] = [];
-	public timer: NodeJS.Timeout | undefined;
+	protected min_val = 0;
+	protected max_val = 0;
+	protected total_val = 0;
+	protected counter = 0;
 
-	constructor() {
-		super();
-		this.timer = undefined;
+	public start(): void {
+		const usage = process.memoryUsage().heapUsed;
+		const val = usage / 1000000;
+
+		this.total_val += val;
+
+		if (this.min_val === 0) this.min_val = val;
+		this.min_val = this.min_val > val ? val : this.min_val;
+		this.max_val = this.max_val < val ? val : this.max_val;
+
+		this.counter++;
 	}
 
-	public async start(ms?: number) {
-		this.timer = await setInterval(async () => {
-			let usage = 0;
-			usage = process.memoryUsage().heapUsed;
+	public stop() {}
 
-			this.usages.push(usage / 1000000);
-		}, ms || 5);
-	}
-
-	public async stop() {
-		setTimeout(() => {
-			clearInterval(this.timer);
-		}, 10);
-	}
-
-	public async getUsages(): Promise<number[]> {
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				resolve(this.usages);
-			}, 20);
-		});
-	}
-
-	public async getMetrics(): Promise<MemoryUsageType> {
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				let total = 0;
-				for (let i = 0; i < this.usages.length; i++) {
-					total += this.usages[i];
-				}
-
-				const max = Math.max(...this.usages);
-				const min = Math.min(...this.usages);
-
-				resolve({
-					total: total / this.usages.length,
-					min: min,
-					max: max,
-					global_memory: os.totalmem() / 1000000,
-					global_free_memory: os.freemem() / 1000000,
-				});
-			}, 20);
-		});
+	public getMetrics() {
+		return {
+			total: this.total_val / this.counter,
+			min: this.min_val,
+			max: this.max_val,
+			global_memory: os.totalmem() / 1000000,
+			global_free_memory: os.freemem() / 1000000,
+		};
 	}
 
 	public clear(): void {
-		this.usages = [];
+		this.total_val = 0;
+		this.min_val = 0;
+		this.max_val = 0;
+		this.counter = 0;
 	}
 }

@@ -1,4 +1,5 @@
-import { CpuUsage, MemoryUsage, Time } from "./utils";
+import { CpuUsage, Time } from "./utils";
+import MemoryUsage from "./utils/MemoryUsage";
 import type { CpuUsageType, MemoryUsageType, TimeUsageType } from "./utils/MetricsBase";
 
 class Metrics {
@@ -12,30 +13,34 @@ class Metrics {
 		this.time = new Time();
 	}
 
-	public async start() {
+	public start() {
 		this.cpuUsage.start();
 		this.memoryUsage.start();
 		this.time.start();
 	}
 
-	public async stop() {
-		this.cpuUsage.stop();
-		this.time.stop();
-		await this.memoryUsage.stop();
+	public retry() {
+		this.memoryUsage.start();
 	}
 
-	public async clear() {
+	public stop() {
+		this.cpuUsage.stop();
+		this.time.stop();
+		this.memoryUsage.stop();
+	}
+
+	public clear() {
 		this.memoryUsage.clear();
 	}
 
-	public async getMetrics(): Promise<MetricsType> {
-		const cpu = await this.cpuUsage.getMetrics();
-		const memory = await this.memoryUsage.getMetrics();
-		const time = await this.time.getMetrics();
+	public getMetrics(): MetricsType {
+		const cpu = this.cpuUsage.getMetrics();
+		const memory = this.memoryUsage.getMetrics();
+		const time = this.time.getMetrics();
 
 		return {
 			cpu,
-			memory,
+			memory: memory,
 			time,
 		};
 	}
@@ -47,5 +52,4 @@ type MetricsType = {
 	time: TimeUsageType;
 };
 
-export default new Metrics();
 export { Metrics, type MetricsType };

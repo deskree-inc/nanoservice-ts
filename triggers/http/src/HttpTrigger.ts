@@ -53,6 +53,7 @@ export default class HttpTrigger extends TriggerBase {
 				const id: string = (req.query?.requestId as string) || (uuid() as string);
 				req.query.requestId = undefined;
 				const blueprintNameInPath: string = req.params.blueprint;
+				const globalMetrics = new Metrics();
 
 				const workflow_execution = metrics.getMeter("default").createCounter(`workflow:${blueprintNameInPath}`, {
 					description: "Workflow requests",
@@ -70,10 +71,15 @@ export default class HttpTrigger extends TriggerBase {
 					description: "Workflow runner cpu usage",
 				});
 
-				this.tracer.startActiveSpan(`${blueprintNameInPath}`, async (span: Span) => {
+				const workflow_runner_errors = metrics
+					.getMeter("default")
+					.createCounter(`workflow:${blueprintNameInPath}:errors`, {
+						description: "Workflow runner errors",
+					});
+
+				await this.tracer.startActiveSpan(`${blueprintNameInPath}`, async (span: Span) => {
 					try {
-						const metrics = new Metrics();
-						metrics.start();
+						globalMetrics.start();
 						const start = performance.now();
 
 						await this.configuration.init(blueprintNameInPath, this.nodeMap);
@@ -90,14 +96,14 @@ export default class HttpTrigger extends TriggerBase {
 
 						ctx.request = req as unknown as RequestContext;
 						ctx = await this.run(ctx);
-
-						metrics.stop();
-						const average = await metrics.getMetrics();
+						globalMetrics.retry();
+						globalMetrics.stop();
+						const average = await globalMetrics.getMetrics();
 
 						ctx.logger.log(
 							`Memory average: ${average.memory.total.toFixed(2)}MB, min: ${average.memory.min.toFixed(2)}MB, max: ${average.memory.max.toFixed(2)}MB`,
 						);
-						metrics.clear();
+						globalMetrics.clear();
 
 						const end = performance.now();
 						ctx.logger.log(`Workflow Runner completed in ${(end - start).toFixed(2)}ms`);
@@ -168,6 +174,13 @@ export default class HttpTrigger extends TriggerBase {
 							const error_context = e as GlobalError;
 
 							if (error_context.context.message === "{}" && error_context.context.json instanceof DOMException) {
+								workflow_runner_errors.add(1, {
+									pid: process.pid,
+									env: process.env.NODE_ENV,
+									workflow_request_id: `${id}`,
+									workflow_path: `${blueprintNameInPath}`,
+									workflow_error: (error_context.context.json as Error).toString(),
+								});
 								span.setStatus({
 									code: SpanStatusCode.ERROR,
 									message: (error_context.context.json as Error).toString(),
@@ -181,14 +194,35 @@ export default class HttpTrigger extends TriggerBase {
 								const code = error_context.context.code as number;
 
 								if (error_context.hasJson()) {
+									workflow_runner_errors.add(1, {
+										pid: process.pid,
+										env: process.env.NODE_ENV,
+										workflow_request_id: `${id}`,
+										workflow_path: `${blueprintNameInPath}`,
+										workflow_error: "custom error",
+									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: JSON.stringify(error_context.context.json) });
 									res.status(code).json(error_context.context.json);
 								} else {
+									workflow_runner_errors.add(1, {
+										pid: process.pid,
+										env: process.env.NODE_ENV,
+										workflow_request_id: `${id}`,
+										workflow_path: `${blueprintNameInPath}`,
+										workflow_error: error_context.message,
+									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
 									res.status(code).json({ error: error_context.message });
 								}
 							}
 						} else {
+							workflow_runner_errors.add(1, {
+								pid: process.pid,
+								env: process.env.NODE_ENV,
+								workflow_request_id: `${id}`,
+								workflow_path: `${blueprintNameInPath}`,
+								workflow_error: (e as Error).message,
+							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
 							res.status(500).json({ error: (e as Error).message });
 						}
