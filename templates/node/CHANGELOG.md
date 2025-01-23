@@ -1,5 +1,14 @@
 # node-name
 
+## 0.0.9
+
+### Patch Changes
+
+- Improved and extended the open telemetry feature
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.9
+  - @nanoservice-ts/shared@0.0.3
+
 ## 0.0.8
 
 ### Patch Changes

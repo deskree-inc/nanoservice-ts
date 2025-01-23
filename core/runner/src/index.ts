@@ -26,6 +26,7 @@ import Properties from "./types/Properties";
 import Targets from "./types/Targets";
 import Trigger from "./types/Trigger";
 import TriggerHttp from "./types/TriggerHttp";
+import TriggerResponse from "./types/TriggerResponse";
 import Triggers from "./types/Triggers";
 
 export {
@@ -56,4 +57,5 @@ export {
 	INanoServiceResponse,
 	RunnerSteps,
 	Average,
+	TriggerResponse,
 };

@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/runner",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
@@ -30,6 +30,7 @@
 		"zod": "^3.24.1",
 		"@nanoservice-ts/shared": "workspace:*",
 		"@nanoservice-ts/helper": "workspace:*",
+		"@opentelemetry/api": "^1.9.0",
 		"uuid": "^11.0.3",
 		"jsonschema": "^1.4.1",
 		"lodash": "^4.17.21"

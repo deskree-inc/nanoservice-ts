@@ -1,5 +1,11 @@
 # @nanoservice-ts/shared
 
+## 0.0.3
+
+### Patch Changes
+
+- Improved and extended the open telemetry feature
+
 ## 0.0.2
 
 ### Patch Changes

@@ -10,6 +10,8 @@ import type VarsContext from "./VarsContext";
 
 type Context = {
 	id: string;
+	workflow_name?: string;
+	workflow_path?: string;
 	request: RequestContext;
 	response: ResponseContext;
 	error: ErrorContext;

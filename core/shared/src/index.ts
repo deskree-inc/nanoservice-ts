@@ -1,6 +1,6 @@
 import GlobalError from "./GlobalError";
 import GlobalLogger from "./GlobalLogger";
-import { Metrics } from "./Metrics";
+import { Metrics, type MetricsType } from "./Metrics";
 import NodeBase from "./NodeBase";
 import Trigger from "./Trigger";
 import ConfigContext from "./types/ConfigContext";
@@ -30,4 +30,5 @@ export {
 	GlobalError,
 	Metrics,
 	MemoryUsage,
+	type MetricsType,
 };

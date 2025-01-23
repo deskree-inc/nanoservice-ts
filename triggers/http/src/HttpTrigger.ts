@@ -1,7 +1,7 @@
-import type { GlobalOptions } from "@nanoservice-ts/runner";
+import type { GlobalOptions, TriggerResponse } from "@nanoservice-ts/runner";
 import { TriggerBase } from "@nanoservice-ts/runner";
 import { NodeMap } from "@nanoservice-ts/runner";
-import { type Context, GlobalError, Metrics, type RequestContext } from "@nanoservice-ts/shared";
+import { type Context, GlobalError, type RequestContext } from "@nanoservice-ts/shared";
 import { type Span, SpanStatusCode, metrics, trace } from "@opentelemetry/api";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -53,57 +53,30 @@ export default class HttpTrigger extends TriggerBase {
 				const id: string = (req.query?.requestId as string) || (uuid() as string);
 				req.query.requestId = undefined;
 				const blueprintNameInPath: string = req.params.blueprint;
-				const globalMetrics = new Metrics();
 
-				const workflow_execution = metrics.getMeter("default").createCounter(`workflow:${blueprintNameInPath}`, {
-					description: "Workflow requests",
+				const defaultMeter = metrics.getMeter("default");
+				const workflow_runner_errors = defaultMeter.createCounter(`workflow:${blueprintNameInPath}:errors`, {
+					description: "Workflow runner errors",
 				});
-
-				const workflow_runner_time = metrics.getMeter("default").createGauge(`workflow:${blueprintNameInPath}:time`, {
-					description: "Workflow runner elapsed time",
-				});
-
-				const workflow_runner_mem = metrics.getMeter("default").createGauge(`workflow:${blueprintNameInPath}:memory`, {
-					description: "Workflow runner memory usage",
-				});
-
-				const workflow_runner_cpu = metrics.getMeter("default").createGauge(`workflow:${blueprintNameInPath}:cpu`, {
-					description: "Workflow runner cpu usage",
-				});
-
-				const workflow_runner_errors = metrics
-					.getMeter("default")
-					.createCounter(`workflow:${blueprintNameInPath}:errors`, {
-						description: "Workflow runner errors",
-					});
 
 				await this.tracer.startActiveSpan(`${blueprintNameInPath}`, async (span: Span) => {
 					try {
-						globalMetrics.start();
 						const start = performance.now();
 
 						await this.configuration.init(blueprintNameInPath, this.nodeMap);
-
 						let ctx: Context = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
 						req.params = handleDynamicRoute(this.configuration.trigger.http.path, req);
 
 						ctx.logger.log(`Workflow name: "${this.configuration.name}", version: "${this.configuration.version}"`);
 
 						const { method, path } = this.configuration.trigger.http;
-
 						if (method && req.method.toLowerCase() !== method.toLowerCase()) throw new Error("Invalid HTTP method");
 						if (!validateRoute(path, req.path)) throw new Error("Invalid HTTP path");
 
 						ctx.request = req as unknown as RequestContext;
-						ctx = await this.run(ctx);
-						globalMetrics.retry();
-						globalMetrics.stop();
-						const average = await globalMetrics.getMetrics();
-
-						ctx.logger.log(
-							`Memory average: ${average.memory.total.toFixed(2)}MB, min: ${average.memory.min.toFixed(2)}MB, max: ${average.memory.max.toFixed(2)}MB`,
-						);
-						globalMetrics.clear();
+						const response: TriggerResponse = await this.run(ctx);
+						ctx = response.ctx;
+						const average = response.metrics;
 
 						const end = performance.now();
 						ctx.logger.log(`Workflow Runner completed in ${(end - start).toFixed(2)}ms`);
@@ -125,43 +98,6 @@ export default class HttpTrigger extends TriggerBase {
 						span.setAttribute("workflow_cpu_usage", `${average.cpu.usage}`);
 						span.setAttribute("workflow_cpu_model", `${average.cpu.model}`);
 						span.setStatus({ code: SpanStatusCode.OK });
-
-						workflow_execution.add(1, {
-							pid: process.pid,
-							env: process.env.NODE_ENV,
-							workflow_request_id: `${ctx.id}`,
-							workflow_runner_version: `${this.configuration.version}`,
-							workflow_runner_name: `${this.configuration.name}`,
-						});
-
-						workflow_runner_time.record(end - start, {
-							pid: process.pid,
-							env: process.env.NODE_ENV,
-							workflow_request_id: `${ctx.id}`,
-							workflow_version: `${this.configuration.version}`,
-							workflow_name: `${this.configuration.name}`,
-						});
-
-						workflow_runner_mem.record(average.memory.max, {
-							pid: process.pid,
-							env: process.env.NODE_ENV,
-							workflow_request_id: `${ctx.id}`,
-							workflow_version: `${this.configuration.version}`,
-							workflow_name: `${this.configuration.name}`,
-							average: average.memory.total,
-							min: average.memory.min,
-						});
-
-						workflow_runner_cpu.record(average.cpu.usage, {
-							pid: process.pid,
-							env: process.env.NODE_ENV,
-							workflow_request_id: `${ctx.id}`,
-							workflow_version: `${this.configuration.version}`,
-							workflow_name: `${this.configuration.name}`,
-							cpu_percentage: average.cpu.average,
-							cpu_total: average.cpu.total,
-							cpu_model: average.cpu.model,
-						});
 
 						res.setHeader("Content-Type", ctx.response.contentType);
 						res.status(200).send(ctx.response.data);

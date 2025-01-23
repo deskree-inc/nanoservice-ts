@@ -1,5 +1,14 @@
 # @nanoservice-ts/if-else
 
+## 0.0.13
+
+### Patch Changes
+
+- Improved and extended the open telemetry feature
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.9
+  - @nanoservice-ts/shared@0.0.3
+
 ## 0.0.12
 
 ### Patch Changes

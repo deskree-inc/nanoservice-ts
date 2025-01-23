@@ -67,8 +67,8 @@ export default class Configuration implements Config {
 			const step: RunnerNode = blueprint_steps[i];
 			const node: RunnerNode = await this.nodeResolver(step);
 
-			const validator = z.instanceof(NodeBase);
-			validator.parse(node);
+			// const validator = z.instanceof(NodeBase);
+			// validator.parse(node);
 			node.node = step.node;
 			node.name = step.name;
 			node.active = step.active !== undefined ? step.active : true;
