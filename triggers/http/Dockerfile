@@ -37,6 +37,8 @@ COPY --from=prerelease /usr/src/app/workflows workflows
 ENV WORKFLOWS_PATH=/usr/src/app/workflows
 ENV CONSOLE_LOG_ACTIVE=false
 ENV NODE_ENV=production
+ENV LOKI_EXPORTER_ACTIVATED=true
+ENV LOKI_EXPORTER_URL=http://loki:3100/otlp
 
 # run the app
 USER node

@@ -4,3 +4,10 @@ datasources:
     url: http://prometheus:9090
     access: proxy
     isDefault: true
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    jsonData:
+      timeout: 60
+      maxLines: 1000

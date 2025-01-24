@@ -31,15 +31,15 @@ export default abstract class TriggerBase extends Trigger {
 			description: "Workflow requests",
 		});
 
-		const workflow_runner_time = defaultMeter.createGauge("workflow:time", {
+		const workflow_runner_time = defaultMeter.createGauge("workflow_time", {
 			description: "Workflow runner elapsed time",
 		});
 
-		const workflow_runner_mem = defaultMeter.createGauge("workflow:memory", {
+		const workflow_runner_mem = defaultMeter.createGauge("workflow_memory", {
 			description: "Workflow runner memory usage",
 		});
 
-		const workflow_runner_cpu = defaultMeter.createGauge("workflow:cpu", {
+		const workflow_runner_cpu = defaultMeter.createGauge("workflow_cpu", {
 			description: "Workflow runner cpu usage",
 		});
 

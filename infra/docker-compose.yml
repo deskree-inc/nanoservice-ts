@@ -42,6 +42,17 @@ services:
     privileged: true
     depends_on:
       - prometheus
+      - loki
+    restart: unless-stopped
+  loki:
+    container_name: loki
+    hostname: loki
+    image: grafana/loki:3.3.2
+    ports:
+      - "3100:3100"
+    volumes:
+      - "./loki-config.yaml:/mnt/config/loki-config.yaml"
+    command: -config.file=/mnt/config/loki-config.yaml
     restart: unless-stopped
 
   nanoservice-http:

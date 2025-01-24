@@ -40,7 +40,7 @@ export default abstract class NanoService extends NodeBase {
 			description: "Node requests",
 		});
 
-		const node_time = defaultMeter.createGauge("node:time", {
+		const node_time = defaultMeter.createGauge("node_time", {
 			description: "Node elapsed time",
 		});
 

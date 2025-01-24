@@ -12,8 +12,8 @@
 	"steps": [
 		{
 			"name": "filter-request",
-			"node": "control-flow/if-else@1.0.0",
-			"type": "local"
+			"node": "@nanoservice-ts/if-else",
+			"type": "module"
 		}
 	],
 	"nodes": {

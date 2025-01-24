@@ -55,7 +55,7 @@ export default class HttpTrigger extends TriggerBase {
 				const blueprintNameInPath: string = req.params.blueprint;
 
 				const defaultMeter = metrics.getMeter("default");
-				const workflow_runner_errors = defaultMeter.createCounter("workflow:errors", {
+				const workflow_runner_errors = defaultMeter.createCounter("workflow_errors", {
 					description: "Workflow runner errors",
 				});
 

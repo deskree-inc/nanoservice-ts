@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.11
+
+### Patch Changes
+
+- Fixed invalid metric name
+
 ## 0.1.10
 
 ### Patch Changes
