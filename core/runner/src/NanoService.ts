@@ -36,11 +36,11 @@ export default abstract class NanoService extends NodeBase {
 		const defaultMeter = metrics.getMeter("default");
 		const start = performance.now();
 
-		const node_execution = defaultMeter.createCounter(`node:${this.name}`, {
+		const node_execution = defaultMeter.createCounter("node", {
 			description: "Node requests",
 		});
 
-		const node_time = defaultMeter.createGauge(`node:${this.name}:time`, {
+		const node_time = defaultMeter.createGauge("node:time", {
 			description: "Node elapsed time",
 		});
 
@@ -63,9 +63,7 @@ export default abstract class NanoService extends NodeBase {
 			const end = performance.now();
 
 			node_execution.add(1, {
-				pid: process.pid,
 				env: process.env.NODE_ENV,
-				workflow_request_id: `${ctx.id}`,
 				workflow_runner_path: `${ctx.workflow_path}`,
 				workflow_runner_name: `${ctx.workflow_name}`,
 				node_name: `${this.name}`,
@@ -73,9 +71,7 @@ export default abstract class NanoService extends NodeBase {
 			});
 
 			node_time.record(end - start, {
-				pid: process.pid,
 				env: process.env.NODE_ENV,
-				workflow_request_id: `${ctx.id}`,
 				workflow_runner_path: `${ctx.workflow_path}`,
 				workflow_runner_name: `${ctx.workflow_name}`,
 				node_name: `${this.name}`,

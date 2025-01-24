@@ -23,6 +23,7 @@ services:
     depends_on:
       - cadvisor
       - nanoservice-http
+    restart: unless-stopped
 
   grafana:
     container_name: grafana
@@ -41,6 +42,7 @@ services:
     privileged: true
     depends_on:
       - prometheus
+    restart: unless-stopped
 
   nanoservice-http:
     container_name: nanoservice-http
@@ -51,5 +53,6 @@ services:
     ports:
       - "4000:4000"
       - "9091:9091"
+    restart: unless-stopped
 volumes:
   grafana-data:

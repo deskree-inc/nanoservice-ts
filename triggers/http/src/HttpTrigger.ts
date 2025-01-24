@@ -55,7 +55,7 @@ export default class HttpTrigger extends TriggerBase {
 				const blueprintNameInPath: string = req.params.blueprint;
 
 				const defaultMeter = metrics.getMeter("default");
-				const workflow_runner_errors = defaultMeter.createCounter(`workflow:${blueprintNameInPath}:errors`, {
+				const workflow_runner_errors = defaultMeter.createCounter("workflow:errors", {
 					description: "Workflow runner errors",
 				});
 
@@ -111,11 +111,9 @@ export default class HttpTrigger extends TriggerBase {
 
 							if (error_context.context.message === "{}" && error_context.context.json instanceof DOMException) {
 								workflow_runner_errors.add(1, {
-									pid: process.pid,
 									env: process.env.NODE_ENV,
-									workflow_request_id: `${id}`,
-									workflow_path: `${blueprintNameInPath}`,
-									workflow_error: (error_context.context.json as Error).toString(),
+									workflow_version: `${this.configuration.version || "unknown"}`,
+									workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 								});
 								span.setStatus({
 									code: SpanStatusCode.ERROR,
@@ -131,21 +129,17 @@ export default class HttpTrigger extends TriggerBase {
 
 								if (error_context.hasJson()) {
 									workflow_runner_errors.add(1, {
-										pid: process.pid,
 										env: process.env.NODE_ENV,
-										workflow_request_id: `${id}`,
-										workflow_path: `${blueprintNameInPath}`,
-										workflow_error: "custom error",
+										workflow_version: `${this.configuration.version || "unknown"}`,
+										workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: JSON.stringify(error_context.context.json) });
 									res.status(code).json(error_context.context.json);
 								} else {
 									workflow_runner_errors.add(1, {
-										pid: process.pid,
 										env: process.env.NODE_ENV,
-										workflow_request_id: `${id}`,
-										workflow_path: `${blueprintNameInPath}`,
-										workflow_error: error_context.message,
+										workflow_version: `${this.configuration.version || "unknown"}`,
+										workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
 									res.status(code).json({ error: error_context.message });
@@ -153,11 +147,9 @@ export default class HttpTrigger extends TriggerBase {
 							}
 						} else {
 							workflow_runner_errors.add(1, {
-								pid: process.pid,
 								env: process.env.NODE_ENV,
-								workflow_request_id: `${id}`,
-								workflow_path: `${blueprintNameInPath}`,
-								workflow_error: (e as Error).message,
+								workflow_version: `${this.configuration.version || "unknown"}`,
+								workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
 							res.status(500).json({ error: (e as Error).message });

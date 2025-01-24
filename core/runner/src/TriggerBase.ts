@@ -27,19 +27,19 @@ export default abstract class TriggerBase extends Trigger {
 	async run(ctx: Context): Promise<TriggerResponse> {
 		const start = performance.now();
 		const defaultMeter = metrics.getMeter("default");
-		const workflow_execution = defaultMeter.createCounter(`workflow:${ctx.workflow_path}`, {
+		const workflow_execution = defaultMeter.createCounter("workflow", {
 			description: "Workflow requests",
 		});
 
-		const workflow_runner_time = defaultMeter.createGauge(`workflow:${ctx.workflow_path}:time`, {
+		const workflow_runner_time = defaultMeter.createGauge("workflow:time", {
 			description: "Workflow runner elapsed time",
 		});
 
-		const workflow_runner_mem = defaultMeter.createGauge(`workflow:${ctx.workflow_path}:memory`, {
+		const workflow_runner_mem = defaultMeter.createGauge("workflow:memory", {
 			description: "Workflow runner memory usage",
 		});
 
-		const workflow_runner_cpu = defaultMeter.createGauge(`workflow:${ctx.workflow_path}:cpu`, {
+		const workflow_runner_cpu = defaultMeter.createGauge("workflow:cpu", {
 			description: "Workflow runner cpu usage",
 		});
 
@@ -59,40 +59,27 @@ export default abstract class TriggerBase extends Trigger {
 			);
 			globalMetrics.clear();
 			workflow_execution.add(1, {
-				pid: process.pid,
 				env: process.env.NODE_ENV,
-				workflow_request_id: `${ctx.id}`,
 				workflow_runner_version: `${this.configuration.version}`,
 				workflow_runner_name: `${this.configuration.name}`,
 			});
 
 			workflow_runner_time.record(end - start, {
-				pid: process.pid,
 				env: process.env.NODE_ENV,
-				workflow_request_id: `${ctx.id}`,
 				workflow_version: `${this.configuration.version}`,
 				workflow_name: `${this.configuration.name}`,
 			});
 
 			workflow_runner_mem.record(average.memory.max, {
-				pid: process.pid,
 				env: process.env.NODE_ENV,
-				workflow_request_id: `${ctx.id}`,
 				workflow_version: `${this.configuration.version}`,
 				workflow_name: `${this.configuration.name}`,
-				average: average.memory.total,
-				min: average.memory.min,
 			});
 
 			workflow_runner_cpu.record(average.cpu.usage, {
-				pid: process.pid,
 				env: process.env.NODE_ENV,
-				workflow_request_id: `${ctx.id}`,
 				workflow_version: `${this.configuration.version}`,
 				workflow_name: `${this.configuration.name}`,
-				cpu_percentage: average.cpu.average,
-				cpu_total: average.cpu.total,
-				cpu_model: average.cpu.model,
 			});
 
 			return {
