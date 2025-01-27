@@ -104,7 +104,7 @@ export async function createProject(opts: OptionValues) {
 		const envLocal = `${dirPath}/.env.local`;
 
 		let envContent = fsExtra.readFileSync(envExample, "utf8");
-		envContent = envContent.replace(/\[PROJECT_NAME\]/g, dirPath);
+		envContent = envContent.replace(/PROJECT_NAME/g, dirPath);
 		fsExtra.writeFileSync(envLocal, envContent);
 
 		// Change project name in package.json
