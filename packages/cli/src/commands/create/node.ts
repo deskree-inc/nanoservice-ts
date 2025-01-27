@@ -71,7 +71,7 @@ export async function createNode(opts: OptionValues) {
 		if (!nodeProjectDirExists) throw new Error("ops1");
 
 		// Prepare the node
-		const currentNodesDir = `${currentDir}/nodes`;
+		const currentNodesDir = `${currentDir}/src/nodes`;
 		if (!isDefault) {
 			fsExtra.ensureDirSync(currentNodesDir);
 		} else {
@@ -89,7 +89,14 @@ export async function createNode(opts: OptionValues) {
 
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node`, dirPath);
 
-		// Create a new project
+		// Change project name in package.json
+		const packageJson = `${dirPath}/package.json`;
+		const packageJsonContent = JSON.parse(fsExtra.readFileSync(packageJson, "utf8"));
+		packageJsonContent.name = nodeName;
+		packageJsonContent.version = "1.0.0";
+		packageJsonContent.author = "";
+		fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
+
 		if (!isDefault) s.stop("Node created successfully");
 		console.log(`Node Name: ${nodeName}`);
 	} catch (error) {

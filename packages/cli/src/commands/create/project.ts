@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import * as p from "@clack/prompts";
@@ -93,12 +92,28 @@ export async function createProject(opts: OptionValues) {
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/triggers/${trigger}`, dirPath);
 
 		if (!isDefault) s.message("Installing the examples of workflows and nodes");
-		const nodesDir = `${dirPath}/nodes`;
+		const nodesDir = `${dirPath}/src/nodes`;
 		const workflowsDir = `${dirPath}/workflows`;
-		fs.unlinkSync(nodesDir);
-		fs.unlinkSync(workflowsDir);
+
 		fsExtra.ensureDirSync(nodesDir);
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/workflows`, workflowsDir);
+
+		// Create .env.local file
+
+		const envExample = `${dirPath}/.env.example`;
+		const envLocal = `${dirPath}/.env.local`;
+
+		let envContent = fsExtra.readFileSync(envExample, "utf8");
+		envContent = envContent.replace(/\[PROJECT_NAME\]/g, dirPath);
+		fsExtra.writeFileSync(envLocal, envContent);
+
+		// Change project name in package.json
+		const packageJson = `${dirPath}/package.json`;
+		const packageJsonContent = JSON.parse(fsExtra.readFileSync(packageJson, "utf8"));
+		packageJsonContent.name = projectName;
+		packageJsonContent.version = "1.0.0";
+		packageJsonContent.author = "";
+		fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
 
 		// Create a new project
 		if (!isDefault) s.stop("Project created successfully");
