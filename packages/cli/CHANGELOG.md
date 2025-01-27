@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.10
+
+### Patch Changes
+
+- Improved project and node creation with default settings
+
 ## 0.0.9
 
 ### Patch Changes
