@@ -1,0 +1,48 @@
+---
+title: nanoctl
+---
+
+`nanoservice-ts` is using [npx](https://docs.npmjs.com/cli/v8/commands/npx) for our CLI called `nanoctl`. `nanoctl` is a command-line tool designed to simplify the creation and setup of nanoservice projects. It enables developers to quickly initialize ready-to-use project structures with minimal configuration.
+
+# Commands
+
+Below is the list of all existing `npx nanoctl` commands:
+
+### Create Project
+
+Command responsbile for instantiating a new nanoservice project.
+
+```bash
+  npx nanoctl@latest create project
+```
+
+Requests the following parameters via the CLI:
+
+<Steps>
+  <Step title="Assign a name to the project">
+    Select the project name.
+  </Step>
+  <Step title=" Choose the trigger to install">
+    Select a default workflow trigger to install (ex. HTTP). For the list of available triggers and their configurations, check the [Triggers](/docs/d/core-concepts/trigger) page.
+  </Step>
+</Steps>
+
+The new nanoservice-ts project will be created in the current directory. To learn more visit [Initialization Guide](/docs/d/getting-started/npx).
+
+### Create Node
+
+Command responsbile for instantiating a new nanoservice project.
+
+```bash
+  npx nanoctl@latest create node
+```
+
+Requests the following parameters via the CLI:
+
+<Steps>
+  <Step title="Assign a name to the nodet">
+    Select the node name.
+  </Step>
+</Steps>
+
+A new node will be created in the `nodes` directory of an active nanoservice project. To learn more about nodes, visit the [Nodes](/docs/d/core-concepts/nodes) page. For a detailed guide on how to create a custom node and use it, check out the [Quickstart](/docs/d/quickstart.mdx) page.
