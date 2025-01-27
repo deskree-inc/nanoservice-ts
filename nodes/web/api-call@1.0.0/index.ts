@@ -1,10 +1,10 @@
-import type { BlueprintContext } from "@deskree/blueprint-shared";
 import {
 	type INanoServiceResponse,
 	type JsonLikeObject,
 	NanoService,
 	NanoServiceResponse,
 } from "@nanoservice-ts/runner";
+import type { Context } from "@nanoservice-ts/shared";
 import { inputSchema } from "./inputSchema";
 import { runApiCall } from "./util";
 
@@ -16,7 +16,7 @@ export default class ApiCall extends NanoService {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
 		try {
@@ -26,7 +26,7 @@ export default class ApiCall extends NanoService {
 			const responseType = inputs.responseType as string;
 			const body = inputs.body || ctx.response.data;
 
-			const result = await runApiCall(url, method, headers, body, responseType);
+			const result = await runApiCall(url, method, headers, body as JsonLikeObject, responseType);
 			response.setSuccess(result);
 		} catch (error: unknown) {
 			this.setError(

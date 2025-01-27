@@ -1,36 +1,32 @@
-import { MemoryUsage } from "@nanoservice-ts/runner";
+import { env } from "node:process";
+import { DefaultLogger } from "@nanoservice-ts/runner";
+import { type Span, metrics, trace } from "@opentelemetry/api";
 import HttpTrigger from "./HttpTrigger";
 
 class Main {
 	private httpTrigger: HttpTrigger = <HttpTrigger>{};
-	protected memoryUsage: MemoryUsage;
 	protected trigger_initializer = 0;
 	protected initializer = 0;
+	protected tracer = trace.getTracer("trigger-http-server", "0.0.8");
+	private logger = new DefaultLogger();
+	protected app_cold_start = metrics.getMeter("default").createGauge("initialization", {
+		description: "Application cold start",
+	});
 
 	constructor() {
-		this.httpTrigger = new HttpTrigger();
-		this.memoryUsage = new MemoryUsage();
 		this.initializer = performance.now();
+		this.httpTrigger = new HttpTrigger();
 	}
 
 	async run() {
-		this.trigger_initializer = await this.httpTrigger.listen();
-		this.initializer = performance.now() - this.initializer + this.trigger_initializer;
+		this.tracer.startActiveSpan("initialization", async (span: Span) => {
+			await this.httpTrigger.listen();
+			this.initializer = performance.now() - this.initializer;
 
-		console.log(`Runner initialized in ${(this.initializer).toFixed(2)}ms`);
-
-		const mem_usage = process.env.SHOW_MEMORY_USAGE || "false";
-		if (mem_usage === "true") {
-			this.memoryUsage.start();
-			setInterval(() => {
-				this.memoryUsage.getAverage().then((average) => {
-					console.log(
-						`Node Mem: ${(average.total).toFixed(2)} MB, Host Mem: ${(average.global_memory).toFixed(2)} MB, Host Free Mem: ${(average.global_free_memory).toFixed(2)} MB`,
-					);
-					this.memoryUsage.clear();
-				});
-			}, 1000);
-		}
+			this.logger.log(`Server initialized in ${(this.initializer).toFixed(2)}ms`);
+			this.app_cold_start.record(this.initializer, { pid: process.pid, env: env.NODE_ENV });
+			span.end();
+		});
 	}
 
 	getHttpApp() {

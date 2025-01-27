@@ -1,22 +1,22 @@
 import assert from "node:assert";
 import { before, describe, it, mock } from "node:test";
-import type { BlueprintContext } from "@deskree/blueprint-shared";
 import type { ParamsDictionary } from "@nanoservice-ts/runner";
+import type { Context } from "@nanoservice-ts/shared";
 import Node from "../index";
 
-function generateCtx(): BlueprintContext {
-	const ctx: BlueprintContext = {
+function generateCtx(): Context {
+	const ctx: Context = {
 		response: {
 			data: null,
 			error: null,
 		},
 		request: {
-			body: null,
+			body: <ParamsDictionary>{},
 		},
 		config: {},
 		id: "",
 		error: {
-			message: undefined,
+			message: "",
 			code: undefined,
 			json: undefined,
 			stack: undefined,

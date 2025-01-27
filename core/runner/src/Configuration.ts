@@ -1,5 +1,5 @@
-import { BlueprintNode } from "@deskree/blueprint-shared";
-import { z } from "zod";
+// import { NodeBase } from "@nanoservice-ts/shared";
+// import { z } from "zod";
 import ConfigurationResolver from "./ConfigurationResolver";
 import type NanoService from "./NanoService";
 import type RunnerNode from "./RunnerNode";
@@ -57,18 +57,18 @@ export default class Configuration implements Config {
 		const nodes: NanoService[] = [];
 
 		if (blueprint_steps === undefined) {
-			throw new Error("Blueprint must have at least one step");
+			throw new Error("Workflow must have at least one step");
 		}
 		if (blueprint_steps.length === 0) {
-			throw new Error("Blueprint must have at least one step");
+			throw new Error("Workflow must have at least one step");
 		}
 
 		for (let i = 0; i < blueprint_steps.length; i++) {
 			const step: RunnerNode = blueprint_steps[i];
 			const node: RunnerNode = await this.nodeResolver(step);
 
-			const validator = z.instanceof(BlueprintNode);
-			validator.parse(node);
+			// const validator = z.instanceof(NodeBase);
+			// validator.parse(node);
 			node.node = step.node;
 			node.name = step.name;
 			node.active = step.active !== undefined ? step.active : true;
@@ -155,8 +155,8 @@ export default class Configuration implements Config {
 			node.active = step.active !== undefined ? step.active : true;
 			node.stop = step.stop !== undefined ? step.stop : false;
 
-			const validator = z.instanceof(BlueprintNode);
-			validator.parse(node);
+			// const validator = z.instanceof(NodeBase);
+			// validator.parse(node);
 			flows.steps.push(node);
 		}
 

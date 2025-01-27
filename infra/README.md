@@ -1,0 +1,60 @@
+# DEPLOY
+
+You can deploy using Docker in any cloud service like:
+1. AWS
+2. GCP
+3. Azure
+4. Digital Ocean
+
+> **Http Trigger** includes the Dockerfile
+
+Also, you can deploy using docker compose in development or staging environment using our docker-compose.yml and configurations files included in the infra 
+directory.
+<br/><br/>
+To get the templates, you must clone our github repository into your local computer.
+
+```sh
+git clone https://github.com/deskree-inc/nanoservice-ts.git nanoservice-ts
+cd nanoservice-ts
+cd infra
+
+# Using the default settings without Logs
+docker compose up -d
+
+# Testing
+curl -i -GET 'http://localhost:4000/countries' 
+
+# Grafana
+# http://localhost:3000 
+# user: admin
+# pass: admin
+
+# To activate the logs to be displayed in Grafana Dashboard, you must install the Docker Plugin following the instruction bellow.
+```
+
+# LOKI
+
+To collect Loki logs from Docker Container, please install the docker plugin following the instructions here:
+<br/>
+<a href="https://grafana.com/docs/loki/latest/send-data/docker-driver/">Driver Documentation</a>
+<br/>
+<br/>
+Also enable loggin in docker-compose.yml file:
+```yaml
+nanoservice-http:
+    container_name: nanoservice-http
+    hostname: nanoservice-http
+    build:
+      context: ../triggers/http
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+      - "9091:9091"
+    restart: unless-stopped
+    logging: # Log to Loki. Enable this to see logs in Grafana.
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-retries: 5
+        loki-batch-size: 400
+```

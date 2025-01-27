@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/if-else",
-	"version": "0.0.8",
+	"version": "0.0.16",
 	"description": "nanoservice if-else",
 	"engines": {
 		"node": ">=18.0.0"
@@ -23,7 +23,7 @@
 		"rimraf": "^6.0.1"
 	},
 	"dependencies": {
-		"@deskree/blueprint-shared": "0.0.21",
+		"@nanoservice-ts/shared": "workspace:*",
 		"@nanoservice-ts/runner": "workspace:*",
 		"@nanoservice-ts/helper": "workspace:*",
 		"lodash": "^4.17.21"

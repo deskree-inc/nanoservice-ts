@@ -1,6 +1,6 @@
 {
 	"name": "nanoctl",
-	"version": "0.0.7",
+	"version": "0.0.9",
 	"license": "MIT",
 	"description": "cli for nanoservice-ts",
 	"engines": {

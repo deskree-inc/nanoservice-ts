@@ -1,7 +1,9 @@
-import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
-import { type GlobalOptions, MemoryUsage } from "@nanoservice-ts/runner";
+import type { GlobalOptions, TriggerResponse } from "@nanoservice-ts/runner";
 import { TriggerBase } from "@nanoservice-ts/runner";
 import { NodeMap } from "@nanoservice-ts/runner";
+import { DefaultLogger } from "@nanoservice-ts/runner";
+import { type Context, GlobalError, type RequestContext } from "@nanoservice-ts/shared";
+import { type Span, SpanStatusCode, metrics, trace } from "@opentelemetry/api";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
@@ -15,6 +17,8 @@ export default class HttpTrigger extends TriggerBase {
 	private port: string | number = process.env.PORT || 4000;
 	private initializer = 0;
 	private nodeMap: GlobalOptions = <GlobalOptions>{};
+	protected tracer = trace.getTracer("trigger-http-workflow", "0.0.1");
+	private logger = new DefaultLogger();
 
 	constructor() {
 		super();
@@ -52,78 +56,119 @@ export default class HttpTrigger extends TriggerBase {
 				req.query.requestId = undefined;
 				const blueprintNameInPath: string = req.params.blueprint;
 
-				try {
-					const memoryUsage = new MemoryUsage();
-					memoryUsage.start();
-					const start = performance.now();
+				const defaultMeter = metrics.getMeter("default");
+				const workflow_runner_errors = defaultMeter.createCounter("workflow_errors", {
+					description: "Workflow runner errors",
+				});
 
-					await this.configuration.init(blueprintNameInPath, this.nodeMap);
+				await this.tracer.startActiveSpan(`${blueprintNameInPath}`, async (span: Span) => {
+					try {
+						const start = performance.now();
 
-					let ctx: BlueprintContext = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
-					req.params = handleDynamicRoute(this.configuration.trigger.http.path, req);
+						await this.configuration.init(blueprintNameInPath, this.nodeMap);
+						let ctx: Context = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
+						req.params = handleDynamicRoute(this.configuration.trigger.http.path, req);
 
-					ctx.logger.log(`Blueprint name: "${this.configuration.name}", version: "${this.configuration.version}"`);
+						ctx.logger.log(`Version: ${this.configuration.version}, Method: ${req.method}`);
 
-					const { method, path } = this.configuration.trigger.http;
+						const { method, path } = this.configuration.trigger.http;
+						if (method && req.method.toLowerCase() !== method.toLowerCase()) throw new Error("Invalid HTTP method");
+						if (!validateRoute(path, req.path)) throw new Error("Invalid HTTP path");
 
-					if (method && req.method.toLowerCase() !== method.toLowerCase()) throw new Error("Invalid HTTP method");
-					if (!validateRoute(path, req.path)) throw new Error("Invalid HTTP path");
+						ctx.request = req as unknown as RequestContext;
+						const response: TriggerResponse = await this.run(ctx);
+						ctx = response.ctx;
+						const average = response.metrics;
 
-					ctx.request = req;
-					ctx = await this.run(ctx);
+						const end = performance.now();
+						ctx.logger.log(`Completed in ${(end - start).toFixed(2)}ms`);
 
-					memoryUsage.stop();
-					const average = await memoryUsage.getAverage();
-					ctx.logger.log(
-						`Memory average: ${average.total.toFixed(2)}MB, min: ${average.min.toFixed(2)}MB, max: ${average.max.toFixed(2)}MB`,
-					);
-					memoryUsage.clear();
+						if (ctx.response.contentType === undefined || ctx.response.contentType === "")
+							ctx.response.contentType = "application/json";
 
-					const end = performance.now();
-					ctx.logger.log(`Workflow Runner completed in ${(end - start).toFixed(2)}ms`);
+						span.setAttribute("success", true);
+						span.setAttribute("Content-Type", ctx.response.contentType);
+						span.setAttribute("workflow_request_id", `${ctx.id}`);
+						span.setAttribute("workflow_elapsed_time", `${end - start}`);
+						span.setAttribute("workflow_version", `${this.configuration.version}`);
+						span.setAttribute("workflow_name", `${this.configuration.name}`);
+						span.setAttribute("workflow_memory_avg_mb", `${average.memory.total}`);
+						span.setAttribute("workflow_memory_min_mb", `${average.memory.min}`);
+						span.setAttribute("workflow_memory_max_mb", `${average.memory.max}`);
+						span.setAttribute("workflow_cpu_percentage", `${average.cpu.average}`);
+						span.setAttribute("workflow_cpu_total", `${average.cpu.total}`);
+						span.setAttribute("workflow_cpu_usage", `${average.cpu.usage}`);
+						span.setAttribute("workflow_cpu_model", `${average.cpu.model}`);
+						span.setStatus({ code: SpanStatusCode.OK });
 
-					if (ctx.response.contentType === undefined || ctx.response.contentType === "")
-						ctx.response.contentType = "application/json";
+						res.setHeader("Content-Type", ctx.response.contentType);
+						res.status(200).send(ctx.response.data);
+					} catch (e: unknown) {
+						span.setAttribute("success", false);
+						span.setAttribute("workflow_request_id", `${id}`);
+						span.recordException(e as Error);
 
-					res.setHeader("Content-Type", ctx.response.contentType);
-					res.setHeader("workflow_runner_id", `${ctx.id}`);
-					res.setHeader("workflow_runner_time", `${end - start}`);
-					res.setHeader("workflow_runner_version", `${this.configuration.version}`);
-					res.setHeader("workflow_runner_name", `${this.configuration.name}`);
-					res.setHeader("workflow_runner_memory_avg_mb", `${average.total}`);
-					res.setHeader("workflow_runner_memory_min_mb", `${average.min}`);
-					res.setHeader("workflow_runner_memory_max_mb", `${average.max}`);
+						if (e instanceof GlobalError) {
+							const error_context = e as GlobalError;
 
-					res.status(200).send(ctx.response.data);
-				} catch (e: unknown) {
-					res.setHeader("blueprint_runner_id", `${id}`);
+							if (error_context.context.message === "{}" && error_context.context.json instanceof DOMException) {
+								workflow_runner_errors.add(1, {
+									env: process.env.NODE_ENV,
+									workflow_version: `${this.configuration.version || "unknown"}`,
+									workflow_name: `${blueprintNameInPath || this.configuration.name}`,
+								});
+								span.setStatus({
+									code: SpanStatusCode.ERROR,
+									message: (error_context.context.json as Error).toString(),
+								});
+								res.status(500).json({
+									origin: error_context.context.name,
+									error: (error_context.context.json as Error).toString(),
+								});
 
-					if (e instanceof BlueprintError) {
-						const error_context = e as BlueprintError;
-
-						if (error_context.context.message === "{}" && error_context.context.json instanceof DOMException) {
-							res
-								.status(500)
-								.json({ origin: error_context.context.name, error: (error_context.context.json as Error).toString() });
-						} else {
-							if (error_context.context.code === undefined) error_context.setCode(500);
-							const code = error_context.context.code as number;
-
-							if (error_context.hasJson()) {
-								res.status(code).json(error_context.context.json);
+								this.logger.error(`${(error_context.context.json as Error).toString()}`);
 							} else {
-								console.log("error_context", error_context);
-								res.status(code).json({ error: error_context.message });
+								if (error_context.context.code === undefined) error_context.setCode(500);
+								const code = error_context.context.code as number;
+
+								if (error_context.hasJson()) {
+									workflow_runner_errors.add(1, {
+										env: process.env.NODE_ENV,
+										workflow_version: `${this.configuration.version || "unknown"}`,
+										workflow_name: `${blueprintNameInPath || this.configuration.name}`,
+									});
+									span.setStatus({ code: SpanStatusCode.ERROR, message: JSON.stringify(error_context.context.json) });
+									this.logger.error(`${JSON.stringify(error_context.context.json)}`);
+									res.status(code).json(error_context.context.json);
+								} else {
+									workflow_runner_errors.add(1, {
+										env: process.env.NODE_ENV,
+										workflow_version: `${this.configuration.version || "unknown"}`,
+										workflow_name: `${blueprintNameInPath || this.configuration.name}`,
+									});
+									span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
+									this.logger.error(`${error_context.message}`);
+									res.status(code).json({ error: error_context.message });
+								}
 							}
+						} else {
+							workflow_runner_errors.add(1, {
+								env: process.env.NODE_ENV,
+								workflow_version: `${this.configuration.version || "unknown"}`,
+								workflow_name: `${blueprintNameInPath || this.configuration.name}`,
+							});
+							span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
+							this.logger.error(`${(e as Error).message}`, `${(e as Error).stack?.replace(/\n/g, " ")}`);
+							res.status(500).json({ error: (e as Error).message });
 						}
-					} else {
-						res.status(500).json({ error: (e as Error).message });
+					} finally {
+						span.end();
 					}
-				}
+				});
 			});
 
 			this.app.listen(this.port, () => {
-				console.log(`HttpTrigger is running at http://localhost:${this.port}`);
+				this.logger.log(`Server is running at http://localhost:${this.port}`);
 				done(this.endCounter(this.initializer));
 			});
 		});

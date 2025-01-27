@@ -1,4 +1,4 @@
-import type { BlueprintError, ResponseContext } from "@deskree/blueprint-shared";
+import type { GlobalError, ResponseContext } from "@nanoservice-ts/shared";
 import type NanoService from "./NanoService";
 import type JsonLikeObject from "./types/JsonLikeObject";
 
@@ -9,7 +9,7 @@ export interface INanoServiceResponse extends ResponseContext {
 export default class NanoServiceResponse implements INanoServiceResponse {
 	public steps: NanoService[];
 	public data: string | JsonLikeObject;
-	public error: BlueprintError | null;
+	public error: GlobalError | null;
 	public success?: boolean | undefined;
 	public contentType?: string | undefined;
 
@@ -21,7 +21,7 @@ export default class NanoServiceResponse implements INanoServiceResponse {
 		this.contentType = "application/json";
 	}
 
-	setError(error: BlueprintError): void {
+	setError(error: GlobalError): void {
 		this.error = error;
 		this.success = false;
 		this.data = {};

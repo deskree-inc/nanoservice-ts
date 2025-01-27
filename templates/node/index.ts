@@ -1,10 +1,10 @@
-import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
 import {
 	type INanoServiceResponse,
 	type JsonLikeObject,
 	NanoService,
 	NanoServiceResponse,
 } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
 
 // This is the main class that will be exported
 // This class will be used to create a new instance of the node
@@ -22,7 +22,7 @@ export default class Node extends NanoService {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
 		// Create a new instance of the response
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
@@ -30,7 +30,7 @@ export default class Node extends NanoService {
 			// Your code here
 			response.setSuccess({ message: "Hello World from Node!" }); // Set the success
 		} catch (error: unknown) {
-			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
+			const nodeError: GlobalError = new GlobalError((error as Error).message);
 			nodeError.setCode(500);
 			nodeError.setStack((error as Error).stack);
 			nodeError.setName(this.name);

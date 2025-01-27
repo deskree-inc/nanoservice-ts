@@ -1,6 +1,6 @@
-import { AddElse, AddIf, Workflow } from "@nanoservice-ts/helper";
+import { AddElse, AddIf, type Step, Workflow } from "@nanoservice-ts/helper";
 
-const step = Workflow({
+const step: Step = Workflow({
 	name: "World Countries",
 	version: "1.0.0",
 	description: "Workflow description",
@@ -13,8 +13,8 @@ const step = Workflow({
 	.addCondition({
 		node: {
 			name: "filter-request",
-			node: "control-flow/if-else@1.0.0",
-			type: "local",
+			node: "@nanoservice-ts/if-else",
+			type: "module",
 		},
 		conditions: () => {
 			return [

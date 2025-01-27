@@ -1,7 +1,7 @@
-import type { BlueprintTrigger } from "@deskree/blueprint-shared";
+import type { Trigger } from "@nanoservice-ts/shared";
 
 type Triggers = {
-	[key: string]: BlueprintTrigger;
+	[key: string]: Trigger;
 };
 
 export default Triggers;

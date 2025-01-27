@@ -1,5 +1,48 @@
 # node-name
 
+## 0.0.10
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.12
+  - @nanoservice-ts/shared@0.0.4
+
+## 0.0.9
+
+### Patch Changes
+
+- Improved and extended the open telemetry feature
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.9
+  - @nanoservice-ts/shared@0.0.3
+
+## 0.0.8
+
+### Patch Changes
+
+- Fixed open telemetry issues and types
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.8
+  - @nanoservice-ts/shared@0.0.2
+
+## 0.0.7
+
+### Patch Changes
+
+- Fixed issue with the cli node creation test
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.7
+  - @nanoservice-ts/shared@0.0.1
+
+## 0.0.6
+
+### Patch Changes
+
+- Migrated and refactored shared library
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.6
+
 ## 0.0.5
 
 ### Patch Changes

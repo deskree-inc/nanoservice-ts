@@ -1,13 +1,14 @@
-import type { BlueprintContext, ResponseContext } from "@deskree/blueprint-shared";
+import type { Context, LoggerContext, ResponseContext } from "@nanoservice-ts/shared";
 import { beforeAll, expect, test } from "vitest";
+import DefaultLogger from "../src/DefaultLogger";
 import NanoService from "../src/NanoService";
 import NanoServiceResponse, { type INanoServiceResponse } from "../src/NanoServiceResponse";
 import type JsonLikeObject from "../src/types/JsonLikeObject";
 
-let context = <BlueprintContext>{};
+let context = <Context>{};
 
 beforeAll(() => {
-	context = <BlueprintContext>{
+	context = <Context>{
 		response: {},
 		request: {},
 		vars: {},
@@ -20,6 +21,7 @@ beforeAll(() => {
 				},
 			},
 		} as JsonLikeObject,
+		logger: new DefaultLogger() as LoggerContext,
 	};
 });
 
@@ -40,7 +42,7 @@ test("Execute nanoService wrong inputs", async () => {
 	const response: ResponseContext = await nano.run(context);
 
 	expect(response.success).toBe(false);
-	expect(response.error?.context.json.message).toBe('requires property "data"');
+	expect(response.error?.context?.json?.message).toBe('requires property "data"');
 });
 
 class AddCreatedAtProperty extends NanoService {
@@ -71,7 +73,7 @@ class AddCreatedAtProperty extends NanoService {
 		};
 	}
 
-	public async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService[]> {
+	public async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService[]> {
 		const response = new NanoServiceResponse();
 		const data = inputs.data as JsonLikeObject;
 		data.createdAt = true;

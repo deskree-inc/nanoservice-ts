@@ -1,7 +1,7 @@
 {
 	"name": "@nanoservice-ts/api-call",
-	"version": "0.1.7",
-	"description": "Blueprint runner",
+	"version": "0.1.15",
+	"description": "Node module for making API calls",
 	"engines": {
 		"node": ">=18.0.0"
 	},
@@ -23,7 +23,7 @@
 		"rimraf": "^6.0.1"
 	},
 	"dependencies": {
-		"@deskree/blueprint-shared": "0.0.21",
+		"@nanoservice-ts/shared": "workspace:*",
 		"@nanoservice-ts/runner": "workspace:*",
 		"lodash": "^4.17.21"
 	},
