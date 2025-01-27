@@ -35,6 +35,12 @@ function generateCtx(): Context {
 			getLogsAsBase64: (): string => {
 				throw new Error("Function not implemented.");
 			},
+			logLevel: (level: string, message: string): void => {
+				throw new Error("Function not implemented.");
+			},
+			error: (message: string, stack: string): void => {
+				throw new Error("Function not implemented.");
+			},
 		},
 		eventLogger: undefined,
 		_PRIVATE_: undefined,
