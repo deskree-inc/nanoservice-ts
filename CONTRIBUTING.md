@@ -54,7 +54,7 @@ cd nanoservice-ts
 ---
 
 ## Code Style and Standards
-- Use [insert style guide/tool, e.g., Prettier/ESLint] to ensure code consistency.
+- Use ESLint to ensure code consistency.
 - Adhere to the project's architectural patterns and modular design principles.
 - Avoid introducing unnecessary dependencies.
 
