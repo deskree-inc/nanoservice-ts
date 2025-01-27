@@ -1,3 +1,4 @@
+import { DefaultLogger } from "@nanoservice-ts/runner";
 import { metrics } from "@opentelemetry/api";
 import { PrometheusExporter } from "@opentelemetry/exporter-prometheus";
 import { Resource } from "@opentelemetry/resources";
@@ -6,7 +7,7 @@ import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic
 
 // Set up the Prometheus exporter to expose metrics at /metrics on port 9091
 const prometheusExporter = new PrometheusExporter({ port: 9091, endpoint: "/metrics" }, () =>
-	console.log("Prometheus scrape endpoint: http://localhost:9091/metrics"),
+	new DefaultLogger().log("Prometheus scrape endpoint: http://localhost:9091/metrics"),
 );
 
 const resource = Resource.default().merge(

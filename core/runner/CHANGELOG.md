@@ -1,5 +1,13 @@
 # @nanoservice/runner
 
+## 0.1.12
+
+### Patch Changes
+
+- Improved Loki metrics
+- Updated dependencies
+  - @nanoservice-ts/shared@0.0.4
+
 ## 0.1.11
 
 ### Patch Changes

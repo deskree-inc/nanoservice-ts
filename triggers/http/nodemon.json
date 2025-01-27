@@ -3,8 +3,10 @@
 	"ext": "ts",
 	"ignore": ["src/**/*.test.ts"],
 	"exec_simple": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
-	"exec_open_telemetry": "node -r ts-node/register -r ./src/open_telemetry.ts --env-file=.env.local ./src/index.ts",
-	"exec": "node -r ts-node/register -r ./src/prometheus.ts -r ./src/open_telemetry.ts --env-file=.env.local ./src/index.ts",
+	"exec_metrics": "node -r ts-node/register -r ./src/opentelemetry_metrics.ts --env-file=.env.local ./src/index.ts",
+	"exec_tracing": "node -r ts-node/register -r ./src/opentelemetry_traces.ts --env-file=.env.local ./src/index.ts",
+	"exec_metrics_tracing": "node -r ts-node/register -r ./src/opentelemetry_metrics.ts -r ./src/opentelemetry_traces.ts --env-file=.env.local ./src/index.ts",
+	"exec": "node -r ts-node/register -r ./src/opentelemetry_metrics.ts --env-file=.env.local ./src/index.ts",
 	"env": {
 		"NODE_ENV": "local"
 	}

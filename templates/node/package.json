@@ -1,6 +1,6 @@
 {
 	"name": "node-name",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"description": "",
 	"author": "",
 	"scripts": {
@@ -16,8 +16,8 @@
 		"vitest": "^2.1.8"
 	},
 	"dependencies": {
-		"@nanoservice-ts/shared": "^0.0.3",
-		"@nanoservice-ts/runner": "^0.1.9",
+		"@nanoservice-ts/shared": "^0.0.4",
+		"@nanoservice-ts/runner": "^0.1.12",
 		"@nanoservice-ts/helper": "^0.1.3"
 	},
 	"private": true

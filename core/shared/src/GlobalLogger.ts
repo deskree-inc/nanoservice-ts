@@ -8,6 +8,8 @@ export default abstract class GlobalLogger implements LoggerContext {
 	}
 
 	abstract log(message: string): void;
+	abstract logLevel(level: string, message: string): void;
+	abstract error(message: string, stack: string): void;
 
 	getLogs() {
 		return this.logs;

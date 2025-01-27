@@ -35,6 +35,7 @@ export default abstract class NanoService extends NodeBase {
 		const response: ResponseContext = { success: true, data: {}, error: null };
 		const defaultMeter = metrics.getMeter("default");
 		const start = performance.now();
+		ctx.logger.log(`Running node: ${this.name} [${JSON.stringify(this.originalConfig)}]`);
 
 		const node_execution = defaultMeter.createCounter("node", {
 			description: "Node requests",
@@ -77,6 +78,8 @@ export default abstract class NanoService extends NodeBase {
 				node_name: `${this.name}`,
 				node: (this as unknown as RunnerNode).node,
 			});
+
+			ctx.logger.log(`Executed node: ${this.name} in ${(end - start).toFixed(2)}ms`);
 
 			response.data = result;
 		} catch (error: unknown) {

@@ -1,5 +1,5 @@
-import { NodeBase } from "@nanoservice-ts/shared";
-import { z } from "zod";
+// import { NodeBase } from "@nanoservice-ts/shared";
+// import { z } from "zod";
 import ConfigurationResolver from "./ConfigurationResolver";
 import type NanoService from "./NanoService";
 import type RunnerNode from "./RunnerNode";
@@ -155,8 +155,8 @@ export default class Configuration implements Config {
 			node.active = step.active !== undefined ? step.active : true;
 			node.stop = step.stop !== undefined ? step.stop : false;
 
-			const validator = z.instanceof(NodeBase);
-			validator.parse(node);
+			// const validator = z.instanceof(NodeBase);
+			// validator.parse(node);
 			flows.steps.push(node);
 		}
 

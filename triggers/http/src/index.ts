@@ -1,4 +1,5 @@
 import { env } from "node:process";
+import { DefaultLogger } from "@nanoservice-ts/runner";
 import { type Span, metrics, trace } from "@opentelemetry/api";
 import HttpTrigger from "./HttpTrigger";
 
@@ -7,6 +8,7 @@ class Main {
 	protected trigger_initializer = 0;
 	protected initializer = 0;
 	protected tracer = trace.getTracer("trigger-http-server", "0.0.8");
+	private logger = new DefaultLogger();
 	protected app_cold_start = metrics.getMeter("default").createGauge("initialization", {
 		description: "Application cold start",
 	});
@@ -21,7 +23,7 @@ class Main {
 			await this.httpTrigger.listen();
 			this.initializer = performance.now() - this.initializer;
 
-			console.log(`HttpTrigger initialized in ${(this.initializer).toFixed(2)}ms`);
+			this.logger.log(`Server initialized in ${(this.initializer).toFixed(2)}ms`);
 			this.app_cold_start.record(this.initializer, { pid: process.pid, env: env.NODE_ENV });
 			span.end();
 		});

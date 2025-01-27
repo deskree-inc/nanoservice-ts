@@ -22,7 +22,6 @@ services:
     privileged: true
     depends_on:
       - cadvisor
-      - nanoservice-http
     restart: unless-stopped
 
   grafana:
@@ -65,5 +64,13 @@ services:
       - "4000:4000"
       - "9091:9091"
     restart: unless-stopped
+    logging: # Log to Loki. Enable this to see logs in Grafana.
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-retries: 5
+        loki-batch-size: 400
+    depends_on:
+      - loki
 volumes:
   grafana-data:

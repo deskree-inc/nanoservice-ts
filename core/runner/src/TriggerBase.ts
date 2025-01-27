@@ -92,17 +92,17 @@ export default abstract class TriggerBase extends Trigger {
 		}
 	}
 
-	createContext(logger?: LoggerContext, blueprintName?: string, id?: string): Context {
+	createContext(logger?: LoggerContext, blueprintPath?: string, id?: string): Context {
 		const requestId: string = id || uuid();
 		const ctx: Context = {
 			id: requestId,
 			workflow_name: this.configuration.name,
-			workflow_path: blueprintName || "",
+			workflow_path: blueprintPath || "",
 			config: this.configuration.nodes,
 			request: { body: {} },
 			response: { data: "", contentType: "", success: true, error: null },
 			error: { message: [] },
-			logger: logger || new DefaultLogger(blueprintName, requestId),
+			logger: logger || new DefaultLogger(this.configuration.name, blueprintPath, requestId),
 			eventLogger: null,
 			_PRIVATE_: null,
 		};

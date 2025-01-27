@@ -3,14 +3,15 @@ import type NanoService from "./NanoService";
 import type NanoServiceResponse from "./NanoServiceResponse";
 
 export default abstract class RunnerSteps {
-	async runSteps(ctx: Context, steps: NanoService[]): Promise<Context> {
+	async runSteps(ctx: Context, steps: NanoService[], deep = false, step_name = ""): Promise<Context> {
 		ctx.config = { ...ctx.config };
 
 		try {
-			ctx.logger.log(`Starting runner for ${steps.length} steps`);
+			ctx.logger.log(`Starting runner for ${steps.length} steps ${!deep ? "(Parent)" : `(${step_name})`}`);
 			let flow = false;
 			let flow_steps: NanoService[] = [];
 			let flow_step = 0;
+			let stepName = "";
 
 			for (let i = 0; i < steps.length; i++) {
 				const step: NodeBase = steps[i];
@@ -23,6 +24,7 @@ export default abstract class RunnerSteps {
 					ctx.response = model.data as NanoServiceResponse;
 					if (ctx.response.error) throw ctx.response.error;
 				} else {
+					stepName = step.name;
 					flow_steps = (await step.processFlow(ctx)).data as NanoService[];
 
 					flow = true;
@@ -34,7 +36,7 @@ export default abstract class RunnerSteps {
 
 			if (flow) {
 				const nextSteps = steps.length > flow_step + 1 ? steps.slice(flow_step + 1) : [];
-				return await this.runSteps(ctx, [...flow_steps, ...nextSteps]);
+				return await this.runSteps(ctx, [...flow_steps, ...nextSteps], true, stepName);
 			}
 		} catch (e: unknown) {
 			let error_context = <Error>{};

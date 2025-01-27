@@ -1,6 +1,7 @@
 import type { GlobalOptions, TriggerResponse } from "@nanoservice-ts/runner";
 import { TriggerBase } from "@nanoservice-ts/runner";
 import { NodeMap } from "@nanoservice-ts/runner";
+import { DefaultLogger } from "@nanoservice-ts/runner";
 import { type Context, GlobalError, type RequestContext } from "@nanoservice-ts/shared";
 import { type Span, SpanStatusCode, metrics, trace } from "@opentelemetry/api";
 import bodyParser from "body-parser";
@@ -17,6 +18,7 @@ export default class HttpTrigger extends TriggerBase {
 	private initializer = 0;
 	private nodeMap: GlobalOptions = <GlobalOptions>{};
 	protected tracer = trace.getTracer("trigger-http-workflow", "0.0.1");
+	private logger = new DefaultLogger();
 
 	constructor() {
 		super();
@@ -67,7 +69,7 @@ export default class HttpTrigger extends TriggerBase {
 						let ctx: Context = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
 						req.params = handleDynamicRoute(this.configuration.trigger.http.path, req);
 
-						ctx.logger.log(`Workflow name: "${this.configuration.name}", version: "${this.configuration.version}"`);
+						ctx.logger.log(`Version: ${this.configuration.version}, Method: ${req.method}`);
 
 						const { method, path } = this.configuration.trigger.http;
 						if (method && req.method.toLowerCase() !== method.toLowerCase()) throw new Error("Invalid HTTP method");
@@ -79,7 +81,7 @@ export default class HttpTrigger extends TriggerBase {
 						const average = response.metrics;
 
 						const end = performance.now();
-						ctx.logger.log(`Workflow Runner completed in ${(end - start).toFixed(2)}ms`);
+						ctx.logger.log(`Completed in ${(end - start).toFixed(2)}ms`);
 
 						if (ctx.response.contentType === undefined || ctx.response.contentType === "")
 							ctx.response.contentType = "application/json";
@@ -123,6 +125,8 @@ export default class HttpTrigger extends TriggerBase {
 									origin: error_context.context.name,
 									error: (error_context.context.json as Error).toString(),
 								});
+
+								this.logger.error(`${(error_context.context.json as Error).toString()}`);
 							} else {
 								if (error_context.context.code === undefined) error_context.setCode(500);
 								const code = error_context.context.code as number;
@@ -134,6 +138,7 @@ export default class HttpTrigger extends TriggerBase {
 										workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: JSON.stringify(error_context.context.json) });
+									this.logger.error(`${JSON.stringify(error_context.context.json)}`);
 									res.status(code).json(error_context.context.json);
 								} else {
 									workflow_runner_errors.add(1, {
@@ -142,6 +147,7 @@ export default class HttpTrigger extends TriggerBase {
 										workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
+									this.logger.error(`${error_context.message}`);
 									res.status(code).json({ error: error_context.message });
 								}
 							}
@@ -152,6 +158,7 @@ export default class HttpTrigger extends TriggerBase {
 								workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
+							this.logger.error(`${(e as Error).message}`, `${(e as Error).stack?.replace(/\n/g, " ")}`);
 							res.status(500).json({ error: (e as Error).message });
 						}
 					} finally {
@@ -161,7 +168,7 @@ export default class HttpTrigger extends TriggerBase {
 			});
 
 			this.app.listen(this.port, () => {
-				console.log(`HttpTrigger is running at http://localhost:${this.port}`);
+				this.logger.log(`Server is running at http://localhost:${this.port}`);
 				done(this.endCounter(this.initializer));
 			});
 		});

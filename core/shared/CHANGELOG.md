@@ -1,5 +1,11 @@
 # @nanoservice-ts/shared
 
+## 0.0.4
+
+### Patch Changes
+
+- Improved Loki metrics
+
 ## 0.0.3
 
 ### Patch Changes

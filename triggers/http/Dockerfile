@@ -35,13 +35,13 @@ COPY --from=prerelease /usr/src/app/package.json .
 COPY --from=prerelease /usr/src/app/workflows workflows
 
 ENV WORKFLOWS_PATH=/usr/src/app/workflows
-ENV CONSOLE_LOG_ACTIVE=false
+ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
-ENV LOKI_EXPORTER_ACTIVATED=true
-ENV LOKI_EXPORTER_URL=http://loki:3100/otlp
 
 # run the app
 USER node
 EXPOSE 4000/tcp
 EXPOSE 9091/tcp
-ENTRYPOINT [ "node", "-r", "./dist/open_telemetry.js", "-r", "./dist/prometheus.js", "dist/index.js" ]
+
+#ENTRYPOINT [ "node", "-r", "./dist/opentelemetry_traces.js", "-r", "./dist/opentelemetry_metrics.js", "dist/index.js" ]
+ENTRYPOINT [ "node", "-r", "./dist/opentelemetry_metrics.js", "dist/index.js" ]
