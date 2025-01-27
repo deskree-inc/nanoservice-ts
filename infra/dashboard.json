@@ -15,36 +15,60 @@
 			}
 		]
 	},
-	"description": "Docker monitoring with Prometheus and cAdvisor",
 	"editable": true,
 	"fiscalYearStartMonth": 0,
-	"gnetId": 193,
-	"graphTooltip": 1,
+	"graphTooltip": 0,
 	"id": 3,
 	"links": [],
-	"liveNow": false,
 	"panels": [
 		{
 			"datasource": {
 				"type": "prometheus",
-				"uid": "prometheus"
+				"uid": "P1809F7CD0C75ACF3"
 			},
 			"fieldConfig": {
 				"defaults": {
 					"color": {
-						"mode": "thresholds"
+						"mode": "fixed"
 					},
-					"mappings": [
-						{
-							"options": {
-								"match": "null",
-								"result": {
-									"text": "N/A"
-								}
-							},
-							"type": "special"
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 15,
+						"gradientMode": "hue",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 12,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
 						}
-					],
+					},
+					"fieldMinMax": false,
+					"mappings": [],
 					"thresholds": {
 						"mode": "absolute",
 						"steps": [
@@ -57,72 +81,131 @@
 								"value": 80
 							}
 						]
-					},
-					"unit": "none"
+					}
 				},
-				"overrides": []
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Movies or Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-green",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "World Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-yellow",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
 			},
 			"gridPos": {
-				"h": 3,
-				"w": 8,
+				"h": 10,
+				"w": 12,
 				"x": 0,
 				"y": 0
 			},
-			"id": 7,
-			"links": [],
-			"maxDataPoints": 100,
+			"id": 1,
 			"options": {
-				"colorMode": "none",
-				"graphMode": "none",
-				"justifyMode": "auto",
-				"orientation": "horizontal",
-				"reduceOptions": {
+				"legend": {
 					"calcs": ["mean"],
-					"fields": "",
-					"values": false
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
 				},
-				"textMode": "auto"
+				"timezone": ["browser"],
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
 			},
-			"pluginVersion": "10.0.2",
+			"pluginVersion": "11.4.0",
 			"targets": [
 				{
 					"datasource": {
 						"type": "prometheus",
-						"uid": "prometheus"
+						"uid": "P1809F7CD0C75ACF3"
 					},
-					"expr": "count(container_last_seen{image!=\"\"})",
-					"intervalFactor": 2,
-					"legendFormat": "",
-					"metric": "container_last_seen",
-					"refId": "A",
-					"step": 240
+					"disableTextWrap": false,
+					"editorMode": "code",
+					"expr": "increase(workflow_total[1m])",
+					"fullMetaSearch": false,
+					"includeNullMetadata": true,
+					"instant": false,
+					"legendFormat": "{{workflow_runner_name}}",
+					"range": true,
+					"refId": "Requests Success",
+					"useBackend": false
 				}
 			],
-			"title": "Running containers",
+			"title": "Workflow Requests",
 			"transparent": true,
-			"type": "stat"
+			"type": "timeseries"
 		},
 		{
 			"datasource": {
 				"type": "prometheus",
-				"uid": "prometheus"
+				"uid": "P1809F7CD0C75ACF3"
 			},
 			"fieldConfig": {
 				"defaults": {
 					"color": {
-						"mode": "thresholds"
+						"mode": "palette-classic"
 					},
-					"mappings": [
-						{
-							"options": {
-								"match": "null",
-								"result": {
-									"text": "N/A"
-								}
-							},
-							"type": "special"
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 10,
+						"gradientMode": "hue",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "linear",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 9,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "auto",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
 						}
-					],
+					},
+					"mappings": [],
 					"thresholds": {
 						"mode": "absolute",
 						"steps": [
@@ -135,509 +218,919 @@
 								"value": 80
 							}
 						]
-					},
-					"unit": "mbytes"
+					}
 				},
 				"overrides": []
 			},
 			"gridPos": {
-				"h": 3,
-				"w": 8,
-				"x": 8,
+				"h": 10,
+				"w": 12,
+				"x": 12,
 				"y": 0
 			},
-			"id": 5,
-			"links": [],
-			"maxDataPoints": 100,
-			"options": {
-				"colorMode": "none",
-				"graphMode": "none",
-				"justifyMode": "auto",
-				"orientation": "horizontal",
-				"reduceOptions": {
-					"calcs": ["lastNotNull"],
-					"fields": "",
-					"values": false
-				},
-				"textMode": "auto"
-			},
-			"pluginVersion": "10.0.2",
-			"targets": [
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "prometheus"
-					},
-					"expr": "sum(container_memory_usage_bytes{image!=\"\"})/1024/1024",
-					"intervalFactor": 2,
-					"legendFormat": "",
-					"metric": "container_memory_usage_bytes",
-					"refId": "A",
-					"step": 240
-				}
-			],
-			"title": "Total Memory Usage",
-			"transparent": true,
-			"type": "stat"
-		},
-		{
-			"datasource": {
-				"type": "prometheus",
-				"uid": "prometheus"
-			},
-			"fieldConfig": {
-				"defaults": {
-					"color": {
-						"mode": "thresholds"
-					},
-					"mappings": [
-						{
-							"options": {
-								"match": "null",
-								"result": {
-									"text": "N/A"
-								}
-							},
-							"type": "special"
-						}
-					],
-					"thresholds": {
-						"mode": "absolute",
-						"steps": [
-							{
-								"color": "green",
-								"value": null
-							},
-							{
-								"color": "red",
-								"value": 80
-							}
-						]
-					},
-					"unit": "percent"
-				},
-				"overrides": []
-			},
-			"gridPos": {
-				"h": 3,
-				"w": 8,
-				"x": 16,
-				"y": 0
-			},
-			"id": 6,
-			"links": [],
-			"maxDataPoints": 100,
-			"options": {
-				"colorMode": "none",
-				"graphMode": "none",
-				"justifyMode": "auto",
-				"orientation": "horizontal",
-				"reduceOptions": {
-					"calcs": ["lastNotNull"],
-					"fields": "",
-					"values": false
-				},
-				"textMode": "auto"
-			},
-			"pluginVersion": "10.0.2",
-			"targets": [
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "prometheus"
-					},
-					"expr": "sum(rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100)",
-					"intervalFactor": 2,
-					"legendFormat": "",
-					"metric": "container_memory_usage_bytes",
-					"refId": "A",
-					"step": 240
-				}
-			],
-			"title": "Total CPU Usage",
-			"transparent": true,
-			"type": "stat"
-		},
-		{
-			"aliasColors": {},
-			"bars": false,
-			"dashLength": 10,
-			"dashes": false,
-			"datasource": {
-				"type": "prometheus",
-				"uid": "prometheus"
-			},
-			"decimals": 2,
-			"editable": true,
-			"error": false,
-			"fill": 1,
-			"fillGradient": 0,
-			"grid": {},
-			"gridPos": {
-				"h": 7,
-				"w": 24,
-				"x": 0,
-				"y": 3
-			},
-			"hiddenSeries": false,
 			"id": 2,
-			"legend": {
-				"alignAsTable": true,
-				"avg": true,
-				"current": true,
-				"max": false,
-				"min": false,
-				"rightSide": true,
-				"show": true,
-				"total": false,
-				"values": true
-			},
-			"lines": true,
-			"linewidth": 2,
-			"links": [],
-			"nullPointMode": "connected",
 			"options": {
-				"alertThreshold": true
+				"legend": {
+					"calcs": ["mean"],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"timezone": ["browser"],
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
 			},
-			"percentage": false,
-			"pluginVersion": "10.0.2",
-			"pointradius": 5,
-			"points": false,
-			"renderer": "flot",
-			"seriesOverrides": [],
-			"spaceLength": 10,
-			"stack": false,
-			"steppedLine": false,
+			"pluginVersion": "11.4.0",
 			"targets": [
 				{
 					"datasource": {
 						"type": "prometheus",
-						"uid": "prometheus"
+						"uid": "P1809F7CD0C75ACF3"
 					},
-					"expr": "rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100",
-					"intervalFactor": 2,
-					"legendFormat": "{{name}}",
-					"metric": "cpu",
+					"disableTextWrap": false,
+					"editorMode": "builder",
+					"expr": "increase(workflow_errors_total[1m])",
+					"fullMetaSearch": false,
+					"includeNullMetadata": true,
+					"instant": false,
+					"legendFormat": "{{workflow_name}}",
+					"range": true,
 					"refId": "A",
-					"step": 10
+					"useBackend": false
 				}
 			],
-			"thresholds": [],
-			"timeRegions": [],
-			"title": "CPU Usage",
-			"tooltip": {
-				"msResolution": false,
-				"shared": true,
-				"sort": 0,
-				"value_type": "cumulative"
-			},
-			"type": "graph",
-			"xaxis": {
-				"mode": "time",
-				"show": true,
-				"values": []
-			},
-			"yaxes": [
-				{
-					"format": "percent",
-					"logBase": 1,
-					"show": true
-				},
-				{
-					"format": "short",
-					"logBase": 1,
-					"show": true
-				}
-			],
-			"yaxis": {
-				"align": false
-			}
+			"title": "Workflow Errors",
+			"transparent": true,
+			"type": "timeseries"
 		},
 		{
-			"aliasColors": {},
-			"bars": false,
-			"dashLength": 10,
-			"dashes": false,
 			"datasource": {
 				"type": "prometheus",
-				"uid": "prometheus"
+				"uid": "P1809F7CD0C75ACF3"
 			},
-			"decimals": 2,
-			"editable": true,
-			"error": false,
-			"fill": 1,
-			"fillGradient": 0,
-			"grid": {},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "fixed"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "series",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 15,
+						"gradientMode": "hue",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 12,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"fieldMinMax": false,
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Movies or Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-green",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "World Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-yellow",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
 			"gridPos": {
-				"h": 7,
-				"w": 24,
+				"h": 8,
+				"w": 8,
 				"x": 0,
 				"y": 10
 			},
-			"hiddenSeries": false,
-			"id": 1,
-			"legend": {
-				"alignAsTable": true,
-				"avg": true,
-				"current": true,
-				"max": false,
-				"min": false,
-				"rightSide": true,
-				"show": true,
-				"total": false,
-				"values": true
-			},
-			"lines": true,
-			"linewidth": 2,
-			"links": [],
-			"nullPointMode": "connected",
+			"id": 5,
 			"options": {
-				"alertThreshold": true
+				"legend": {
+					"calcs": ["min", "max"],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"timezone": ["browser"],
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
 			},
-			"percentage": false,
-			"pluginVersion": "10.0.2",
-			"pointradius": 5,
-			"points": false,
-			"renderer": "flot",
-			"seriesOverrides": [],
-			"spaceLength": 10,
-			"stack": false,
-			"steppedLine": false,
+			"pluginVersion": "11.4.0",
 			"targets": [
 				{
 					"datasource": {
 						"type": "prometheus",
-						"uid": "prometheus"
+						"uid": "P1809F7CD0C75ACF3"
 					},
-					"expr": "container_memory_usage_bytes{image!=\"\"}",
-					"hide": false,
-					"intervalFactor": 2,
-					"legendFormat": "{{name}}",
-					"metric": "container_memory_usage_bytes",
-					"refId": "A",
-					"step": 10
+					"disableTextWrap": false,
+					"editorMode": "code",
+					"expr": "increase(workflow_cpu[30s])",
+					"fullMetaSearch": false,
+					"includeNullMetadata": true,
+					"instant": false,
+					"legendFormat": "{{workflow_name}}",
+					"range": true,
+					"refId": "Requests Success",
+					"useBackend": false
 				}
 			],
-			"thresholds": [],
-			"timeRegions": [],
-			"title": "Memory Usage",
-			"tooltip": {
-				"msResolution": false,
-				"shared": true,
-				"sort": 0,
-				"value_type": "cumulative"
-			},
-			"type": "graph",
-			"xaxis": {
-				"mode": "time",
-				"show": true,
-				"values": []
-			},
-			"yaxes": [
-				{
-					"format": "bytes",
-					"label": "",
-					"logBase": 1,
-					"show": true
-				},
-				{
-					"format": "short",
-					"logBase": 1,
-					"show": false
-				}
-			],
-			"yaxis": {
-				"align": false
-			}
+			"title": "Workflow Cpu",
+			"type": "timeseries"
 		},
 		{
-			"aliasColors": {},
-			"bars": false,
-			"dashLength": 10,
-			"dashes": false,
 			"datasource": {
 				"type": "prometheus",
-				"uid": "prometheus"
+				"uid": "P1809F7CD0C75ACF3"
 			},
-			"editable": true,
-			"error": false,
-			"fill": 1,
-			"fillGradient": 0,
-			"grid": {},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "fixed"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "series",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 15,
+						"gradientMode": "hue",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 12,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"fieldMinMax": false,
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Movies or Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-green",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "World Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-yellow",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
 			"gridPos": {
-				"h": 7,
+				"h": 8,
+				"w": 8,
+				"x": 8,
+				"y": 10
+			},
+			"id": 4,
+			"options": {
+				"legend": {
+					"calcs": ["mean"],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"timezone": ["browser"],
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"pluginVersion": "11.4.0",
+			"targets": [
+				{
+					"datasource": {
+						"type": "prometheus",
+						"uid": "P1809F7CD0C75ACF3"
+					},
+					"disableTextWrap": false,
+					"editorMode": "code",
+					"expr": "increase(workflow_memory[30s])",
+					"fullMetaSearch": false,
+					"includeNullMetadata": true,
+					"instant": false,
+					"legendFormat": "{{workflow_name}}",
+					"range": true,
+					"refId": "Requests Success",
+					"useBackend": false
+				}
+			],
+			"title": "Workflow Memory",
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "prometheus",
+				"uid": "P1809F7CD0C75ACF3"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "fixed"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 15,
+						"gradientMode": "hue",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 12,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"fieldMinMax": false,
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Movies or Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-green",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "World Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-yellow",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 8,
+				"w": 8,
+				"x": 16,
+				"y": 10
+			},
+			"id": 3,
+			"options": {
+				"legend": {
+					"calcs": ["mean"],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"timezone": ["browser"],
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
+			},
+			"pluginVersion": "11.4.0",
+			"targets": [
+				{
+					"datasource": {
+						"type": "prometheus",
+						"uid": "P1809F7CD0C75ACF3"
+					},
+					"disableTextWrap": false,
+					"editorMode": "code",
+					"expr": "increase(workflow_time[1m])",
+					"fullMetaSearch": false,
+					"includeNullMetadata": true,
+					"instant": false,
+					"legendFormat": "{{workflow_name}}",
+					"range": true,
+					"refId": "Requests Success",
+					"useBackend": false
+				}
+			],
+			"title": "Workflow Request Time",
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "prometheus",
+				"uid": "P1809F7CD0C75ACF3"
+			},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "fixed"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 15,
+						"gradientMode": "hue",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 12,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"fieldMinMax": false,
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Movies or Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-green",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "World Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-yellow",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "@nanoservice-ts/api-call:get-countries-api"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-purple",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "@nanoservice-ts/api-call:get-facts"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-blue",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "@nanoservice-ts/if-else:filter-request"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "super-light-blue",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
+			"gridPos": {
+				"h": 10,
 				"w": 12,
 				"x": 0,
-				"y": 17
+				"y": 18
 			},
-			"hiddenSeries": false,
-			"id": 3,
-			"legend": {
-				"avg": false,
-				"current": false,
-				"max": false,
-				"min": false,
-				"show": true,
-				"total": false,
-				"values": false
-			},
-			"lines": true,
-			"linewidth": 2,
-			"links": [],
-			"nullPointMode": "connected",
+			"id": 6,
 			"options": {
-				"alertThreshold": true
+				"legend": {
+					"calcs": ["mean"],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"timezone": ["browser"],
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
 			},
-			"percentage": false,
-			"pluginVersion": "10.0.2",
-			"pointradius": 5,
-			"points": false,
-			"renderer": "flot",
-			"seriesOverrides": [],
-			"spaceLength": 10,
-			"stack": false,
-			"steppedLine": false,
+			"pluginVersion": "11.4.0",
 			"targets": [
 				{
 					"datasource": {
 						"type": "prometheus",
-						"uid": "prometheus"
+						"uid": "P1809F7CD0C75ACF3"
 					},
-					"expr": "irate(container_network_receive_bytes_total{image!=\"\"}[5m])",
-					"intervalFactor": 2,
-					"legendFormat": "{{name}}",
-					"metric": "container_network_receive_bytes_total",
-					"refId": "A",
-					"step": 20
+					"disableTextWrap": false,
+					"editorMode": "code",
+					"expr": "increase(node_total[1m])",
+					"fullMetaSearch": false,
+					"includeNullMetadata": true,
+					"instant": false,
+					"legendFormat": "{{node}}:{{node_name}}",
+					"range": true,
+					"refId": "Requests Success",
+					"useBackend": false
 				}
 			],
-			"thresholds": [],
-			"timeRegions": [],
-			"title": "Network Rx",
-			"tooltip": {
-				"msResolution": false,
-				"shared": true,
-				"sort": 0,
-				"value_type": "cumulative"
-			},
-			"type": "graph",
-			"xaxis": {
-				"mode": "time",
-				"show": true,
-				"values": []
-			},
-			"yaxes": [
-				{
-					"format": "Bps",
-					"logBase": 1,
-					"show": true
-				},
-				{
-					"format": "short",
-					"logBase": 1,
-					"show": true
-				}
-			],
-			"yaxis": {
-				"align": false
-			}
+			"title": "Node Requests",
+			"transparent": true,
+			"type": "timeseries"
 		},
 		{
-			"aliasColors": {},
-			"bars": false,
-			"dashLength": 10,
-			"dashes": false,
 			"datasource": {
 				"type": "prometheus",
-				"uid": "prometheus"
+				"uid": "P1809F7CD0C75ACF3"
 			},
-			"editable": true,
-			"error": false,
-			"fill": 1,
-			"fillGradient": 0,
-			"grid": {},
+			"fieldConfig": {
+				"defaults": {
+					"color": {
+						"mode": "fixed"
+					},
+					"custom": {
+						"axisBorderShow": false,
+						"axisCenteredZero": false,
+						"axisColorMode": "text",
+						"axisLabel": "",
+						"axisPlacement": "auto",
+						"barAlignment": 0,
+						"barWidthFactor": 0.6,
+						"drawStyle": "line",
+						"fillOpacity": 15,
+						"gradientMode": "hue",
+						"hideFrom": {
+							"legend": false,
+							"tooltip": false,
+							"viz": false
+						},
+						"insertNulls": false,
+						"lineInterpolation": "smooth",
+						"lineStyle": {
+							"fill": "solid"
+						},
+						"lineWidth": 2,
+						"pointSize": 12,
+						"scaleDistribution": {
+							"type": "linear"
+						},
+						"showPoints": "always",
+						"spanNulls": false,
+						"stacking": {
+							"group": "A",
+							"mode": "none"
+						},
+						"thresholdsStyle": {
+							"mode": "off"
+						}
+					},
+					"fieldMinMax": false,
+					"mappings": [],
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{
+								"color": "green",
+								"value": null
+							},
+							{
+								"color": "red",
+								"value": 80
+							}
+						]
+					}
+				},
+				"overrides": [
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "Movies or Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-green",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "World Countries"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-yellow",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "@nanoservice-ts/api-call:get-countries-api"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-purple",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "@nanoservice-ts/api-call:get-facts"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "dark-blue",
+									"mode": "fixed"
+								}
+							}
+						]
+					},
+					{
+						"matcher": {
+							"id": "byName",
+							"options": "@nanoservice-ts/if-else:filter-request"
+						},
+						"properties": [
+							{
+								"id": "color",
+								"value": {
+									"fixedColor": "super-light-blue",
+									"mode": "fixed"
+								}
+							}
+						]
+					}
+				]
+			},
 			"gridPos": {
-				"h": 7,
+				"h": 10,
 				"w": 12,
 				"x": 12,
-				"y": 17
+				"y": 18
 			},
-			"hiddenSeries": false,
-			"id": 4,
-			"legend": {
-				"avg": false,
-				"current": false,
-				"max": false,
-				"min": false,
-				"show": true,
-				"total": false,
-				"values": false
-			},
-			"lines": true,
-			"linewidth": 2,
-			"links": [],
-			"nullPointMode": "connected",
+			"id": 7,
 			"options": {
-				"alertThreshold": true
+				"legend": {
+					"calcs": ["mean"],
+					"displayMode": "list",
+					"placement": "bottom",
+					"showLegend": true
+				},
+				"timezone": ["browser"],
+				"tooltip": {
+					"mode": "single",
+					"sort": "none"
+				}
 			},
-			"percentage": false,
-			"pluginVersion": "10.0.2",
-			"pointradius": 5,
-			"points": false,
-			"renderer": "flot",
-			"seriesOverrides": [],
-			"spaceLength": 10,
-			"stack": false,
-			"steppedLine": false,
+			"pluginVersion": "11.4.0",
 			"targets": [
 				{
 					"datasource": {
 						"type": "prometheus",
-						"uid": "prometheus"
+						"uid": "P1809F7CD0C75ACF3"
 					},
-					"expr": "irate(container_network_transmit_bytes_total{image!=\"\"}[5m])",
-					"intervalFactor": 2,
-					"legendFormat": "{{name}}",
-					"refId": "A",
-					"step": 20
+					"disableTextWrap": false,
+					"editorMode": "code",
+					"expr": "increase(node_time[1m])",
+					"fullMetaSearch": false,
+					"includeNullMetadata": true,
+					"instant": false,
+					"legendFormat": "{{node}}:{{node_name}}",
+					"range": true,
+					"refId": "Requests Success",
+					"useBackend": false
 				}
 			],
-			"thresholds": [],
-			"timeRegions": [],
-			"title": "Network Tx",
-			"tooltip": {
-				"msResolution": false,
-				"shared": true,
-				"sort": 0,
-				"value_type": "cumulative"
+			"title": "Node Request Time",
+			"transparent": true,
+			"type": "timeseries"
+		},
+		{
+			"datasource": {
+				"type": "loki",
+				"uid": "P8E80F9AEF21F6940"
 			},
-			"type": "graph",
-			"xaxis": {
-				"mode": "time",
-				"show": true,
-				"values": []
+			"fieldConfig": {
+				"defaults": {},
+				"overrides": []
 			},
-			"yaxes": [
+			"gridPos": {
+				"h": 10,
+				"w": 24,
+				"x": 0,
+				"y": 28
+			},
+			"id": 8,
+			"options": {
+				"dedupStrategy": "none",
+				"enableLogDetails": true,
+				"prettifyLogMessage": false,
+				"showCommonLabels": false,
+				"showLabels": false,
+				"showTime": false,
+				"sortOrder": "Descending",
+				"wrapLogMessage": false
+			},
+			"pluginVersion": "11.4.0",
+			"targets": [
 				{
-					"format": "Bps",
-					"logBase": 1,
-					"show": true
-				},
-				{
-					"format": "short",
-					"logBase": 1,
-					"show": true
+					"datasource": {
+						"type": "loki",
+						"uid": "P8E80F9AEF21F6940"
+					},
+					"editorMode": "builder",
+					"expr": "{service_name=\"nanoservice-http\"} |= `level=\"info\"`",
+					"queryType": "range",
+					"refId": "A"
 				}
 			],
-			"yaxis": {
-				"align": false
-			}
+			"title": "Logs",
+			"type": "logs"
+		},
+		{
+			"datasource": {
+				"type": "loki",
+				"uid": "P8E80F9AEF21F6940"
+			},
+			"fieldConfig": {
+				"defaults": {},
+				"overrides": []
+			},
+			"gridPos": {
+				"h": 11,
+				"w": 24,
+				"x": 0,
+				"y": 38
+			},
+			"id": 9,
+			"options": {
+				"dedupStrategy": "none",
+				"enableLogDetails": true,
+				"prettifyLogMessage": false,
+				"showCommonLabels": false,
+				"showLabels": false,
+				"showTime": false,
+				"sortOrder": "Descending",
+				"wrapLogMessage": false
+			},
+			"pluginVersion": "11.4.0",
+			"targets": [
+				{
+					"datasource": {
+						"type": "loki",
+						"uid": "P8E80F9AEF21F6940"
+					},
+					"editorMode": "builder",
+					"expr": "{service_name=\"nanoservice-http\"} |= `level=\"error\"`",
+					"queryType": "range",
+					"refId": "A"
+				}
+			],
+			"title": "Errors",
+			"type": "logs"
 		}
 	],
-	"refresh": "10s",
-	"schemaVersion": 38,
-	"style": "dark",
-	"tags": ["docker"],
+	"preload": false,
+	"refresh": "",
+	"schemaVersion": 40,
+	"tags": [],
 	"templating": {
 		"list": []
 	},
@@ -645,24 +1138,10 @@
 		"from": "now-5m",
 		"to": "now"
 	},
-	"timepicker": {
-		"refresh_intervals": [
-			"5s",
-			"10s",
-			"30s",
-			"1m",
-			"5m",
-			"15m",
-			"30m",
-			"1h",
-			"2h",
-			"1d"
-		],
-		"time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
-	},
+	"timepicker": {},
 	"timezone": "browser",
-	"title": "Docker Monitoring Test",
-	"uid": "ee75b6b8-f1c6-4ef1-9d39-fe50cc55a274",
-	"version": 1,
+	"title": "Workflows Dashboard",
+	"uid": "ceawp9k6qslxcf",
+	"version": 32,
 	"weekStart": ""
 }
