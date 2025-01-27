@@ -37,6 +37,7 @@ COPY --from=prerelease /usr/src/app/workflows workflows
 ENV WORKFLOWS_PATH=/usr/src/app/workflows
 ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
+ENV APP_NAME=nanoservice-http
 
 # run the app
 USER node

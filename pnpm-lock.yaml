@@ -240,11 +240,11 @@ importers:
         specifier: ^0.1.3
         version: 0.1.3
       '@nanoservice-ts/runner':
-        specifier: ^0.1.9
-        version: 0.1.9
+        specifier: ^0.1.12
+        version: 0.1.12
       '@nanoservice-ts/shared':
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.4
+        version: 0.0.4
     devDependencies:
       '@types/node':
         specifier: ^22.10.2
@@ -281,20 +281,20 @@ importers:
   triggers/http:
     dependencies:
       '@nanoservice-ts/api-call':
-        specifier: workspace:*
-        version: link:../../nodes/web/api-call@1.0.0
+        specifier: ^0.1.15
+        version: 0.1.15
       '@nanoservice-ts/helper':
         specifier: ^0.1.3
         version: 0.1.3
       '@nanoservice-ts/if-else':
-        specifier: workspace:*
-        version: link:../../nodes/control-flow/if-else@1.0.0
+        specifier: ^0.0.16
+        version: 0.0.16
       '@nanoservice-ts/runner':
-        specifier: workspace:*
-        version: link:../../core/runner
+        specifier: ^0.1.12
+        version: 0.1.12
       '@nanoservice-ts/shared':
-        specifier: workspace:*
-        version: link:../../core/shared
+        specifier: ^0.0.4
+        version: 0.0.4
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.0
@@ -679,16 +679,24 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
+  '@nanoservice-ts/api-call@0.1.15':
+    resolution: {integrity: sha512-tTRQYO0iUJvXaHFD5e+0GIXNhJxdYTndJS8RLKSDORFoti3x+oU1UeUddgpNHzyRxcx+A31Qflpd3mU3XACf+A==}
+    engines: {node: '>=18.0.0'}
+
   '@nanoservice-ts/helper@0.1.3':
     resolution: {integrity: sha512-ohwjvxvrSFGS0ciy1dQoyX1viPFtNlbmomn+hma9jtIw5LG0JPjQVRN1PtxUGeV6h6+tofBb0Tk7F1Jj+2u35g==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/runner@0.1.9':
-    resolution: {integrity: sha512-BjikWIudYUUsT37I74v5zQbAVrRU3tovc7SieL+xLB6kZv1u1zpZ2Snigykm8onbvjxYdrAGO7QXOGautICx2A==}
+  '@nanoservice-ts/if-else@0.0.16':
+    resolution: {integrity: sha512-zHNvlKQFYGQ7cnKyfYF8MFX4qh83UtUXQX59KyNVrjW/vQVxdAvo7V6sF1BdTS0ZJD1nF1QyIuHNhIfsNg+JFQ==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/shared@0.0.3':
-    resolution: {integrity: sha512-TIF1o4Q7VWrMf+jGbdIj6Zgzx962QHK0rZfYVTWyKCW39VdIeWhduJ1L17ec8KBd29f7lYTh0XSQzaegVW1Knw==}
+  '@nanoservice-ts/runner@0.1.12':
+    resolution: {integrity: sha512-Zz7JhVRq0Djzmm5YFmJC2VxzCE1ByrT4+jqH5R4zrsuLUHPoCWkVwlw8wfuAQf95V4IQDeGVm7pf4nR9MQOIAg==}
+    engines: {node: '>=18.0.0'}
+
+  '@nanoservice-ts/shared@0.0.4':
+    resolution: {integrity: sha512-hwRxiDOI77rKjhQYPjDuN77YmwhzVwXoXXmyOex7gofWwj0lvXTU6/U+ihGqum8cezRMzf2PYe3rLE5BG8LjxQ==}
 
   '@napi-rs/wasm-runtime@0.2.4':
     resolution: {integrity: sha512-9zESzOO5aDByvhIAsOy9TbpZ0Ur2AJbUI7UT73kcUTS2mxAMHOBaa1st/jAymNoCtvrit99kkzT1FZuXVcgfIQ==}
@@ -3408,21 +3416,34 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
+  '@nanoservice-ts/api-call@0.1.15':
+    dependencies:
+      '@nanoservice-ts/runner': 0.1.12
+      '@nanoservice-ts/shared': 0.0.4
+      lodash: 4.17.21
+
   '@nanoservice-ts/helper@0.1.3':
     dependencies:
       zod: 3.24.1
 
-  '@nanoservice-ts/runner@0.1.9':
+  '@nanoservice-ts/if-else@0.0.16':
     dependencies:
       '@nanoservice-ts/helper': 0.1.3
-      '@nanoservice-ts/shared': 0.0.3
+      '@nanoservice-ts/runner': 0.1.12
+      '@nanoservice-ts/shared': 0.0.4
+      lodash: 4.17.21
+
+  '@nanoservice-ts/runner@0.1.12':
+    dependencies:
+      '@nanoservice-ts/helper': 0.1.3
+      '@nanoservice-ts/shared': 0.0.4
       '@opentelemetry/api': 1.9.0
       jsonschema: 1.5.0
       lodash: 4.17.21
       uuid: 11.0.4
       zod: 3.24.1
 
-  '@nanoservice-ts/shared@0.0.3':
+  '@nanoservice-ts/shared@0.0.4':
     dependencies:
       dayjs: 1.11.13
       lodash: 4.17.21
