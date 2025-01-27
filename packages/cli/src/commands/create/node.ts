@@ -71,7 +71,7 @@ export async function createNode(opts: OptionValues) {
 		if (!nodeProjectDirExists) throw new Error("ops1");
 
 		// Prepare the node
-		const currentNodesDir = `${currentDir}/src/nodes`;
+		const currentNodesDir = `${currentDir}/nodes`;
 		if (!isDefault) {
 			fsExtra.ensureDirSync(currentNodesDir);
 		} else {
