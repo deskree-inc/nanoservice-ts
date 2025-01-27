@@ -13,14 +13,15 @@ Workflow execution refers to the process of running a sequence of steps (nodes) 
 
 ## Workflow Execution Overview
 
-1. **Execution Through Triggers**  
+<Steps>
+  <Step title="Execution Through Triggers">
    Workflows begin execution through Triggers, which define how and when the workflow is started.
    
    For local development, workflows are executed using HTTP Triggers:
    
    Start the local development server by running the following command:
    
-   ```plaintext
+   ```bash
    npm run dev
    ```
    
@@ -28,33 +29,27 @@ Workflow execution refers to the process of running a sequence of steps (nodes) 
    
    The local development server listens on `http://localhost:3000` or the port defined in your project. The workflow's path is accessible at:
    
-   ```plaintext
+   ```bash
    http://localhost:3000/{workflow-name}
    ```
 
    Example: If your workflow is named countries, the trigger URL will be:
    
-   ```plaintext
+   ```bash
    http://localhost:3000/countries
    ```
 
-2. **Nodes Perform Tasks**  
-   Nodes within the workflow are executed sequentially or conditionally, depending on their configuration.
-   
-   Built-in nodes like API Fetch, Mappers, or FOREACH execute specific tasks.
-   
-   Custom nodes extend functionality for unique requirements.
-
-3. **Context Object (ctx) Stores Data**  
+  </Step>
+  <Step title="Context Object (ctx) Stores Data">
    The context object (`ctx`) keeps track of inputs, outputs, and workflow states as execution progresses.
    
    Example:
-   ```plaintext
+   ```bash
    "${ctx.node-name.output}"
    ```
-
-4. **Output is Returned**  
-   Once all steps are executed, the workflow produces a final result. This result is typically returned as an HTTP response.
+  </Step>
+  <Step title="Output is Returned">
+       Once all steps are executed, the workflow produces a final result. This result is typically returned as an HTTP response.
    
    Example response for an HTTP trigger:
    ```json
@@ -63,6 +58,8 @@ Workflow execution refers to the process of running a sequence of steps (nodes) 
      "data": { ... }
    }
    ```
+  </Step>
+</Steps>
 
 ## Key Execution Features
 
@@ -78,14 +75,14 @@ Workflow execution refers to the process of running a sequence of steps (nodes) 
 ### Local Development Steps
 
 1. **Run the Development Server:** Start your project in development mode:
-   ```plaintext
+   ```bash
    npm run dev
    ```
 
 2. **Test with POSTMAN or curl:** Send an HTTP request to the workflow trigger URL.
    
    Example:
-   ```plaintext
+   ```bash
    curl -X GET http://localhost:3000/countries
    ```
 
