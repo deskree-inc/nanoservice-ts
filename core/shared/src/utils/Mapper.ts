@@ -20,13 +20,17 @@ class Mapper {
 
 	public replaceString = (strData: string, ctx: Context, data: ParamsDictionary) => {
 		let str = strData;
+
+		if (str.length > 1000) {
+			throw new Error("Input too long");
+		}
 		const regex = /\${(.*?)}/g;
 		const matches = str.match(regex);
 
 		if (matches) {
 			for (const match of matches) {
 				try {
-					const key = match.replace("${", "").replace("}", "");
+					const key = match.replace(/\${/g, "").replace(/}/g, "");
 					const value = _.get(data, key) || this.runJs(key, ctx, data);
 					// if (value) str = this.parseBasedOnType(str.replace(match, value), typeof value);
 					str = str.replace(match, value as string);
