@@ -1,5 +1,6 @@
-import type { Context, ResponseContext } from "@nanoservice-ts/shared";
+import type { Context, LoggerContext, ResponseContext } from "@nanoservice-ts/shared";
 import { beforeAll, expect, test } from "vitest";
+import DefaultLogger from "../src/DefaultLogger";
 import NanoService from "../src/NanoService";
 import NanoServiceResponse, { type INanoServiceResponse } from "../src/NanoServiceResponse";
 import type JsonLikeObject from "../src/types/JsonLikeObject";
@@ -20,6 +21,7 @@ beforeAll(() => {
 				},
 			},
 		} as JsonLikeObject,
+		logger: new DefaultLogger() as LoggerContext,
 	};
 });
 
