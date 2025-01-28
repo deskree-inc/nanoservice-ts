@@ -32,5 +32,5 @@
 		"ejs": "^3.1.10",
 		"clone": "^2.1.2"
 	},
-	"private": true
+	"private": false
 }
