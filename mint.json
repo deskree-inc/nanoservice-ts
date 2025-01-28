@@ -67,12 +67,12 @@
 			"url": "/docs/d"
 		},
 		{
-			"name": "For Contributors",
-			"url": "/docs/c"
-		},
-		{
 			"name": "Changelog",
 			"url": "https://github.com/deskree-inc/nanoservice-ts/releases"
+		},
+		{
+			"name": "Roadmap",
+			"url": "https://github.com/orgs/deskree-inc/projects/4/views/1"
 		}
 	],
 	"navigation": [
@@ -95,49 +95,32 @@
 				{
 					"group": "Initialization",
 					"pages": [
-						"/docs/d/getting-started/templates",
-						"/docs/d/getting-started/npx",
-						"/docs/d/getting-started/ts-helpers"
+						"/docs/d/getting-started/nanoctl",
+						"/docs/d/getting-started/templates"
+					]
+				}
+			]
+		},
+		{
+			"group": "Core Concepts",
+			"pages": [
+				{
+					"group": "Nodes",
+					"pages": [
+						"/docs/d/core-concepts/nodes",
+						"/docs/d/core-concepts/nodes-built-in"
 					]
 				},
-				"/docs/d/getting-started/project-structure"
-			]
-		},
-		{
-			"group": "Definitions",
-			"pages": [
-				"/docs/d/core-concepts/workflows",
-				"/docs/d/core-concepts/nodes",
+				{
+					"group": "Workflows",
+					"pages": [
+						"/docs/d/core-concepts/workflows",
+						"/docs/d/core-concepts/executing-workflows"
+					]
+				},
 				"/docs/d/core-concepts/trigger",
-				"/docs/d/core-concepts/npx",
-				"/docs/d/core-concepts/executing-workflows"
-			]
-		},
-		{
-			"group": "Creating custom nodes",
-			"pages": [
-				"/docs/d/creating-custom-nodes/introduction",
-				"/docs/d/creating-custom-nodes/directory-structure",
-				"/docs/d/creating-custom-nodes/creating-a-node",
-				"/docs/d/creating-custom-nodes/testing-and-debugging",
-				"/docs/d/creating-custom-nodes/publishing-a-node"
-			]
-		},
-		{
-			"group": "Overview",
-			"pages": [
-				"/docs/c/overview/architecture",
-				"/docs/c/overview/runner",
-				"/docs/c/overview/faq"
-			]
-		},
-		{
-			"group": "Areas of Contribution",
-			"pages": [
-				"/docs/c/contribution/nodes",
-				"/docs/c/contribution/triggers",
-				"/docs/c/contribution/cli",
-				"/docs/c/contribution/ts-helpers"
+				"/docs/d/core-concepts/nanoctl",
+				"/docs/d/core-concepts/deployment"
 			]
 		}
 	],
@@ -146,7 +129,7 @@
 			"x": "https://x.com/deskree_backend",
 			"github": "https://github.com/deskree-inc",
 			"linkedin": "https://linkedin.com/company/deskree",
-			"discord": "https://discord.com/invite/u3BZUkMK"
+			"discord": "https://discord.gg/etgJcHSrR5"
 		},
 		"links": [
 			{
@@ -159,5 +142,10 @@
 				]
 			}
 		]
+	},
+	"analytics": {
+		"ga4": {
+			"measurementId": "G-X860TC8VML"
+		}
 	}
 }
