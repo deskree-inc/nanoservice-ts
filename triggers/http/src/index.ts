@@ -24,17 +24,15 @@ class Main {
 			this.initializer = performance.now() - this.initializer;
 
 			this.logger.log(`Server initialized in ${(this.initializer).toFixed(2)}ms`);
-			this.app_cold_start.record(this.initializer, { pid: process.pid, env: env.NODE_ENV });
+			this.app_cold_start.record(this.initializer, { pid: process.pid, env: env.NODE_ENV, app: process.env.APP_NAME });
 			span.end();
 		});
 	}
 
+	// Expose the Express app for hosting with serverless functions like AWS Lambda, GC Functions, etc.
 	getHttpApp() {
 		return this.httpTrigger.getApp();
 	}
 }
 
-const main = new Main();
-main.run();
-
-export const api = main.getHttpApp();
+new Main().run();

@@ -1,5 +1,11 @@
 # @nanoservice-ts/shared
 
+## 0.0.5
+
+### Patch Changes
+
+- Implemented a react node and the chatbot demo page
+
 ## 0.0.4
 
 ### Patch Changes

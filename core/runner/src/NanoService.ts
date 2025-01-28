@@ -50,46 +50,38 @@ export default abstract class NanoService extends NodeBase {
 		const data = ctx.response?.data || ctx.request?.body;
 		const inputs = opts.inputs || opts.conditions;
 
-		try {
-			opts = this.blueprintMapper(
-				opts as unknown as ParamsDictionary,
-				ctx,
-				data as ParamsDictionary,
-			) as unknown as JsonLikeObject;
-			await this.validate(inputs as JsonLikeObject, this.inputSchema);
+		opts = this.blueprintMapper(
+			opts as unknown as ParamsDictionary,
+			ctx,
+			data as ParamsDictionary,
+		) as unknown as JsonLikeObject;
+		await this.validate(inputs as JsonLikeObject, this.inputSchema);
 
-			// Process node custom logic
-			const result = await this.handle(ctx, inputs as JsonLikeObject);
-			this.v.validate(result, this.outputSchema);
-			const end = performance.now();
+		// Process node custom logic
+		const result = await this.handle(ctx, inputs as JsonLikeObject);
+		this.v.validate(result, this.outputSchema);
+		const end = performance.now();
 
-			node_execution.add(1, {
-				env: process.env.NODE_ENV,
-				workflow_runner_path: `${ctx.workflow_path}`,
-				workflow_runner_name: `${ctx.workflow_name}`,
-				node_name: `${this.name}`,
-				node: (this as unknown as RunnerNode).node,
-			});
+		node_execution.add(1, {
+			env: process.env.NODE_ENV,
+			workflow_runner_path: `${ctx.workflow_path}`,
+			workflow_runner_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
 
-			node_time.record(end - start, {
-				env: process.env.NODE_ENV,
-				workflow_runner_path: `${ctx.workflow_path}`,
-				workflow_runner_name: `${ctx.workflow_name}`,
-				node_name: `${this.name}`,
-				node: (this as unknown as RunnerNode).node,
-			});
+		node_time.record(end - start, {
+			env: process.env.NODE_ENV,
+			workflow_runner_path: `${ctx.workflow_path}`,
+			workflow_runner_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
 
-			ctx.logger.log(`Executed node: ${this.name} in ${(end - start).toFixed(2)}ms`);
+		ctx.logger.log(`Executed node: ${this.name} in ${(end - start).toFixed(2)}ms`);
 
-			response.data = result;
-		} catch (error: unknown) {
-			response.error = this.setError({
-				message: (error as Error).message,
-				stack: (error as Error).stack,
-				code: 500,
-			});
-			response.success = false;
-		}
+		response.data = result;
+		(response.data as unknown as NanoService).contentType = this.contentType;
 
 		return response;
 	}

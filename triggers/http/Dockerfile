@@ -23,6 +23,7 @@ COPY . .
 
 # [optional] tests & build
 ENV NODE_ENV=production
+# RUN bun add -d @types/ejs
 RUN bun run build
 
 # copy production dependencies and source code into final image

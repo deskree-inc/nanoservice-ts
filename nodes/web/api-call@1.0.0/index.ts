@@ -4,7 +4,7 @@ import {
 	NanoService,
 	NanoServiceResponse,
 } from "@nanoservice-ts/runner";
-import type { Context } from "@nanoservice-ts/shared";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import { inputSchema } from "./inputSchema";
 import { runApiCall } from "./util";
 
@@ -29,13 +29,11 @@ export default class ApiCall extends NanoService {
 			const result = await runApiCall(url, method, headers, body as JsonLikeObject, responseType);
 			response.setSuccess(result);
 		} catch (error: unknown) {
-			this.setError(
-				this.setError({
-					message: (error as Error).message,
-					stack: (error as Error).stack,
-					code: 500,
-				}),
-			);
+			const nodeError: GlobalError = new GlobalError((error as Error).message);
+			nodeError.setCode(500);
+			nodeError.setStack((error as Error).stack);
+			nodeError.setName(this.name);
+			response.setError(nodeError);
 		}
 
 		return response;

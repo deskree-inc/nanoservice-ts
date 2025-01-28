@@ -25,25 +25,14 @@ export default abstract class NodeBase {
 			error: null,
 		};
 
-		try {
-			const config: NodeConfigContext = ctx.config as unknown as NodeConfigContext;
-			this.originalConfig = _.cloneDeep(config[this.name]);
-			this.blueprintMapper(config[this.name], ctx);
+		const config: NodeConfigContext = ctx.config as unknown as NodeConfigContext;
+		this.originalConfig = _.cloneDeep(config[this.name]);
+		this.blueprintMapper(config[this.name], ctx);
 
-			response = await this.run(ctx);
+		response = await this.run(ctx);
 
-			if (response.error) response.success = false;
-			ctx.response = response;
-
-			if (step !== undefined) {
-				const mapperStep: Step = config[step.name]?.mapper as unknown as Step;
-				if (response.success && mapperStep) response = await this.processMapper(mapperStep, ctx, config);
-			}
-		} catch (error: unknown) {
-			response.error = this.setError(error as ErrorContext);
-			response.success = false;
-			ctx.response = response;
-		}
+		if (response.error) throw response.error;
+		ctx.response = response;
 
 		return response;
 	}
@@ -66,27 +55,6 @@ export default abstract class NodeBase {
 			ctx.response = response;
 		}
 
-		return response;
-	}
-
-	private async processMapper(step: Step, ctx: Context, config: NodeConfigContext): Promise<ResponseContext> {
-		let response: ResponseContext = {
-			success: true,
-			data: null,
-			error: null,
-		};
-
-		try {
-			if (!step.node.startsWith("mapper")) throw new Error("You must use a mapper node to use the mapper property");
-
-			this.blueprintMapper(config as unknown as ParamsDictionary, ctx);
-
-			response = (await step.run(ctx)) as ResponseContext;
-			if (response.error) response.success = false;
-		} catch (error: unknown) {
-			response.error = this.setError(error as ErrorContext);
-			response.success = false;
-		}
 		return response;
 	}
 

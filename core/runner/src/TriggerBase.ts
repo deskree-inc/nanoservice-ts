@@ -43,53 +43,48 @@ export default abstract class TriggerBase extends Trigger {
 			description: "Workflow runner cpu usage",
 		});
 
-		try {
-			const globalMetrics = new Metrics();
-			globalMetrics.start();
+		const globalMetrics = new Metrics();
+		globalMetrics.start();
 
-			const runner: Runner = this.getRunner();
-			const context = await runner.run(ctx);
-			globalMetrics.retry();
-			globalMetrics.stop();
-			const average = await globalMetrics.getMetrics();
-			const end = performance.now();
+		const runner: Runner = this.getRunner();
+		const context = await runner.run(ctx);
+		globalMetrics.retry();
+		globalMetrics.stop();
+		const average = await globalMetrics.getMetrics();
+		const end = performance.now();
 
-			ctx.logger.log(
-				`Memory average: ${average.memory.total.toFixed(2)}MB, min: ${average.memory.min.toFixed(2)}MB, max: ${average.memory.max.toFixed(2)}MB`,
-			);
-			globalMetrics.clear();
-			workflow_execution.add(1, {
-				env: process.env.NODE_ENV,
-				workflow_runner_version: `${this.configuration.version}`,
-				workflow_runner_name: `${this.configuration.name}`,
-			});
+		ctx.logger.log(
+			`Memory average: ${average.memory.total.toFixed(2)}MB, min: ${average.memory.min.toFixed(2)}MB, max: ${average.memory.max.toFixed(2)}MB`,
+		);
+		globalMetrics.clear();
+		workflow_execution.add(1, {
+			env: process.env.NODE_ENV,
+			workflow_runner_version: `${this.configuration.version}`,
+			workflow_runner_name: `${this.configuration.name}`,
+		});
 
-			workflow_runner_time.record(end - start, {
-				env: process.env.NODE_ENV,
-				workflow_version: `${this.configuration.version}`,
-				workflow_name: `${this.configuration.name}`,
-			});
+		workflow_runner_time.record(end - start, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+		});
 
-			workflow_runner_mem.record(average.memory.max, {
-				env: process.env.NODE_ENV,
-				workflow_version: `${this.configuration.version}`,
-				workflow_name: `${this.configuration.name}`,
-			});
+		workflow_runner_mem.record(average.memory.max, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+		});
 
-			workflow_runner_cpu.record(average.cpu.usage, {
-				env: process.env.NODE_ENV,
-				workflow_version: `${this.configuration.version}`,
-				workflow_name: `${this.configuration.name}`,
-			});
+		workflow_runner_cpu.record(average.cpu.usage, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+		});
 
-			return {
-				ctx: context,
-				metrics: average,
-			};
-		} catch (e: unknown) {
-			console.log(e);
-			throw e;
-		}
+		return {
+			ctx: context,
+			metrics: average,
+		};
 	}
 
 	createContext(logger?: LoggerContext, blueprintPath?: string, id?: string): Context {

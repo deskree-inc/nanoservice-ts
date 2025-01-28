@@ -1,5 +1,31 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.19
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/react@0.0.3
+
+## 0.0.18
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/react@0.0.2
+
+## 0.0.17
+
+### Patch Changes
+
+- Implemented a react node and the chatbot demo page
+- Updated dependencies
+  - @nanoservice-ts/api-call@0.1.16
+  - @nanoservice-ts/runner@0.1.13
+  - @nanoservice-ts/shared@0.0.5
+  - @nanoservice-ts/react@0.0.1
+  - @nanoservice-ts/if-else@0.0.17
+
 ## 0.0.16
 
 ### Patch Changes

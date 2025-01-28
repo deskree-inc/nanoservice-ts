@@ -1,5 +1,14 @@
 # @nanoservice-ts/api-call
 
+## 0.1.16
+
+### Patch Changes
+
+- Implemented a react node and the chatbot demo page
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.13
+  - @nanoservice-ts/shared@0.0.5
+
 ## 0.1.15
 
 ### Patch Changes

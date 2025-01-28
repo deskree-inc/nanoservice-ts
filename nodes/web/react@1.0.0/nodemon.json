@@ -1,0 +1,9 @@
+{
+	"watch": ["src", "app"],
+	"ext": "ts,jsx",
+	"ignore": ["src/**/*.test.ts"],
+	"exec": "tsc && npm run build:babel",
+	"env": {
+		"NODE_ENV": "local"
+	}
+}

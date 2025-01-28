@@ -1,0 +1,41 @@
+{
+	"name": "Chatbot",
+	"description": "React node to render a frontend page",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "get-facts",
+			"node": "@nanoservice-ts/api-call",
+			"type": "module"
+		},
+		{
+			"name": "chatbot",
+			"node": "@nanoservice-ts/react",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"get-facts": {
+			"inputs": {
+				"url": "https://catfact.ninja/fact",
+				"method": "GET",
+				"headers": {
+					"Content-Type": "application/json"
+				},
+				"responseType": "application/json"
+			}
+		},
+		"chatbot": {
+			"inputs": {
+				"file_path": "app/index.merged.min.js"
+			}
+		}
+	}
+}
