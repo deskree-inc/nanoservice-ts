@@ -1,0 +1,36 @@
+{
+	"name": "@nanoservice-ts/react",
+	"version": "0.0.1",
+	"description": "",
+	"author": "",
+	"scripts": {
+		"test:dev": "vitest",
+		"test": "vitest run",
+		"build:ts": "rm -rf dist && tsc",
+		"build:dev": "nodemon",
+		"build:babel": "rm -rf dist/app/index.merged.min.js && babel dist/app --out-file dist/app/index.merged.min.js",
+		"build": "npm run build:ts && npm run build:babel"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^22.10.2",
+		"@types/ejs": "^3.1.5",
+		"typescript": "^5.1.3",
+		"vitest": "^2.1.8",
+		"@babel/cli": "^7.0.0",
+		"@babel/core": "^7.0.0",
+		"@babel/preset-env": "^7.26.7",
+		"@babel/preset-react": "^7.26.3",
+		"babel-minify": "^0.5.2",
+		"@types/clone": "^2.1.4",
+		"nodemon": "^3.1.9"
+	},
+	"dependencies": {
+		"@nanoservice-ts/shared": "workspace:*",
+		"@nanoservice-ts/runner": "workspace:*",
+		"@nanoservice-ts/helper": "workspace:*",
+		"ejs": "^3.1.10",
+		"clone": "^2.1.2"
+	},
+	"private": true
+}

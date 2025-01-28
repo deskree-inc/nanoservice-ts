@@ -46,15 +46,16 @@ export default class HttpTrigger extends TriggerBase {
 
 	listen(): Promise<number> {
 		return new Promise((done) => {
+			this.app.use(express.static("public"));
 			this.app.use(bodyParser.text({ limit: "150mb" }));
 			this.app.use(bodyParser.urlencoded({ extended: true }));
 			this.app.use(bodyParser.json({ limit: "150mb" }));
 			this.app.use(cors());
 
-			this.app.use(["/:blueprint", "/"], async (req: Request, res: Response): Promise<void> => {
+			this.app.use(["/:workflow", "/"], async (req: Request, res: Response): Promise<void> => {
 				const id: string = (req.query?.requestId as string) || (uuid() as string);
 				req.query.requestId = undefined;
-				const blueprintNameInPath: string = req.params.blueprint;
+				const blueprintNameInPath: string = req.params.workflow;
 
 				const defaultMeter = metrics.getMeter("default");
 				const workflow_runner_errors = defaultMeter.createCounter("workflow_errors", {
@@ -147,7 +148,7 @@ export default class HttpTrigger extends TriggerBase {
 										workflow_name: `${blueprintNameInPath || this.configuration.name}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
-									this.logger.error(`${error_context.message}`);
+									this.logger.error(`${error_context.message}`, error_context.stack?.replace(/\n/g, " "));
 									res.status(code).json({ error: error_context.message });
 								}
 							}

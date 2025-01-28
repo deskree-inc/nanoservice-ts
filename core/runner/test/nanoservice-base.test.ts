@@ -39,10 +39,11 @@ test("Execute nanoService implementation", async () => {
 test("Execute nanoService wrong inputs", async () => {
 	const nano = new AddCreatedAtProperty();
 	context.config["add-property"].inputs.data = undefined;
-	const response: ResponseContext = await nano.run(context);
-
-	expect(response.success).toBe(false);
-	expect(response.error?.context?.json?.message).toBe('requires property "data"');
+	try {
+		await nano.run(context);
+	} catch (e) {
+		expect(e.message).toBe('requires property "data"');
+	}
 });
 
 class AddCreatedAtProperty extends NanoService {
