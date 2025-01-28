@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/trigger-http",
-	"version": "0.0.17",
+	"version": "0.0.18",
 	"description": "Trigger for HTTP requests",
 	"engines": {
 		"node": ">=18.0.0"
@@ -29,7 +29,7 @@
 		"@nanoservice-ts/api-call": "^0.1.16",
 		"@nanoservice-ts/helper": "^0.1.3",
 		"@nanoservice-ts/if-else": "^0.0.17",
-		"@nanoservice-ts/react": "^0.0.1",
+		"@nanoservice-ts/react": "^0.0.2",
 		"@nanoservice-ts/runner": "^0.1.13",
 		"@nanoservice-ts/shared": "^0.0.5",
 		"@opentelemetry/api": "^1.9.0",

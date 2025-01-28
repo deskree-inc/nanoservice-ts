@@ -1,5 +1,11 @@
 # @nanoservice-ts/react
 
+## 0.0.2
+
+### Patch Changes
+
+- fixed package.json and dependabot error
+
 ## 0.0.1
 
 ### Patch Changes
