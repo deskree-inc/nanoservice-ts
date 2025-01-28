@@ -84,26 +84,38 @@ With **nanoservice-ts**, backend development becomes modular, predictable, and f
 <!-- GETTING STARTED -->
 ## Getting Started
 
-**nanoservice-ts** makes it easy to kickstart your backend development using pre-built templates, the `npx` CLI, and TypeScript helper methods. Follow the steps below to get started:
+To start developing your project, simply run:
 
-### Templates
+```bash
+  npx nanoctl@latest create project
+```
 
+And follow the instructions of the CLI
 
-### NPX Package
+_For more information and examples, visit [Getting Started](https://nanoservice.xyz/docs/d/getting-started/nanoctl)_
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### TS Helpers
+## Creating Nodes & Workflows
+
+* **Node** is a small functioning unit designed to perform a specific task within a workflow
+* **Workflow** is a collection of nodes group together in a certain sequence to create a piece of business logic that starts with a trigger
+* **Trigger** is an event or condition that starts the execution of a workflow
+
+_For a step-by-step example of how to use nodes, workflows, and triggers, visit [Quickstart](http://localhost:3000/docs/d/quickstart)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Running Workflows
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+To run the created workflow locally:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Start the runner via `npm run dev`
+2. Use tools like POSTMAN, curl, or any HTTP client to test workflows at `http://localhost:3000/{workflow-name}`
+
+_For more examples, please refer to the [Executing Workflows](https://nanoservice.xyz/docs/d/core-concepts/executing-workflows)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -137,5 +149,16 @@ Discord: [Nanoservice](https://discord.gg/Y2bAmPqz)
 Reddit: [r/nanoservice](https://www.reddit.com/r/nanoservice/)
 
 Project Link: [https://github.com/deskree-inc/nanoservice-ts](https://github.com/deskree-inc/nanoservice-ts)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+Some awesome tools used in the project:
+
+* [Grafana](https://github.com/grafana/grafana)
+* [Docker](https://github.com/docker)
+* [Open Telemetry](https://github.com/open-telemetry)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
