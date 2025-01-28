@@ -1,5 +1,11 @@
 # @nanoservice-ts/react
 
+## 0.0.3
+
+### Patch Changes
+
+- Add index.html in the package
+
 ## 0.0.2
 
 ### Patch Changes

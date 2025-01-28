@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/react",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
@@ -14,7 +14,7 @@
 		"build:ts": "rm -rf dist && tsc",
 		"build:dev": "nodemon",
 		"build:babel": "rm -rf dist/app/index.merged.min.js && babel dist/app --out-file dist/app/index.merged.min.js",
-		"build": "npm run build:ts && npm run build:babel"
+		"build": "npm run build:ts && npm run build:babel && cp index.html dist/index.html"
 	},
 	"license": "MIT",
 	"devDependencies": {

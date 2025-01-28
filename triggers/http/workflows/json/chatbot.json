@@ -34,7 +34,7 @@
 		},
 		"chatbot": {
 			"inputs": {
-				"file_path": ""
+				"file_path": "app/index.merged.min.js"
 			}
 		}
 	}

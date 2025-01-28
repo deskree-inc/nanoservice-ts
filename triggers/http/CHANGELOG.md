@@ -1,5 +1,12 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.19
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/react@0.0.3
+
 ## 0.0.18
 
 ### Patch Changes

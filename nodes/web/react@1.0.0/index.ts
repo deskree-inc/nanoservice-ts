@@ -40,7 +40,7 @@ export default class React extends NanoService {
 		// Create a new instance of the response
 		const response = new NanoServiceResponse();
 		let file_path = inputs.file_path as string;
-		if (file_path === undefined || file_path === "") file_path = "./dist/app/index.merged.min.js";
+		if (file_path === undefined || file_path === "") file_path = "./app/index.merged.min.js";
 		const react_script_template = '<script type="text/babel">REACT_SCRIPT</script>';
 
 		try {
