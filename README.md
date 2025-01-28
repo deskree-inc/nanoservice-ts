@@ -144,7 +144,7 @@ Distributed under the Apache License 2.0. See `LICENSE.txt` for more information
 <!-- CONTACT -->
 ## Contact
 
-Discord: [Nanoservice](https://discord.gg/Y2bAmPqz)
+Discord: [Nanoservice](https://discord.gg/uFs9bYwfM9)
 
 Reddit: [r/nanoservice](https://www.reddit.com/r/nanoservice/)
 
