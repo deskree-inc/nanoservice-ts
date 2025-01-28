@@ -119,8 +119,14 @@
 					]
 				},
 				"/docs/d/core-concepts/trigger",
-				"/docs/d/core-concepts/nanoctl",
-				"/docs/d/core-concepts/deployment"
+				"/docs/d/core-concepts/nanoctl"
+			]
+		},
+		{
+			"group": "Advanced",
+			"pages": [
+				"/docs/d/advanced/deployment",
+				"/docs/d/advanced/monitoring-obserbvability"
 			]
 		}
 	],

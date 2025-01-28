@@ -7,6 +7,7 @@
 	"license": "MIT",
 	"scripts": {
 		"ci:publish": "pnpm publish -r --access public",
+		"doc:dev": "npx mintlify dev",
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
 		"test": "nx run-many -t test",
