@@ -67,6 +67,10 @@
 			"url": "/docs/d"
 		},
 		{
+			"name": "For Contributors",
+			"url": "/docs/c"
+		},
+		{
 			"name": "Changelog",
 			"url": "https://github.com/deskree-inc/nanoservice-ts/releases"
 		},
@@ -127,6 +131,25 @@
 			"pages": [
 				"/docs/d/advanced/deployment",
 				"/docs/d/advanced/monitoring-obserbvability"
+			]
+		},
+		{
+			"group": "Overview",
+			"pages": [
+				"/docs/c/overview/architecture",
+				"/docs/c/overview/how-to-contribute"
+			]
+		},
+		{
+			"group": "Core",
+			"pages": ["/docs/c/core/runner", "/docs/c/core/shared"]
+		},
+		{
+			"group": "Extensions",
+			"pages": [
+				"/docs/c/extensions/nodes",
+				"/docs/c/extensions/triggers",
+				"/docs/c/extensions/cli"
 			]
 		}
 	],
