@@ -1,0 +1,115 @@
+---
+title: runner
+---
+
+`runner` is an execution engine designed to process nanoservice-based workflows efficiently. It provides a structured way to execute nanoservices within a defined workflow, enabling modular, reusable backend logic.
+
+---
+
+## Relationship to the rest of the project
+<Tip> For a complete reference visit [runner](/docs/ref/runner/src/README)</Tip>
+Runner is responsibly for reading workflow files and executing provided nodes based on the selected trigger. Think about it as a conductor that orchestrates the execution of nanoservices. 
+
+In addition, it also tracks important parameters and metrics during the workflow execution that can be used for debugging and [monitoring purposes](/docs/d/advanced/monitoring-obserbvability).
+
+## **Guide to Contributing to the Runner in Nanoservice-ts**
+
+### **1. Clone the Repository**  
+```bash
+git clone https://github.com/deskree-inc/nanoservice-ts.git
+cd nanoservice-ts/core/runner
+npm install
+```
+
+### **2. Run the Runner Locally**  
+```bash
+npm run dev
+```
+This will start the Runner in **development mode**, allowing you to test changes in real-time.
+
+---
+
+### **Understanding the Runner**  
+The Runner is responsible for:  
+✅ **Executing nanoservices** in an isolated environment.  
+✅ **Managing resource allocation** (CPU, memory).  
+✅ **Handling retries, error logging, and state management.**  
+
+#### **Key Files & Directories**  
+```
+/core/runner
+ ├── /src
+ │    ├── index.ts        # Main execution entry
+ │    ├── executor.ts     # Runs individual nodes
+ │    ├── container.ts    # Manages container execution
+ │    ├── logger.ts       # Handles logging and debugging
+ │    ├── state.ts        # Stores execution state
+ ├── /tests              # Unit tests
+ ├── package.json        # Dependencies
+ ├── README.md           # Runner documentation
+```
+
+---
+
+### **Adding Features or Fixing Bugs**
+#### **1. Create a Feature Branch**  
+```bash
+git checkout -b feature/improve-runner-logging
+```
+
+#### **2. Make Your Changes**
+Modify the relevant files inside `/core/runner/src/`.  
+Example: **Improving logging in `executor.ts`**  
+```typescript
+import { logInfo } from './logger';
+
+async function executeNode(node: NodeConfig) {
+  logInfo(`Executing node: ${node.id} (${node.type})`);
+  // Execution logic...
+}
+```
+
+#### **3. Test Your Changes**  
+Run unit tests:  
+```bash
+npm test
+```
+Manually test with:  
+```bash
+npm run dev
+```
+
+#### **4. Submit a Pull Request**
+Push your changes and open a PR on GitHub.  
+```bash
+git push origin feature/improve-runner-logging
+```
+In the PR description, include:  
+- **What was changed?**  
+- **Why was it changed?**  
+- **How was it tested?**  
+
+---
+
+### **Best Practices**
+✅ Keep functions modular and reusable.  
+✅ Write **unit tests** for new features.  
+✅ Use **consistent logging** for observability.  
+✅ Ensure changes do not break existing workflows.  
+
+---
+
+### **Final Notes**
+Contributing to the Runner helps improve the **efficiency and reliability** of `nanoservice-ts`. If you have any questions, open an issue on GitHub! 🚀  
+
+🔗 [GitHub Repository](https://github.com/deskree-inc/nanoservice-ts.git)  
+```
+
+---
+
+### **Why This Format?**
+- **Straight to the point** with **real code examples**.  
+- Covers **setup, development, testing, and submission**.  
+- Includes **best practices** to ensure high-quality contributions.  
+
+Would you like any refinements? 🚀

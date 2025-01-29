@@ -5,7 +5,79 @@ title: Built-In Nodes
 `nanoservice-ts` comes with a series of built-on nodes to make workflow development easier.
 
 ## Control Flow
-### foreach
-### for
-### try-catch
-### if-error
+### if-else
+
+Some text describing the node.
+
+#### Params
+<ParamField path="name" type="string">
+  The name of the workflow, used to identify it.
+</ParamField>
+<ParamField path="description" type="string">
+ A brief explanation of what the workflow does.
+</ParamField>
+<ParamField path="version" type="string">
+  The version of the workflow, useful for managing updates.
+</ParamField>
+<ResponseField name="trigger" type="trigger object">
+  Here you can define the trigger for the workflow. To see the list available triggers and how to use them, check the [Triggers](/docs/d/core-concepts/trigger) page.
+</ResponseField>
+<ResponseField name="steps" type="array of steps objects">
+  <Expandable title="properties">
+    <ResponseField name="name" type="string">
+      A unique identifier for the step.
+    </ResponseField>
+    <ResponseField name="node" type="string">
+      The module or custom node to execute.
+    </ResponseField>
+    <ResponseField name="accept" type="string">
+      Specifies the type of node, such as module for pre-built nodes.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+<ResponseField name="nodes" type="nodes object">
+  A configuration block for individual nodes used in the workflow.
+  Each node is defined by its unique name and includes various properties specified by the node creator.
+</ResponseField>
+
+#### Example of Use
+
+<CodeGroup>
+```json Node Steps Example
+{
+    "name": "filter-request",
+    "node": "@nanoservice-ts/if-else",
+    "type": "module"
+}
+```
+```json Node Configuration Example
+"filter-request": {
+    "conditions": [
+        {
+            "type": "if",
+            "steps": [
+                {
+                    "name": "get-countries",
+                    "node": "@nanoservice-ts/api-call",
+                    "type": "module"
+                }
+            ],
+            "condition": "ctx.request.query.countries === \"true\""
+        },
+        {
+            "type": "else",
+            "steps": [
+                {
+                    "name": "get-facts",
+                    "node": "@nanoservice-ts/api-call",
+                    "type": "module"
+                }
+            ]
+        }
+    ]
+}
+```
+</CodeGroup>
+
+## Web
+### api-call

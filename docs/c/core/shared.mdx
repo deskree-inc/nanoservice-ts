@@ -1,0 +1,128 @@
+---
+title: shared
+---
+
+`shared` is a group of utilities that are shared between runner, nodes, and triggers. It includes utilities for logging, error handling, and other common tasks and classes.
+
+---
+
+<Tip> For a complete reference visit [runner](/docs/ref/shared/src/README)</Tip>
+
+# **Guide to Contributing to shared in Nanoservice-ts**
+
+The **Shared** module in `nanoservice-ts` contains common utilities used across the framework, including the **Runner, Nodes, and Triggers**. These utilities handle **logging, error management, and other core functionalities**. This guide will help you contribute to the shared utilities effectively.
+
+---
+
+## **Repository & Setup**  
+The `nanoservice-ts` framework is hosted at:  
+🔗 [GitHub Repository](https://github.com/deskree-inc/nanoservice-ts.git)  
+
+### **1. Clone the Repository**  
+```bash
+git clone https://github.com/deskree-inc/nanoservice-ts.git
+cd nanoservice-ts/core/shared
+npm install
+```
+
+### **2. Understand the Directory Structure**  
+```
+/core/shared
+ ├── /src
+ │    ├── logger.ts       # Logging utilities
+ │    ├── errorHandler.ts # Global error handling
+ │    ├── config.ts       # Shared configuration loader
+ │    ├── utils.ts        # Miscellaneous utilities
+ ├── /tests              # Unit tests for shared utilities
+ ├── package.json        # Dependencies and build scripts
+ ├── README.md           # Shared module documentation
+```
+
+---
+
+## **Common Utilities in Shared**
+### **1. Logging (`logger.ts`)**  
+Provides consistent logging for the entire framework.  
+Example:
+```typescript
+export function logInfo(message: string) {
+  console.log(`[INFO]: ${message}`);
+}
+
+export function logError(message: string, error?: Error) {
+  console.error(`[ERROR]: ${message}`, error || '');
+}
+```
+
+### **2. Error Handling (`errorHandler.ts`)**  
+Handles global errors across Runner, Nodes, and Triggers.  
+Example:
+```typescript
+export class NanoserviceError extends Error {
+  constructor(message: string, public code?: number) {
+    super(message);
+    this.name = 'NanoserviceError';
+  }
+}
+```
+
+### **3. Configuration Loader (`config.ts`)**  
+Loads common settings from environment variables or files.  
+Example:
+```typescript
+export const config = {
+  maxRetries: process.env.MAX_RETRIES || 3,
+  logLevel: process.env.LOG_LEVEL || 'info',
+};
+```
+
+---
+
+## **Adding Features or Fixing Bugs**
+### **1. Create a Feature Branch**  
+```bash
+git checkout -b feature/improve-logging
+```
+
+### **2. Make Your Changes**
+Modify the relevant files inside `/core/shared/src/`.  
+Example: **Adding a debug log level in `logger.ts`**  
+```typescript
+export function logDebug(message: string) {
+  if (process.env.LOG_LEVEL === 'debug') {
+    console.debug(`[DEBUG]: ${message}`);
+  }
+}
+```
+
+### **3. Test Your Changes**  
+Run unit tests to ensure no regressions:  
+```bash
+npm test
+```
+
+### **4. Submit a Pull Request**  
+Push your changes and open a PR on GitHub.  
+```bash
+git push origin feature/improve-logging
+```
+In the PR description, include:  
+- **What was changed?**  
+- **Why was it changed?**  
+- **How was it tested?**  
+
+---
+
+## **Best Practices**
+✅ Keep utilities **generic and reusable**.  
+✅ Write **unit tests** for all new functions.  
+✅ Follow **consistent logging and error handling patterns**.  
+✅ Ensure **backward compatibility** with existing modules.  
+
+---
+
+## **Final Notes**
+Contributing to **Shared** ensures that all components of `nanoservice-ts` (Runner, Nodes, and Triggers) function smoothly and consistently. If you have any questions, **open an issue or PR** on GitHub! 🚀  
+
+🔗 [GitHub Repository](https://github.com/deskree-inc/nanoservice-ts.git)  
+```

@@ -1,3 +1,4 @@
+// @ts-ignore
 import os from "node:os";
 import MetricsBase from "./MetricsBase";
 

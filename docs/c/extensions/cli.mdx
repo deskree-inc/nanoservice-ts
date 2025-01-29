@@ -1,0 +1,156 @@
+---
+title: Improving CLI
+---
+
+Welcome to the `nanoservice-ts` CLI contribution guide! This document outlines the best practices for contributing to the CLI, ensuring consistency, usability, and maintainability.
+
+---
+
+## **Overview**  
+The CLI (`@nanoservice-ts/cli`) is a core tool for managing workflows, nodes, and deployments. Contributions should focus on:  
+✅ **Enhancing Developer Experience** – Commands should be intuitive and efficient.  
+✅ **Maintaining Consistency** – Follow existing patterns and structures.  
+✅ **Ensuring Robustness** – Proper error handling, validations, and tests are mandatory.  
+
+---
+
+## **Getting Started**  
+### **1. Setup the Development Environment**  
+Clone the repository and navigate to the CLI package:  
+```bash
+git clone https://github.com/deskree-inc/nanoservice-ts.git
+cd packages/cli
+npm install
+```
+
+To run the CLI locally:  
+```bash
+node ./bin/nanoservice-cli.js --help
+```
+
+### **2. CLI Structure**  
+The CLI follows a modular command structure:  
+```
+/packages/cli
+ ├── /src
+ │    ├── commands/  # Individual CLI commands
+ │    ├── utils/     # Shared utilities
+ │    ├── index.ts   # CLI entry point
+ │    ├── config.ts  # CLI configurations
+ │    ├── logger.ts  # Logging utilities
+ ├── /tests          # Unit tests for CLI commands
+ ├── package.json    # CLI dependencies and scripts
+ └── bin/nanoservice-cli.js  # CLI executable entry
+```
+
+---
+
+## **Adding a New CLI Command**  
+All commands should be placed inside `/src/commands/` and registered in `index.ts`.  
+
+### **1. Create a New Command File**  
+Example: Adding a `list-nodes` command  
+```typescript
+import { Command } from 'commander';
+import { fetchNodes } from '../utils/nodes';
+import { logSuccess, logError } from '../logger';
+
+const listNodesCommand = new Command('list-nodes')
+  .description('List all available nanoservice nodes')
+  .action(async () => {
+    try {
+      const nodes = await fetchNodes();
+      logSuccess('Available Nodes:', nodes);
+    } catch (error) {
+      logError('Error fetching nodes:', error);
+    }
+  });
+
+export default listNodesCommand;
+```
+
+### **2. Register the Command in `index.ts`**  
+```typescript
+import { program } from 'commander';
+import listNodesCommand from './commands/listNodes';
+
+program.addCommand(listNodesCommand);
+program.parse(process.argv);
+```
+
+---
+
+## **Coding Guidelines**  
+### **1. Naming Conventions**  
+- Commands should use **kebab-case** (e.g., `deploy-workflow`, `init-project`).
+- Functions should use **camelCase** (e.g., `fetchNodes()`).
+- Files should use **PascalCase.ts** (e.g., `ListNodes.ts`).
+
+### **2. Command Structure**  
+Each command should include:  
+✅ **A clear description** (`.description()`).  
+✅ **Error handling** using `try/catch`.  
+✅ **Logging** (`logSuccess()`, `logError()`).  
+✅ **Async execution** (`await` where necessary).  
+
+### **3. Logging & Feedback**  
+Use **consistent logging** to improve UX:  
+```typescript
+import { logSuccess, logError } from '../logger';
+logSuccess('Action completed successfully!');
+logError('Something went wrong!');
+```
+
+---
+
+## **Testing & Validation**  
+### **1. Writing Tests**  
+All CLI commands must have tests under `/tests/`. Example test for `list-nodes`:  
+```typescript
+import { describe, it, expect } from '@jest/globals';
+import { fetchNodes } from '../src/utils/nodes';
+
+describe('list-nodes command', () => {
+  it('should return a list of nodes', async () => {
+    const nodes = await fetchNodes();
+    expect(Array.isArray(nodes)).toBe(true);
+  });
+});
+```
+Run tests:  
+```bash
+npm test
+```
+
+### **2. Manual Testing**  
+Before submitting a PR, test your command locally:  
+```bash
+node ./bin/nanoservice-cli.js list-nodes
+```
+
+---
+
+## **Submitting a Pull Request**  
+### **1. Open a New Branch**  
+Follow branch naming conventions:  
+```bash
+git checkout -b feature/add-list-nodes
+```
+
+### **2. Ensure Code Quality**  
+Run linting and formatting checks:  
+```bash
+npm run lint
+npm run format
+```
+
+### **3. Submit a PR**  
+- Provide a **clear description** of the change.  
+- Reference any related issues.  
+- Request a **review from maintainers** before merging.  
+
+---
+
+## **Final Notes**  
+Contributing to the `nanoservice-ts` CLI means helping developers **build and deploy faster with nanoservices**. We value **clean, well-documented, and intuitive** CLI tools. If you have any questions, feel free to open an issue! 🚀  
+```

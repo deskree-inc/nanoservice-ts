@@ -1,0 +1,139 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [runner/src](/docs/ref/runner/src/README) / NanoServiceResponse
+
+# Class: NanoServiceResponse
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L9)
+
+## Implements
+
+- [`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse)
+
+## Constructors
+
+### new NanoServiceResponse()
+
+> **new NanoServiceResponse**(): [`NanoServiceResponse`](/docs/ref/runner/src/classes/NanoServiceResponse)
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:16](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L16)
+
+#### Returns
+
+[`NanoServiceResponse`](/docs/ref/runner/src/classes/NanoServiceResponse)
+
+## Properties
+
+### contentType?
+
+> `optional` **contentType**: `string`
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L14)
+
+#### Implementation of
+
+[`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse).[`contentType`](/docs/ref/runner/src/interfaces/INanoServiceResponse#contenttype)
+
+***
+
+### data
+
+> **data**: `string` \| [`JsonLikeObject`](/docs/ref/runner/src/interfaces/JsonLikeObject)
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L11)
+
+#### Implementation of
+
+[`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse).[`data`](/docs/ref/runner/src/interfaces/INanoServiceResponse#data)
+
+***
+
+### error
+
+> **error**: `null` \| `GlobalError`
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L12)
+
+#### Implementation of
+
+[`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse).[`error`](/docs/ref/runner/src/interfaces/INanoServiceResponse#error)
+
+***
+
+### steps
+
+> **steps**: [`NanoService`](/docs/ref/runner/src/classes/NanoService)[]
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L10)
+
+#### Implementation of
+
+[`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse).[`steps`](/docs/ref/runner/src/interfaces/INanoServiceResponse#steps)
+
+***
+
+### success?
+
+> `optional` **success**: `boolean`
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:13](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L13)
+
+#### Implementation of
+
+[`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse).[`success`](/docs/ref/runner/src/interfaces/INanoServiceResponse#success)
+
+## Methods
+
+### setError()
+
+> **setError**(`error`): `void`
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:24](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L24)
+
+#### Parameters
+
+##### error
+
+`GlobalError`
+
+#### Returns
+
+`void`
+
+***
+
+### setSteps()
+
+> **setSteps**(`steps`): `void`
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:36](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L36)
+
+#### Parameters
+
+##### steps
+
+[`NanoService`](/docs/ref/runner/src/classes/NanoService)[]
+
+#### Returns
+
+`void`
+
+***
+
+### setSuccess()
+
+> **setSuccess**(`data`): `void`
+
+Defined in: [core/runner/src/NanoServiceResponse.ts:30](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoServiceResponse.ts#L30)
+
+#### Parameters
+
+##### data
+
+`string` | [`JsonLikeObject`](/docs/ref/runner/src/interfaces/JsonLikeObject)
+
+#### Returns
+
+`void`

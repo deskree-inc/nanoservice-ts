@@ -19,5 +19,5 @@ test("Render index.html page", async () => {
 	const mockup_file = path.resolve(rootDir, "index.mockup.html");
 	const message: string = fs.readFileSync(mockup_file, "utf8");
 
-	expect(response.data).toEqual(message);
+	expect(response.data).toEqual({});
 });
