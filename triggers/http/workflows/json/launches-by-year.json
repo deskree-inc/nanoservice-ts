@@ -1,0 +1,31 @@
+{
+	"name": "launches-by-year",
+	"description": "Get launches by year",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "api",
+			"node": "@nanoservice-ts/api-call",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"api": {
+			"inputs": {
+				"url": "https://ll.thespacedevs.com/2.3.0/launches/?format=json&year=${ctx.request.query.dob ? new Date(ctx.request.query.dob).getYear() : new Date('2000-01-01').getYear()}",
+				"method": "GET",
+				"headers": {
+					"Content-Type": "application/json"
+				},
+				"responseType": "application/json"
+			}
+		}
+	}
+}

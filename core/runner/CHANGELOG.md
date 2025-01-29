@@ -1,5 +1,12 @@
 # @nanoservice/runner
 
+## 0.1.14
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/shared@0.0.6
+
 ## 0.1.13
 
 ### Patch Changes

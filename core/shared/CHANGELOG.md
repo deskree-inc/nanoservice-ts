@@ -1,5 +1,11 @@
 # @nanoservice-ts/shared
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated the quickstart mdx and fixed api-call error issue with rest
+
 ## 0.0.5
 
 ### Patch Changes
