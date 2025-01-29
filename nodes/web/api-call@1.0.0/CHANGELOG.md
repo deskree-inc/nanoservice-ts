@@ -1,5 +1,14 @@
 # @nanoservice-ts/api-call
 
+## 0.1.17
+
+### Patch Changes
+
+- Updated the quickstart mdx and fixed api-call error issue with rest
+- Updated dependencies
+  - @nanoservice-ts/shared@0.0.6
+  - @nanoservice-ts/runner@0.1.14
+
 ## 0.1.16
 
 ### Patch Changes

@@ -34,7 +34,9 @@ class Mapper {
 					const value = _.get(data, key) || this.runJs(key, ctx, data);
 					// if (value) str = this.parseBasedOnType(str.replace(match, value), typeof value);
 					str = str.replace(match, value as string);
-				} catch (e) {}
+				} catch (e) {
+					console.log("Mapper Error 1", e);
+				}
 			}
 		}
 		const result = this.jsMapper(str, ctx, data) as string;
@@ -57,7 +59,9 @@ class Mapper {
 				const fn = str.replace("js/", "");
 				return this.runJs(fn, ctx, data, ctx.func, ctx.vars);
 			}
-		} catch (error) {}
+		} catch (error) {
+			console.log("Mapper Error 2", error);
+		}
 		return str;
 	}
 }

@@ -23,8 +23,8 @@ To initialize the project, simply run the following command and follow the instr
   </Step>
   <Step title="Follow the interactive prompts">
    ```plaintext
-    Select a template: HTTP API
     Project Name: my-api-project
+    Select a template: HTTP API
     Install dependencies and start coding:
    ```
   </Step>
@@ -40,27 +40,24 @@ After creating a project using the npx package, your folder might look like this
 
 ```plaintext
 my-api-project/
+├── .env.local
+├── Dockerfile
+├── nodemon.json
 ├── package.json
+├── public
 ├── workflows/
 │   └── example-workflow.json
-├── nodes/
 └── src/
+    |── nodes
+    |-- types
+    ├── Nodes.ts
+    ├── Workflow.ts
     └── index.ts
 ```
 Key Directories:
 * `workflows/`: Contains your nanoservice workflow definitions.
-* `nodes/`: Contains custom nodes that extend functionality.
 * `src/`: Your project’s main logic and entry point.
-
-### Create env
-
-Create `.env.local` file in the root directory with the following structure:
-```env
-PORT=3000
-WORKFLOWS_PATH=[PROJECT_PATH]/workflows
-NODES_PATH=[PROJECT_PATH]/nodes
-```
-Replace `[PROJECT_PATH]` with the real project path
+* `src/nodes/`: Contains custom nodes that extend functionality.
 
 ---
 
@@ -69,7 +66,6 @@ Replace `[PROJECT_PATH]` with the real project path
 
 For this project, we will create 2 custom nodes:
 * `api-call` - a node for fetching data from an external API.
-* `get-year` - a node for extracting the year from a date of birth.
 
 ### Setup
 
@@ -88,12 +84,12 @@ To create your first node, run the following command:
   </Step>
     <Step title="Install dependencies and start coding">
    ```bash
-    cd nodes/api-call
+    cd src/nodes/api-call
     npm install
     ```
   </Step>
 </Steps>
-After running the command, a new directory was added to the `nodes/` folder under the new node's name with all the necessary files to start coding your custom node:
+After running the command, a new directory was added to the `src/nodes/` folder under the new node's name with all the necessary files to start coding your custom node:
 
 ```plaintext
 my-api-project/
@@ -124,108 +120,92 @@ Repeat the process for the second node with a name `get-year`. After running the
 In the `nodes/api-call/index.ts` we will create a node that will fetch data from an external API. For the simplicity of this example it will be hardcoded for only `GET` requests with headers set to `application/json`, will receive a URL as an input and return the response.
 
 ```typescript
-import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
 import {
 	type INanoServiceResponse,
 	type JsonLikeObject,
 	NanoService,
 	NanoServiceResponse,
 } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
 
-// This is the main class that will be exported
-// This class will be used to create a new instance of the node
-// This class must be created using the extends NanoService
-export default class Node extends NanoService {
+export default class ApiCall extends NanoService {
 	constructor() {
 		super();
 
-		// Set the input "JSON Schema Format" here for automated validation
-		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
 		this.inputSchema = {
-      type: "string",
-      title: "url",
-    };
-
-		// Set the output "JSON Schema Format" here for automated validation
-		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
-		this.outputSchema = {
+      $schema: "http://json-schema.org/draft-07/schema#",
+      title: "Generated schema for Root",
       type: "object",
-      title: "response",
+      properties: {
+        url: {
+          type: "string",
+        },
+        method: {
+          type: "string",
+        },
+        body: {
+          type: "object",
+          properties: {},
+        },
+        headers: {
+          type: "object",
+          properties: {},
+        },
+        responseType: {
+          type: "string",
+        },
+      },
+      required: ["url", "method"],
     };
+
+		this.outputSchema = {};
 	}
 
-	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
-		// Create a new instance of the response
+	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
 		try {
-			const data = await fetch(inputs.url, {method: "GET", headers: {"Content-Type": "application/json"}});
-			response.setSuccess(data.data); // Set the success
+			const method = inputs.method as string;
+			const url = inputs.url as string;
+			const headers = inputs.headers as JsonLikeObject;
+			const responseType = inputs.responseType as string;
+			const body = inputs.body || ctx.response.data;
+
+      const options: {
+        method: string;
+        headers: JsonLikeObject;
+        redirect: "follow";
+        responseType: string;
+        body: string | undefined;
+      } = {
+        method,
+        headers,
+        redirect: "follow",
+        responseType,
+        body: typeof body === "string" ? body : JSON.stringify(body),
+      };
+
+      if (method === "GET") options.body = undefined;
+
+			const response: Response = await fetch(url, options as RequestInit);
+      if(response.status >= 400 && response.ok === false) {
+        throw new Error(response.statusText);
+      }
+
+      let parsedResponse: string | JsonLikeObject;
+      if (response.headers.get("content-type")?.includes("application/json")) {
+        parsedResponse = await response.json();
+      } else {
+        parsedResponse = await response.text();
+      }
+
+			response.setSuccess(parsedResponse);
 		} catch (error: unknown) {
-			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
+			const nodeError: GlobalError = new GlobalError((error as Error).message);
 			nodeError.setCode(500);
 			nodeError.setStack((error as Error).stack);
 			nodeError.setName(this.name);
-			nodeError.setJson(undefined); // Return a custom JSON object here
-
-			response.setError(nodeError); // Set the error
-		}
-
-		return response;
-	}
-}
-```
-
-Now, let's create the second node `get-year` that will extract the year from the date of birth. In the `nodes/get-year/index.ts` file, implement the logic for your custom node. 
-
-
-```typescript
-import { type BlueprintContext, BlueprintError } from "@deskree/blueprint-shared";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-
-// This is the main class that will be exported
-// This class will be used to create a new instance of the node
-// This class must be created using the extends NanoService
-export default class Node extends NanoService {
-	constructor() {
-		super();
-
-		// Set the input "JSON Schema Format" here for automated validation
-		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
-		this.inputSchema = {
-      type: "string",
-      title: "date",
-    };
-
-		// Set the output "JSON Schema Format" here for automated validation
-		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
-		this.outputSchema = {
-      type: "integer",
-      title: "year",
-    };
-	}
-
-	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
-		// Create a new instance of the response
-		const response: NanoServiceResponse = new NanoServiceResponse();
-
-		try {
-      const date = new Date(inputs.date);
-      const year = date.getYear();
-			response.setSuccess(yeara); // Set the success
-		} catch (error: unknown) {
-			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
-			nodeError.setCode(500);
-			nodeError.setStack((error as Error).stack);
-			nodeError.setName(this.name);
-			nodeError.setJson(undefined); // Return a custom JSON object here
-
-			response.setError(nodeError); // Set the error
+			response.setError(nodeError);
 		}
 
 		return response;
@@ -265,50 +245,6 @@ For the `api-call` node, the `config.json` file should look like this:
   }
 }
 ```
-For the `get-year` node, the `config.json` file should look like this:
-```json
-{
-  "name": "get-year",
-  "version": "1.0.0",
-  "description": "",
-  "group": "Utility",
-  "config": {},
-  "input": {
-    "type": "string",
-    "description": "The date to extract the year from"
-  },
-  "output": {
-    "type": "integer",
-    "description": "The year extracted from the date"
-  },
-  "steps": {
-    "type": "boolean",
-    "default": false
-  },
-  "functions": {
-    "type": "array"
-  }
-}
-```
-
-### Registering nodes
-
-Each node needs to be registered in the `src/Nodes.ts` file to be used in the workflow. To do this, import the node and register it in the `nodes` object. 
-
-```typescript
-import ApiCall from "../nodes/api-call";
-import GetYear from "../nodes/get-year";
-import type Nodes from "./types/Nodes";
-
-const nodes: Nodes = {
-    "@nanoservice-ts/api-call": new ApiCall(),
-    "@nanoservice-ts/get-year": new GetYear(),
-};
-
-export default nodes;
-```
-
-Now the nodes can be used in the workflow.
 
 # Creating a workflow
 <Tip>**Workflow** is a JSON file that defines the sequence of tasks (nodes) to be executed. Think about it as a set of instructions to the run on how to put your nodes together. To learn more, visit [workflows](/docs/d/core-concepts/workflows.mdx)</Tip>
@@ -318,28 +254,33 @@ Now let's create a workflow that will use the nodes we've created. Create a new 
 ```json
 {
   "name": "launches-by-year",
+  "description": "Get launches by year",
   "trigger": {
-    "http": {
-      "method": "GET",
-      "path": "/space"
-    }
-  },
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
   "steps": [
     {
       "name": "api",
-      "node": "get-year",
-      "inputs": {
-        "date": "{{ctx.response.query.dob}}"
-      }
-    },
-    {
-      "name": "api",
       "node": "api-call",
+      "type": "local"
+    }
+  ],
+  "nodes": {
+    "api": {
       "inputs": {
-        "url": "https://ll.thespacedevs.com/2.3.0/launches/?format=json&year={{get-year}}"
+        "url": "https://ll.thespacedevs.com/2.3.0/launches/?format=json&year=${ctx.request.query.dob ? new Date(ctx.request.query.dob).getYear() : new Date('2000-01-01').getYear()}",
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "responseType": "json"
       }
     }
-  ]
+  }
 }
 ```
 
