@@ -90,7 +90,9 @@ export default abstract class NodeBase {
 		try {
 			if (typeof obj === "string") newObj = mapper.replaceString(obj, ctx, data as ParamsDictionary);
 			else mapper.replaceObjectStrings(newObj, ctx, data as ParamsDictionary);
-		} catch (e) {}
+		} catch (e) {
+			console.log("MAPPER ERROR", e);
+		}
 
 		return newObj;
 	};

@@ -1,5 +1,16 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.20
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/api-call@0.1.17
+  - @nanoservice-ts/shared@0.0.6
+  - @nanoservice-ts/runner@0.1.14
+  - @nanoservice-ts/if-else@0.0.18
+  - @nanoservice-ts/react@0.0.4
+
 ## 0.0.19
 
 ### Patch Changes

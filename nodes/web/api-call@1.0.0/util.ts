@@ -22,14 +22,18 @@ export const runApiCall = async (
 	};
 
 	if (method === "GET") options.body = undefined;
-
 	const response: Response = await fetch(url, options as RequestInit);
+
+	if (response.status >= 400 && response.ok === false) {
+		throw new Error(response.statusText);
+	}
+
 	let parsedResponse: string | JsonLikeObject;
 	if (response.headers.get("content-type")?.includes("application/json")) {
 		parsedResponse = await response.json();
 	} else {
 		parsedResponse = await response.text();
 	}
-	if (!response.ok) throw new Error(parsedResponse as string);
+
 	return parsedResponse;
 };
