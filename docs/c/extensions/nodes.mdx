@@ -1,3 +1,144 @@
 ---
 title: Creating nodes
 ---
+
+<Tip> While we are growing the list of built-in nodes, we will also be providing a space for you to submit your own nodes for others to use without shipping that as a a part of the framework. Check out our [Roadmap](https://github.com/orgs/deskree-inc/projects/4/views/2) for more information. </Tip>
+
+# **Guide to Contributing Built-in Nodes in Nanoservice-ts**
+
+Built-in nodes are **predefined, reusable nanoservices** that provide common functionality for workflows. This guide explains how to create, test, and contribute new built-in nodes to the framework.
+
+---
+
+## **What Are Built-in Nodes?**  
+Nodes are the **smallest executable units** in `nanoservice-ts` workflows. They perform specific tasks, such as:  
+- **API Requests** (e.g., fetch data from an external service)  
+- **Data Transformation** (e.g., JSON parsing, filtering, formatting)  
+- **Database Operations** (e.g., Postgres queries)  
+- **Messaging & Events** (e.g., sending messages to Kafka, RabbitMQ)  
+
+Nodes are stored in the `/nodes` directory and can be reused across multiple workflows.
+
+---
+
+## **Getting Started**  
+### **1. Set Up Your Development Environment**  
+Clone the repository and navigate to the `nodes` directory:  
+```bash
+git clone https://github.com/deskree-inc/nanoservice-ts.git
+cd nodes
+npm install
+```
+
+---
+
+## **Node Structure**  
+Each node follows a standardized structure and should be placed inside `/nodes/{NodeName}.ts`.
+
+### **Example: API Request Node**
+```typescript
+import { Node } from '../core/Node';
+
+export default class ApiRequestNode extends Node {
+  constructor() {
+    super('apiRequest', 'Performs an HTTP request to a specified endpoint');
+  }
+
+  async execute(params: { method: string; url: string; body?: any }) {
+    const response = await fetch(params.url, {
+      method: params.method,
+      body: JSON.stringify(params.body),
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    return await response.json();
+  }
+}
+```
+
+### **Key Components:**  
+✅ **Extends `Node` class** for consistency.  
+✅ **Implements `execute()` method** for business logic.  
+✅ **Uses input parameters dynamically** to support multiple use cases.  
+
+---
+
+## **Adding a New Built-in Node**
+1. **Create a new file in `/nodes`**  
+   ```bash
+   touch nodes/MyNewNode.ts
+   ```
+2. **Extend the base `Node` class**  
+3. **Implement the `execute()` method**  
+4. **Test the node using unit tests and manual execution.**  
+5. **Submit a Pull Request (PR) for review.**  
+
+---
+
+## **Testing Your Node**
+### **1. Writing Unit Tests**
+All nodes must include tests in `/tests/nodes/`. Example test for `ApiRequestNode`:  
+```typescript
+import ApiRequestNode from '../../nodes/ApiRequestNode';
+
+describe('ApiRequestNode', () => {
+  it('should perform an API request', async () => {
+    const node = new ApiRequestNode();
+    const response = await node.execute({ method: 'GET', url: 'https://api.example.com' });
+
+    expect(response).toBeDefined();
+  });
+});
+```
+Run tests:  
+```bash
+npm test
+```
+
+### **2. Manual Testing**
+To manually test the node:  
+```bash
+node ./bin/nanoservice-cli.js node run apiRequest --method GET --url https://api.example.com
+```
+
+---
+
+## **Node Configuration**
+Each node must be **configurable via CLI and environment variables**. Example:
+```typescript
+export const nodeConfig = {
+  retries: 3, // Number of retries before failing
+  timeout: 5000, // Execution timeout in milliseconds
+};
+```
+
+---
+
+## **Submitting a Pull Request**
+1. **Follow Branch Naming Convention**  
+   ```bash
+   git checkout -b feature/add-my-new-node
+   ```
+2. **Ensure Code Quality**  
+   ```bash
+   npm run lint
+   npm test
+   ```
+3. **Submit a PR** with:  
+   - A **clear description** of the node.  
+   - Tests and configuration examples.  
+   - Proper **documentation** updates.  
+
+---
+
+## **Best Practices**
+✅ **Keep nodes lightweight and efficient.**  
+✅ **Ensure proper error handling and logging.**  
+✅ **Write clear documentation and tests.**  
+✅ **Follow the project's TypeScript style guide.**  
+
+---
+
+## **Final Notes**
+Built-in nodes **simplify workflow development** and improve code reusability in `nanoservice-ts`. By contributing new nodes, you help expand the framework’s capabilities. If you have any questions, open an issue or join the discussion! 🚀  
+```
