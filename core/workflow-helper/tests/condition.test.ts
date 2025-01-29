@@ -1,4 +1,4 @@
-import { beforeAll, expect, test } from "vitest";
+import { beforeAll, test } from "vitest";
 import AddElse from "../src/components/AddElse";
 import AddIf from "../src/components/AddIf";
 import type StepNode from "../src/components/StepNode";

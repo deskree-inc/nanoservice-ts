@@ -1,4 +1,4 @@
-import type { Context, LoggerContext, ResponseContext } from "@nanoservice-ts/shared";
+import type { Context, LoggerContext } from "@nanoservice-ts/shared";
 import { beforeAll, expect, test } from "vitest";
 import DefaultLogger from "../src/DefaultLogger";
 import NanoService from "../src/NanoService";
@@ -38,10 +38,12 @@ test("Execute nanoService implementation", async () => {
 
 test("Execute nanoService wrong inputs", async () => {
 	const nano = new AddCreatedAtProperty();
+	// @ts-ignore
 	context.config["add-property"].inputs.data = undefined;
 	try {
 		await nano.run(context);
 	} catch (e) {
+		// @ts-ignore
 		expect(e.message).toBe('requires property "data"');
 	}
 });

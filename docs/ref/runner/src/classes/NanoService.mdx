@@ -1,0 +1,441 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [runner/src](/docs/ref/runner/src/README) / NanoService
+
+# Class: `abstract` NanoService
+
+Defined in: [core/runner/src/NanoService.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L10)
+
+## Extends
+
+- `default`
+
+## Constructors
+
+### new NanoService()
+
+> **new NanoService**(): [`NanoService`](/docs/ref/runner/src/classes/NanoService)
+
+Defined in: [core/runner/src/NanoService.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L15)
+
+#### Returns
+
+[`NanoService`](/docs/ref/runner/src/classes/NanoService)
+
+#### Overrides
+
+`NodeBase.constructor`
+
+## Properties
+
+### active
+
+> **active**: `boolean`
+
+Defined in: core/shared/dist/NodeBase.d.ts:13
+
+#### Inherited from
+
+`NodeBase.active`
+
+***
+
+### blueprintMapper()
+
+> **blueprintMapper**: (`obj`, `ctx`, `data`?) => `string` \| `ParamsDictionary`
+
+Defined in: core/shared/dist/NodeBase.d.ts:23
+
+#### Parameters
+
+##### obj
+
+`ParamsDictionary`
+
+##### ctx
+
+`Context`
+
+##### data?
+
+`ParamsDictionary`
+
+#### Returns
+
+`string` \| `ParamsDictionary`
+
+#### Inherited from
+
+`NodeBase.blueprintMapper`
+
+***
+
+### contentType
+
+> **contentType**: `string`
+
+Defined in: core/shared/dist/NodeBase.d.ts:12
+
+#### Inherited from
+
+`NodeBase.contentType`
+
+***
+
+### flow
+
+> **flow**: `boolean`
+
+Defined in: core/shared/dist/NodeBase.d.ts:10
+
+#### Inherited from
+
+`NodeBase.flow`
+
+***
+
+### inputSchema
+
+> **inputSchema**: `Schema`
+
+Defined in: [core/runner/src/NanoService.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L11)
+
+***
+
+### name
+
+> **name**: `string`
+
+Defined in: core/shared/dist/NodeBase.d.ts:11
+
+#### Inherited from
+
+`NodeBase.name`
+
+***
+
+### originalConfig
+
+> **originalConfig**: `ParamsDictionary`
+
+Defined in: core/shared/dist/NodeBase.d.ts:15
+
+#### Inherited from
+
+`NodeBase.originalConfig`
+
+***
+
+### outputSchema
+
+> **outputSchema**: `Schema`
+
+Defined in: [core/runner/src/NanoService.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L12)
+
+***
+
+### stop
+
+> **stop**: `boolean`
+
+Defined in: core/shared/dist/NodeBase.d.ts:14
+
+#### Inherited from
+
+`NodeBase.stop`
+
+## Methods
+
+### getSchemas()
+
+> **getSchemas**(): `object`
+
+Defined in: [core/runner/src/NanoService.ts:27](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L27)
+
+#### Returns
+
+`object`
+
+##### input
+
+> **input**: `Schema`
+
+##### output
+
+> **output**: `Schema`
+
+***
+
+### getVar()
+
+> **getVar**(`ctx`, `name`): `undefined` \| `ParamsDictionary`
+
+Defined in: core/shared/dist/NodeBase.d.ts:22
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+##### name
+
+`string`
+
+#### Returns
+
+`undefined` \| `ParamsDictionary`
+
+#### Inherited from
+
+`NodeBase.getVar`
+
+***
+
+### handle()
+
+> `abstract` **handle**(`ctx`, `inputs`): `Promise`\<[`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse) \| [`NanoService`](/docs/ref/runner/src/classes/NanoService)[]\>
+
+Defined in: [core/runner/src/NanoService.ts:89](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L89)
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+##### inputs
+
+[`JsonLikeObject`](/docs/ref/runner/src/interfaces/JsonLikeObject)
+
+#### Returns
+
+`Promise`\<[`INanoServiceResponse`](/docs/ref/runner/src/interfaces/INanoServiceResponse) \| [`NanoService`](/docs/ref/runner/src/classes/NanoService)[]\>
+
+***
+
+### process()
+
+> **process**(`ctx`, `step`?): `Promise`\<`ResponseContext`\>
+
+Defined in: core/shared/dist/NodeBase.d.ts:16
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+##### step?
+
+`Step`
+
+#### Returns
+
+`Promise`\<`ResponseContext`\>
+
+#### Inherited from
+
+`NodeBase.process`
+
+***
+
+### processFlow()
+
+> **processFlow**(`ctx`): `Promise`\<`ResponseContext`\>
+
+Defined in: core/shared/dist/NodeBase.d.ts:17
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+#### Returns
+
+`Promise`\<`ResponseContext`\>
+
+#### Inherited from
+
+`NodeBase.processFlow`
+
+***
+
+### run()
+
+> **run**(`ctx`): `Promise`\<`ResponseContext`\>
+
+Defined in: [core/runner/src/NanoService.ts:34](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L34)
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+#### Returns
+
+`Promise`\<`ResponseContext`\>
+
+#### Overrides
+
+`NodeBase.run`
+
+***
+
+### runJs()
+
+> **runJs**(`str`, `ctx`, `data`?, `func`?, `vars`?): `ParamsDictionary`
+
+Defined in: core/shared/dist/NodeBase.d.ts:20
+
+#### Parameters
+
+##### str
+
+`string`
+
+##### ctx
+
+`Context`
+
+##### data?
+
+`ParamsDictionary`
+
+##### func?
+
+`FunctionContext`
+
+##### vars?
+
+`VarsContext`
+
+#### Returns
+
+`ParamsDictionary`
+
+#### Inherited from
+
+`NodeBase.runJs`
+
+***
+
+### runSteps()
+
+> **runSteps**(`step`, `ctx`): `Promise`\<`Context`\>
+
+Defined in: core/shared/dist/NodeBase.d.ts:19
+
+#### Parameters
+
+##### step
+
+`Step` | `Step`[]
+
+##### ctx
+
+`Context`
+
+#### Returns
+
+`Promise`\<`Context`\>
+
+#### Inherited from
+
+`NodeBase.runSteps`
+
+***
+
+### setError()
+
+> **setError**(`config`): `GlobalError`
+
+Defined in: core/shared/dist/NodeBase.d.ts:24
+
+#### Parameters
+
+##### config
+
+`ErrorContext`
+
+#### Returns
+
+`GlobalError`
+
+#### Inherited from
+
+`NodeBase.setError`
+
+***
+
+### setSchemas()
+
+> **setSchemas**(`input`, `output`): `void`
+
+Defined in: [core/runner/src/NanoService.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L22)
+
+#### Parameters
+
+##### input
+
+`Schema`
+
+##### output
+
+`Schema`
+
+#### Returns
+
+`void`
+
+***
+
+### setVar()
+
+> **setVar**(`ctx`, `vars`): `void`
+
+Defined in: core/shared/dist/NodeBase.d.ts:21
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+##### vars
+
+`VarsContext`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+`NodeBase.setVar`
+
+***
+
+### validate()
+
+> **validate**(`obj`, `schema`): `Promise`\<`void`\>
+
+Defined in: [core/runner/src/NanoService.ts:91](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/NanoService.ts#L91)
+
+#### Parameters
+
+##### obj
+
+[`JsonLikeObject`](/docs/ref/runner/src/interfaces/JsonLikeObject)
+
+##### schema
+
+`Schema`
+
+#### Returns
+
+`Promise`\<`void`\>

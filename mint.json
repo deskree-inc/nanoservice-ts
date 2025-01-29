@@ -71,6 +71,10 @@
 			"url": "/docs/c"
 		},
 		{
+			"name": "References",
+			"url": "/docs/ref"
+		},
+		{
 			"name": "Changelog",
 			"url": "https://github.com/deskree-inc/nanoservice-ts/releases"
 		},
@@ -150,6 +154,68 @@
 				"/docs/c/extensions/nodes",
 				"/docs/c/extensions/triggers",
 				"/docs/c/extensions/cli"
+			]
+		},
+		{
+			"group": "References",
+			"pages": [
+				"/docs/ref/README",
+				{
+					"group": "Runner",
+					"pages": [
+						"/docs/ref/runner/src/README",
+						"/docs/ref/runner/src/classes/Configuration",
+						"/docs/ref/runner/src/classes/ConfigurationResolver",
+						"/docs/ref/runner/src/classes/DefaultLogger",
+						"/docs/ref/runner/src/classes/LocalStorage",
+						"/docs/ref/runner/src/classes/NanoService",
+						"/docs/ref/runner/src/classes/NanoServiceResponse",
+						"/docs/ref/runner/src/classes/NodeMap",
+						"/docs/ref/runner/src/classes/ResolverBase",
+						"/docs/ref/runner/src/classes/Runner",
+						"/docs/ref/runner/src/classes/RunnerSteps",
+						"/docs/ref/runner/src/classes/TriggerBase",
+						"/docs/ref/runner/src/interfaces/INanoServiceResponse",
+						"/docs/ref/runner/src/interfaces/JsonLikeObject",
+						"/docs/ref/runner/src/interfaces/ParamsDictionary",
+						"/docs/ref/runner/src/type-aliases/Average",
+						"/docs/ref/runner/src/type-aliases/Condition",
+						"/docs/ref/runner/src/type-aliases/Conditions",
+						"/docs/ref/runner/src/type-aliases/Config",
+						"/docs/ref/runner/src/type-aliases/Flow",
+						"/docs/ref/runner/src/type-aliases/GlobalOptions",
+						"/docs/ref/runner/src/type-aliases/Inputs",
+						"/docs/ref/runner/src/type-aliases/Node",
+						"/docs/ref/runner/src/type-aliases/Properties",
+						"/docs/ref/runner/src/type-aliases/Targets",
+						"/docs/ref/runner/src/type-aliases/Trigger",
+						"/docs/ref/runner/src/type-aliases/TriggerHttp",
+						"/docs/ref/runner/src/type-aliases/TriggerResponse",
+						"/docs/ref/runner/src/type-aliases/Triggers"
+					]
+				},
+				{
+					"group": "Shared",
+					"pages": [
+						"/docs/ref/shared/src/README",
+						"/docs/ref/shared/src/classes/GlobalError",
+						"/docs/ref/shared/src/classes/GlobalLogger",
+						"/docs/ref/shared/src/classes/MemoryUsage",
+						"/docs/ref/shared/src/classes/Metrics",
+						"/docs/ref/shared/src/classes/NodeBase",
+						"/docs/ref/shared/src/classes/Trigger",
+						"/docs/ref/shared/src/type-aliases/ConfigContext",
+						"/docs/ref/shared/src/type-aliases/Context",
+						"/docs/ref/shared/src/type-aliases/ErrorContext",
+						"/docs/ref/shared/src/type-aliases/FunctionContext",
+						"/docs/ref/shared/src/type-aliases/LoggerContext",
+						"/docs/ref/shared/src/type-aliases/MetricsType",
+						"/docs/ref/shared/src/type-aliases/NodeConfigContext",
+						"/docs/ref/shared/src/type-aliases/RequestContext",
+						"/docs/ref/shared/src/type-aliases/ResponseContext",
+						"/docs/ref/shared/src/type-aliases/Step"
+					]
+				}
 			]
 		}
 	],

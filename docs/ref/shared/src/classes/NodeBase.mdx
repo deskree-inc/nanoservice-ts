@@ -1,0 +1,269 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [shared/src](/docs/ref/shared/src/README) / NodeBase
+
+# Class: `abstract` NodeBase
+
+Defined in: [core/shared/src/NodeBase.ts:13](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L13)
+
+## Constructors
+
+### new NodeBase()
+
+> **new NodeBase**(): [`NodeBase`](/docs/ref/shared/src/classes/NodeBase)
+
+#### Returns
+
+[`NodeBase`](/docs/ref/shared/src/classes/NodeBase)
+
+## Properties
+
+### active
+
+> **active**: `boolean` = `true`
+
+Defined in: [core/shared/src/NodeBase.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L17)
+
+***
+
+### contentType
+
+> **contentType**: `string` = `""`
+
+Defined in: [core/shared/src/NodeBase.ts:16](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L16)
+
+***
+
+### flow
+
+> **flow**: `boolean` = `false`
+
+Defined in: [core/shared/src/NodeBase.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L14)
+
+***
+
+### name
+
+> **name**: `string` = `""`
+
+Defined in: [core/shared/src/NodeBase.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L15)
+
+***
+
+### originalConfig
+
+> **originalConfig**: `ParamsDictionary` = `{}`
+
+Defined in: [core/shared/src/NodeBase.ts:19](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L19)
+
+***
+
+### stop
+
+> **stop**: `boolean` = `false`
+
+Defined in: [core/shared/src/NodeBase.ts:18](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L18)
+
+## Methods
+
+### blueprintMapper()
+
+> **blueprintMapper**(`obj`, `ctx`, `data`?): `string` \| `ParamsDictionary`
+
+Defined in: [core/shared/src/NodeBase.ts:87](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L87)
+
+#### Parameters
+
+##### obj
+
+`ParamsDictionary`
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+##### data?
+
+`ParamsDictionary`
+
+#### Returns
+
+`string` \| `ParamsDictionary`
+
+***
+
+### getVar()
+
+> **getVar**(`ctx`, `name`): `undefined` \| `ParamsDictionary`
+
+Defined in: [core/shared/src/NodeBase.ts:83](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L83)
+
+#### Parameters
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+##### name
+
+`string`
+
+#### Returns
+
+`undefined` \| `ParamsDictionary`
+
+***
+
+### process()
+
+> **process**(`ctx`, `step`?): `Promise`\<[`ResponseContext`](/docs/ref/shared/src/type-aliases/ResponseContext)\>
+
+Defined in: [core/shared/src/NodeBase.ts:21](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L21)
+
+#### Parameters
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+##### step?
+
+[`Step`](/docs/ref/shared/src/type-aliases/Step)
+
+#### Returns
+
+`Promise`\<[`ResponseContext`](/docs/ref/shared/src/type-aliases/ResponseContext)\>
+
+***
+
+### processFlow()
+
+> **processFlow**(`ctx`): `Promise`\<[`ResponseContext`](/docs/ref/shared/src/type-aliases/ResponseContext)\>
+
+Defined in: [core/shared/src/NodeBase.ts:40](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L40)
+
+#### Parameters
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+#### Returns
+
+`Promise`\<[`ResponseContext`](/docs/ref/shared/src/type-aliases/ResponseContext)\>
+
+***
+
+### run()
+
+> `abstract` **run**(`ctx`): `Promise`\<[`ResponseContext`](/docs/ref/shared/src/type-aliases/ResponseContext)\>
+
+Defined in: [core/shared/src/NodeBase.ts:61](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L61)
+
+#### Parameters
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+#### Returns
+
+`Promise`\<[`ResponseContext`](/docs/ref/shared/src/type-aliases/ResponseContext)\>
+
+***
+
+### runJs()
+
+> **runJs**(`str`, `ctx`, `data`, `func`, `vars`): `ParamsDictionary`
+
+Defined in: [core/shared/src/NodeBase.ts:68](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L68)
+
+#### Parameters
+
+##### str
+
+`string`
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+##### data
+
+`ParamsDictionary` = `{}`
+
+##### func
+
+[`FunctionContext`](/docs/ref/shared/src/type-aliases/FunctionContext) = `{}`
+
+##### vars
+
+`VarsContext` = `{}`
+
+#### Returns
+
+`ParamsDictionary`
+
+***
+
+### runSteps()
+
+> **runSteps**(`step`, `ctx`): `Promise`\<[`Context`](/docs/ref/shared/src/type-aliases/Context)\>
+
+Defined in: [core/shared/src/NodeBase.ts:63](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L63)
+
+#### Parameters
+
+##### step
+
+[`Step`](/docs/ref/shared/src/type-aliases/Step) | [`Step`](/docs/ref/shared/src/type-aliases/Step)[]
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+#### Returns
+
+`Promise`\<[`Context`](/docs/ref/shared/src/type-aliases/Context)\>
+
+***
+
+### setError()
+
+> **setError**(`config`): [`GlobalError`](/docs/ref/shared/src/classes/GlobalError)
+
+Defined in: [core/shared/src/NodeBase.ts:100](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L100)
+
+#### Parameters
+
+##### config
+
+[`ErrorContext`](/docs/ref/shared/src/type-aliases/ErrorContext)
+
+#### Returns
+
+[`GlobalError`](/docs/ref/shared/src/classes/GlobalError)
+
+***
+
+### setVar()
+
+> **setVar**(`ctx`, `vars`): `void`
+
+Defined in: [core/shared/src/NodeBase.ts:78](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/shared/src/NodeBase.ts#L78)
+
+#### Parameters
+
+##### ctx
+
+[`Context`](/docs/ref/shared/src/type-aliases/Context)
+
+##### vars
+
+`VarsContext`
+
+#### Returns
+
+`void`

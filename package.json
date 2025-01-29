@@ -1,6 +1,6 @@
 {
 	"name": "nanoservice-ts",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "",
 	"keywords": [],
 	"author": "",
@@ -8,6 +8,7 @@
 	"scripts": {
 		"ci:publish": "pnpm publish -r --access public",
 		"doc:dev": "npx mintlify dev",
+		"doc:generate": "npx typedoc && node ./docs/generateRefLinks.js",
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
 		"test": "nx run-many -t test",
@@ -29,7 +30,9 @@
 		"@changesets/cli": "^2.27.11",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.3.0",
-		"nx": "20.2.2"
+		"nx": "20.2.2",
+		"typedoc": "^0.27.6",
+		"typedoc-plugin-markdown": "^4.4.1"
 	},
 	"lint-staged": {
 		"*": [
