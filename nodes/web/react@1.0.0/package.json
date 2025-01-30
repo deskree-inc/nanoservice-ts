@@ -5,7 +5,8 @@
 	"engines": {
 		"node": ">=18.0.0"
 	},
-	"author": "Deskree Inc.",
+	"author": "Deskree Technologies Inc.",
+	"license": "Apache-2.0",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
@@ -16,7 +17,6 @@
 		"build:babel": "rm -rf dist/app/index.merged.min.js && babel dist/app --out-file dist/app/index.merged.min.js",
 		"build": "npm run build:ts && npm run build:babel && cp index.html dist/index.html"
 	},
-	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^22.10.2",
 		"@types/ejs": "^3.1.5",
