@@ -1,5 +1,11 @@
 # @nanoservice-ts/react
 
+## 0.0.5
+
+### Patch Changes
+
+- Added configuration options
+
 ## 0.0.4
 
 ### Patch Changes

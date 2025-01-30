@@ -3,11 +3,14 @@ import { DefaultLogger } from "@nanoservice-ts/runner";
 import { type Span, metrics, trace } from "@opentelemetry/api";
 import HttpTrigger from "./HttpTrigger";
 
-class Main {
+export default class App {
 	private httpTrigger: HttpTrigger = <HttpTrigger>{};
 	protected trigger_initializer = 0;
 	protected initializer = 0;
-	protected tracer = trace.getTracer("trigger-http-server", "0.0.8");
+	protected tracer = trace.getTracer(
+		process.env.PROJECT_NAME || "trigger-http-server",
+		process.env.PROJECT_VERSION || "0.0.1",
+	);
 	private logger = new DefaultLogger();
 	protected app_cold_start = metrics.getMeter("default").createGauge("initialization", {
 		description: "Application cold start",
@@ -35,4 +38,6 @@ class Main {
 	}
 }
 
-new Main().run();
+if (process.env.DISABLE_TRIGGER_RUN !== "true") {
+	new App().run();
+}

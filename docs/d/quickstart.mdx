@@ -94,7 +94,7 @@ After running the command, a new directory was added to the `src/nodes/` folder 
 ```plaintext
 my-api-project/
 ├── package.json
-├── workflows/
+├── test/
 │   └── example-workflow.json
 ├── nodes/
 │   └── api-call/
@@ -109,8 +109,6 @@ my-api-project/
 └── src/
     └── index.ts
 ```
-
-Repeat the process for the second node with a name `get-year`. After running the `npx nanoctl@latest create node` and providing the `get-year` name, a new directory will be created in the `nodes/` folder with the same structure as the first node.
 
 ---
 
@@ -187,16 +185,16 @@ export default class ApiCall extends NanoService {
 
       if (method === "GET") options.body = undefined;
 
-			const response: Response = await fetch(url, options as RequestInit);
-      if(response.status >= 400 && response.ok === false) {
-        throw new Error(response.statusText);
+			const result: Response = await fetch(url, options as RequestInit);
+      if(result.status >= 400 && result.ok === false) {
+        throw new Error(result.statusText);
       }
 
       let parsedResponse: string | JsonLikeObject;
-      if (response.headers.get("content-type")?.includes("application/json")) {
-        parsedResponse = await response.json();
+      if (result.headers.get("content-type")?.includes("application/json")) {
+        parsedResponse = await result.json();
       } else {
-        parsedResponse = await response.text();
+        parsedResponse = await result.text();
       }
 
 			response.setSuccess(parsedResponse);
@@ -227,9 +225,59 @@ For the `api-call` node, the `config.json` file should look like this:
   "version": "1.0.0",
   "description": "",
   "group": "API",
-  "config": {},
+  "config": {
+		"type": "object",
+		"properties": {
+			"inputs": {
+				"type": "object",
+				"properties": {
+					"url": {
+					  "type": "string"
+					},
+					"method": {
+					  "type": "string"
+					},
+					"body": {
+					  "type": "object",
+					  "properties": {}
+					},
+					"headers": {
+					  "type": "object",
+					  "properties": {}
+					},
+					"responseType": {
+					  "type": "string"
+					}
+				  },
+				  "required": ["url", "method"]
+			}
+		},
+		"required": ["inputs"],
+		"example": {
+			"inputs": {
+				"properties": {
+					"url": "https://jsonplaceholder.typicode.com/posts",
+					"method": "GET",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"body": {}
+				}
+			}
+		}
+	},
   "input": {
-    "type": "string",
+    "anyOf": [
+			{
+				"type": "object"
+			},
+			{
+				"type": "array"
+			},
+			{
+				"type": "string"
+			}
+		],
     "description": "The URL to fetch data from"
   },
   "output": {
@@ -245,6 +293,22 @@ For the `api-call` node, the `config.json` file should look like this:
   }
 }
 ```
+
+### Build the new Node
+<Tip> The `nanoservice-ts` imports the created nodes at runtime. It is required to build the node using the script build.</Tip>
+
+To build the node run the following command:
+
+<Steps>
+  <Step title="Install dependencies and run build">
+   ```bash
+    npm install
+    npm run build
+    ```
+  </Step>
+</Steps>
+
+After executing the build command a new `dist` directory will be created in the node's directory with the compiled files.
 
 # Creating a workflow
 <Tip>**Workflow** is a JSON file that defines the sequence of tasks (nodes) to be executed. Think about it as a set of instructions to the run on how to put your nodes together. To learn more, visit [workflows](/docs/d/core-concepts/workflows.mdx)</Tip>
@@ -292,10 +356,10 @@ Note that in this example we are using `ctx` to get the original request query p
 
 To test our newly created workflow simply run a command `npm run dev` in the root directory of the project. This will start the server on the port specified in the `.env.local` file. By default, you should be able to access at port `3000`.
 
-Then make a GET API request to http://localhost:3000/launches-by-year either using a browser or a tool like Postman. The request should contain a query parameter `dob` with the date of birth in the format `YYYY-MM-DD`. For example:
+Then make a GET API request to http://localhost:4000/launches-by-year either using a browser or a tool like Postman. The request should contain a query parameter `dob` with the date of birth in the format `YYYY-MM-DD`. For example:
 
 ```bash
-curl -X GET http://localhost:3000/launches-by-year?dob=1990-01-01
+curl -X GET http://localhost:4000/launches-by-year?dob=1990-01-01
 ```
 
 The response should be a JSON object with the list of space launches that happened in the year 1990.

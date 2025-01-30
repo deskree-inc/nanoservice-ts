@@ -6,24 +6,12 @@ export const inputSchema = {
 		title: {
 			type: "string",
 		},
-		index_html: {
+		view_path: {
 			type: "string",
 		},
-		scripts: {
-			type: "string",
-		},
-		react_app: {
-			type: "string",
-		},
-		styles: {
-			type: "string",
-		},
-		root_element: {
-			type: "string",
-		},
-		metas: {
+		file_path: {
 			type: "string",
 		},
 	},
-	required: ["react_app"],
+	required: ["title", "file_path"],
 };

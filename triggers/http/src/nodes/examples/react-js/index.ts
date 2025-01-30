@@ -9,11 +9,10 @@ import {
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import ejs from "ejs";
 import { inputSchema } from "./inputSchema";
-// import clone from "clone";
 
 const rootDir = path.resolve(__dirname, ".");
 
-export default class React extends NanoService {
+export default class WeatherUI extends NanoService {
 	constructor() {
 		super();
 
@@ -39,25 +38,21 @@ export default class React extends NanoService {
 	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
 		// Create a new instance of the response
 		const response = new NanoServiceResponse();
-		let file_path = inputs.react_app as string;
-		if (file_path === undefined || file_path === "") file_path = "./app/index.merged.min.js";
+		let file_path = inputs.file_path as string;
+		if (file_path === undefined || file_path === "") file_path = "./app/index.js";
 		const react_script_template = '<script type="text/babel">REACT_SCRIPT</script>';
 
-		const title = (inputs.title as string) || "React App";
-		const scripts = (inputs.scripts as string) || "";
-		const metas = (inputs.metas as string) || "";
-		const index_html = (inputs.index_html as string) || "index.html";
-		const styles = (inputs.styles as string) || "";
-		const root_element = (inputs.root_element as string) || "root";
+		const view_path = (inputs.view_path as string) || "index.html";
+		const title = inputs.title as string;
 
 		try {
 			// Load React script from the current module location
 			const min_file = this.root(file_path);
-			let react_app = fs.readFileSync(min_file, "utf8");
-			react_app = react_script_template.replace("REACT_SCRIPT", `\n${react_app}\n`);
+			let react_script = fs.readFileSync(min_file, "utf8");
+			react_script = react_script_template.replace("REACT_SCRIPT", `\n${react_script}\n`);
 
 			// Read index.html file from the current module location
-			const content = fs.readFileSync(this.root(index_html), "utf8");
+			const content = fs.readFileSync(this.root(view_path), "utf8");
 			const render = ejs.compile(content, { client: false });
 			const ctxCloned = {
 				config: ctx.config,
@@ -74,15 +69,7 @@ export default class React extends NanoService {
 				},
 			};
 
-			const html = render({
-				title,
-				metas,
-				styles,
-				scripts,
-				root_element,
-				react_app,
-				ctx: btoa(JSON.stringify(ctxCloned)),
-			});
+			const html = render({ title, react_script, ctx: btoa(JSON.stringify(ctxCloned)) });
 
 			// Your code here
 			response.setSuccess(html); // Set the success

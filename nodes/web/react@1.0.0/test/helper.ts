@@ -48,7 +48,7 @@ export default function ctx(): Context {
 	ctx.config = {
 		react: {
 			inputs: {
-				file_path: "./dist/app/index.merged.min.js",
+				react_app: "./dist/app/index.merged.min.js",
 			},
 		},
 	} as unknown as ParamsDictionary;
