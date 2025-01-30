@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql # DB dvdrental
+      - ./:/var/lib/postgresql/bump
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080

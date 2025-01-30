@@ -1,0 +1,31 @@
+{
+	"name": "Films Workflow",
+	"description": "This workflow returns a list of films from Postgres",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "get-films",
+			"node": "postgres-query",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"get-films": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "SELECT * FROM \"film\" ORDER BY \"title\" LIMIT 50"
+			}
+		}
+	}
+}

@@ -21,6 +21,7 @@
 		"@types/express": "^5.0.0",
 		"@types/node": "^22.10.2",
 		"@types/ejs": "^3.1.5",
+		"@types/pg": "^8.11.11",
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
@@ -49,7 +50,8 @@
 		"uuid": "^11.0.3",
 		"zod": "^3.24.1",
 		"@mastra/core": "^0.1.27-alpha.80",
-		"ejs": "^3.1.10"
+		"ejs": "^3.1.10",
+		"pg": "^8.13.1"
 	},
 	"private": true
 }
