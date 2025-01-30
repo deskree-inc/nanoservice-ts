@@ -1,3 +1,4 @@
+// @ts-ignore
 import os, { type CpuInfo } from "node:os";
 import MetricsBase, { type CpuUsageType } from "./MetricsBase";
 

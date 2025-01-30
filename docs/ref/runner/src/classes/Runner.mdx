@@ -1,0 +1,87 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [runner/src](/docs/ref/runner/src/README) / Runner
+
+# Class: Runner
+
+Defined in: [core/runner/src/Runner.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/Runner.ts#L5)
+
+## Extends
+
+- [`RunnerSteps`](/docs/ref/runner/src/classes/RunnerSteps)
+
+## Constructors
+
+### new Runner()
+
+> **new Runner**(`steps`): [`Runner`](/docs/ref/runner/src/classes/Runner)
+
+Defined in: [core/runner/src/Runner.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/Runner.ts#L8)
+
+#### Parameters
+
+##### steps
+
+[`NanoService`](/docs/ref/runner/src/classes/NanoService)[] = `[]`
+
+#### Returns
+
+[`Runner`](/docs/ref/runner/src/classes/Runner)
+
+#### Overrides
+
+[`RunnerSteps`](/docs/ref/runner/src/classes/RunnerSteps).[`constructor`](/docs/ref/runner/src/classes/RunnerSteps#constructors)
+
+## Methods
+
+### run()
+
+> **run**(`ctx`): `Promise`\<`Context`\>
+
+Defined in: [core/runner/src/Runner.ts:13](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/Runner.ts#L13)
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+#### Returns
+
+`Promise`\<`Context`\>
+
+***
+
+### runSteps()
+
+> **runSteps**(`ctx`, `steps`, `deep`, `step_name`): `Promise`\<`Context`\>
+
+Defined in: [core/runner/src/RunnerSteps.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/RunnerSteps.ts#L6)
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+##### steps
+
+[`NanoService`](/docs/ref/runner/src/classes/NanoService)[]
+
+##### deep
+
+`boolean` = `false`
+
+##### step\_name
+
+`string` = `""`
+
+#### Returns
+
+`Promise`\<`Context`\>
+
+#### Inherited from
+
+[`RunnerSteps`](/docs/ref/runner/src/classes/RunnerSteps).[`runSteps`](/docs/ref/runner/src/classes/RunnerSteps#runsteps)

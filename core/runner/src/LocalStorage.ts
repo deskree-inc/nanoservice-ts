@@ -1,3 +1,4 @@
+// @ts-ignore
 import fs from "node:fs";
 import ResolverBase from "./ResolverBase";
 import type Config from "./types/Config";

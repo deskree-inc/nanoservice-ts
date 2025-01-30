@@ -1,0 +1,243 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [runner/src](/docs/ref/runner/src/README) / DefaultLogger
+
+# Class: DefaultLogger
+
+Defined in: [core/runner/src/DefaultLogger.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L3)
+
+## Extends
+
+- `default`
+
+## Constructors
+
+### new DefaultLogger()
+
+> **new DefaultLogger**(`workflowName`?, `workflowPath`?, `requestId`?): [`DefaultLogger`](/docs/ref/runner/src/classes/DefaultLogger)
+
+Defined in: [core/runner/src/DefaultLogger.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L10)
+
+#### Parameters
+
+##### workflowName?
+
+`string`
+
+##### workflowPath?
+
+`string`
+
+##### requestId?
+
+`string`
+
+#### Returns
+
+[`DefaultLogger`](/docs/ref/runner/src/classes/DefaultLogger)
+
+#### Overrides
+
+`GlobalLogger.constructor`
+
+## Properties
+
+### appName
+
+> **appName**: `undefined` \| `string` = `""`
+
+Defined in: [core/runner/src/DefaultLogger.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L8)
+
+***
+
+### env
+
+> **env**: `undefined` \| `string` = `""`
+
+Defined in: [core/runner/src/DefaultLogger.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L7)
+
+***
+
+### logs
+
+> `protected` **logs**: `string`[]
+
+Defined in: core/shared/dist/GlobalLogger.d.ts:3
+
+#### Inherited from
+
+`GlobalLogger.logs`
+
+***
+
+### requestId
+
+> **requestId**: `undefined` \| `string` = `""`
+
+Defined in: [core/runner/src/DefaultLogger.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L6)
+
+***
+
+### workflowName
+
+> **workflowName**: `undefined` \| `string` = `""`
+
+Defined in: [core/runner/src/DefaultLogger.ts:4](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L4)
+
+***
+
+### workflowPath
+
+> **workflowPath**: `undefined` \| `string` = `""`
+
+Defined in: [core/runner/src/DefaultLogger.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L5)
+
+## Methods
+
+### error()
+
+> **error**(`message`, `stack`): `void`
+
+Defined in: [core/runner/src/DefaultLogger.ts:29](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L29)
+
+#### Parameters
+
+##### message
+
+`string`
+
+##### stack
+
+`string` = `""`
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+`GlobalLogger.error`
+
+***
+
+### getLogs()
+
+> **getLogs**(): `string`[]
+
+Defined in: core/shared/dist/GlobalLogger.d.ts:8
+
+#### Returns
+
+`string`[]
+
+#### Inherited from
+
+`GlobalLogger.getLogs`
+
+***
+
+### getLogsAsBase64()
+
+> **getLogsAsBase64**(): `string`
+
+Defined in: core/shared/dist/GlobalLogger.d.ts:10
+
+#### Returns
+
+`string`
+
+#### Inherited from
+
+`GlobalLogger.getLogsAsBase64`
+
+***
+
+### getLogsAsText()
+
+> **getLogsAsText**(): `string`
+
+Defined in: core/shared/dist/GlobalLogger.d.ts:9
+
+#### Returns
+
+`string`
+
+#### Inherited from
+
+`GlobalLogger.getLogsAsText`
+
+***
+
+### injectMetadata()
+
+> **injectMetadata**(`message`, `level`, `stack`): `string`
+
+Defined in: [core/runner/src/DefaultLogger.ts:34](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L34)
+
+#### Parameters
+
+##### message
+
+`string`
+
+##### level
+
+`string` = `"info"`
+
+##### stack
+
+`string` = `""`
+
+#### Returns
+
+`string`
+
+***
+
+### log()
+
+> **log**(`message`): `void`
+
+Defined in: [core/runner/src/DefaultLogger.ts:19](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L19)
+
+#### Parameters
+
+##### message
+
+`string`
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+`GlobalLogger.log`
+
+***
+
+### logLevel()
+
+> **logLevel**(`level`, `message`): `void`
+
+Defined in: [core/runner/src/DefaultLogger.ts:24](https://github.com/deskree-inc/nanoservice-ts/blob/ba7c322d2df8c8713881891584f33c6c7ed154ba/core/runner/src/DefaultLogger.ts#L24)
+
+#### Parameters
+
+##### level
+
+`string`
+
+##### message
+
+`string`
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+`GlobalLogger.logLevel`
