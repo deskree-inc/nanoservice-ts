@@ -1,0 +1,9 @@
+GET http://localhost:4000/countries HTTP/1.1
+
+###
+
+GET http://localhost:4000/empty HTTP/1.1
+
+###
+
+GET http://localhost:4000/films HTTP/1.1
