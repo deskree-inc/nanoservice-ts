@@ -17,7 +17,7 @@
 		},
 		{
 			"name": "chatbot",
-			"node": "@nanoservice-ts/react",
+			"node": "react-js",
 			"type": "module"
 		}
 	],
@@ -34,7 +34,8 @@
 		},
 		"chatbot": {
 			"inputs": {
-				"file_path": "app/index.merged.min.js"
+				"title": "Chatbot UI",
+				"file_path": "app/chatbot.jsx"
 			}
 		}
 	}

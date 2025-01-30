@@ -1,0 +1,79 @@
+{
+	"name": "Mastra Weather Agent",
+	"description": "A simple weather agent that provides accurate weather information.",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "*",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "filter-request",
+			"node": "@nanoservice-ts/if-else",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"filter-request": {
+			"conditions": [
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "weather",
+							"node": "mastra-agent",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"post\""
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "weather-ui",
+							"node": "react-js",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\""
+				},
+				{
+					"type": "else",
+					"steps": [
+						{
+							"name": "method-not-allowed",
+							"node": "error-node",
+							"type": "module"
+						}
+					]
+				}
+			]
+		},
+		"weather": {
+			"inputs": {
+				"name": "Weather Agent",
+				"instructions": "You are a helpful weather assistant that provides accurate weather information. Your primary function is to help users get weather details for specific locations. When responding: - Always ask for a location if none is provided, - Include relevant details like humidity, wind conditions, and precipitation, - Keep responses concise but informative. Use the weatherTool to fetch current weather data.",
+				"model": {
+					"provider": "OPEN_AI",
+					"name": "gpt-4o-mini"
+				},
+				"message": "Could you please provide me with the current weather details for ${ctx.request.body.city}, {ctx.request.body.country}?"
+			}
+		},
+		"weather-ui": {
+			"inputs": {
+				"title": "Weather UI",
+				"file_path": "app/weather.jsx"
+			}
+		},
+		"method-not-allowed": {
+			"inputs": {
+				"message": "Invalid HTTP method"
+			}
+		}
+	}
+}

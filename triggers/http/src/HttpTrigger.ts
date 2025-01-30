@@ -17,7 +17,10 @@ export default class HttpTrigger extends TriggerBase {
 	private port: string | number = process.env.PORT || 4000;
 	private initializer = 0;
 	private nodeMap: GlobalOptions = <GlobalOptions>{};
-	protected tracer = trace.getTracer("trigger-http-workflow", "0.0.1");
+	protected tracer = trace.getTracer(
+		process.env.PROJECT_NAME || "trigger-http-workflow",
+		process.env.PROJECT_VERSION || "0.0.1",
+	);
 	private logger = new DefaultLogger();
 
 	constructor() {
@@ -73,7 +76,8 @@ export default class HttpTrigger extends TriggerBase {
 						ctx.logger.log(`Version: ${this.configuration.version}, Method: ${req.method}`);
 
 						const { method, path } = this.configuration.trigger.http;
-						if (method && req.method.toLowerCase() !== method.toLowerCase()) throw new Error("Invalid HTTP method");
+						if (method && method !== "*" && req.method.toLowerCase() !== method.toLowerCase())
+							throw new Error("Invalid HTTP method");
 						if (!validateRoute(path, req.path)) throw new Error("Invalid HTTP path");
 
 						ctx.request = req as unknown as RequestContext;

@@ -15,9 +15,10 @@ beforeAll(() => {
 
 // Validate Hello World from Node
 test("Render index.html page", async () => {
-	const response = await node.handle(ctx(), { file_path: "./dist/app/index.merged.min.js" });
+	const response = await node.handle(ctx(), { react_app: "./dist/app/index.merged.min.js" });
 	const mockup_file = path.resolve(rootDir, "index.mockup.html");
 	const message: string = fs.readFileSync(mockup_file, "utf8");
 
+	expect(response.success).toEqual(true);
 	expect(response.data).toEqual(message);
 });
