@@ -3,8 +3,8 @@
 	"version": "0.1.0",
 	"description": "",
 	"keywords": [],
-	"author": "",
-	"license": "MIT",
+	"author": "Deskree Technologies Inc.",
+	"license": "Apache-2.0",
 	"scripts": {
 		"ci:publish": "pnpm publish -r --access public",
 		"doc:dev": "npx mintlify dev",
@@ -23,7 +23,7 @@
 		"http:dev": "pnpm --filter @nanoservice-ts/trigger-http --parallel -r run dev",
 		"nodes:build": "pnpm --filter @nanoservice-ts/api-call --filter @nanoservice-ts/if-else --filter @nanoservice-ts/react --filter node-name --parallel -r run build:dev",
 		"core:build:dev": "pnpm --filter @nanoservice-ts/runner --filter @nanoservice-ts/shared --filter @nanoservice-ts/helper --parallel run build:dev",
-		"build": "pnpm --filter nanoctl --filter @nanoservice-ts/runner --filter @nanoservice-ts/shared --filter @nanoservice-ts/helper run build && pnpm --filter @nanoservice-ts/api-call --filter @nanoservice-ts/if-else --filter node-name --parallel -r run build"
+		"build": "pnpm --filter nanoctl --filter @nanoservice-ts/runner --filter @nanoservice-ts/shared --filter @nanoservice-ts/helper run build && pnpm --filter @nanoservice-ts/api-call --filter @nanoservice-ts/if-else --filter @nanoservice-ts/react --filter node-name --parallel -r run build"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",

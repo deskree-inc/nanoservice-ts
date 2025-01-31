@@ -3,6 +3,7 @@ title: Creating triggers
 ---
 
 # **Guide to Contributing Triggers in Nanoservice-ts**
+<Tip> Make sure you follow the recommendations on how to set up local environment and steps to complete before committing your changes. To learn more [visit](/docs/c/overview/how-to-contribute)</Tip>
 
 Triggers in `nanoservice-ts` allow workflows to be executed **automatically** in response to specific events. This guide provides an overview of how to create, test, and contribute new triggers to the framework.
 
@@ -10,7 +11,7 @@ Triggers in `nanoservice-ts` allow workflows to be executed **automatically** in
 
 ## **What Are Triggers?**  
 Triggers define **when and how a workflow starts**. They listen for external or internal events, such as:  
-- **HTTP Requests** (e.g., API calls)  
+- **HTTP Requests** (e.g., API calls) <Icon icon="check" iconType="solid" />  
 - **Scheduled Events** (e.g., cron jobs)  
 - **Database Changes** (e.g., new records in Postgres)  
 - **Queue Messages** (e.g., Kafka, RabbitMQ events)  
@@ -20,8 +21,8 @@ Triggers are stored in the `/triggers` directory and are configurable via CLI.
 
 ---
 
-## **Getting Started**  
-### **1. Set Up Your Development Environment**  
+## **Getting Started**
+
 Clone the repository and navigate to the `triggers` directory:  
 ```bash
 git clone https://github.com/deskree-inc/nanoservice-ts.git
@@ -31,80 +32,12 @@ npm install
 
 ---
 
-## **Trigger Structure**  
-Each trigger must implement a standard interface and be placed inside `/triggers/{triggerName}.ts`.  
-
-### **Example: HTTP Trigger**
-```typescript
-import { Trigger } from '../core/Trigger';
-
-export default class HttpTrigger extends Trigger {
-  constructor() {
-    super('http', 'Triggers workflow execution on HTTP requests');
-  }
-
-  async execute(params: { method: string; url: string; body?: any }) {
-    console.log(`Received ${params.method} request at ${params.url}`);
-    return { success: true, data: params.body };
-  }
-}
-```
-**Key Components:**  
-✅ **Extends `Trigger` class** for standardization.  
-✅ **Implements `execute()` method** to define behavior.  
-✅ **Receives parameters dynamically** (e.g., HTTP method, URL, body).  
-
----
-
 ## **Adding a New Trigger**
-1. **Create a new file in `/triggers`**  
-   ```bash
-   touch triggers/MyNewTrigger.ts
-   ```
-2. **Extend the base `Trigger` class**  
-3. **Implement the `execute()` method** to define trigger logic.  
-4. **Test the trigger using unit tests and manual execution.**  
-5. **Submit a Pull Request (PR) for review.**  
-
----
-
-## **Testing Your Trigger**
-### **1. Writing Unit Tests**
-All triggers must include tests in `/tests/triggers/`. Example test for `HttpTrigger`:  
-```typescript
-import HttpTrigger from '../../triggers/HttpTrigger';
-
-describe('HttpTrigger', () => {
-  it('should execute on HTTP request', async () => {
-    const trigger = new HttpTrigger();
-    const response = await trigger.execute({ method: 'POST', url: '/test', body: { key: 'value' } });
-
-    expect(response.success).toBe(true);
-    expect(response.data).toEqual({ key: 'value' });
-  });
-});
-```
-Run tests:  
-```bash
-npm test
-```
-
-### **2. Manual Testing**
-To manually test the trigger:  
-```bash
-node ./bin/nanoservice-cli.js trigger run http --method POST --url /test --body '{"key": "value"}'
-```
-
----
-
-## **Trigger Configuration**
-Each trigger must be **configurable via CLI and environment variables**. Example:
-```typescript
-export const triggerConfig = {
-  retries: 3, // Number of retries before failing
-  timeout: 5000, // Execution timeout in milliseconds
-};
-```
+1. Create a new directory in `/triggers`  
+2. Use `http-trigger` as a template or build your own
+3. Make sure you are using the [TriggerBase class](/docs/ref/runner/src/classes/TriggerBase) as the base class
+4. Document your code, create interface definitions, and make sure you follow ESlint rules
+5. Make sure you have tests for your trigger and you achieve full coverage after running `pnpm test`
 
 ---
 

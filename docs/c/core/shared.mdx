@@ -10,6 +10,8 @@ title: shared
 
 # **Guide to Contributing to shared in Nanoservice-ts**
 
+<Tip> Make sure you follow the recommendations on how to set up local environment and steps to complete before committing your changes. To learn more [visit](/docs/c/overview/how-to-contribute)</Tip>
+
 The **Shared** module in `nanoservice-ts` contains common utilities used across the framework, including the **Runner, Nodes, and Triggers**. These utilities handle **logging, error management, and other core functionalities**. This guide will help you contribute to the shared utilities effectively.
 
 ---
@@ -18,62 +20,11 @@ The **Shared** module in `nanoservice-ts` contains common utilities used across 
 The `nanoservice-ts` framework is hosted at:  
 🔗 [GitHub Repository](https://github.com/deskree-inc/nanoservice-ts.git)  
 
-### **1. Clone the Repository**  
+### Clone the Repository**  
 ```bash
 git clone https://github.com/deskree-inc/nanoservice-ts.git
 cd nanoservice-ts/core/shared
 npm install
-```
-
-### **2. Understand the Directory Structure**  
-```
-/core/shared
- ├── /src
- │    ├── logger.ts       # Logging utilities
- │    ├── errorHandler.ts # Global error handling
- │    ├── config.ts       # Shared configuration loader
- │    ├── utils.ts        # Miscellaneous utilities
- ├── /tests              # Unit tests for shared utilities
- ├── package.json        # Dependencies and build scripts
- ├── README.md           # Shared module documentation
-```
-
----
-
-## **Common Utilities in Shared**
-### **1. Logging (`logger.ts`)**  
-Provides consistent logging for the entire framework.  
-Example:
-```typescript
-export function logInfo(message: string) {
-  console.log(`[INFO]: ${message}`);
-}
-
-export function logError(message: string, error?: Error) {
-  console.error(`[ERROR]: ${message}`, error || '');
-}
-```
-
-### **2. Error Handling (`errorHandler.ts`)**  
-Handles global errors across Runner, Nodes, and Triggers.  
-Example:
-```typescript
-export class NanoserviceError extends Error {
-  constructor(message: string, public code?: number) {
-    super(message);
-    this.name = 'NanoserviceError';
-  }
-}
-```
-
-### **3. Configuration Loader (`config.ts`)**  
-Loads common settings from environment variables or files.  
-Example:
-```typescript
-export const config = {
-  maxRetries: process.env.MAX_RETRIES || 3,
-  logLevel: process.env.LOG_LEVEL || 'info',
-};
 ```
 
 ---

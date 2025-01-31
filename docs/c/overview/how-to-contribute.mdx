@@ -22,6 +22,55 @@ Nanoservice-ts is an open-source project built to redefine how developers archit
   </Step>
 </Steps>
 
+### Setting up the Development Environment
+
+To set up the development environment, follow the steps below:
+
+<Steps>
+  <Step title="Close the repository">
+    ```bash
+    git clone https://github.com/deskree-inc/nanoservice-ts.git
+    cd nanoservice-ts
+    ```
+  </Step>
+  <Step title="Install the dependencies">
+  The following command will install the dependencies required for the project.
+    ```bash
+    pnpm install
+    ```
+  </Step>
+  <Step title="Create env">
+    The following command will create the `.env.local` required by the tests in the runner project.
+    ```bash
+    make prepare
+    ```
+  </Step>
+</Steps>
+
+### Before committing your changes
+
+<Steps>
+  <Step title="Run build process">
+  The following command will will create the build for all the projects because as required by monorepo.
+    ```bash
+    pnpm build
+    ```
+  </Step>
+  <Step title="Generate documentation">
+  If you've made any changes to the `/core` of the project, make sure you you run the following command to update the `TypeDoc` documentation.
+  The following command will install the dependencies required for the project.
+    ```bash
+    npm run doc:generate
+    ```
+  </Step>
+  <Step title="Run test">
+    The following command will execute the test in all the projects
+    ```bash
+    pnpm test
+    ```
+  </Step>
+</Steps>
+
 ### Best Practices
 <Steps>
   <Step title="First Step">

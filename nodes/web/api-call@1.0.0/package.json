@@ -5,7 +5,8 @@
 	"engines": {
 		"node": ">=18.0.0"
 	},
-	"author": "Deskree Inc",
+	"author": "Deskree Technologies Inc.",
+	"license": "Apache-2.0",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
@@ -13,7 +14,6 @@
 		"build": "rimraf ./dist && tsc",
 		"build:dev": "tsc --watch"
 	},
-	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^22.10.2",
 		"@types/lodash": "^4.14.196",

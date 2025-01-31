@@ -8,8 +8,8 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"repository": "https://github.com/deskree-inc/nanoservice-ts-shared-lib.git",
-	"author": "Marco A. Castillo Della Sera",
-	"license": "MIT",
+	"author": "Deskree Technologies Inc.",
+	"license": "Apache-2.0",
 	"scripts": {
 		"start:dev": "npx nodemon",
 		"build": "rimraf ./dist && tsc"

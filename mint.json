@@ -81,6 +81,10 @@
 		{
 			"name": "Roadmap",
 			"url": "https://github.com/orgs/deskree-inc/projects/4/views/2"
+		},
+		{
+			"name": "Other Resources",
+			"url": "/docs/o"
 		}
 	],
 	"navigation": [
@@ -134,7 +138,7 @@
 			"group": "Advanced",
 			"pages": [
 				"/docs/d/advanced/deployment",
-				"/docs/d/advanced/monitoring-obserbvability"
+				"/docs/d/advanced/monitoring-observability"
 			]
 		},
 		{
@@ -155,6 +159,10 @@
 				"/docs/c/extensions/triggers",
 				"/docs/c/extensions/cli"
 			]
+		},
+		{
+			"group": "Resources",
+			"pages": ["/docs/o/resources"]
 		},
 		{
 			"group": "References",
