@@ -7,6 +7,10 @@ import type JsonLikeObject from "../src/types/JsonLikeObject";
 
 let context = <Context>{};
 
+type InputType = {
+	data: JsonLikeObject;
+};
+
 beforeAll(() => {
 	context = <Context>{
 		response: {},
@@ -48,7 +52,7 @@ test("Execute nanoService wrong inputs", async () => {
 	}
 });
 
-class AddCreatedAtProperty extends NanoService {
+class AddCreatedAtProperty extends NanoService<InputType> {
 	constructor() {
 		super();
 		this.name = "add-property";
@@ -76,7 +80,7 @@ class AddCreatedAtProperty extends NanoService {
 		};
 	}
 
-	public async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService[]> {
+	public async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService<InputType>[]> {
 		const response = new NanoServiceResponse();
 		const data = inputs.data as JsonLikeObject;
 		data.createdAt = true;

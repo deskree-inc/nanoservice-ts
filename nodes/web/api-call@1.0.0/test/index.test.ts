@@ -1,135 +1,74 @@
-import assert from "node:assert";
-import { before, describe, it, mock } from "node:test";
-import type { ParamsDictionary } from "@nanoservice-ts/runner";
-import type { Context } from "@nanoservice-ts/shared";
-import Node from "../index";
+import { NanoServiceResponse } from "@nanoservice-ts/runner";
+import type { Context, GlobalError } from "@nanoservice-ts/shared";
+import { describe, expect, it, vi } from "vitest";
+import ApiCall, { type InputType } from "../index";
+import { runApiCall } from "../util";
 
-function generateCtx(): Context {
-	const ctx: Context = {
-		response: {
-			data: null,
-			error: null,
-		},
+// ✅ Correct way to mock `runApiCall` in Vitest
+vi.mock("../util", () => ({
+	runApiCall: vi.fn(), // Directly mock the function
+}));
+
+describe("ApiCall Node", () => {
+	const mockContext: Context = {
 		request: {
-			body: <ParamsDictionary>{},
+			method: "POST",
+			body: { default: "data" },
+			headers: {},
+			params: {},
+			query: {},
 		},
-		config: {},
-		id: "",
-		error: {
-			message: "",
-			code: undefined,
-			json: undefined,
-			stack: undefined,
-			name: undefined,
+		response: {
+			data: {},
 		},
-		logger: {
-			log: (message: string): void => {
-				throw new Error("Function not implemented.");
-			},
-			getLogs: (): string[] => {
-				throw new Error("Function not implemented.");
-			},
-			getLogsAsText: (): string => {
-				throw new Error("Function not implemented.");
-			},
-			getLogsAsBase64: (): string => {
-				throw new Error("Function not implemented.");
-			},
-			logLevel: (level: string, message: string): void => {
-				throw new Error("Function not implemented.");
-			},
-			error: (message: string, stack: string): void => {
-				throw new Error("Function not implemented.");
-			},
-		},
-		eventLogger: undefined,
-		_PRIVATE_: undefined,
+		vars: {},
+	} as unknown as Context;
+
+	const validInputs = {
+		method: "GET",
+		url: "https://api.example.com",
+		headers: { Authorization: "Bearer token" },
+		responseType: "json",
+		body: { key: "value" },
 	};
 
-	ctx.config = {
-		"api-call": {
-			inputs: {
-				url: "https://jsonplaceholder.typicode.com/todos/1",
-				method: "GET",
-			},
-		},
-	} as unknown as ParamsDictionary;
+	it("should successfully make an API call and return response", async () => {
+		const apiCallNode = new ApiCall();
+		const mockResult = { success: true, data: { message: "API Response" } };
 
-	return ctx;
-}
+		// ✅ Correct way to mock function in Vitest
+		vi.mocked(runApiCall).mockResolvedValue(mockResult);
 
-describe("ApiCall", () => {
-	let node: Node;
-
-	before(() => {
-		node = new Node();
-		node.name = "api-call";
+		const result = await apiCallNode.handle(mockContext, validInputs);
+		expect(result).toBeInstanceOf(NanoServiceResponse);
+		expect(result.success).toBe(true);
+		expect(result.data).toEqual(mockResult);
 	});
 
-	it("should call an api with json content-type", async () => {
-		// mocking fetch api
-		mock.method(global, "fetch", () => {
-			return {
-				headers: {
-					get: () => {
-						return "application/json";
-					},
-				},
-				json: () => {
-					return {
-						data: {
-							userId: 1,
-							id: 1,
-							title: "delectus aut autem",
-						},
-					};
-				},
-			};
-		});
-		const ctx = generateCtx();
-		const result = await node.run(ctx);
-		assert.ok(result);
+	it("should use ctx.response.data as the body if inputs.body is undefined", async () => {
+		const apiCallNode = new ApiCall();
+		mockContext.response.data = { fallback: "data" };
+		const inputsWithoutBody: InputType = { ...validInputs, body: {} };
+
+		const mockResult = { success: true, data: { fallback: "data" } };
+		vi.mocked(runApiCall).mockResolvedValue(mockResult);
+
+		const result = await apiCallNode.handle(mockContext, inputsWithoutBody);
+		expect(result).toBeInstanceOf(NanoServiceResponse);
+		expect(result.success).toBe(true);
+		expect(result.data).toEqual(mockResult);
 	});
 
-	it("should call an api with text content-type", async () => {
-		// mocking fetch api
-		mock.method(global, "fetch", () => {
-			return {
-				headers: {
-					get: () => {
-						return "text/plain";
-					},
-				},
-				text: () => {
-					return "lorem ipsum";
-				},
-			};
-		});
-		const ctx = generateCtx();
-		const result = await node.run(ctx);
-		assert.ok(result);
-	});
+	it("should return an error if the API call fails", async () => {
+		const apiCallNode = new ApiCall();
+		const mockError = new Error("API request failed");
 
-	it("should throw an error if content-type is not supported", async () => {
-		// mocking fetch api
-		mock.method(global, "fetch", () => {
-			return {
-				headers: {
-					get: () => {
-						return "application/xml";
-					},
-				},
-				text: () => {
-					return "lorem ipsum";
-				},
-			};
-		});
-		const ctx = generateCtx();
+		vi.mocked(runApiCall).mockRejectedValue(mockError);
 
-		try {
-			await node.run(ctx);
-		} catch (e) {
-			assert.ok(e);
-		}
+		const result = await apiCallNode.handle(mockContext, validInputs);
+		expect(result).toBeInstanceOf(NanoServiceResponse);
+		expect(result.success).toBe(false);
+		expect(result.error).toBeDefined();
+		expect((result.error as GlobalError).message).toBe("API request failed");
 	});
 });

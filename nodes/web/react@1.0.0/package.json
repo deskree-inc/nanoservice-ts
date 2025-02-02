@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/react",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"

@@ -1,9 +1,4 @@
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import createTool from "./tool";
 import importEsModule from "./util";
@@ -13,10 +8,18 @@ type ModelConfig = {
 	name: string;
 };
 
+type MastraAgentInputs = {
+	name: string;
+	instructions: string;
+	model: ModelConfig;
+	tools: Record<string, unknown>;
+	message: string;
+};
+
 // This is the main class that will be exported
 // This class will be used to create a new instance of the node
 // This class must be created using the extends NanoService
-export default class MastraAgent extends NanoService {
+export default class MastraAgent extends NanoService<MastraAgentInputs> {
 	constructor() {
 		super();
 
@@ -59,7 +62,7 @@ export default class MastraAgent extends NanoService {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: MastraAgentInputs): Promise<INanoServiceResponse> {
 		// Create a new instance of the response
 		const response: NanoServiceResponse = new NanoServiceResponse();
 

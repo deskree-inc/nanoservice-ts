@@ -1,13 +1,12 @@
-import type { GlobalError, ResponseContext } from "@nanoservice-ts/shared";
-import type NanoService from "./NanoService";
+import type { GlobalError, NodeBase, ResponseContext } from "@nanoservice-ts/shared";
 import type JsonLikeObject from "./types/JsonLikeObject";
 
 export interface INanoServiceResponse extends ResponseContext {
-	steps: NanoService[];
+	steps: NodeBase[];
 }
 
 export default class NanoServiceResponse implements INanoServiceResponse {
-	public steps: NanoService[];
+	public steps: NodeBase[];
 	public data: string | JsonLikeObject;
 	public error: GlobalError | null;
 	public success?: boolean | undefined;
@@ -33,7 +32,7 @@ export default class NanoServiceResponse implements INanoServiceResponse {
 		this.success = true;
 	}
 
-	setSteps(steps: NanoService[]): void {
+	setSteps(steps: NodeBase[]): void {
 		this.steps = steps;
 	}
 }

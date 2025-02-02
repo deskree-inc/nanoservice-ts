@@ -1,18 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import ejs from "ejs";
 import { inputSchema } from "./inputSchema";
 
 const rootDir = path.resolve(__dirname, ".");
 
-export default class WeatherUI extends NanoService {
+type InputType = {
+	file_path: string;
+	view_path: string;
+	title: string;
+};
+
+export default class WeatherUI extends NanoService<InputType> {
 	constructor() {
 		super();
 
@@ -35,7 +36,7 @@ export default class WeatherUI extends NanoService {
 		return path.resolve(rootDir, relPath);
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
 		// Create a new instance of the response
 		const response = new NanoServiceResponse();
 		let file_path = inputs.file_path as string;

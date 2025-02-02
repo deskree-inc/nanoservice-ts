@@ -1,19 +1,23 @@
 import fs from "node:fs";
 import path from "node:path";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import ejs from "ejs";
 import { inputSchema } from "./inputSchema";
-// import clone from "clone";
+
+type InputType = {
+	react_app: string;
+	title?: string;
+	scripts?: string;
+	metas?: string;
+	index_html?: string;
+	styles?: string;
+	root_element?: string;
+};
 
 const rootDir = path.resolve(__dirname, ".");
 
-export default class React extends NanoService {
+export default class React extends NanoService<InputType> {
 	constructor() {
 		super();
 
@@ -36,19 +40,19 @@ export default class React extends NanoService {
 		return path.resolve(rootDir, relPath);
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
 		// Create a new instance of the response
 		const response = new NanoServiceResponse();
-		let file_path = inputs.react_app as string;
+		let file_path = inputs.react_app;
 		if (file_path === undefined || file_path === "") file_path = "./app/index.merged.min.js";
 		const react_script_template = '<script type="text/babel">REACT_SCRIPT</script>';
 
-		const title = (inputs.title as string) || "React App";
-		const scripts = (inputs.scripts as string) || "";
-		const metas = (inputs.metas as string) || "";
-		const index_html = (inputs.index_html as string) || "index.html";
-		const styles = (inputs.styles as string) || "";
-		const root_element = (inputs.root_element as string) || "root";
+		const title = inputs.title || "React App";
+		const scripts = inputs.scripts || "";
+		const metas = inputs.metas || "";
+		const index_html = inputs.index_html || "index.html";
+		const styles = inputs.styles || "";
+		const root_element = inputs.root_element || "root";
 
 		try {
 			// Load React script from the current module location

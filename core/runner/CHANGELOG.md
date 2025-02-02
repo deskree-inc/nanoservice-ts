@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.15
+
+### Patch Changes
+
+- Improved the NanoService base class to accept a InputType. This force developer to always create a type to define the Node handle input. Added unit test for pending projects like if-else and api-call.
+
 ## 0.1.14
 
 ### Patch Changes

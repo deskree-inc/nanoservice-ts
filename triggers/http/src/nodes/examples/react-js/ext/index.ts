@@ -1,13 +1,12 @@
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import { inputSchema } from "./inputSchema";
 
-export default class ErrorNode extends NanoService {
+type ErrorNodeInputs = {
+	message: string;
+};
+
+export default class ErrorNode extends NanoService<ErrorNodeInputs> {
 	constructor() {
 		super();
 
@@ -23,7 +22,7 @@ export default class ErrorNode extends NanoService {
 		this.contentType = "text/html";
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: ErrorNodeInputs): Promise<INanoServiceResponse> {
 		// Create a new instance of the response
 		const response = new NanoServiceResponse();
 		const message = inputs.message as string;

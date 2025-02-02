@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/if-else",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"description": "nanoservice if-else",
 	"engines": {
 		"node": ">=18.0.0"
@@ -12,20 +12,23 @@
 	"scripts": {
 		"start:dev": "npx nodemon",
 		"build": "rimraf ./dist && tsc",
-		"build:dev": "tsc --watch"
+		"build:dev": "tsc --watch",
+		"test": "vitest run",
+		"test:dev": "vitest --watch"
 	},
 	"devDependencies": {
-		"@types/node": "^22.10.2",
 		"@types/lodash": "^4.14.196",
+		"@types/node": "^22.10.2",
 		"nodemon": "^3.1.9",
+		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.1.3",
-		"rimraf": "^6.0.1"
+		"vitest": "^3.0.4"
 	},
 	"dependencies": {
-		"@nanoservice-ts/shared": "workspace:*",
-		"@nanoservice-ts/runner": "workspace:*",
 		"@nanoservice-ts/helper": "workspace:*",
+		"@nanoservice-ts/runner": "workspace:*",
+		"@nanoservice-ts/shared": "workspace:*",
 		"lodash": "^4.17.21"
 	},
 	"private": false

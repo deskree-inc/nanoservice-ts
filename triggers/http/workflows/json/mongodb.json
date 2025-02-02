@@ -1,0 +1,28 @@
+{
+	"name": "MongoDB CRUD API",
+	"description": "Provides a RESTful API to interact dynamically with MongoDB collections.",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "*",
+			"path": "/:collection/:id?",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "mongodb_query",
+			"node": "mongodb-query",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"mongodb_query": {
+			"inputs": {
+				"collection": "${ctx.request.params.collection}",
+				"data": "js/ctx.request.body",
+				"id": "${ctx.request.params.id}"
+			}
+		}
+	}
+}
