@@ -18,7 +18,7 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.14.196",
-		"@types/node": "^22.10.2",
+		"@types/node": "^22.13.0",
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.1",
