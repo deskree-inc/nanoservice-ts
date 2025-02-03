@@ -1,0 +1,10 @@
+{
+	"watch": ["src"],
+	"ext": "ts",
+	"ignore": ["src/**/*.test.ts"],
+	"exec": "export NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)/rootCA.pem\" && node -r ts-node/register --env-file=.env.local ./src/server.ts",
+	"env": {
+		"NODE_ENV": "local"
+	},
+	"ignoreRoot": [".git"]
+}

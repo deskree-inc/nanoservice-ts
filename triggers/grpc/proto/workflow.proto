@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package nanoservice.workflow.v1;
+
+message WorkflowRequest {
+    string Name = 1;
+    string Message = 2;
+    MessageEncoding Encoding = 3;
+    MessageType Type = 4;
+}
+
+message WorkflowResponse {
+    string Message = 1;
+    string Encoding = 2;
+    string Type = 3;
+}
+
+enum MessageEncoding {
+    BASE64 = 0;
+    STRING = 1;
+}
+
+enum MessageType {
+    TEXT = 0;
+    JSON = 1;
+    XML = 2;
+    HTML = 3;
+    BINARY = 4;
+}
+
+service WorkflowService {
+    rpc ExecuteWorkflow (WorkflowRequest) returns (WorkflowResponse) {}
+}

@@ -1,0 +1,11 @@
+version: v2
+clean: true
+plugins:
+  - local: protoc-gen-es
+    opt: target=ts
+    out: src/gen
+    include_imports: true
+  # - local: protoc-gen-connect-es 
+  #   opt: target=ts
+  #   out: src
+  #   include_imports: true
