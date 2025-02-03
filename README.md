@@ -146,6 +146,8 @@ Distributed under the Apache License 2.0. See `LICENSE.txt` for more information
 
 Discord: [Nanoservice](https://discord.gg/uFs9bYwfM9)
 
+X: [@nanoservice_ts](https://x.com/nanoservice_ts)
+
 Reddit: [r/nanoservice](https://www.reddit.com/r/nanoservice/)
 
 Project Link: [https://github.com/deskree-inc/nanoservice-ts](https://github.com/deskree-inc/nanoservice-ts)
