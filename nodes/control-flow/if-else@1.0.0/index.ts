@@ -1,18 +1,18 @@
 import type { ConditionOpts } from "@nanoservice-ts/helper";
-import { type Condition, type INanoServiceResponse, type JsonLikeObject, NanoService } from "@nanoservice-ts/runner";
+import { type Condition, type INanoServiceResponse, NanoService } from "@nanoservice-ts/runner";
 import type { Context, NodeBase } from "@nanoservice-ts/shared";
 import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
 
-export default class IfElse extends NanoService {
+export default class IfElse extends NanoService<Array<Condition>> {
 	constructor() {
 		super();
 		this.flow = true;
 		this.contentType = "";
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject | Condition[]): Promise<INanoServiceResponse | NanoService[]> {
+	async handle(ctx: Context, inputs: Array<Condition>): Promise<INanoServiceResponse | NanoService<Condition[]>[]> {
 		let steps: NodeBase[] = [];
-		const conditions = inputs as Condition[];
+		const conditions = inputs;
 
 		const firstCondition = conditions[0] as ConditionOpts;
 		if (firstCondition.type !== "if") throw new Error("First condition must be an if");
@@ -38,7 +38,7 @@ export default class IfElse extends NanoService {
 			}
 		}
 
-		return steps as NanoService[];
+		return steps as unknown as NanoService<Condition[]>[];
 	}
 }
 

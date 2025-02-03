@@ -5,9 +5,10 @@ import { type Schema, type ValidationError, Validator } from "jsonschema";
 import _ from "lodash";
 import type { INanoServiceResponse } from "./NanoServiceResponse";
 import type RunnerNode from "./RunnerNode";
+import type Condition from "./types/Condition";
 import type JsonLikeObject from "./types/JsonLikeObject";
 
-export default abstract class NanoService extends NodeBase {
+export default abstract class NanoService<T> extends NodeBase {
 	public inputSchema: Schema;
 	public outputSchema: Schema;
 	private v: Validator;
@@ -81,12 +82,15 @@ export default abstract class NanoService extends NodeBase {
 		ctx.logger.log(`Executed node: ${this.name} in ${(end - start).toFixed(2)}ms`);
 
 		response.data = result;
-		(response.data as unknown as NanoService).contentType = this.contentType;
+		(response.data as unknown as NanoService<T>).contentType = this.contentType;
 
 		return response;
 	}
 
-	public abstract handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService[]>;
+	public abstract handle(
+		ctx: Context,
+		inputs: T | JsonLikeObject | Condition[],
+	): Promise<INanoServiceResponse | NanoService<T>[]>;
 
 	public async validate(obj: JsonLikeObject, schema: Schema): Promise<void> {
 		const result = this.v.validate(obj, schema);

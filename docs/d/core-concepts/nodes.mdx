@@ -99,7 +99,12 @@ import {
 	NanoServiceResponse,
 } from "@nanoservice-ts/runner";
 
-export default class Node extends NanoService {
+type InputType = {
+	// Define the input type here
+	message: string;
+}
+
+export default class Node extends NanoService<InputType> {
 	constructor() {
 		super();
 
@@ -107,11 +112,11 @@ export default class Node extends NanoService {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: BlueprintContext, inputs: InputType): Promise<INanoServiceResponse> {
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
 		try {
-			response.setSuccess();
+			response.setSuccess(inputs.message);
 		} catch (error: unknown) {
 			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
 			nodeError.setCode(500);
@@ -128,7 +133,7 @@ export default class Node extends NanoService {
 ### `handle` method
 Each node needs to have a `handle` method where all the core logic of the node is written. It accepts two parameters: `ctx` and `inputs` and returns a promise of `NanoServiceResponse`.
 ```typescript
-async handle(ctx: BlueprintContext, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+async handle(ctx: BlueprintContext, inputs: InputType): Promise<INanoServiceResponse> {
   // Core logic of the node
 }
 ```

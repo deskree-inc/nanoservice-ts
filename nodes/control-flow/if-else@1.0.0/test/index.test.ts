@@ -1,11 +1,10 @@
-import assert from "node:assert";
-import { before, describe, it } from "node:test";
-import type { ParamsDictionary } from "@nanoservice-ts/runner";
-import type { ConfigContext, Context } from "@nanoservice-ts/shared";
-import Node, { type NodeOptions } from "../index";
+import type { Condition, JsonLikeObject, ParamsDictionary } from "@nanoservice-ts/runner";
+import type { Context, NodeBase, ResponseContext } from "@nanoservice-ts/shared";
+import { describe, expect, it } from "vitest";
+import IfElse from "../index";
 
-function generateCtx(name: string): Context {
-	const ctx: Context = {
+describe("IfElse Node", () => {
+	const mockContext: Context = {
 		response: {
 			data: null,
 			error: null,
@@ -46,76 +45,145 @@ function generateCtx(name: string): Context {
 		_PRIVATE_: undefined,
 	};
 
-	ctx.config = {
-		[name]: {
-			conditions: [
-				{
-					type: "if",
-					condition: "data !== undefined",
-					steps: [
-						{
-							name: "fix-json-key",
-							node: "fix-json-key",
-							type: "local",
-						},
-					],
-				},
-				{
-					type: "else",
-					steps: [
-						{
-							name: "add-properties",
-							node: "add-properties",
-							type: "local",
-						},
-					],
-				},
-			],
-		},
-	} as unknown as ParamsDictionary;
+	const step: {
+		name: string;
+		run?: (ctx: Context, data: ParamsDictionary) => Promise<ResponseContext>;
+	} = {
+		name: "node1",
+		run: async (ctx: Context, data: ParamsDictionary): Promise<ResponseContext> => <ResponseContext>{},
+	} as unknown as NodeBase;
 
-	return ctx;
-}
+	it("should execute the correct steps when if condition is true", async () => {
+		const ifElseNode = new IfElse();
+		const conditions: Condition[] = [
+			{
+				type: "if",
+				condition: "ctx.request.method === 'GET'",
+				steps: [
+					(() => {
+						step.name = "step1";
+						return step as unknown as NodeBase;
+					})(),
+				],
+			},
+			{
+				type: "else",
+				steps: [step as unknown as NodeBase],
+				condition: "",
+			},
+		];
 
-describe("IfElse", () => {
-	let node: Node;
-	let ctx: Context;
-
-	before(() => {
-		node = new Node();
-		node.name = "if-else";
-		ctx = generateCtx(node.name);
+		(mockContext.request as JsonLikeObject).method = "GET";
+		const result = (await ifElseNode.handle(mockContext, conditions)) as NodeBase[];
+		expect(result[0].name).toEqual("step1");
 	});
 
-	it("should get the step if condition is true", async () => {
-		const result = await node.run(ctx);
-		assert.deepStrictEqual(result, [{ name: "fix-json-key", node: "fix-json-key", type: "local" }]);
+	it("should execute the else step when if condition is false", async () => {
+		const ifElseNode = new IfElse();
+		const conditions: Condition[] = [
+			{
+				type: "if",
+				condition: "ctx.request.method === 'POST'",
+				steps: [step as unknown as NodeBase],
+			},
+			{
+				type: "else",
+				steps: [
+					(() => {
+						step.name = "step2";
+						return step as unknown as NodeBase;
+					})(),
+				],
+				condition: "",
+			},
+		];
+
+		const result = (await ifElseNode.handle(mockContext, conditions)) as NodeBase[];
+		expect(result[0].name).toEqual("step2");
 	});
 
-	it("should get the step if condition is false", async () => {
-		const opts = (ctx.config as ParamsDictionary)[node.name] as unknown as NodeOptions;
+	it("should throw an error if the first condition is not 'if'", async () => {
+		const ifElseNode = new IfElse();
+		const conditions: Condition[] = [
+			{
+				type: "else",
+				steps: [step as unknown as NodeBase],
+				condition: "",
+			},
+		];
 
-		opts.conditions[0].condition = "data === undefined";
-		const result = await node.run(ctx);
-		assert.deepStrictEqual(result, [{ name: "add-properties", node: "add-properties", type: "local" }]);
+		await expect(ifElseNode.handle(mockContext, conditions)).rejects.toThrow("First condition must be an if");
 	});
 
-	it("should throw error if no config is provided", async () => {
-		let opts = (ctx.config as ParamsDictionary)[node.name] as unknown as NodeOptions;
+	it("should throw an error if the last condition is not 'else'", async () => {
+		const ifElseNode = new IfElse();
+		const conditions: Condition[] = [
+			{
+				type: "if",
+				condition: "ctx.request.method === 'GET'",
+				steps: [step as unknown as NodeBase],
+			},
+			{
+				type: "if",
+				condition: "ctx.request.method === 'POST'",
+				steps: [step as unknown as NodeBase],
+			},
+		];
 
-		opts.conditions[1].type = "if";
-		await assert.rejects(async () => await node.run(ctx));
+		await expect(ifElseNode.handle(mockContext, conditions)).rejects.toThrow("Last condition must be an else");
+	});
 
-		opts.conditions[0].type = "else";
-		await assert.rejects(async () => await node.run(ctx));
+	it("should execute the first matching condition", async () => {
+		const ifElseNode = new IfElse();
+		const conditions: Condition[] = [
+			{
+				type: "if",
+				condition: "ctx.request.method === 'POST'",
+				steps: [step as unknown as NodeBase],
+			},
+			{
+				type: "if",
+				condition: "ctx.request.method === 'GET'",
+				steps: [
+					(() => {
+						step.name = "step2";
+						return step as unknown as NodeBase;
+					})(),
+				],
+			},
+			{
+				type: "else",
+				steps: [step as unknown as NodeBase],
+				condition: "",
+			},
+		];
 
-		opts.conditions = [];
-		await assert.rejects(async () => await node.run(ctx));
+		(mockContext.request as JsonLikeObject).method = "GET";
+		const result = (await ifElseNode.handle(mockContext, conditions)) as NodeBase[];
+		expect(result[0].name).toEqual("step2");
+	});
 
-		opts = <NodeOptions>{};
-		await assert.rejects(async () => await node.run(ctx));
+	it("should execute the else condition if none match", async () => {
+		const ifElseNode = new IfElse();
+		const conditions: Condition[] = [
+			{
+				type: "if",
+				condition: "ctx.request.method === 'POST'",
+				steps: [step as unknown as NodeBase],
+			},
+			{
+				type: "else",
+				steps: [
+					(() => {
+						step.name = "step2";
+						return step as unknown as NodeBase;
+					})(),
+				],
+				condition: "",
+			},
+		];
 
-		ctx.config = <ConfigContext>{};
-		await assert.rejects(async () => await node.run(ctx));
+		const result = (await ifElseNode.handle(mockContext, conditions)) as NodeBase[];
+		expect(result[0].name).toEqual("step2");
 	});
 });

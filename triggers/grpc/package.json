@@ -1,0 +1,50 @@
+{
+	"name": "@nanoservice-ts/http-grpc",
+	"version": "1.0.0",
+	"description": "",
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"repository": "https://github.com/deskree-inc/nanoservice-ts.git",
+	"author": "Marco A. Castillo Della Sera",
+	"license": "Apache-2.0",
+	"scripts": {
+		"dev": "nodemon",
+		"start": "node dist/index.js",
+		"reload": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
+		"build": "rimraf ./dist && tsc && copyfiles -u 1 src/nodes/**/*.html src/nodes/**/*.md dist/",
+		"build:proto": "npx buf generate ."
+	},
+	"devDependencies": {
+		"@bufbuild/buf": "^1.50.0",
+		"@bufbuild/protoc-gen-es": "^2.2.3",
+		"@connectrpc/protoc-gen-connect-es": "^1.6.1",
+		"@types/node": "^22.10.2",
+		"nodemon": "^3.1.9",
+		"rimraf": "^6.0.1",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"@nanoservice-ts/api-call": "^0.1.18",
+		"@nanoservice-ts/helper": "^0.1.3",
+		"@nanoservice-ts/if-else": "^0.0.19",
+		"@nanoservice-ts/runner": "^0.1.15",
+		"@nanoservice-ts/shared": "^0.0.6",
+		"@opentelemetry/api": "^1.9.0",
+		"@bufbuild/protobuf": "^2.2.3",
+		"@connectrpc/connect-node": "^2.0.1",
+		"@connectrpc/connect": "^2.0.1",
+		"@connectrpc/connect-fastify": "^2.0.1",
+		"fastify": "^5.2.1",
+		"uuid": "^11.0.3",
+		"fast-xml-parser": "^4.5.1"
+	},
+	"peerDependencies": {
+		"@connectrpc/connect": "2.0.1",
+		"@bufbuild/protoc-gen-es": "2.2.3"
+	},
+	"private": true
+}

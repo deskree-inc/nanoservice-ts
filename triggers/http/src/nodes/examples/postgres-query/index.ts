@@ -1,16 +1,18 @@
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import pg from "pg";
+
+type PostgresQueryInputs = {
+	user: string;
+	password: string;
+	host: string;
+	query: string;
+};
 
 // This is the main class that will be exported
 // This class will be used to create a new instance of the node
 // This class must be created using the extends NanoService
-export default class PostgresQuery extends NanoService {
+export default class PostgresQuery extends NanoService<PostgresQueryInputs> {
 	constructor() {
 		super();
 
@@ -27,7 +29,7 @@ export default class PostgresQuery extends NanoService {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: PostgresQueryInputs): Promise<INanoServiceResponse> {
 		// Create a new instance of the response
 		const response: NanoServiceResponse = new NanoServiceResponse();
 

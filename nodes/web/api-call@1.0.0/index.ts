@@ -8,7 +8,15 @@ import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import { inputSchema } from "./inputSchema";
 import { runApiCall } from "./util";
 
-export default class ApiCall extends NanoService {
+export type InputType = {
+	method: string;
+	url: string;
+	headers: JsonLikeObject;
+	responseType: string;
+	body: JsonLikeObject;
+};
+
+export default class ApiCall extends NanoService<InputType> {
 	constructor() {
 		super();
 
@@ -16,14 +24,14 @@ export default class ApiCall extends NanoService {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
 		try {
-			const method = inputs.method as string;
-			const url = inputs.url as string;
-			const headers = inputs.headers as JsonLikeObject;
-			const responseType = inputs.responseType as string;
+			const method = inputs.method;
+			const url = inputs.url;
+			const headers = inputs.headers;
+			const responseType = inputs.responseType;
 			const body = inputs.body || ctx.response.data;
 
 			const result = await runApiCall(url, method, headers, body as JsonLikeObject, responseType);

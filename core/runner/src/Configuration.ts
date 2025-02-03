@@ -1,7 +1,7 @@
 // import { NodeBase } from "@nanoservice-ts/shared";
 // import { z } from "zod";
+import type { NodeBase } from "@nanoservice-ts/shared";
 import ConfigurationResolver from "./ConfigurationResolver";
-import type NanoService from "./NanoService";
 import type RunnerNode from "./RunnerNode";
 import type RunnerNodeBase from "./RunnerNodeBase";
 import type Condition from "./types/Condition";
@@ -17,7 +17,7 @@ export default class Configuration implements Config {
 	public workflow: Config = <Config>{};
 	public name: string;
 	public version: string;
-	public steps: NanoService[];
+	public steps: NodeBase[];
 	public nodes: Node;
 	public trigger: Trigger;
 	public static loaded_nodes: Node = <Node>{};
@@ -53,8 +53,8 @@ export default class Configuration implements Config {
 		this.trigger = this.workflow.trigger;
 	}
 
-	protected async getSteps(blueprint_steps: RunnerNode[]): Promise<NanoService[]> {
-		const nodes: NanoService[] = [];
+	protected async getSteps(blueprint_steps: RunnerNode[]): Promise<NodeBase[]> {
+		const nodes: NodeBase[] = [];
 
 		if (blueprint_steps === undefined) {
 			throw new Error("Workflow must have at least one step");
@@ -73,7 +73,7 @@ export default class Configuration implements Config {
 			node.name = step.name;
 			node.active = step.active !== undefined ? step.active : true;
 			node.stop = step.stop !== undefined ? step.stop : false;
-			nodes.push(node as unknown as NanoService);
+			nodes.push(node);
 		}
 
 		return nodes;
