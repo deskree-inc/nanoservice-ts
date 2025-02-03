@@ -53,6 +53,11 @@
 			"url": "https://discord.gg/uFs9bYwfM9"
 		},
 		{
+			"name": "X",
+			"icon": "x",
+			"url": "https://x.com/nanoservice_ts"
+		},
+		{
 			"name": "Reddit",
 			"icon": "Reddit",
 			"url": "https://www.reddit.com/r/nanoservice/"
