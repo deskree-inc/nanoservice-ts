@@ -6,13 +6,14 @@ const { XMLParser, XMLBuilder } = require("fast-xml-parser");
 export default class MessageDecode {
 	requestDecode(request: WorkflowRequest): Context {
 		let message: Context = <Context>{};
+
 		switch (request.Encoding) {
-			case MessageEncoding.BASE64: {
+			case MessageEncoding[MessageEncoding.BASE64]: {
 				const messageStr = Buffer.from(request.Message, "base64").toString("utf-8");
 				message = this.decodeType(messageStr, request.Type);
 				break;
 			}
-			case MessageEncoding.STRING: {
+			case MessageEncoding[MessageEncoding.STRING]: {
 				message = this.decodeType(request.Message, request.Type);
 				break;
 			}
@@ -23,12 +24,12 @@ export default class MessageDecode {
 		return message;
 	}
 
-	decodeType(message: string, type: MessageType): Context {
+	decodeType(message: string, type: string): Context {
 		switch (type) {
-			case MessageType.JSON: {
+			case MessageType[MessageType.JSON]: {
 				return JSON.parse(message);
 			}
-			case MessageType.XML: {
+			case MessageType[MessageType.XML]: {
 				return new XMLParser().parse(message);
 			}
 			default:
@@ -36,11 +37,11 @@ export default class MessageDecode {
 		}
 	}
 
-	responseEncode(ctx: Context, encoding: MessageEncoding, type: MessageType): WorkflowResponse {
+	responseEncode(ctx: Context, encoding: string, type: string): WorkflowResponse {
 		let message: string | object | Buffer<ArrayBuffer>;
 		const responseType = this.mapContentType(ctx.response.contentType as string);
 		switch (encoding) {
-			case MessageEncoding.BASE64: {
+			case MessageEncoding[MessageEncoding.BASE64]: {
 				if (responseType === MessageType.JSON) {
 					message = this.encodeType(ctx.response.data as JsonLikeObject, type);
 					message = Buffer.from(message).toString("base64");
@@ -54,7 +55,7 @@ export default class MessageDecode {
 				}
 				break;
 			}
-			case MessageEncoding.STRING: {
+			case MessageEncoding[MessageEncoding.STRING]: {
 				if (responseType === MessageType.JSON) {
 					message = this.encodeType(ctx.response.data as JsonLikeObject, type);
 				}
@@ -71,18 +72,18 @@ export default class MessageDecode {
 
 		return {
 			Message: message,
-			Encoding: MessageEncoding[encoding],
+			Encoding: encoding,
 			Type: MessageType[responseType],
 		} as WorkflowResponse;
 	}
 
-	responseErrorEncode(e: string | JsonLikeObject, encoding: MessageEncoding, type: MessageType): string {
+	responseErrorEncode(e: string | JsonLikeObject, encoding: string, type: string): string {
 		let message: string | object | Buffer<ArrayBuffer>;
 		switch (encoding) {
-			case MessageEncoding.BASE64:
+			case MessageEncoding[MessageEncoding.BASE64]:
 				message = Buffer.from(this.encodeType(e, type)).toString("base64");
 				break;
-			case MessageEncoding.STRING:
+			case MessageEncoding[MessageEncoding.STRING]:
 				message = this.encodeType(e, type);
 				break;
 			default:
@@ -92,14 +93,14 @@ export default class MessageDecode {
 		return message as string;
 	}
 
-	encodeType(message: string | object | Buffer<ArrayBuffer>, type: MessageType): string {
+	encodeType(message: string | object | Buffer<ArrayBuffer>, type: string): string {
 		switch (type) {
-			case MessageType.JSON:
+			case MessageType[MessageType.JSON]:
 				return JSON.stringify(message);
-			case MessageType.TEXT:
-			case MessageType.HTML:
+			case MessageType[MessageType.TEXT]:
+			case MessageType[MessageType.HTML]:
 				return message.toString();
-			case MessageType.XML:
+			case MessageType[MessageType.XML]:
 				return new XMLBuilder().build(message);
 			default:
 				throw new Error(`Unsupported type: ${type}`);

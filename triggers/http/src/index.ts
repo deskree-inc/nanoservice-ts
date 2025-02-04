@@ -1,4 +1,3 @@
-import { env } from "node:process";
 import { DefaultLogger } from "@nanoservice-ts/runner";
 import { type Span, metrics, trace } from "@opentelemetry/api";
 import HttpTrigger from "./HttpTrigger";
@@ -27,7 +26,11 @@ export default class App {
 			this.initializer = performance.now() - this.initializer;
 
 			this.logger.log(`Server initialized in ${(this.initializer).toFixed(2)}ms`);
-			this.app_cold_start.record(this.initializer, { pid: process.pid, env: env.NODE_ENV, app: process.env.APP_NAME });
+			this.app_cold_start.record(this.initializer, {
+				pid: process.pid,
+				env: process.env.NODE_ENV,
+				app: process.env.APP_NAME,
+			});
 			span.end();
 		});
 	}

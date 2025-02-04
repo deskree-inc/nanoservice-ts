@@ -126,7 +126,15 @@ import {
 } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 
-export default class ApiCall extends NanoService {
+export type InputType = {
+	method: string;
+	url: string;
+	headers: JsonLikeObject;
+	responseType: string;
+	body: JsonLikeObject;
+};
+
+export default class Node extends NanoService<InputType> {
 	constructor() {
 		super();
 
@@ -159,7 +167,7 @@ export default class ApiCall extends NanoService {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
 		try {
