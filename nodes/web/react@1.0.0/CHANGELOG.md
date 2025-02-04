@@ -1,5 +1,15 @@
 # @nanoservice-ts/react
 
+## 0.0.7
+
+### Patch Changes
+
+- Added support for YAML, XML and TOML in the workflow file. Upgraded package version recommended by Dependabot.
+- Updated dependencies
+  - @nanoservice-ts/helper@0.1.4
+  - @nanoservice-ts/runner@0.1.16
+  - @nanoservice-ts/shared@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes

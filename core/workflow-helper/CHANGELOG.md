@@ -1,5 +1,11 @@
 # @nanoservice/helper
 
+## 0.1.4
+
+### Patch Changes
+
+- Added support for YAML, XML and TOML in the workflow file. Upgraded package version recommended by Dependabot.
+
 ## 0.1.3
 
 ### Patch Changes
