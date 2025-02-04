@@ -1,5 +1,11 @@
 # @nanoservice-ts/shared
 
+## 0.0.7
+
+### Patch Changes
+
+- Added support for YAML, XML and TOML in the workflow file. Upgraded package version recommended by Dependabot.
+
 ## 0.0.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.11
+
+### Patch Changes
+
+- Added support for YAML, XML and TOML in the workflow file. Upgraded package version recommended by Dependabot.
+
 ## 0.0.10
 
 ### Patch Changes

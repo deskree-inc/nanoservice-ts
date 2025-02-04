@@ -1,6 +1,6 @@
 {
 	"name": "nanoctl",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"author": "Deskree Technologies Inc.",
 	"license": "Apache-2.0",
 	"description": "cli for nanoservice-ts",
@@ -26,8 +26,8 @@
 	},
 	"keywords": ["nanoctl", "cli", "nanoservice", "nanoservice-ts"],
 	"dependencies": {
-		"@clack/prompts": "^0.8.2",
-		"commander": "^12.1.0",
+		"@clack/prompts": "^0.9.1",
+		"commander": "^13.1.0",
 		"figlet": "^1.8.0",
 		"fs-extra": "^11.2.0",
 		"picocolors": "^1.1.1",
@@ -41,7 +41,7 @@
 	"devDependencies": {
 		"@types/figlet": "^1.7.0",
 		"@types/fs-extra": "^11.0.4",
-		"@types/node": "^22.10.2",
+		"@types/node": "^22.13.1",
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",

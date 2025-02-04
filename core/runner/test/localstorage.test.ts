@@ -43,7 +43,7 @@ function createLocator(): WorkflowLocator {
 }
 
 test("Load JSON example", async () => {
-	expect(async () => await storage.get("countries", locator)).not.toThrow();
+	expect(async () => await storage.get("countries", locator, "json")).not.toThrow();
 });
 
 test("Load Helper example", async () => {
@@ -51,8 +51,41 @@ test("Load Helper example", async () => {
 });
 
 test("Compare JSON vs Helper", async () => {
-	const json = await storage.get("countries", locator);
+	const json = await storage.get("countries", locator, "json");
 	const helper = await storage.get("countries-helper", locator);
 
 	expect(json).toEqual(helper);
+});
+
+test("Load YAML example", async () => {
+	expect(async () => await storage.get("countries", locator, "yaml")).not.toThrow();
+});
+
+test("Compare YAML vs Helper", async () => {
+	const yaml = await storage.get("countries", locator, "yaml");
+	const json = await storage.get("countries", locator, "json");
+
+	expect(json).toEqual(yaml);
+});
+
+test("Load XML example", async () => {
+	expect(async () => await storage.get("countries", locator, "xml")).not.toThrow();
+});
+
+test("Compare XML vs Helper", async () => {
+	const xml = await storage.get("countries", locator, "xml");
+	const json = await storage.get("countries", locator, "json");
+
+	expect(json).toEqual(xml);
+});
+
+test("Load TOML example", async () => {
+	expect(async () => await storage.get("countries", locator, "toml")).not.toThrow();
+});
+
+test("Compare TOML vs Helper", async () => {
+	const toml = await storage.get("countries", locator, "toml");
+	const json = await storage.get("countries", locator, "json");
+
+	expect(json).toEqual(toml);
 });
