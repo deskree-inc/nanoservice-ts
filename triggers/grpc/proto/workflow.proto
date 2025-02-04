@@ -5,8 +5,8 @@ package nanoservice.workflow.v1;
 message WorkflowRequest {
     string Name = 1;
     string Message = 2;
-    MessageEncoding Encoding = 3;
-    MessageType Type = 4;
+    string Encoding = 3;
+    string Type = 4;
 }
 
 message WorkflowResponse {

@@ -23,9 +23,3 @@ If you already use ```mkcert```, just run ```mkcert localhost 127.0.0.1 ::1``` t
 
 Reference:
 https://connectrpc.com/docs/node/getting-started/
-
-# Test
-
-```bash
-npx buf curl --protocol grpc --schema . --http2-prior-knowledge -d '{"Name": "countries", "Message": "Hola!", "MessageEncoding": "STRING", "MessageType": "TEXT"}' https://localhost:8443/nanoservice.workflow.v1.WorkflowService/ExecuteWorkflow
-```

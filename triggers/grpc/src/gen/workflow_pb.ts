@@ -12,7 +12,7 @@ import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf
 export const file_workflow: GenFile =
 	/*@__PURE__*/
 	fileDesc(
-		"Cg53b3JrZmxvdy5wcm90bxIXbmFub3NlcnZpY2Uud29ya2Zsb3cudjEioAEKD1dvcmtmbG93UmVxdWVzdBIMCgROYW1lGAEgASgJEg8KB01lc3NhZ2UYAiABKAkSOgoIRW5jb2RpbmcYAyABKA4yKC5uYW5vc2VydmljZS53b3JrZmxvdy52MS5NZXNzYWdlRW5jb2RpbmcSMgoEVHlwZRgEIAEoDjIkLm5hbm9zZXJ2aWNlLndvcmtmbG93LnYxLk1lc3NhZ2VUeXBlIkMKEFdvcmtmbG93UmVzcG9uc2USDwoHTWVzc2FnZRgBIAEoCRIQCghFbmNvZGluZxgCIAEoCRIMCgRUeXBlGAMgASgJKikKD01lc3NhZ2VFbmNvZGluZxIKCgZCQVNFNjQQABIKCgZTVFJJTkcQASpACgtNZXNzYWdlVHlwZRIICgRURVhUEAASCAoESlNPThABEgcKA1hNTBACEggKBEhUTUwQAxIKCgZCSU5BUlkQBDJ7Cg9Xb3JrZmxvd1NlcnZpY2USaAoPRXhlY3V0ZVdvcmtmbG93EigubmFub3NlcnZpY2Uud29ya2Zsb3cudjEuV29ya2Zsb3dSZXF1ZXN0GikubmFub3NlcnZpY2Uud29ya2Zsb3cudjEuV29ya2Zsb3dSZXNwb25zZSIAYgZwcm90bzM",
+		"Cg53b3JrZmxvdy5wcm90bxIXbmFub3NlcnZpY2Uud29ya2Zsb3cudjEiUAoPV29ya2Zsb3dSZXF1ZXN0EgwKBE5hbWUYASABKAkSDwoHTWVzc2FnZRgCIAEoCRIQCghFbmNvZGluZxgDIAEoCRIMCgRUeXBlGAQgASgJIkMKEFdvcmtmbG93UmVzcG9uc2USDwoHTWVzc2FnZRgBIAEoCRIQCghFbmNvZGluZxgCIAEoCRIMCgRUeXBlGAMgASgJKikKD01lc3NhZ2VFbmNvZGluZxIKCgZCQVNFNjQQABIKCgZTVFJJTkcQASpACgtNZXNzYWdlVHlwZRIICgRURVhUEAASCAoESlNPThABEgcKA1hNTBACEggKBEhUTUwQAxIKCgZCSU5BUlkQBDJ7Cg9Xb3JrZmxvd1NlcnZpY2USaAoPRXhlY3V0ZVdvcmtmbG93EigubmFub3NlcnZpY2Uud29ya2Zsb3cudjEuV29ya2Zsb3dSZXF1ZXN0GikubmFub3NlcnZpY2Uud29ya2Zsb3cudjEuV29ya2Zsb3dSZXNwb25zZSIAYgZwcm90bzM",
 	);
 
 /**
@@ -30,14 +30,14 @@ export type WorkflowRequest = Message<"nanoservice.workflow.v1.WorkflowRequest">
 	Message: string;
 
 	/**
-	 * @generated from field: nanoservice.workflow.v1.MessageEncoding Encoding = 3;
+	 * @generated from field: string Encoding = 3;
 	 */
-	Encoding: MessageEncoding;
+	Encoding: string;
 
 	/**
-	 * @generated from field: nanoservice.workflow.v1.MessageType Type = 4;
+	 * @generated from field: string Type = 4;
 	 */
-	Type: MessageType;
+	Type: string;
 };
 
 /**
