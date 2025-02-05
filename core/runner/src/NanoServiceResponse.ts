@@ -7,7 +7,7 @@ export interface INanoServiceResponse extends ResponseContext {
 
 export default class NanoServiceResponse implements INanoServiceResponse {
 	public steps: NodeBase[];
-	public data: string | JsonLikeObject;
+	public data: string | JsonLikeObject | JsonLikeObject[];
 	public error: GlobalError | null;
 	public success?: boolean | undefined;
 	public contentType?: string | undefined;
@@ -26,7 +26,7 @@ export default class NanoServiceResponse implements INanoServiceResponse {
 		this.data = {};
 	}
 
-	setSuccess(data: string | JsonLikeObject): void {
+	setSuccess(data: string | JsonLikeObject | JsonLikeObject[]): void {
 		this.data = data;
 		this.error = null;
 		this.success = true;
