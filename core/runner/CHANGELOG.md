@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.17
+
+### Patch Changes
+
+- setSuccess accept JsonLikeObject[] for arrays
+
 ## 0.1.16
 
 ### Patch Changes
