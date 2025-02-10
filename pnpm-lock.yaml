@@ -261,8 +261,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       posthog-node:
-        specifier: ^4.3.2
-        version: 4.4.1
+        specifier: ^4.5.0
+        version: 4.5.0
       simple-git:
         specifier: ^3.27.0
         version: 3.27.0
@@ -3451,8 +3451,8 @@ packages:
   postgres-range@1.1.4:
     resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
 
-  posthog-node@4.4.1:
-    resolution: {integrity: sha512-o9G9sSvwWITrfSJgIUrPLJd//AYPGJNu5D+pSLxqiBvhUeicc/i639FvU0DPr1OsHiLDE2zHNMmLpa0mw4kBCg==}
+  posthog-node@4.5.0:
+    resolution: {integrity: sha512-h1WTHYvgOZ7kBGH0XfKVOVsSyFgCEbgzC2RIw7fetsW6RrSvxPYcaycKUDfqa5EGbvU0SYLbqAeeqNZjPDaznA==}
     engines: {node: '>=15.0.0'}
 
   prettier@2.8.8:
@@ -7489,7 +7489,7 @@ snapshots:
 
   postgres-range@1.1.4: {}
 
-  posthog-node@4.4.1:
+  posthog-node@4.5.0:
     dependencies:
       axios: 1.7.9
     transitivePeerDependencies:
