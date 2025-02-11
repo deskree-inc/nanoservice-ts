@@ -1,5 +1,11 @@
 # @nanoservice-ts/trigger-grpc
 
+## 0.0.5
+
+### Patch Changes
+
+- Successfully implemented all the enhancements and improvements identified during our internal hackathon.
+
 ## 0.0.4
 
 ### Patch Changes

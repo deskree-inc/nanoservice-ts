@@ -1,5 +1,11 @@
 # node-name
 
+## 0.0.15
+
+### Patch Changes
+
+- Successfully implemented all the enhancements and improvements identified during our internal hackathon.
+
 ## 0.0.14
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.12
+
+### Patch Changes
+
+- Successfully implemented all the enhancements and improvements identified during our internal hackathon.
+
 ## 0.0.11
 
 ### Patch Changes

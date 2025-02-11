@@ -55,6 +55,10 @@ export default class HttpTrigger extends TriggerBase {
 			this.app.use(bodyParser.json({ limit: "150mb" }));
 			this.app.use(cors());
 
+			this.app.use("/health-check", (req: Request, res: Response) => {
+				res.status(200).send("OK");
+			});
+
 			this.app.use(["/:workflow", "/"], async (req: Request, res: Response): Promise<void> => {
 				const id: string = (req.query?.requestId as string) || (uuid() as string);
 				req.query.requestId = undefined;
