@@ -1,5 +1,11 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.24
+
+### Patch Changes
+
+- Successfully implemented all the enhancements and improvements identified during our internal hackathon.
+
 ## 0.0.23
 
 ### Patch Changes

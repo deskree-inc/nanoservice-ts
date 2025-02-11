@@ -34,7 +34,21 @@ async function main() {
 					command: "create project",
 					args: options,
 					execution: async () => {
-						createProject(options);
+						createProject(options, false);
+					},
+				});
+			});
+
+		project
+			.command(".")
+			.description("Create a new Project")
+			.action(async (options: OptionValues) => {
+				console.log(options);
+				await analytics.trackCommandExecution({
+					command: "create project .",
+					args: options,
+					execution: async () => {
+						createProject(options, true);
 					},
 				});
 			});
@@ -48,7 +62,20 @@ async function main() {
 					command: "create node",
 					args: options,
 					execution: async () => {
-						createNode(options);
+						createNode(options, false);
+					},
+				});
+			});
+
+		node
+			.command(".")
+			.description("Create a new Node")
+			.action(async (options: OptionValues) => {
+				await analytics.trackCommandExecution({
+					command: "create node",
+					args: options,
+					execution: async () => {
+						createNode(options, true);
 					},
 				});
 			});

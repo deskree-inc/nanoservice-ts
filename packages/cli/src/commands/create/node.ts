@@ -1,15 +1,19 @@
+import child_process from "node:child_process";
 import os from "node:os";
 import path from "node:path";
+import util from "node:util";
 import * as p from "@clack/prompts";
 import type { OptionValues } from "commander";
 import figlet from "figlet";
 import fsExtra from "fs-extra";
 import color from "picocolors";
 
+const exec = util.promisify(child_process.exec);
+
 const HOME_DIR = `${os.homedir()}/.nanoctl`;
 const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
 
-export async function createNode(opts: OptionValues) {
+export async function createNode(opts: OptionValues, currentPath = false) {
 	const isDefault = opts.name !== undefined;
 	let nodeName: string = opts.name ? opts.name : "";
 
@@ -25,15 +29,22 @@ export async function createNode(opts: OptionValues) {
 		);
 		console.log("");
 
-		p.intro(color.inverse(" Create a new Node "));
+		const resolveNodeName = async (): Promise<string> => {
+			if (nodeName !== "") {
+				return nodeName;
+			}
+
+			return (await p.text({
+				message: "Please provide a name for the node",
+				placeholder: "node-name",
+				defaultValue: "",
+			})) as string;
+		};
+
+		p.intro(color.inverse(" Creating a new Node "));
 		const nanoctlNode = await p.group(
 			{
-				nodeName: () =>
-					p.text({
-						message: "Assign a name to the node",
-						placeholder: "node-name",
-						defaultValue: "",
-					}),
+				nodeName: () => resolveNodeName(),
 				// multiSteps: () =>
 				// 	p.multiselect({
 				// 		message: "Is it a multi steps node?",
@@ -45,7 +56,7 @@ export async function createNode(opts: OptionValues) {
 			},
 			{
 				onCancel: () => {
-					p.cancel("Operation cancelled.");
+					p.cancel("Operation canceled.");
 					process.exit(0);
 				},
 			},
@@ -55,37 +66,42 @@ export async function createNode(opts: OptionValues) {
 	}
 
 	const s = p.spinner();
-	if (!isDefault) s.start("Creating node...");
+	if (!isDefault) s.start("Creating the node...");
 
 	try {
 		// Prepare the project
 		const mainDirExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (!mainDirExists)
 			throw new Error(
-				"nanoservice-ts repository not found. Please run 'nanoctl create project' to clone the repository.",
+				"The nanoservice-ts repository was not found. Please run 'nanoctl create project' to clone the repository.",
 			);
 
-		// Validate the project
-		const currentDir = `${process.cwd()}/src`;
-		const nodeProjectDirExists = fsExtra.existsSync(currentDir);
-		if (!nodeProjectDirExists) throw new Error("ops1");
+		let dirPath = process.cwd();
+		if (!currentPath) {
+			// Validate the project
+			const currentDir = `${process.cwd()}/src`;
+			const nodeProjectDirExists = fsExtra.existsSync(currentDir);
+			if (!nodeProjectDirExists) throw new Error("ops1");
 
-		// Prepare the node
-		const currentNodesDir = `${currentDir}/nodes`;
-		if (!isDefault) {
-			fsExtra.ensureDirSync(currentNodesDir);
-		} else {
-			const nodeDirExists = fsExtra.existsSync(currentNodesDir);
-			if (!nodeDirExists) throw new Error("ops1");
+			// Prepare the node
+			const currentNodesDir = `${currentDir}/nodes`;
+			if (!isDefault) {
+				fsExtra.ensureDirSync(currentNodesDir);
+			} else {
+				const nodeDirExists = fsExtra.existsSync(currentNodesDir);
+				if (!nodeDirExists) throw new Error("ops1");
+			}
+
+			dirPath = path.join(currentNodesDir, nodeName);
 		}
 
-		const dirPath = path.join(currentNodesDir, nodeName);
-
-		if (!isDefault) s.message("Copying project files");
+		if (!isDefault) s.message("Copying project files...");
 
 		/// Copy the project files
-		const nodeDirExists = fsExtra.existsSync(dirPath);
-		if (nodeDirExists) throw new Error("ops2");
+		if (!currentPath) {
+			const nodeDirExists = fsExtra.existsSync(dirPath);
+			if (nodeDirExists) throw new Error("ops2");
+		}
 
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node`, dirPath);
 
@@ -97,8 +113,16 @@ export async function createNode(opts: OptionValues) {
 		packageJsonContent.author = "";
 		fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
 
-		if (!isDefault) s.stop("Node created successfully");
-		console.log(`Node Name: ${nodeName}`);
+		// Install Packages
+		s.message("Installing packages...");
+		await exec("npm install", { cwd: dirPath });
+
+		if (!isDefault) s.stop(`Node "${nodeName}" created successfully.`);
+		if (!currentPath) console.log(`\nNavigate to the node directory by running: cd ${nodeName}`);
+		console.log(
+			`${currentPath ? "\n" : ""}Run the command "npm run build" or "npm run build:dev" to build the project.`,
+		);
+		console.log("For more documentation, visit https://nanoservice.xyz/docs/d/core-concepts/nodes");
 	} catch (error) {
 		if (!isDefault) s.stop("An error occurred");
 
@@ -107,13 +131,13 @@ export async function createNode(opts: OptionValues) {
 			console.log(
 				"Oops! It seems like you haven't created a project yet... or have you? 🤔\n" +
 					"If you already did, you can navigate to it using: cd project-name\n" +
-					"Otherwise, you can create a new project with: nanoctl create project",
+					"Otherwise, you can create a new project with: npx nanoctl@latest create project",
 			);
 		}
 		if (message === "ops2") {
 			console.log(
-				"The Node you want to create already exists in the project.\n" +
-					"Try using a different name, or you can delete the existing Node to create a new one.",
+				"The node you are trying to create already exists in the project.\n" +
+					"Please use a different name, or delete the existing node to create a new one.",
 			);
 		}
 		if (message !== "ops1" && message !== "ops2") {
