@@ -20,7 +20,7 @@
 		"@types/cors": "^2.8.17",
 		"@types/ejs": "^3.1.5",
 		"@types/express": "^5.0.0",
-		"@types/node": "^22.13.1",
+		"@types/node": "^22.13.4",
 		"@types/pg": "^8.11.11",
 		"copyfiles": "^2.4.1",
 		"nodemon": "^3.1.9",
