@@ -110,7 +110,7 @@ my-api-project/
 
 In the `nodes/api-call/index.ts` we will create a node that will fetch data from an external API. For the simplicity of this example it will be hardcoded for only `GET` requests with headers set to `application/json`, will receive a URL as an input and return the response.
 
-```typescript
+```typescript index.ts
 import {
 	type INanoServiceResponse,
 	type JsonLikeObject,
@@ -220,7 +220,7 @@ Let's set up `config.json` files for both of the nodes we've created. For the si
 
 For the `api-call` node, the `config.json` file should look like this:
 
-```json
+```json config.json
 {
   "name": "api-call",
   "version": "1.0.0",
@@ -316,7 +316,7 @@ After executing the build command a new `dist` directory will be created in the 
 
 Now let's create a workflow that will use the nodes we've created. Create a new file in the `workflows` directory called `launches-by-year.json`.
 
-```json
+```json launches-by-year.json
 {
   "name": "launches-by-year",
   "description": "Get launches by year",
