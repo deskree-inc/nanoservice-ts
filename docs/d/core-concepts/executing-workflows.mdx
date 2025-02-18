@@ -27,16 +27,16 @@ Workflow execution refers to the process of running a sequence of steps (nodes) 
    
    Use tools like POSTMAN, curl, or any HTTP client to test workflows.
    
-   The local development server listens on `http://localhost:3000` or the port defined in your project. The workflow's path is accessible at:
+   The local development server listens on `http://localhost:4000` or the port defined in your project. The workflow's path is accessible at:
    
    ```bash
-   http://localhost:3000/{workflow-name}
+   http://localhost:4000/{workflow-name}
    ```
 
    Example: If your workflow is named countries, the trigger URL will be:
    
    ```bash
-   http://localhost:3000/countries
+   http://localhost:4000/countries
    ```
 
   </Step>
@@ -83,7 +83,7 @@ Workflow execution refers to the process of running a sequence of steps (nodes) 
    
    Example:
    ```bash
-   curl -X GET http://localhost:3000/countries
+   curl -X GET http://localhost:4000/countries
    ```
 
 3. **Inspect Outputs:** Check the HTTP response and workflow logs to verify execution.

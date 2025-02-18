@@ -23,17 +23,10 @@ To initialize the project, simply run the following command and follow the instr
   </Step>
   <Step title="Follow the interactive prompts">
    ```plaintext
-    Project Name: my-api-project
-    Select a template: HTTP API
-    Install dependencies and start coding:
+    Please provide a name for the project: my-api-project
+    Select the trigger to install: HTTP
+    Project "my-api-project" created successfully
    ```
-  </Step>
-  <Step title="Install dependencies and start coding">
-   ```bash
-    cd my-api-project
-    npm install
-    npm run dev
-    ```
   </Step>
 </Steps>
 After creating a project using the npx package, your folder might look like this:
@@ -362,7 +355,7 @@ Note that in this example we are using `ctx` to get the original request query p
 
 # Running Workflow
 
-To test our newly created workflow simply run a command `npm run dev` in the root directory of the project. This will start the server on the port specified in the `.env.local` file. By default, you should be able to access at port `3000`.
+To test our newly created workflow simply run a command `npm run dev` in the root directory of the project. This will start the server on the port specified in the `.env.local` file. By default, you should be able to access at port `4000`.
 
 Then make a GET API request to http://localhost:4000/launches-by-year either using a browser or a tool like Postman. The request should contain a query parameter `dob` with the date of birth in the format `YYYY-MM-DD`. For example:
 
