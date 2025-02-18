@@ -2,12 +2,15 @@
 title: Overview
 ---
 
-In nanoservices, a workflow is defined as a JSON file that outlines the sequence of **nodes** (execution steps), their configuration, data flow, and the **trigger** that starts the workflow.
+In nanoservices, a workflow outlines the sequence of **nodes** (execution steps), their configuration, data flow, and the **trigger** that starts the workflow.
 
 ---
 
-## Workflow JSON Structure
-```json Workflow Example
+<Tip>All workflows are defined in the `/workflows` directory of the project</Tip>
+
+## Workflow Structure & Format
+<CodeGroup>
+```json JSON
 {
   "name": "World Countries",
   "description": "Workflow description",
@@ -40,6 +43,82 @@ In nanoservices, a workflow is defined as a JSON file that outlines the sequence
   }
 } 
 ```
+```YAML YAML
+---
+name: World Countries
+description: Workflow description
+version: 1.0.0
+trigger:
+  http:
+    method: GET
+    path: "/"
+    accept: application/json
+steps:
+- name: get-countries-api
+  node: "@nanoservice-ts/api-call"
+  type: module
+nodes:
+  get-countries-api:
+    inputs:
+      url: https://countriesnow.space/api/v0.1/countries/capital
+      method: GET
+      headers:
+        Content-Type: application/json
+      responseType: application/json
+```
+```TOML TOML
+name = "World Countries"
+description = "Workflow description"
+version = "1.0.0"
+
+[trigger.http]
+method = "GET"
+path = "/"
+accept = "application/json"
+
+[[steps]]
+name = "get-countries-api"
+node = "@nanoservice-ts/api-call"
+type = "module"
+
+[nodes.get-countries-api.inputs]
+url = "https://countriesnow.space/api/v0.1/countries/capital"
+method = "GET"
+responseType = "application/json"
+
+  [nodes.get-countries-api.inputs.headers]
+  Content-Type = "application/json"
+```
+```XML XML
+<name>World Countries</name>
+<description>Workflow description</description>
+<version>1.0.0</version>
+<trigger>
+    <http>
+        <method>GET</method>
+        <path>/</path>
+        <accept>application/json</accept>
+    </http>
+</trigger>
+<steps>
+    <name>get-countries-api</name>
+    <node>@nanoservice-ts/api-call</node>
+    <type>module</type>
+</steps>
+<nodes>
+    <get-countries-api>
+        <inputs>
+            <url>https://countriesnow.space/api/v0.1/countries/capital</url>
+            <method>GET</method>
+            <headers>
+                <Content-Type>application/json</Content-Type>
+            </headers>
+            <responseType>application/json</responseType>
+        </inputs>
+    </get-countries-api>
+</nodes>
+```
+</CodeGroup>
 <ParamField path="name" type="string">
   The name of the workflow, used to identify it.
 </ParamField>
@@ -129,7 +208,7 @@ To enhance the workflow, include additional steps in the `steps` array. Each new
 Update the `nodes` object to configure the newly added steps.  
 
 **Example**: Adding a data transformation step.  
-```json
+```json JSON
 "steps": [
   {
     "name": "get-countries-api",
@@ -211,3 +290,7 @@ Workflows can also invoke other workflows, enabling you to build complex, multi-
 ### Global Methods
 
 In addition to CTX, the data can be manipulated using global methods. These methods are available in all nodes and can be used to perform various operations on the data.
+
+## Creating Workflows
+
+To create a new workflow, add a new file in the `/workflows` directory with the `.json`, `.yaml`, `.toml`, or `.xml` extension. The file should contain the workflow structure as described above.
