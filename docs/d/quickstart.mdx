@@ -23,17 +23,10 @@ To initialize the project, simply run the following command and follow the instr
   </Step>
   <Step title="Follow the interactive prompts">
    ```plaintext
-    Project Name: my-api-project
-    Select a template: HTTP API
-    Install dependencies and start coding:
+    Please provide a name for the project: my-api-project
+    Select the trigger to install: HTTP
+    Project "my-api-project" created successfully
    ```
-  </Step>
-  <Step title="Install dependencies and start coding">
-   ```bash
-    cd my-api-project
-    npm install
-    npm run dev
-    ```
   </Step>
 </Steps>
 After creating a project using the npx package, your folder might look like this:
@@ -117,7 +110,7 @@ my-api-project/
 
 In the `nodes/api-call/index.ts` we will create a node that will fetch data from an external API. For the simplicity of this example it will be hardcoded for only `GET` requests with headers set to `application/json`, will receive a URL as an input and return the response.
 
-```typescript
+```typescript index.ts
 import {
 	type INanoServiceResponse,
 	type JsonLikeObject,
@@ -227,7 +220,7 @@ Let's set up `config.json` files for both of the nodes we've created. For the si
 
 For the `api-call` node, the `config.json` file should look like this:
 
-```json
+```json config.json
 {
   "name": "api-call",
   "version": "1.0.0",
@@ -323,7 +316,7 @@ After executing the build command a new `dist` directory will be created in the 
 
 Now let's create a workflow that will use the nodes we've created. Create a new file in the `workflows` directory called `launches-by-year.json`.
 
-```json
+```json launches-by-year.json
 {
   "name": "launches-by-year",
   "description": "Get launches by year",
@@ -362,7 +355,7 @@ Note that in this example we are using `ctx` to get the original request query p
 
 # Running Workflow
 
-To test our newly created workflow simply run a command `npm run dev` in the root directory of the project. This will start the server on the port specified in the `.env.local` file. By default, you should be able to access at port `3000`.
+To test our newly created workflow simply run a command `npm run dev` in the root directory of the project. This will start the server on the port specified in the `.env.local` file. By default, you should be able to access at port `4000`.
 
 Then make a GET API request to http://localhost:4000/launches-by-year either using a browser or a tool like Postman. The request should contain a query parameter `dob` with the date of birth in the format `YYYY-MM-DD`. For example:
 

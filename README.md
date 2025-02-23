@@ -102,7 +102,7 @@ _For more information and examples, visit [Getting Started](https://nanoservice.
 * **Workflow** is a collection of nodes group together in a certain sequence to create a piece of business logic that starts with a trigger
 * **Trigger** is an event or condition that starts the execution of a workflow
 
-_For a step-by-step example of how to use nodes, workflows, and triggers, visit [Quickstart](http://localhost:3000/docs/d/quickstart)_
+_For a step-by-step example of how to use nodes, workflows, and triggers, visit [Quickstart](http://localhost:4000/docs/d/quickstart)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -111,7 +111,7 @@ _For a step-by-step example of how to use nodes, workflows, and triggers, visit 
 To run the created workflow locally:
 
 1. Start the runner via `npm run dev`
-2. Use tools like POSTMAN, curl, or any HTTP client to test workflows at `http://localhost:3000/{workflow-name}`
+2. Use tools like POSTMAN, curl, or any HTTP client to test workflows at `http://localhost:4000/{workflow-name}`
 
 _For more examples, please refer to the [Executing Workflows](https://nanoservice.xyz/docs/d/core-concepts/executing-workflows)_
 
