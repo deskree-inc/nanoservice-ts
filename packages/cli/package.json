@@ -35,7 +35,7 @@
 		"simple-git": "^3.27.0",
 		"type-fest": "^4.34.1",
 		"typescript": "^5.5.4",
-		"yocto-spinner": "^0.1.1",
+		"yocto-spinner": "^0.2.0",
 		"zod": "^3.24.0"
 	},
 	"devDependencies": {
