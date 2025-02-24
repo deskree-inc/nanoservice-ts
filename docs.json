@@ -1,0 +1,250 @@
+{
+	"$schema": "https://mintlify.com/docs.json",
+	"theme": "mint",
+	"name": "Nanoservice-ts Docs",
+	"colors": {
+		"primary": "#39C068",
+		"light": "#39C068",
+		"dark": "#73D997"
+	},
+	"favicon": "/docs/assets/favicon.svg",
+	"navigation": {
+		"tabs": [
+			{
+				"tab": "For Users",
+				"groups": [
+					{
+						"group": "Introduction",
+						"pages": [
+							"docs/d/introduction/welcome",
+							"docs/d/introduction/nanoservices-concept",
+							"docs/d/introduction/nanoservices-microservices-monoliths",
+							"docs/d/introduction/atomic-computing-and-nanoservices"
+						]
+					},
+					{
+						"group": "Quickstart",
+						"pages": ["docs/d/quickstart"]
+					},
+					{
+						"group": "Getting Started",
+						"pages": [
+							{
+								"group": "Initialization",
+								"pages": [
+									"docs/d/getting-started/nanoctl",
+									"docs/d/getting-started/templates"
+								]
+							}
+						]
+					},
+					{
+						"group": "Core Concepts",
+						"pages": [
+							{
+								"group": "Nodes",
+								"pages": [
+									"docs/d/core-concepts/nodes",
+									"docs/d/core-concepts/nodes-built-in"
+								]
+							},
+							{
+								"group": "Workflows",
+								"pages": [
+									"docs/d/core-concepts/workflows",
+									"docs/d/core-concepts/executing-workflows"
+								]
+							},
+							"docs/d/core-concepts/trigger",
+							"docs/d/core-concepts/nanoctl"
+						]
+					},
+					{
+						"group": "Advanced",
+						"pages": [
+							"docs/d/advanced/deployment",
+							"docs/d/advanced/monitoring-observability"
+						]
+					}
+				]
+			},
+			{
+				"tab": "For Contributors",
+				"groups": [
+					{
+						"group": "Overview",
+						"pages": [
+							"docs/c/overview/architecture",
+							"docs/c/overview/how-to-contribute"
+						]
+					},
+					{
+						"group": "Core",
+						"pages": ["docs/c/core/runner", "docs/c/core/shared"]
+					},
+					{
+						"group": "Extensions",
+						"pages": [
+							"docs/c/extensions/nodes",
+							"docs/c/extensions/triggers",
+							"docs/c/extensions/cli"
+						]
+					}
+				]
+			},
+			{
+				"tab": "References",
+				"groups": [
+					{
+						"group": "References",
+						"pages": [
+							"/docs/ref/README",
+							{
+								"group": "Runner",
+								"pages": [
+									"/docs/ref/runner/src/README",
+									"/docs/ref/runner/src/classes/Configuration",
+									"/docs/ref/runner/src/classes/ConfigurationResolver",
+									"/docs/ref/runner/src/classes/DefaultLogger",
+									"/docs/ref/runner/src/classes/LocalStorage",
+									"/docs/ref/runner/src/classes/NanoService",
+									"/docs/ref/runner/src/classes/NanoServiceResponse",
+									"/docs/ref/runner/src/classes/NodeMap",
+									"/docs/ref/runner/src/classes/ResolverBase",
+									"/docs/ref/runner/src/classes/Runner",
+									"/docs/ref/runner/src/classes/RunnerSteps",
+									"/docs/ref/runner/src/classes/TriggerBase",
+									"/docs/ref/runner/src/interfaces/INanoServiceResponse",
+									"/docs/ref/runner/src/interfaces/JsonLikeObject",
+									"/docs/ref/runner/src/interfaces/ParamsDictionary",
+									"/docs/ref/runner/src/type-aliases/Average",
+									"/docs/ref/runner/src/type-aliases/Condition",
+									"/docs/ref/runner/src/type-aliases/Conditions",
+									"/docs/ref/runner/src/type-aliases/Config",
+									"/docs/ref/runner/src/type-aliases/Flow",
+									"/docs/ref/runner/src/type-aliases/GlobalOptions",
+									"/docs/ref/runner/src/type-aliases/Inputs",
+									"/docs/ref/runner/src/type-aliases/Node",
+									"/docs/ref/runner/src/type-aliases/Properties",
+									"/docs/ref/runner/src/type-aliases/Targets",
+									"/docs/ref/runner/src/type-aliases/Trigger",
+									"/docs/ref/runner/src/type-aliases/TriggerHttp",
+									"/docs/ref/runner/src/type-aliases/TriggerResponse",
+									"/docs/ref/runner/src/type-aliases/Triggers"
+								]
+							},
+							{
+								"group": "Shared",
+								"pages": [
+									"/docs/ref/shared/src/README",
+									"/docs/ref/shared/src/classes/GlobalError",
+									"/docs/ref/shared/src/classes/GlobalLogger",
+									"/docs/ref/shared/src/classes/MemoryUsage",
+									"/docs/ref/shared/src/classes/Metrics",
+									"/docs/ref/shared/src/classes/NodeBase",
+									"/docs/ref/shared/src/classes/Trigger",
+									"/docs/ref/shared/src/type-aliases/ConfigContext",
+									"/docs/ref/shared/src/type-aliases/Context",
+									"/docs/ref/shared/src/type-aliases/ErrorContext",
+									"/docs/ref/shared/src/type-aliases/FunctionContext",
+									"/docs/ref/shared/src/type-aliases/LoggerContext",
+									"/docs/ref/shared/src/type-aliases/MetricsType",
+									"/docs/ref/shared/src/type-aliases/NodeConfigContext",
+									"/docs/ref/shared/src/type-aliases/RequestContext",
+									"/docs/ref/shared/src/type-aliases/ResponseContext",
+									"/docs/ref/shared/src/type-aliases/Step"
+								]
+							}
+						]
+					}
+				]
+			},
+			{
+				"tab": "Changelog",
+				"href": "https://github.com/deskree-inc/nanoservice-ts/releases"
+			},
+			{
+				"tab": "Roadmap",
+				"href": "https://github.com/orgs/deskree-inc/projects/4/views/2"
+			},
+			{
+				"tab": "Other Resources",
+				"groups": [
+					{
+						"group": "Resources",
+						"pages": ["docs/o/resources"]
+					}
+				]
+			}
+		],
+		"global": {
+			"anchors": [
+				{
+					"anchor": "Blog",
+					"href": "https://blog.nanoservice.xyz/",
+					"icon": "Medium"
+				},
+				{
+					"anchor": "Discord",
+					"href": "https://discord.gg/uFs9bYwfM9",
+					"icon": "discord"
+				},
+				{
+					"anchor": "X",
+					"href": "https://x.com/nanoservice_ts",
+					"icon": "x"
+				}
+			]
+		}
+	},
+	"logo": {
+		"light": "/docs/assets/logo/light.svg",
+		"dark": "/docs/assets/logo/dark.svg"
+	},
+	"navbar": {
+		"links": [
+			{
+				"label": "Deskree Docs",
+				"href": "https://docs.deskree.com"
+			}
+		],
+		"primary": {
+			"type": "github",
+			"href": "https://github.com/deskree-inc/nanoservice-ts"
+		}
+	},
+	"footer": {
+		"socials": {
+			"x": "https://x.com/nanoservice_ts",
+			"github": "https://github.com/deskree-inc",
+			"linkedin": "https://linkedin.com/company/deskree",
+			"reddit": "https://www.reddit.com/r/nanoservice/",
+			"medium": "https://blog.nanoservice.xyz/",
+			"discord": "https://discord.gg/etgJcHSrR5"
+		},
+		"links": [
+			{
+				"header": "With ❤️ by ",
+				"items": [
+					{
+						"label": "With ❤️ by Deskree",
+						"href": "https://deskree.com"
+					}
+				]
+			}
+		]
+	},
+	"integrations": {
+		"ga4": {
+			"measurementId": "G-X860TC8VML"
+		}
+	},
+	"fonts": {
+		"heading": {
+			"family": "Space Grotesk"
+		},
+		"body": {
+			"family": "Space Grotesk"
+		}
+	}
+}

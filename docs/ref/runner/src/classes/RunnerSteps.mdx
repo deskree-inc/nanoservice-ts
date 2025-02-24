@@ -6,7 +6,7 @@
 
 # Class: `abstract` RunnerSteps
 
-Defined in: [core/runner/src/RunnerSteps.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/cd1933c250152cb6abc77d2acbfd230236ada573/core/runner/src/RunnerSteps.ts#L5)
+Defined in: [core/runner/src/RunnerSteps.ts:4](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/RunnerSteps.ts#L4)
 
 ## Extended by
 
@@ -28,7 +28,9 @@ Defined in: [core/runner/src/RunnerSteps.ts:5](https://github.com/deskree-inc/na
 
 > **runSteps**(`ctx`, `steps`, `deep`, `step_name`): `Promise`\<`Context`\>
 
-Defined in: [core/runner/src/RunnerSteps.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/cd1933c250152cb6abc77d2acbfd230236ada573/core/runner/src/RunnerSteps.ts#L6)
+Defined in: [core/runner/src/RunnerSteps.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/RunnerSteps.ts#L15)
+
+Executes a series of steps in the given context.
 
 #### Parameters
 
@@ -36,18 +38,32 @@ Defined in: [core/runner/src/RunnerSteps.ts:6](https://github.com/deskree-inc/na
 
 `Context`
 
+The context in which the steps are executed.
+
 ##### steps
 
-[`NanoService`](/docs/ref/runner/src/classes/NanoService)[]
+`NodeBase`[]
+
+An array of NanoService steps to be executed.
 
 ##### deep
 
 `boolean` = `false`
 
+A boolean indicating whether the function is being called recursively for flow steps.
+
 ##### step\_name
 
 `string` = `""`
 
+The name of the current step being processed in a flow.
+
 #### Returns
 
 `Promise`\<`Context`\>
+
+A promise that resolves to the updated context after all steps have been executed.
+
+#### Throws
+
+Throws a GlobalError if any step results in an error.
