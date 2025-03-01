@@ -41,6 +41,7 @@
 					{
 						"group": "Core Concepts",
 						"pages": [
+							"docs/d/core-concepts/overview",
 							{
 								"group": "Nodes",
 								"pages": [
