@@ -26,7 +26,7 @@
 	},
 	"keywords": ["nanoctl", "cli", "nanoservice", "nanoservice-ts"],
 	"dependencies": {
-		"@clack/prompts": "^0.9.1",
+		"@clack/prompts": "^0.10.0",
 		"commander": "^13.1.0",
 		"figlet": "^1.8.0",
 		"fs-extra": "^11.2.0",
