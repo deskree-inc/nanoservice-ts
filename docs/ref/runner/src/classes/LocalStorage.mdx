@@ -6,7 +6,7 @@
 
 # Class: LocalStorage
 
-Defined in: [core/runner/src/LocalStorage.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/cd1933c250152cb6abc77d2acbfd230236ada573/core/runner/src/LocalStorage.ts#L7)
+Defined in: [core/runner/src/LocalStorage.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/LocalStorage.ts#L10)
 
 ## Extends
 
@@ -32,7 +32,7 @@ Defined in: [core/runner/src/LocalStorage.ts:7](https://github.com/deskree-inc/n
 
 > **createContext**(`logger`?): `Context`
 
-Defined in: [core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/cd1933c250152cb6abc77d2acbfd230236ada573/core/runner/src/ResolverBase.ts#L9)
+Defined in: [core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/ResolverBase.ts#L9)
 
 #### Parameters
 
@@ -52,9 +52,9 @@ Defined in: [core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/n
 
 ### get()
 
-> **get**(`name`, `workflowLocator`): `Promise`\<[`Config`](/docs/ref/runner/src/type-aliases/Config)\>
+> **get**(`name`, `workflowLocator`, `fileType`?): `Promise`\<[`Config`](/docs/ref/runner/src/type-aliases/Config)\>
 
-Defined in: [core/runner/src/LocalStorage.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/cd1933c250152cb6abc77d2acbfd230236ada573/core/runner/src/LocalStorage.ts#L8)
+Defined in: [core/runner/src/LocalStorage.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/LocalStorage.ts#L11)
 
 #### Parameters
 
@@ -65,6 +65,10 @@ Defined in: [core/runner/src/LocalStorage.ts:8](https://github.com/deskree-inc/n
 ##### workflowLocator
 
 `WorkflowLocator`
+
+##### fileType?
+
+`string`
 
 #### Returns
 
