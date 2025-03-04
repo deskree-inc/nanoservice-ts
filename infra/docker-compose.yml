@@ -59,7 +59,7 @@ services:
     hostname: nanoservice-http
     build:
       context: ../triggers/http
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.node
     ports:
       - "4000:4000"
       - "9091:9091"
