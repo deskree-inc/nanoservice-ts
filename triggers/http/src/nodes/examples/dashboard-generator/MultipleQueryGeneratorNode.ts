@@ -12,6 +12,7 @@ import { z } from "zod";
 
 type InputType = {
 	columns: Column[];
+	relationships: object[];
 	prompt: string;
 	set_var?: boolean;
 };
@@ -47,10 +48,11 @@ export default class MultipleQueryGeneratorNode extends NanoService<InputType> {
 						},
 					},
 				},
+				relationships: { type: "array" },
 				prompt: { type: "string" },
 				set_var: { type: "boolean" },
 			},
-			required: ["columns", "prompt"],
+			required: ["columns", "prompt", "relationships"],
 		};
 	}
 
@@ -77,7 +79,7 @@ export default class MultipleQueryGeneratorNode extends NanoService<InputType> {
 
 	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
 		const response: NanoServiceResponse = new NanoServiceResponse();
-		const { columns, prompt } = inputs;
+		const { columns, prompt, relationships } = inputs;
 
 		try {
 			// Generate SQL query using AI
@@ -153,6 +155,10 @@ export default class MultipleQueryGeneratorNode extends NanoService<InputType> {
 				
 				${tableSchema.join("\n")}
 
+				TABLES RELATIONSHIPS:
+
+				${JSON.stringify(relationships, null, 2)}
+
 				LEARN the TABLES SCHEMA carefully before generating the SQL queries.
 				
 				Return the response as a JSON array with the following schema:
@@ -179,8 +185,6 @@ export default class MultipleQueryGeneratorNode extends NanoService<InputType> {
 				temperature: 0.2,
 				maxTokens: 1000,
 			});
-
-			console.log("QUERIES", prompt, result.object.queries);
 
 			if (inputs.set_var) {
 				if (ctx.vars === undefined) ctx.vars = {};

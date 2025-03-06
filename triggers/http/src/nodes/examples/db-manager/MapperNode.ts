@@ -27,6 +27,11 @@ export default class MapperNode extends NanoService<InputType> {
 		const response: NanoServiceResponse = new NanoServiceResponse();
 
 		try {
+			// @ts-ignore
+			if (inputs.model.queries !== undefined) {
+				// @ts-ignore
+				console.log(inputs.model.queries);
+			}
 			response.setSuccess(inputs.model as JsonLikeObject);
 		} catch (error: unknown) {
 			const nodeError = new GlobalError((error as Error).message);
