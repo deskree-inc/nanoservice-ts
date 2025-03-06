@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Database Query</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --vscode-bg: #1e1e1e;
+      --vscode-sidebar-bg: #252526;
+      --vscode-border: #3c3c3c;
+      --vscode-highlight: #264f78;
+      --vscode-text: #d4d4d4;
+      --vscode-active: #0e639c;
+      --vscode-hover: #37373d;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--vscode-bg);
+      color: var(--vscode-text);
+    }
+    
+    .vscode-header {
+      background-color: var(--vscode-bg);
+      border-bottom: 1px solid var(--vscode-border);
+    }
+    
+    .vscode-sidebar {
+      background-color: var(--vscode-sidebar-bg);
+      border-right: 1px solid var(--vscode-border);
+    }
+    
+    .vscode-table-item {
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 3px;
+    }
+    
+    .vscode-table-item:hover {
+      background-color: var(--vscode-hover);
+    }
+    
+    .vscode-table-item.active {
+      background-color: var(--vscode-highlight);
+    }
+    
+    .vscode-input {
+      background-color: #2d2d2d;
+      border: 1px solid var(--vscode-border);
+      color: var(--vscode-text);
+    }
+    
+    .vscode-button {
+      background-color: var(--vscode-active);
+      color: white;
+    }
+    
+    .vscode-button:hover {
+      background-color: #1177bb;
+    }
+    
+    .vscode-data-table {
+      border: 1px solid var(--vscode-border);
+      background-color: #2d2d2d;
+    }
+    
+    .vscode-data-table th {
+      background-color: #333333;
+      border-bottom: 1px solid var(--vscode-border);
+    }
+    
+    .vscode-data-table td {
+      border-bottom: 1px solid var(--vscode-border);
+    }
+    
+    .monospace {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    
+    function App() {
+      const [tables, setTables] = useState([]);
+      const [selectedTable, setSelectedTable] = useState(null);
+      const [prompt, setPrompt] = useState('');
+      const [results, setResults] = useState(null);
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState(null);
+      const [generatedQuery, setGeneratedQuery] = useState('');
+      
+      // Fetch tables on component mount
+      useEffect(() => {
+        fetchTables();
+      }, []);
+      
+      const fetchTables = async () => {
+        try {
+          const response = await fetch('/db-manager/tables');
+          if (!response.ok) throw new Error('Failed to fetch tables');
+          
+          const data = await response.json();
+          const table_names = data.data.map((table) => { return { name: table.table_name } });
+          setTables(table_names);
+        } catch (err) {
+          setError('Failed to load database tables');
+          console.error(err);
+        }
+      };
+      
+      const handleTableSelect = (table) => {
+        setSelectedTable(table);
+        setResults(null);
+        setGeneratedQuery('');
+      };
+      
+      const handlePromptSubmit = async () => {
+        if (!selectedTable || !prompt.trim()) {
+          setError('Please select a table and enter a prompt');
+          return;
+        }
+        
+        setLoading(true);
+        setError(null);
+        
+        try {
+          const response = await fetch('/db-manager/execute-prompt', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              table_name: selectedTable.name,
+              prompt: prompt
+            }),
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to execute prompt');
+          }
+          
+          const data = await response.json();
+          setResults(data.results);
+          setGeneratedQuery(data.query);
+        } catch (err) {
+          setError(err.message || 'An error occurred');
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      // Get column names from results
+      const getColumnNames = () => {
+        if (!results || results.length === 0) return [];
+        return Object.keys(results[0]);
+      };
+      
+      return (
+        <div className="flex flex-col h-screen">
+          {/* Header */}
+          <header className="vscode-header h-12 flex items-center px-4 shadow-sm">
+            <div className="flex items-center">
+              <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.5 0L8.5 9L3.5 4L0 7.5L8.5 16L21 3.5L17.5 0Z" fill="#0065A9"/>
+                <path d="M17.5 24L8.5 15L3.5 20L0 16.5L8.5 8L21 20.5L17.5 24Z" fill="#007ACC"/>
+                <path d="M21 20.5L8.5 8L21 3.5V20.5Z" fill="#1F9CF0"/>
+              </svg>
+              <h1 className="text-lg font-semibold">AI Database Query</h1>
+            </div>
+          </header>
+          
+          <div className="flex flex-1 overflow-hidden">
+            {/* Sidebar */}
+            <aside className="vscode-sidebar w-64 flex flex-col overflow-y-auto">
+              <div className="p-3 text-sm font-medium uppercase text-gray-400">Database Tables</div>
+              <div className="flex-1">
+                {tables.length === 0 ? (
+                  <div className="px-4 py-2 text-sm text-gray-400">Loading tables...</div>
+                ) : (
+                  <ul>
+                    {tables.map((table, index) => (
+                      <li key={table.name + index.toString()}>
+                        <div 
+                          className={`vscode-table-item text-sm ${selectedTable && selectedTable.name === table.name ? 'active' : ''}`}
+                          onClick={() => handleTableSelect(table)}
+                        >
+                          <span className="mr-2">📄</span>
+                          {table.name}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </aside>
+            
+            {/* Main Content */}
+            <main className="flex-1 flex flex-col overflow-hidden">
+              {/* Prompt Section */}
+              <div className="p-4 border-b border-gray-700">
+                <div className="mb-2">
+                  <label className="block text-sm mb-1">
+                    {selectedTable ? `Table: ${selectedTable.name}` : 'Select a table from the sidebar'}
+                  </label>
+                  <textarea
+                    className="vscode-input w-full p-3 rounded text-sm monospace h-24 resize-none"
+                    placeholder="Enter your prompt here... (e.g., 'Show me all records sorted by date')"
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    disabled={!selectedTable}
+                  />
+                </div>
+                <div className="flex justify-between items-center">
+                  <button
+                    className="vscode-button px-4 py-2 rounded text-sm"
+                    onClick={handlePromptSubmit}
+                    disabled={!selectedTable || loading}
+                  >
+                    {loading ? 'Processing...' : 'Execute Prompt'}
+                  </button>
+                  {error && <div className="text-red-400 text-sm">{error}</div>}
+                </div>
+              </div>
+              
+              {/* Generated SQL Query */}
+              {generatedQuery && (
+                <div className="p-4 border-b border-gray-700 bg-gray-900">
+                  <div className="text-sm text-gray-400 mb-1">Generated SQL Query:</div>
+                  <pre className="vscode-input p-3 rounded text-sm monospace overflow-x-auto">
+                    {generatedQuery}
+                  </pre>
+                </div>
+              )}
+              
+              {/* Results Table */}
+              <div className="flex-1 p-4 overflow-auto">
+                {loading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+                      <div className="mt-2 text-sm">Generating and executing query...</div>
+                    </div>
+                  </div>
+                ) : results ? (
+                  <div>
+                    <div className="text-sm text-gray-400 mb-2">Query Results: {results.length} rows</div>
+                    <div className="vscode-data-table rounded overflow-hidden">
+                      <table className="w-full text-sm monospace">
+                        <thead>
+                          <tr>
+                            {getColumnNames().map((column, index) => (
+                              <th key={index} className="px-4 py-2 text-left">{column}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {results.map((row, rowIndex) => (
+                            <tr key={rowIndex}>
+                              {getColumnNames().map((column, colIndex) => (
+                                <td key={colIndex} className="px-4 py-2">
+                                  {row[column] !== null ? String(row[column]) : 'NULL'}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-400">
+                    {selectedTable ? 
+                      'Enter a prompt and click "Execute Prompt" to see results' : 
+                      'Select a table from the sidebar to get started'}
+                  </div>
+                )}
+              </div>
+            </main>
+          </div>
+        </div>
+      );
+    }
+    
+    ReactDOM.render(<App />, document.getElementById('app'));
+  </script>
+</body>
+</html>
+

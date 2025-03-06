@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation Viewer</title>
+  <!-- Tailwind CSS via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Additional styles -->
+  <style>
+    .prose {
+      max-width: 100%;
+      color: #374151;
+    }
+    .prose h1 {
+      font-size: 2.25rem;
+      margin-top: 0;
+      margin-bottom: 0.8888889em;
+      line-height: 1.1111111;
+      font-weight: 700;
+    }
+    .prose h2 {
+      font-size: 1.5rem;
+      margin-top: 2em;
+      margin-bottom: 1em;
+      line-height: 1.3333333;
+      font-weight: 600;
+    }
+    .prose p {
+      margin-top: 1.25em;
+      margin-bottom: 1.25em;
+    }
+    .prose ol {
+      margin-top: 1.25em;
+      margin-bottom: 1.25em;
+      padding-left: 1.625em;
+    }
+    .prose li {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    .prose pre {
+      background-color: #f3f4f6;
+      padding: 1em;
+      border-radius: 0.375rem;
+      overflow-x: auto;
+    }
+    .dark .prose {
+      color: #e5e7eb;
+    }
+    .dark .prose pre {
+      background-color: #374151;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 flex justify-center">
+  <div id="app" style="width: 75%;"></div>
+
+  <!-- React and ReactDOM from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- React Components -->
+  <script type="text/babel">
+    // Header Component
+    const Header = () => {
+      return (
+        <header className="bg-white border-b border-gray-200">
+          <div className="container mx-auto px-4 py-3 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <h1 className="text-xl font-semibold text-gray-800">Documentation Viewer</h1>
+          </div>
+        </header>
+      );
+    };
+
+    // Sidebar Component
+    const Sidebar = ({ files, selectedFile, onSelectFile }) => {
+      return (
+        <aside className="w-64 border-r border-gray-200 bg-gray-50 overflow-y-auto">
+          <div className="p-4">
+            <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
+              Files
+            </h2>
+            <nav className="space-y-1">
+              {files.map((file) => (
+                <button
+                  key={file}
+                  onClick={() => onSelectFile(file)}
+                  className={`w-full text-left px-3 py-2 rounded-md flex items-center text-sm ${
+                    selectedFile === file
+                      ? 'bg-gray-200 text-gray-900'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span className="truncate">{file}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
+        </aside>
+      );
+    };
+
+    // Content Component
+    const Content = ({ content, loading, selectedFile }) => {
+      return (
+        <main className="flex-1 overflow-y-auto bg-white p-6">
+          {selectedFile ? (
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                {selectedFile}
+              </h2>
+              {loading ? (
+                <div className="flex items-center justify-center h-64">
+                  <svg className="animate-spin h-8 w-8 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span className="ml-2 text-gray-500">Loading documentation...</span>
+                </div>
+              ) : (
+                <div 
+                  className="prose"
+                  dangerouslySetInnerHTML={{ __html: content }} 
+                />
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-64 text-gray-500">
+              Select a file to view its documentation
+            </div>
+          )}
+        </main>
+      );
+    };
+
+    // Main App Component
+    const App = () => {
+      const [files, setFiles] = React.useState([]);
+      const [selectedFile, setSelectedFile] = React.useState(null);
+      const [content, setContent] = React.useState('');
+      const [loading, setLoading] = React.useState(false);
+      const [path, setPath] = React.useState('');
+
+      // Fetch the list of files when the component mounts
+      React.useEffect(() => {
+        const fetchFiles = async () => {
+          try {
+            const response = await fetch('/workflow-docs/workflows');
+            const data = await response.json();
+            const files = data.files;
+            setFiles(files);
+            setPath(data.path);
+            
+            // Select the first file by default if available
+            // if (files.length > 0 && !selectedFile) {
+            //   setSelectedFile(files[0]);
+            // }
+          } catch (error) {
+            console.error('Error fetching files:', error);
+          }
+        };
+
+        fetchFiles();
+      }, []);
+
+      // Fetch the content when a file is selected
+      React.useEffect(() => {
+        const fetchContent = async () => {
+          if (!selectedFile) return;
+
+          setLoading(true);
+          try {
+            const response = await fetch(`/workflow-docs/workflow-doc?path=${encodeURIComponent(path)}/${encodeURIComponent(selectedFile)}`);
+            const html = await response.text();
+            setContent(html);
+          } catch (error) {
+            console.error('Error fetching content:', error);
+            setContent('<div class="text-red-500">Error loading content</div>');
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchContent();
+      }, [selectedFile]);
+
+      const handleFileSelect = (file) => {
+        setSelectedFile(file);
+      };
+
+      return (
+        <div className="flex flex-col h-screen">
+          <Header />
+          <div className="flex flex-1 overflow-hidden">
+            <Sidebar 
+              files={files} 
+              selectedFile={selectedFile} 
+              onSelectFile={handleFileSelect} 
+            />
+            <Content 
+              content={content} 
+              loading={loading} 
+              selectedFile={selectedFile}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    // Render the App
+    ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+  </script>
+</body>
+</html>
+

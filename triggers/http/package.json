@@ -26,14 +26,14 @@
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.7.2"
+		"typescript": "^5.8.2"
 	},
 	"dependencies": {
 		"@nanoservice-ts/api-call": "^0.1.20",
 		"@nanoservice-ts/helper": "^0.1.4",
 		"@nanoservice-ts/if-else": "^0.0.21",
-		"@nanoservice-ts/runner": "^0.1.17",
-		"@nanoservice-ts/shared": "^0.0.7",
+		"@nanoservice-ts/runner": "workspace:*",
+		"@nanoservice-ts/shared": "workspace:*",
 		"@opentelemetry/api": "^1.9.0",
 		"@opentelemetry/exporter-prometheus": "^0.57.2",
 		"@opentelemetry/resources": "^1.30.1",
@@ -45,7 +45,11 @@
 		"cors": "2.8.5",
 		"express": "4.21.2",
 		"uuid": "^11.0.3",
-		"zod": "^3.24.1"
+		"zod": "^3.24.1",
+		"ai": "^4.1.50",
+		"@ai-sdk/openai": "^1.2.0",
+		"ejs": "^3.1.10",
+		"pg": "^8.13.3"
 	},
 	"private": true
 }

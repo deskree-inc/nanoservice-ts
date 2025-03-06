@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Dashboard Generator</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Internal CSS for VS Code look and feel -->
+    <style>
+      :root {
+        /* VS Code-like colors */
+        --vscode-bg: #1e1e1e;
+        --vscode-header: #252526;
+        --vscode-sidebar: #252526;
+        --vscode-panel: #1e1e1e;
+        --vscode-text: #cccccc;
+        --vscode-text-muted: #8c8c8c;
+        --vscode-sidebar-title: #bbbbbb;
+        --vscode-border: #3c3c3c;
+        --vscode-selection: #04395e;
+        --vscode-selection-text: #ffffff;
+        --vscode-hover: #2a2d2e;
+        --vscode-input: #3c3c3c;
+        --vscode-button: #0e639c;
+        --vscode-button-hover: #1177bb;
+        --vscode-button-text: #ffffff;
+        --vscode-focus: #007fd4;
+        --vscode-icon: #cccccc;
+        --vscode-icon-hover: #ffffff;
+        --vscode-header-text: #cccccc;
+        --vscode-sidebar-text: #cccccc;
+      }
+
+      /* Apply VS Code theme classes */
+      .bg-vscode-bg {
+        background-color: var(--vscode-bg);
+      }
+      .bg-vscode-header {
+        background-color: var(--vscode-header);
+      }
+      .bg-vscode-sidebar {
+        background-color: var(--vscode-sidebar);
+      }
+      .bg-vscode-panel {
+        background-color: var(--vscode-panel);
+      }
+      .bg-vscode-input {
+        background-color: var(--vscode-input);
+      }
+      .bg-vscode-button {
+        background-color: var(--vscode-button);
+      }
+      .bg-vscode-selection {
+        background-color: var(--vscode-selection);
+      }
+      .bg-vscode-hover {
+        background-color: var(--vscode-hover);
+      }
+
+      .text-vscode-text {
+        color: var(--vscode-text);
+      }
+      .text-vscode-text-muted {
+        color: var(--vscode-text-muted);
+      }
+      .text-vscode-sidebar-title {
+        color: var(--vscode-sidebar-title);
+      }
+      .text-vscode-button-text {
+        color: var(--vscode-button-text);
+      }
+      .text-vscode-selection-text {
+        color: var(--vscode-selection-text);
+      }
+      .text-vscode-icon {
+        color: var(--vscode-icon);
+      }
+      .text-vscode-icon-hover {
+        color: var(--vscode-icon-hover);
+      }
+      .text-vscode-header-text {
+        color: var(--vscode-header-text);
+      }
+      .text-vscode-sidebar-text {
+        color: var(--vscode-sidebar-text);
+      }
+
+      .border-vscode-border {
+        border-color: var(--vscode-border);
+      }
+
+      .hover\:bg-vscode-button-hover:hover {
+        background-color: var(--vscode-button-hover);
+      }
+      .hover\:bg-vscode-hover:hover {
+        background-color: var(--vscode-hover);
+      }
+      .hover\:text-vscode-icon-hover:hover {
+        color: var(--vscode-icon-hover);
+      }
+
+      .focus\:ring-vscode-focus:focus {
+        --tw-ring-color: var(--vscode-focus);
+      }
+
+      /* Additional styles */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      /* Scrollbar styling for VS Code look */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--vscode-bg);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #777;
+      }
+    </style>
+
+    <!-- React and ReactDOM via CDN -->
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Chart.js for rendering charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-vscode-bg text-vscode-text h-screen flex flex-col">
+    <div id="app" class="flex flex-col h-full"></div>
+
+    <!-- React Application -->
+    <script type="text/babel">
+      // Main App Component
+      function App() {
+        const [dashboards, setDashboards] = React.useState([]);
+        const [selectedDashboard, setSelectedDashboard] = React.useState(null);
+        const [dashboardName, setDashboardName] =
+          React.useState("Untitled Dashboard");
+        const [prompt, setPrompt] = React.useState(
+          "Generate a Dashboard with Insights"
+        );
+        const [charts, setCharts] = React.useState([]);
+        const [loading, setLoading] = React.useState(false);
+        const [sidebarOpen, setSidebarOpen] = React.useState(true);
+        const [saveStatus, setSaveStatus] = React.useState("");
+        const [errorMessage, setErrorMessage] = React.useState("");
+        const [generatedQuery, setGeneratedQuery] = React.useState("");
+
+        // Fetch dashboards on component mount
+        React.useEffect(() => {
+          fetchDashboards();
+        }, []);
+
+        // Fetch available dashboards
+        const fetchDashboards = async () => {
+          try {
+            const response = await fetch("/dashboard-gen/dashboards");
+
+            if (response.ok) {
+              const data = await response.json();
+
+              const keys = Object.keys(data);
+              let dashboards = [];
+
+              for (let key of keys) {
+                dashboards.push({
+                  id: data[key].id,
+                  name: data[key].name,
+                  charts: data[key].charts,
+                });
+              }
+              setDashboards(dashboards);
+            }
+          } catch (error) {
+            console.error("Error fetching dashboards:", error);
+          }
+        };
+
+        // Generate charts from prompt
+        const generateCharts = async () => {
+          if (!prompt.trim()) return;
+
+          setLoading(true);
+          setErrorMessage("");
+          setSelectedDashboard(null);
+          try {
+            const response = await fetch("/dashboard-gen/generate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ prompt }),
+            });
+
+            if (!response.ok) {
+              const data = await response.json();
+              setErrorMessage(data.error);
+            } else {
+              const data = await response.json();
+
+              // const data = {
+              //   total: 5,
+              //   data: {
+              //     prompt: "Generate a Dashboard with Insights",
+              //     charts: [
+              //       {
+              //         type: "bar",
+              //         title: "Top 5 Categories by Total Sales",
+              //         description:
+              //           "This bar chart shows the top 5 film categories based on total sales amount. It helps identify which categories are the most profitable.",
+              //         xAxis: "category_name",
+              //         yAxis: "total_sales",
+              //         series: [
+              //           {
+              //             name: "Total Sales",
+              //             dataKey: "total_sales",
+              //           },
+              //         ],
+              //         data: [
+              //           {
+              //             category_name: "Sports",
+              //             total_sales: "4892.19",
+              //           },
+              //           {
+              //             category_name: "Sci-Fi",
+              //             total_sales: "4336.01",
+              //           },
+              //           {
+              //             category_name: "Animation",
+              //             total_sales: "4245.31",
+              //           },
+              //           {
+              //             category_name: "Drama",
+              //             total_sales: "4118.46",
+              //           },
+              //           {
+              //             category_name: "Comedy",
+              //             total_sales: "4002.48",
+              //           },
+              //         ],
+              //       },
+              //       {
+              //         type: "pie",
+              //         title: "Total Sales by Store",
+              //         description:
+              //           "This pie chart represents the distribution of total sales across different stores. It provides a visual comparison of sales performance by store.",
+              //         xAxis: "",
+              //         yAxis: "",
+              //         series: [
+              //           {
+              //             name: "Total Sales",
+              //             dataKey: "total_sales",
+              //           },
+              //         ],
+              //         data: [
+              //           {
+              //             store_id: 2,
+              //             total_sales: "30683.13",
+              //           },
+              //           {
+              //             store_id: 1,
+              //             total_sales: "30628.91",
+              //           },
+              //         ],
+              //       },
+              //       {
+              //         type: "doughnut",
+              //         title: "Film Count by Language",
+              //         description:
+              //           "This doughnut chart displays the number of films available in each language. It highlights the diversity of film languages in the collection.",
+              //         xAxis: "",
+              //         yAxis: "",
+              //         series: [
+              //           {
+              //             name: "Film Count",
+              //             dataKey: "film_count",
+              //           },
+              //         ],
+              //         data: [
+              //           {
+              //             language_name: "English             ",
+              //             film_count: "1000",
+              //           },
+              //         ],
+              //       },
+              //       {
+              //         type: "line",
+              //         title: "New Customers Over Time",
+              //         description:
+              //           "This line chart tracks the number of new customer registrations over time. It helps in understanding customer growth trends.",
+              //         xAxis: "registration_date",
+              //         yAxis: "new_customers",
+              //         series: [
+              //           {
+              //             name: "New Customers",
+              //             dataKey: "new_customers",
+              //           },
+              //         ],
+              //         data: [
+              //           {
+              //             registration_date: "2006-02-14T05:00:00.000Z",
+              //             new_customers: "599",
+              //           },
+              //         ],
+              //       },
+              //       {
+              //         type: "scatter",
+              //         title: "Customer Distribution by Country",
+              //         description:
+              //           "This scatter chart shows the distribution of customers across different countries. It provides insights into geographical customer distribution.",
+              //         xAxis: "country_name",
+              //         yAxis: "customer_count",
+              //         series: [
+              //           {
+              //             name: "Customer Count",
+              //             dataKey: "customer_count",
+              //           },
+              //         ],
+              //         data: [
+              //           {
+              //             country_name: "India",
+              //             customer_count: "60",
+              //           },
+              //           {
+              //             country_name: "China",
+              //             customer_count: "53",
+              //           },
+              //           {
+              //             country_name: "United States",
+              //             customer_count: "36",
+              //           },
+              //           {
+              //             country_name: "Japan",
+              //             customer_count: "31",
+              //           },
+              //           {
+              //             country_name: "Mexico",
+              //             customer_count: "30",
+              //           },
+              //           {
+              //             country_name: "Brazil",
+              //             customer_count: "28",
+              //           },
+              //           {
+              //             country_name: "Russian Federation",
+              //             customer_count: "28",
+              //           },
+              //           {
+              //             country_name: "Philippines",
+              //             customer_count: "20",
+              //           },
+              //           {
+              //             country_name: "Turkey",
+              //             customer_count: "15",
+              //           },
+              //           {
+              //             country_name: "Indonesia",
+              //             customer_count: "14",
+              //           },
+              //           {
+              //             country_name: "Argentina",
+              //             customer_count: "13",
+              //           },
+              //           {
+              //             country_name: "Nigeria",
+              //             customer_count: "13",
+              //           },
+              //           {
+              //             country_name: "South Africa",
+              //             customer_count: "11",
+              //           },
+              //           {
+              //             country_name: "Taiwan",
+              //             customer_count: "10",
+              //           },
+              //           {
+              //             country_name: "United Kingdom",
+              //             customer_count: "9",
+              //           },
+              //           {
+              //             country_name: "Poland",
+              //             customer_count: "8",
+              //           },
+              //           {
+              //             country_name: "Iran",
+              //             customer_count: "8",
+              //           },
+              //           {
+              //             country_name: "Germany",
+              //             customer_count: "7",
+              //           },
+              //           {
+              //             country_name: "Italy",
+              //             customer_count: "7",
+              //           },
+              //           {
+              //             country_name: "Venezuela",
+              //             customer_count: "7",
+              //           },
+              //           {
+              //             country_name: "Egypt",
+              //             customer_count: "6",
+              //           },
+              //           {
+              //             country_name: "Colombia",
+              //             customer_count: "6",
+              //           },
+              //           {
+              //             country_name: "Ukraine",
+              //             customer_count: "6",
+              //           },
+              //           {
+              //             country_name: "Vietnam",
+              //             customer_count: "6",
+              //           },
+              //           {
+              //             country_name: "Spain",
+              //             customer_count: "5",
+              //           },
+              //           {
+              //             country_name: "Canada",
+              //             customer_count: "5",
+              //           },
+              //           {
+              //             country_name: "South Korea",
+              //             customer_count: "5",
+              //           },
+              //           {
+              //             country_name: "Pakistan",
+              //             customer_count: "5",
+              //           },
+              //           {
+              //             country_name: "Netherlands",
+              //             customer_count: "5",
+              //           },
+              //           {
+              //             country_name: "Saudi Arabia",
+              //             customer_count: "5",
+              //           },
+              //           {
+              //             country_name: "Israel",
+              //             customer_count: "4",
+              //           },
+              //           {
+              //             country_name: "France",
+              //             customer_count: "4",
+              //           },
+              //           {
+              //             country_name: "Yemen",
+              //             customer_count: "4",
+              //           },
+              //           {
+              //             country_name: "Peru",
+              //             customer_count: "4",
+              //           },
+              //           {
+              //             country_name: "Dominican Republic",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Bangladesh",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Thailand",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Algeria",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Chile",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Malaysia",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Mozambique",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Switzerland",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Ecuador",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Paraguay",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Austria",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "United Arab Emirates",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Morocco",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Tanzania",
+              //             customer_count: "3",
+              //           },
+              //           {
+              //             country_name: "Myanmar",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Bulgaria",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Cameroon",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Cambodia",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Congo, The Democratic Republic of the",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Sudan",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Romania",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Latvia",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Yugoslavia",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Puerto Rico",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Kazakstan",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Greece",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Bolivia",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Kenya",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "French Polynesia",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Angola",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Belarus",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Oman",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Azerbaijan",
+              //             customer_count: "2",
+              //           },
+              //           {
+              //             country_name: "Hungary",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "American Samoa",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Armenia",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Sri Lanka",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "French Guiana",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Sweden",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Faroe Islands",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Ethiopia",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Bahrain",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Czech Republic",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Lithuania",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Turkmenistan",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Tunisia",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Virgin Islands, U.S.",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Malawi",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Chad",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Afghanistan",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Greenland",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Moldova",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Gambia",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Holy See (Vatican City State)",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Estonia",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Slovakia",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "North Korea",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Nauru",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Liechtenstein",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Senegal",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Zambia",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Hong Kong",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Kuwait",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Madagascar",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Runion",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Saint Vincent and the Grenadines",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Tuvalu",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Finland",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Iraq",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Anguilla",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Brunei",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Tonga",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "Nepal",
+              //             customer_count: "1",
+              //           },
+              //           {
+              //             country_name: "New Zealand",
+              //             customer_count: "1",
+              //           },
+              //         ],
+              //       },
+              //     ],
+              //   },
+              // };
+
+              if (data.total > 0) {
+                setCharts(data.data.charts);
+                setSelectedDashboard(null);
+                setDashboardName("Untitled Dashboard");
+
+                // Set generated SQL query
+                const queries = data.queries.map((data) => {
+                  const str_builder = [];
+                  str_builder.push(`-- ${data.chart_title}`);
+                  str_builder.push(`-- ${data.chart_type}`);
+                  str_builder.push(data.query.replace(/\n/g, " "));
+                  return str_builder.join("\n");
+                });
+
+                setGeneratedQuery(queries.join("\n"));
+              }
+            }
+          } catch (error) {
+            console.error("Error generating charts:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        // Load dashboard charts
+        const loadDashboard = async (dashboard) => {
+          setSelectedDashboard(dashboard);
+          setDashboardName(dashboard.name);
+          setLoading(true);
+          setGeneratedQuery("");
+
+          try {
+            const response = await fetch(
+              `/dashboard-gen/dashboard/${dashboard.id}`
+            );
+            const data = await response.json();
+
+            if (data.id !== undefined) {
+              setCharts(data.charts);
+            }
+          } catch (error) {
+            console.error("Error loading dashboard:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        // Save or update dashboard
+        const saveDashboard = async () => {
+          setSaveStatus("Saving...");
+          try {
+            const response = await fetch("/dashboard-gen/dashboard", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: Math.random().toString(16).slice(2),
+                name: dashboardName,
+                charts: charts,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (data?.id !== undefined) {
+              setSelectedDashboard({
+                ...selectedDashboard,
+                id: data.id,
+                name: dashboardName,
+              });
+              fetchDashboards(); // Refresh the list of dashboards
+              setSaveStatus("Saved");
+              setTimeout(() => setSaveStatus(""), 2000);
+            }
+          } catch (error) {
+            console.error("Error saving dashboard:", error);
+            setSaveStatus("Error saving");
+            setTimeout(() => setSaveStatus(""), 2000);
+          }
+        };
+
+        // Toggle sidebar
+        const toggleSidebar = () => {
+          setSidebarOpen(!sidebarOpen);
+        };
+
+        return (
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <header className="bg-vscode-header text-vscode-header-text h-12 flex items-center px-4 border-b border-vscode-border">
+              <button
+                onClick={toggleSidebar}
+                className="mr-4 text-vscode-icon hover:text-vscode-icon-hover"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+              </button>
+              <input
+                type="text"
+                value={dashboardName}
+                onChange={(e) => setDashboardName(e.target.value)}
+                className="bg-vscode-input text-vscode-text border border-vscode-border rounded px-2 py-1 mr-2 focus:outline-none focus:ring-1 focus:ring-vscode-focus"
+              />
+              <button
+                onClick={() => saveDashboard()}
+                className={`text-left py-1 px-2 rounded text-sm bg-vscode-selection text-vscode-selection-text`}
+              >
+                Save
+              </button>
+              <span className="text-sm text-vscode-text-muted py-1 px-2">
+                {saveStatus}
+              </span>
+            </header>
+
+            <div className="flex flex-1 overflow-hidden">
+              {/* Sidebar */}
+              <aside
+                className={`bg-vscode-sidebar text-vscode-sidebar-text w-64 border-r border-vscode-border flex flex-col transition-all duration-300 ${
+                  sidebarOpen ? "" : "-ml-64"
+                }`}
+              >
+                <div className="p-4 border-b border-vscode-border">
+                  <h2 className="text-xs uppercase tracking-wider text-vscode-sidebar-title mb-2">
+                    Dashboards
+                  </h2>
+                  <ul className="space-y-1">
+                    {dashboards.map((dashboard) => (
+                      <li key={dashboard.id}>
+                        <button
+                          onClick={() => loadDashboard(dashboard)}
+                          className={`w-full text-left py-1 px-2 rounded text-sm ${
+                            selectedDashboard?.id === dashboard.id
+                              ? "bg-vscode-selection text-vscode-selection-text"
+                              : "hover:bg-vscode-hover"
+                          }`}
+                        >
+                          {dashboard.name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </aside>
+
+              {/* Main Content */}
+              <main className="flex-1 flex flex-col overflow-hidden">
+                {/* Prompt Section */}
+                <div className="p-4 border-b border-vscode-border">
+                  <div className="flex">
+                    <textarea
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      placeholder="Enter your prompt (e.g., 'Show me sales data for the last 6 months')"
+                      className="flex-1 bg-vscode-input text-vscode-text border border-vscode-border rounded p-2 mr-2 focus:outline-none focus:ring-1 focus:ring-vscode-focus"
+                      rows="3"
+                    ></textarea>
+                    <button
+                      onClick={generateCharts}
+                      disabled={loading || !prompt.trim()}
+                      className="bg-vscode-button text-vscode-button-text px-4 py-2 rounded self-start hover:bg-vscode-button-hover disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? "Generating..." : "Generate"}
+                    </button>
+                  </div>
+                  {errorMessage && (
+                    <p className="text-xs text-red-500 mt-2">{errorMessage}</p>
+                  )}
+                </div>
+
+                {/* Generated SQL Query */}
+                {generatedQuery && (
+                  <div className="p-4 border-b border-gray-700 bg-gray-900">
+                    <div className="text-sm text-gray-400 mb-1">
+                      Generated SQL Query:
+                    </div>
+                    <pre className="vscode-input p-3 rounded text-xs monospace overflow-x-auto">
+                      {generatedQuery}
+                    </pre>
+                  </div>
+                )}
+
+                {/* Charts Section */}
+                <div className="flex-1 p-4 overflow-auto">
+                  {loading ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-vscode-button"></div>
+                    </div>
+                  ) : charts.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {charts.map((chart, index) => (
+                        <ChartCard key={index} chart={chart} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-vscode-text-muted">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect
+                          x="3"
+                          y="3"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          ry="2"
+                        ></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                      </svg>
+                      <p className="mt-4 text-lg">No charts to display</p>
+                      <p className="mt-2">
+                        Enter a prompt to generate charts or select a dashboard
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </main>
+            </div>
+          </div>
+        );
+      }
+
+      function formatData(data, series) {
+        const labels = series.map((s) => s.dataKey);
+
+        if(!Array.isArray(data)) data = [data];
+
+        const row = data[0];
+        const keys = Object.keys(row);
+        const key = keys.find((key) => labels.includes(key));
+
+        const chartLabels = data.map((item) => {
+          const keys = Object.keys(item);
+
+          for (let key of keys) {
+            if (!labels.includes(key)) {
+              return item[key];
+            }
+          }
+        });
+
+        const chartData = data.map((item) => item[key]);
+
+        return {
+          labels: chartLabels,
+          datasets: [
+            {
+              label: "",
+              data: chartData,
+            },
+          ],
+        };
+      }
+
+      // Chart Card Component
+      function ChartCard({ chart }) {
+        const chartRef = React.useRef(null);
+        const [chartInstance, setChartInstance] = React.useState(null);
+
+        React.useEffect(() => {
+          if (chartRef.current) {
+            // Destroy previous chart instance if it exists
+            if (chartInstance) {
+              chartInstance.destroy();
+            }
+
+            // Create new chart
+            const ctx = chartRef.current.getContext("2d");
+            const newChartInstance = new Chart(ctx, {
+              type: chart.type,
+              data: formatData(chart.data, chart.series),
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "top",
+                    labels: {
+                      color: "#e4e4e7", // Light text for dark theme
+                    },
+                  },
+                  title: {
+                    display: true,
+                    text: chart.title,
+                    color: "#e4e4e7", // Light text for dark theme
+                  },
+                },
+                scales:
+                  chart.type !== "pie" && chart.type !== "doughnut"
+                    ? {
+                        x: {
+                          title: {
+                            display: true,
+                            text: chart.xAxis,
+                            color: "#a1a1aa", // Light text for dark theme
+                          },
+                          grid: {
+                            color: "#27272a", // Subtle grid lines
+                          },
+                          ticks: {
+                            color: "#a1a1aa", // Light text for dark theme
+                          },
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: chart.yAxis,
+                            color: "#a1a1aa", // Light text for dark theme
+                          },
+                          grid: {
+                            color: "#27272a", // Subtle grid lines
+                          },
+                          ticks: {
+                            color: "#a1a1aa", // Light text for dark theme
+                          },
+                        },
+                      }
+                    : {},
+              },
+            });
+
+            setChartInstance(newChartInstance);
+          }
+
+          return () => {
+            if (chartInstance) {
+              chartInstance.destroy();
+            }
+          };
+        }, [chart]);
+
+        return (
+          <div className="bg-vscode-panel border border-vscode-border rounded-md overflow-hidden">
+            <div className="p-4 h-64">
+              <canvas ref={chartRef}></canvas>
+            </div>
+            {chart.description && (
+              <div className="p-3 border-t border-vscode-border">
+                <p className="text-sm text-vscode-text-muted">
+                  {chart.description}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // Render the App
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

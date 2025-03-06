@@ -1,0 +1,132 @@
+{
+	"name": "Database Manager",
+	"description": "This workflow is used to query a database using an AI Prompt UI",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "*",
+			"path": "/:function?",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "filter-request",
+			"node": "@nanoservice-ts/if-else",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"filter-request": {
+			"conditions": [
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "database-ui",
+							"node": "database-ui",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === undefined"
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "get-tables",
+							"node": "postgres-query",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === \"tables\""
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "get-table-columns",
+							"node": "postgres-query",
+							"type": "module"
+						},
+						{
+							"name": "query-generator",
+							"node": "query-generator",
+							"type": "module"
+						},
+						{
+							"name": "execute-query",
+							"node": "postgres-query",
+							"type": "module"
+						},
+						{
+							"name": "create-response",
+							"node": "mapper",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"post\" && ctx.request.params.function === \"execute-prompt\""
+				},
+				{
+					"type": "else",
+					"steps": [
+						{
+							"name": "method-not-allowed",
+							"node": "error",
+							"type": "module"
+						}
+					]
+				}
+			]
+		},
+		"database-ui": {
+			"inputs": {}
+		},
+		"get-tables": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "select table_name from information_schema.tables where table_schema = 'public'"
+			}
+		},
+		"get-table-columns": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "SELECT t1.column_name, COALESCE(t2.attname, '_') as primary_key, udt_name as data_type FROM information_schema.columns as t1 LEFT JOIN (SELECT a.attname FROM pg_index i JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey) WHERE  i.indrelid = '${ctx.request.body.table_name}'::regclass AND i.indisprimary) as t2 ON t1.column_name = t2.attname WHERE table_schema = 'public' AND table_name = '${ctx.request.body.table_name}';"
+			}
+		},
+		"query-generator": {
+			"inputs": {
+				"table_name": "${ctx.request.body.table_name}",
+				"columns": "js/ctx.response.data.data",
+				"prompt": "${ctx.request.body.prompt}"
+			}
+		},
+		"execute-query": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "${ctx.response.data.query}"
+			}
+		},
+		"create-response": {
+			"inputs": {
+				"model": {
+					"total": "${ctx.response.data.total}",
+					"results": "js/ctx.response.data.data",
+					"query": "${ctx.vars?.query}"
+				}
+			}
+		}
+	}
+}
