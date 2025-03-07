@@ -307,11 +307,11 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       '@nanoservice-ts/runner':
-        specifier: ^0.1.17
-        version: 0.1.17
+        specifier: ^0.1.18
+        version: 0.1.18
       '@nanoservice-ts/shared':
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^0.0.8
+        version: 0.0.8
     devDependencies:
       '@types/node':
         specifier: ^22.13.4
@@ -329,11 +329,11 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       '@nanoservice-ts/runner':
-        specifier: ^0.1.17
-        version: 0.1.17
+        specifier: ^0.1.18
+        version: 0.1.18
       '@nanoservice-ts/shared':
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^0.0.8
+        version: 0.0.8
       ejs:
         specifier: ^3.1.10
         version: 3.1.10
@@ -406,20 +406,20 @@ importers:
         specifier: ^2.0.1
         version: 2.0.2(@bufbuild/protobuf@2.2.3)(@connectrpc/connect@2.0.2(@bufbuild/protobuf@2.2.3))
       '@nanoservice-ts/api-call':
-        specifier: ^0.1.20
-        version: 0.1.20
+        specifier: ^0.1.21
+        version: 0.1.21
       '@nanoservice-ts/helper':
         specifier: ^0.1.4
         version: 0.1.4
       '@nanoservice-ts/if-else':
-        specifier: ^0.0.21
-        version: 0.0.21
+        specifier: ^0.0.22
+        version: 0.0.22
       '@nanoservice-ts/runner':
-        specifier: ^0.1.17
-        version: 0.1.17
+        specifier: ^0.1.18
+        version: 0.1.18
       '@nanoservice-ts/shared':
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^0.0.8
+        version: 0.0.8
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.0
@@ -476,20 +476,20 @@ importers:
   triggers/http:
     dependencies:
       '@nanoservice-ts/api-call':
-        specifier: ^0.1.20
-        version: 0.1.20
+        specifier: ^0.1.21
+        version: 0.1.21
       '@nanoservice-ts/helper':
         specifier: ^0.1.4
         version: 0.1.4
       '@nanoservice-ts/if-else':
-        specifier: ^0.0.21
-        version: 0.0.21
+        specifier: ^0.0.22
+        version: 0.0.22
       '@nanoservice-ts/runner':
-        specifier: ^0.1.17
-        version: 0.1.17
+        specifier: ^0.1.18
+        version: 0.1.18
       '@nanoservice-ts/shared':
-        specifier: ^0.0.7
-        version: 0.0.7
+        specifier: ^0.0.8
+        version: 0.0.8
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.0
@@ -1531,24 +1531,24 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@nanoservice-ts/api-call@0.1.20':
-    resolution: {integrity: sha512-NEgKMz2KhesW5apByPv8LCP3OZajDhr1wQaB1W+rw7CdbxCpKpG+ktq/63CVK3Mj+/zRF7Sr5WBgR0W5w2+akQ==}
+  '@nanoservice-ts/api-call@0.1.21':
+    resolution: {integrity: sha512-2ZfjxFF7vpCKWa97b+CZ5fkLCXxz5SfsNvd/oy8tAWemOtJlxOJrEK6LMigghKkej/n/jBmZXhP43XMXiAz8/g==}
     engines: {node: '>=18.0.0'}
 
   '@nanoservice-ts/helper@0.1.4':
     resolution: {integrity: sha512-ZkcnaX5Fxaupxax4QIZ8iJ6r8/gNugEMnX5fyQ+Q3m27g1U4ydjeKIpFpYs7DQTXInu9IGXb3dJAgGDNCQZUww==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/if-else@0.0.21':
-    resolution: {integrity: sha512-D/IlCMeSEf80W5a2IX6G0CAlx80rDbXqc4/l+sSK/6E2Z+DoNpiA1dq4Su1T1kdzMII7FTZe24ZX2xuVgM7KHQ==}
+  '@nanoservice-ts/if-else@0.0.22':
+    resolution: {integrity: sha512-Dol6/wjHnxqVyidckxUb0jnFVaIJHGppcbYlBmX0w9qrcyt+k/Q2mACpoj+9SwZ+Y/ThNQhy96HNUh9eCM2z5w==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/runner@0.1.17':
-    resolution: {integrity: sha512-+FDJaeupwj3ZS8W5cNNubR4x6D8R+3Q06nGhKZR3DcduV7dlRdoR+MWPKkMRRU0EXv72kSsnbi4lA9mHW2l+Sw==}
+  '@nanoservice-ts/runner@0.1.18':
+    resolution: {integrity: sha512-gFzHwBHEe6Cq7B5JNHNHborrw0o0kgMpYCdzZZdjp17qaZBFbLXRDqCWR01AvrD71Sgf9iGcfIVaV6N/nptFyg==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/shared@0.0.7':
-    resolution: {integrity: sha512-e08URHdNTEFxyq+P6jPgzmC5h9RIdQ19HXKJ+GLyx5JCvxFKrOAFN50gTjQnaxBckfD0dJS5oH8A5CEMvFOJ0g==}
+  '@nanoservice-ts/shared@0.0.8':
+    resolution: {integrity: sha512-ZDWyzTeLVfApouaFIY7oF029zuK3N7Ss5rLYVBsBeCTNnCdSuuDAEAyGkijhx8QfNbiXRv5lNE3BimU6MJsOUA==}
 
   '@napi-rs/wasm-runtime@0.2.4':
     resolution: {integrity: sha512-9zESzOO5aDByvhIAsOy9TbpZ0Ur2AJbUI7UT73kcUTS2mxAMHOBaa1st/jAymNoCtvrit99kkzT1FZuXVcgfIQ==}
@@ -2575,10 +2575,6 @@ packages:
 
   fast-uri@3.0.6:
     resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
-
-  fast-xml-parser@4.5.3:
-    resolution: {integrity: sha512-RKihhV+SHsIUGXObeVy9AXiBbFwkVk7Syp8XgwN5U3JV416+Gwp/GO9i0JYKmikykgz/UHRrrV4ROuZEo/T0ig==}
-    hasBin: true
 
   fast-xml-parser@5.0.8:
     resolution: {integrity: sha512-qY8NiI5L8ff00F2giyICiJxSSKHO52tC36LJqx2JtvGyAd5ZfehC/l4iUVVHpmpIa6sM9N5mneSLHQG2INGoHA==}
@@ -3798,9 +3794,6 @@ packages:
   strip-final-newline@3.0.0:
     resolution: {integrity: sha512-dOESqjYr96iWYylGObzd39EuNTa5VJxyvVAEm5Jnh7KGo75V43Hk1odPQkNDyXNmUR6k+gEiDVXnjB8HJ3crXw==}
     engines: {node: '>=12'}
-
-  strnum@1.1.2:
-    resolution: {integrity: sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==}
 
   strnum@2.0.5:
     resolution: {integrity: sha512-YAT3K/sgpCUxhxNMrrdhtod3jckkpYwH6JAuwmUdXZsmzH1wUyzTMrrK2wYCEEqlKwrWDd35NeuUkbBy/1iK+Q==}
@@ -5345,29 +5338,29 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@nanoservice-ts/api-call@0.1.20':
+  '@nanoservice-ts/api-call@0.1.21':
     dependencies:
-      '@nanoservice-ts/runner': 0.1.17
-      '@nanoservice-ts/shared': 0.0.7
+      '@nanoservice-ts/runner': 0.1.18
+      '@nanoservice-ts/shared': 0.0.8
       lodash: 4.17.21
 
   '@nanoservice-ts/helper@0.1.4':
     dependencies:
       zod: 3.24.2
 
-  '@nanoservice-ts/if-else@0.0.21':
+  '@nanoservice-ts/if-else@0.0.22':
     dependencies:
       '@nanoservice-ts/helper': 0.1.4
-      '@nanoservice-ts/runner': 0.1.17
-      '@nanoservice-ts/shared': 0.0.7
+      '@nanoservice-ts/runner': 0.1.18
+      '@nanoservice-ts/shared': 0.0.8
       lodash: 4.17.21
 
-  '@nanoservice-ts/runner@0.1.17':
+  '@nanoservice-ts/runner@0.1.18':
     dependencies:
       '@nanoservice-ts/helper': 0.1.4
-      '@nanoservice-ts/shared': 0.0.7
+      '@nanoservice-ts/shared': 0.0.8
       '@opentelemetry/api': 1.9.0
-      fast-xml-parser: 4.5.3
+      fast-xml-parser: 5.0.8
       jsonschema: 1.5.0
       lodash: 4.17.21
       smol-toml: 1.3.1
@@ -5375,7 +5368,7 @@ snapshots:
       yaml: 2.7.0
       zod: 3.24.2
 
-  '@nanoservice-ts/shared@0.0.7':
+  '@nanoservice-ts/shared@0.0.8':
     dependencies:
       dayjs: 1.11.13
       lodash: 4.17.21
@@ -6496,10 +6489,6 @@ snapshots:
   fast-redact@3.5.0: {}
 
   fast-uri@3.0.6: {}
-
-  fast-xml-parser@4.5.3:
-    dependencies:
-      strnum: 1.1.2
 
   fast-xml-parser@5.0.8:
     dependencies:
@@ -7814,8 +7803,6 @@ snapshots:
   strip-bom@3.0.0: {}
 
   strip-final-newline@3.0.0: {}
-
-  strnum@1.1.2: {}
 
   strnum@2.0.5: {}
 
