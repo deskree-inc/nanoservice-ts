@@ -123,6 +123,22 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 			if (template === "ui") {
 				fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node-ui`, dirPath);
 			}
+
+			// Change project name in package.json
+			const packageJson = `${dirPath}/package.json`;
+			const packageJsonContent = JSON.parse(fsExtra.readFileSync(packageJson, "utf8"));
+			packageJsonContent.name = nodeName;
+			packageJsonContent.version = "1.0.0";
+			packageJsonContent.author = "";
+			fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
+
+			// Install Packages
+			s.message("Installing packages...");
+			await exec("npm install", { cwd: dirPath });
+
+			// Build the project
+			s.message("Building the project...");
+			await exec("npm run build", { cwd: dirPath });
 		}
 
 		if (nodeType === "class") {
@@ -139,24 +155,6 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/inputSchema.ts`, `${dirPath}/inputSchema.ts`);
 				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/index.html`, `${dirPath}/index.html`);
 			}
-		}
-
-		// Change project name in package.json
-		const packageJson = `${dirPath}/package.json`;
-		const packageJsonContent = JSON.parse(fsExtra.readFileSync(packageJson, "utf8"));
-		packageJsonContent.name = nodeName;
-		packageJsonContent.version = "1.0.0";
-		packageJsonContent.author = "";
-		fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
-
-		// Install Packages
-		if (nodeType === "module") {
-			s.message("Installing packages...");
-			await exec("npm install", { cwd: dirPath });
-
-			// Build the project
-			s.message("Building the project...");
-			await exec("npm run build", { cwd: dirPath });
 		}
 
 		if (!isDefault) s.stop(`Node "${nodeName}" created successfully.`);
