@@ -37,7 +37,6 @@ export default class DashboardGeneratorUI extends NanoService<InputType> {
 		// Create a new instance of the response
 		const response: NanoServiceResponse = new NanoServiceResponse();
 		const view_path = "index.html";
-		console.log(JSON.stringify(ctx.request.params, null, 2));
 
 		try {
 			// Read index.html file from the current module location

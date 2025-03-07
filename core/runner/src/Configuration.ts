@@ -73,6 +73,7 @@ export default class Configuration implements Config {
 			node.name = step.name;
 			node.active = step.active !== undefined ? step.active : true;
 			node.stop = step.stop !== undefined ? step.stop : false;
+			node.set_var = step.set_var !== undefined ? step.set_var : false;
 			nodes.push(node);
 		}
 
@@ -154,6 +155,7 @@ export default class Configuration implements Config {
 			node.name = step.name;
 			node.active = step.active !== undefined ? step.active : true;
 			node.stop = step.stop !== undefined ? step.stop : false;
+			node.set_var = step.set_var !== undefined ? step.set_var : false;
 
 			// const validator = z.instanceof(NodeBase);
 			// validator.parse(node);

@@ -58,7 +58,6 @@ export default class MongoQuery extends NanoService<InputType> {
 					break;
 				}
 				case "GET": {
-					console.log("ID", inputs.id);
 					if (inputs.id !== "undefined") {
 						// Fetch a single document by ID
 						const result = await collection.findOne({ _id: new ObjectId(inputs.id) });

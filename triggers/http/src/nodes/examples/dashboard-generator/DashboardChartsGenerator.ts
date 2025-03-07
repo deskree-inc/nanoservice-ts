@@ -4,7 +4,6 @@ import {
 	type JsonLikeObject,
 	NanoService,
 	NanoServiceResponse,
-	type ParamsDictionary,
 } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import { generateObject } from "ai";
@@ -126,20 +125,10 @@ export default class DashboardChartsGenerator extends NanoService<InputType> {
 				};
 			});
 
-			if (inputs.set_var) {
-				if (ctx.vars === undefined) ctx.vars = {};
-				ctx.vars[this.name] = {
-					total: result.object.charts.length,
-					data: result.object,
-				} as unknown as ParamsDictionary;
-
-				response.setSuccess((ctx.response?.data as JsonLikeObject) || {});
-			} else {
-				response.setSuccess({
-					total: result.object.charts.length,
-					data: result.object,
-				});
-			}
+			response.setSuccess({
+				total: result.object.charts.length,
+				data: result.object,
+			});
 		} catch (error: unknown) {
 			const nodeError = new GlobalError((error as Error).message);
 			nodeError.setCode(500);

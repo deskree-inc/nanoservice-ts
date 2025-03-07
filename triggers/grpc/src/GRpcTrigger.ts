@@ -109,7 +109,6 @@ export default class GRpcTrigger extends TriggerBase {
 
 				return coder.responseEncode(ctx, request.Encoding, request.Type);
 			} catch (e: unknown) {
-				console.log("ERROR CATCH BLOCK");
 				span.setAttribute("success", false);
 				span.setAttribute("workflow_request_id", `${id}`);
 				span.recordException(e as Error);
@@ -133,13 +132,11 @@ export default class GRpcTrigger extends TriggerBase {
 						});
 
 						this.logger.error(`${(error_context.context.json as Error).toString()}`);
-						console.log("ERROR 1");
 						message = {
 							Message: coder.responseErrorEncode((error_context.context.json as Error).toString(), base64Key, textKey),
 							Encoding: base64Key,
 							Type: textKey,
 						} as WorkflowResponse;
-						console.log("ERROR 1", message);
 					} else {
 						if (error_context.context.code === undefined) error_context.setCode(500);
 
@@ -151,13 +148,11 @@ export default class GRpcTrigger extends TriggerBase {
 							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: JSON.stringify(error_context.context.json) });
 							this.logger.error(`${JSON.stringify(error_context.context.json)}`);
-							console.log("ERROR 2");
 							message = {
 								Message: coder.responseErrorEncode(JSON.stringify(error_context.context.json), base64Key, textKey),
 								Encoding: base64Key,
 								Type: jsonKey,
 							} as WorkflowResponse;
-							console.log("ERROR 2", message);
 						} else {
 							workflow_runner_errors.add(1, {
 								env: process.env.NODE_ENV,
@@ -166,13 +161,11 @@ export default class GRpcTrigger extends TriggerBase {
 							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
 							this.logger.error(`${error_context.message}`, error_context.stack?.replace(/\n/g, " "));
-							console.log("ERROR 3");
 							message = {
 								Message: coder.responseErrorEncode(error_context.message, base64Key, textKey),
 								Encoding: MessageEncoding[MessageEncoding.BASE64],
 								Type: textKey,
 							} as WorkflowResponse;
-							console.log("ERROR 3", message);
 						}
 					}
 				} else {
@@ -184,13 +177,11 @@ export default class GRpcTrigger extends TriggerBase {
 					span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
 					this.logger.error(`${(e as Error).message}`, `${(e as Error).stack?.replace(/\n/g, " ")}`);
 
-					console.log("ERROR 4");
 					message = {
 						Message: coder.responseErrorEncode((e as Error).message, base64Key, textKey),
 						Encoding: base64Key,
 						Type: textKey,
 					} as WorkflowResponse;
-					console.log("ERROR 4", message);
 				}
 
 				return message;

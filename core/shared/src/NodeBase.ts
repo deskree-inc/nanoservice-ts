@@ -17,6 +17,7 @@ export default abstract class NodeBase {
 	public active = true;
 	public stop = false;
 	public originalConfig: ParamsDictionary = {};
+	public set_var = false;
 
 	public async process(ctx: Context, step?: Step): Promise<ResponseContext> {
 		let response: ResponseContext = {

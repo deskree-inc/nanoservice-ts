@@ -3,7 +3,6 @@ import {
 	type JsonLikeObject,
 	NanoService,
 	NanoServiceResponse,
-	type ParamsDictionary,
 } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import pg from "pg";
@@ -79,26 +78,12 @@ export default class PostgresQuery extends NanoService<PostgresQueryInputs> {
 					tables.push(table);
 				}
 
-				if (inputs.set_var) {
-					if (ctx.vars === undefined) ctx.vars = {};
-					ctx.vars[this.name] = tables as unknown as ParamsDictionary;
-
-					response.setSuccess((ctx.response?.data as JsonLikeObject) || {});
-				} else {
-					response.setSuccess(tables as unknown as JsonLikeObject);
-				}
+				response.setSuccess(tables as unknown as JsonLikeObject);
 			} else {
-				if (inputs.set_var) {
-					if (ctx.vars === undefined) ctx.vars = {};
-					ctx.vars[this.name] = result.rows as unknown as ParamsDictionary;
-
-					response.setSuccess((ctx.response?.data as JsonLikeObject) || {});
-				} else {
-					response.setSuccess({
-						total: result.rowCount as number,
-						data: result.rows,
-					});
-				}
+				response.setSuccess({
+					total: result.rowCount as number,
+					data: result.rows,
+				});
 			}
 		} catch (error: unknown) {
 			let message = (error as Error).message;
