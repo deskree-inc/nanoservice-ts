@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/api-call",
-	"version": "0.1.20",
+	"version": "0.1.21",
 	"description": "Node module for making API calls",
 	"engines": {
 		"node": ">=18.0.0"

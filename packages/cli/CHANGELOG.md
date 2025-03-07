@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.13
+
+### Patch Changes
+
+- Added examples and create project' command to include examples and 'create node' command with options for type ('module' or 'class') and template ('class' or 'ui')
+
 ## 0.0.12
 
 ### Patch Changes
