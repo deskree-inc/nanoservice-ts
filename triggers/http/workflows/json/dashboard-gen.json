@@ -207,7 +207,7 @@
 		"get-charts": {
 			"inputs": {
 				"tables": "js/ctx.vars['get-tables'].data",
-				"records": "js/ctx.vars['get-charts-data']",
+				"records": "js/Array.isArray(ctx.vars['get-charts-data']) ? ctx.vars['get-charts-data'] : [ctx.vars['get-charts-data']]",
 				"queries": "js/ctx.vars['query-generator'].data.queries",
 				"prompt": "${ctx.request.body.prompt}"
 			}

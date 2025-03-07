@@ -1027,6 +1027,7 @@
 
       function formatData(data, series) {
         const labels = series.map((s) => s.dataKey);
+        if(!data) return { labels: [], datasets: [] };
 
         if(!Array.isArray(data)) data = [data];
 

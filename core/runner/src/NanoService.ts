@@ -106,7 +106,7 @@ export default abstract class NanoService<T> extends NodeBase {
 			const errors: string[] = [];
 			for (let i = 0; i < result.errors.length; i++) {
 				const error: ValidationError = result.errors[i];
-				errors.push(error.message);
+				errors.push(`${error.property} ${error.message}`);
 			}
 			throw new Error(errors.join(", "));
 		}

@@ -1,0 +1,56 @@
+{
+	"name": "node-name",
+	"version": "1.0.0",
+	"description": "",
+	"group": "API",
+	"config": {
+		"type": "object",
+		"properties": {
+			"inputs": {
+				"type": "object",
+				"properties": {},
+				"required": []
+			}
+		},
+		"required": ["inputs"],
+		"example": {
+			"inputs": {
+				"properties": {
+					"url": "https://countriesnow.space/api/v0.1/countries/capital",
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"data": "Hello World"
+					}
+				}
+			}
+		}
+	},
+	"input": {
+		"anyOf": [
+			{
+				"type": "object"
+			},
+			{
+				"type": "array"
+			},
+			{
+				"type": "string"
+			}
+		],
+		"description": "This node accepts an object as input from the previous node or request body"
+	},
+	"output": {
+		"type": "object",
+		"description": "The response from the API call"
+	},
+	"steps": {
+		"type": "boolean",
+		"default": false
+	},
+	"functions": {
+		"type": "array"
+	}
+}

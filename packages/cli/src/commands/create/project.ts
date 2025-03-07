@@ -8,6 +8,7 @@ import figlet from "figlet";
 import fsExtra from "fs-extra";
 import color from "picocolors";
 import simpleGit, { type SimpleGit, type SimpleGitOptions } from "simple-git";
+import { examples_url, node_file, package_dependencies, package_dev_dependencies } from "./utils/Examples.js";
 
 const exec = util.promisify(child_process.exec);
 
@@ -29,6 +30,7 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 	const isDefault = opts.name !== undefined;
 	let projectName: string = opts.name ? opts.name : "";
 	let trigger = "http";
+	let examples = false;
 
 	if (!isDefault) {
 		console.log(
@@ -68,6 +70,14 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 							//{ label: "GRPC", value: "grpc" }
 						],
 					}),
+				examples: () =>
+					p.select({
+						message: "Install the examples?",
+						options: [
+							{ label: "NO", value: false, hint: "recommended" },
+							{ label: "YES", value: true },
+						],
+					}),
 			},
 			{
 				onCancel: () => {
@@ -79,6 +89,7 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 
 		projectName = nanoctlProject.projectName;
 		trigger = nanoctlProject.trigger;
+		examples = nanoctlProject.examples;
 	}
 
 	const s = p.spinner();
@@ -117,6 +128,20 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 		fsExtra.ensureDirSync(nodesDir);
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/workflows`, workflowsDir);
 
+		// Examples
+
+		if (!examples) {
+			fsExtra.removeSync(`${nodesDir}/examples`);
+			fsExtra.removeSync(`${workflowsDir}`);
+			fsExtra.ensureDirSync(`${workflowsDir}`);
+			fsExtra.ensureDirSync(`${workflowsDir}/json`);
+			fsExtra.ensureDirSync(`${workflowsDir}/yaml`);
+			fsExtra.ensureDirSync(`${workflowsDir}/toml`);
+		} else {
+			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/development`, `${nodesDir}/examples/infra`);
+			fsExtra.writeFileSync(`${dirPath}/src/Nodes.ts`, node_file);
+		}
+
 		// Create .env.local file
 
 		const envExample = `${dirPath}/.env.example`;
@@ -126,12 +151,24 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 		const result = envContent.replaceAll("PROJECT_PATH", dirPath);
 		fsExtra.writeFileSync(envLocal, result);
 
-		// Change project name in package.json
+		// Change package.json
 		const packageJson = `${dirPath}/package.json`;
 		const packageJsonContent = JSON.parse(fsExtra.readFileSync(packageJson, "utf8"));
 		packageJsonContent.name = projectName;
 		packageJsonContent.version = "1.0.0";
 		packageJsonContent.author = "";
+
+		if (examples) {
+			packageJsonContent.dependencies = {
+				...packageJsonContent.dependencies,
+				...package_dependencies,
+			};
+			packageJsonContent.devDependencies = {
+				...packageJsonContent.devDependencies,
+				...package_dev_dependencies,
+			};
+		}
+
 		fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
 
 		// Install Packages
@@ -140,11 +177,15 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 
 		// Create a new project
 		if (!isDefault) s.stop(`Project "${projectName}" created successfully.`);
-		console.log(`\nTrigger: ${trigger}`);
+		console.log(`\nTrigger: ${trigger.toUpperCase()}\n`);
 		if (!currentPath) console.log(`Change to the project directory: cd ${projectName}`);
 		console.log(`Run the command "npm run dev" to start the development server.`);
 		console.log("You can test the project in your browser at http://localhost:4000/health-check");
 		console.log("For more documentation, visit https://nanoservice.xyz/");
+
+		if (examples) {
+			console.log(examples_url);
+		}
 	} catch (error) {
 		if (!isDefault) s.stop((error as Error).message);
 		if (isDefault) console.log((error as Error).message);
