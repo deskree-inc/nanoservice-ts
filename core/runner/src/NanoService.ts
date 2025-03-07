@@ -1,5 +1,6 @@
 import { type ConfigContext, type Context, NodeBase, type ResponseContext } from "@nanoservice-ts/shared";
 import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
+import type VarsContext from "@nanoservice-ts/shared/dist/types/VarsContext";
 import { metrics } from "@opentelemetry/api";
 import { type Schema, type ValidationError, Validator } from "jsonschema";
 import _ from "lodash";
@@ -81,8 +82,15 @@ export default abstract class NanoService<T> extends NodeBase {
 
 		ctx.logger.log(`Executed node: ${this.name} in ${(end - start).toFixed(2)}ms`);
 
-		response.data = result;
-		(response.data as unknown as NanoService<T>).contentType = this.contentType;
+		if (this.set_var) {
+			const vars = {
+				[this.name]: (result as unknown as JsonLikeObject).data,
+			};
+			this.setVar(ctx, vars as unknown as VarsContext);
+		} else {
+			response.data = result;
+			(response.data as unknown as NanoService<T>).contentType = this.contentType;
+		}
 
 		return response;
 	}
@@ -98,7 +106,7 @@ export default abstract class NanoService<T> extends NodeBase {
 			const errors: string[] = [];
 			for (let i = 0; i < result.errors.length; i++) {
 				const error: ValidationError = result.errors[i];
-				errors.push(error.message);
+				errors.push(`${error.property} ${error.message}`);
 			}
 			throw new Error(errors.join(", "));
 		}

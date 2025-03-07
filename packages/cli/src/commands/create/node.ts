@@ -16,6 +16,8 @@ const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
 export async function createNode(opts: OptionValues, currentPath = false) {
 	const isDefault = opts.name !== undefined;
 	let nodeName: string = opts.name ? opts.name : "";
+	let nodeType = "";
+	let template = "";
 
 	if (!isDefault) {
 		console.log(
@@ -45,14 +47,22 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		const nanoctlNode = await p.group(
 			{
 				nodeName: () => resolveNodeName(),
-				// multiSteps: () =>
-				// 	p.multiselect({
-				// 		message: "Is it a multi steps node?",
-				// 		options: [
-				// 			{ label: "FALSE", value: false, hint: "recommended" },
-				// 			{ label: "TRUE", value: true }
-				// 		],
-				// 	}),
+				nodeType: () =>
+					p.select({
+						message: "Select the nanoservice type",
+						options: [
+							{ label: "Module", value: "module", hint: "recommended" },
+							{ label: "Class", value: "class" },
+						],
+					}),
+				template: () =>
+					p.select({
+						message: "Select the template",
+						options: [
+							{ label: "Class", value: "class", hint: "recommended" },
+							{ label: "UI - EJS + ReactJS + TailwindCSS", value: "ui" },
+						],
+					}),
 			},
 			{
 				onCancel: () => {
@@ -63,6 +73,8 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		);
 
 		nodeName = nanoctlNode.nodeName;
+		nodeType = nanoctlNode.nodeType;
+		template = nanoctlNode.template;
 	}
 
 	const s = p.spinner();
@@ -97,13 +109,37 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 
 		if (!isDefault) s.message("Copying project files...");
 
-		/// Copy the project files
+		/// Copy the node files
 		if (!currentPath) {
 			const nodeDirExists = fsExtra.existsSync(dirPath);
 			if (nodeDirExists) throw new Error("ops2");
 		}
 
-		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node`, dirPath);
+		if (nodeType === "module") {
+			if (template === "class") {
+				fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node`, dirPath);
+			}
+
+			if (template === "ui") {
+				fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node-ui`, dirPath);
+			}
+		}
+
+		if (nodeType === "class") {
+			if (template === "class") {
+				fsExtra.ensureDirSync(dirPath);
+				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node/index.ts`, `${dirPath}/index.ts`);
+			}
+
+			if (template === "ui") {
+				fsExtra.ensureDirSync(dirPath);
+				fsExtra.ensureDirSync(`${dirPath}/app`);
+				fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node-ui/app`, `${dirPath}/app`);
+				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/index.ts`, `${dirPath}/index.ts`);
+				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/inputSchema.ts`, `${dirPath}/inputSchema.ts`);
+				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/index.html`, `${dirPath}/index.html`);
+			}
+		}
 
 		// Change project name in package.json
 		const packageJson = `${dirPath}/package.json`;
@@ -114,11 +150,17 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
 
 		// Install Packages
-		s.message("Installing packages...");
-		await exec("npm install", { cwd: dirPath });
+		if (nodeType === "module") {
+			s.message("Installing packages...");
+			await exec("npm install", { cwd: dirPath });
+
+			// Build the project
+			s.message("Building the project...");
+			await exec("npm run build", { cwd: dirPath });
+		}
 
 		if (!isDefault) s.stop(`Node "${nodeName}" created successfully.`);
-		if (!currentPath) console.log(`\nNavigate to the node directory by running: cd ${nodeName}`);
+		if (!currentPath) console.log(`\nNavigate to the node directory by running: cd src/nodes/${nodeName}`);
 		console.log(
 			`${currentPath ? "\n" : ""}Run the command "npm run build" or "npm run build:dev" to build the project.`,
 		);

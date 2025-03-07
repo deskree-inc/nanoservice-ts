@@ -1,4 +1,9 @@
-import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import {
+	type INanoServiceResponse,
+	type JsonLikeObject,
+	NanoService,
+	NanoServiceResponse,
+} from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import pg from "pg";
 
@@ -7,6 +12,12 @@ type PostgresQueryInputs = {
 	password: string;
 	host: string;
 	query: string;
+	set_var?: boolean;
+};
+
+type Table = {
+	total: number;
+	data: unknown[];
 };
 
 // This is the main class that will be exported
@@ -21,7 +32,14 @@ export default class PostgresQuery extends NanoService<PostgresQueryInputs> {
 		this.inputSchema = {
 			$schema: "http://json-schema.org/draft-04/schema#",
 			type: "object",
-			properties: {},
+			properties: {
+				user: { type: "string" },
+				password: { type: "string" },
+				host: { type: "string" },
+				query: { type: "string" },
+				set_var: { type: "boolean" },
+			},
+			required: ["user", "password", "host", "query"],
 		};
 
 		// Set the output "JSON Schema Format" here for automated validation
@@ -47,10 +65,26 @@ export default class PostgresQuery extends NanoService<PostgresQueryInputs> {
 			const result = await client.query(inputs.query as string);
 			await client.end();
 
-			response.setSuccess({
-				total: result.rowCount as number,
-				data: result.rows,
-			}); // Set the success
+			if (Array.isArray(result)) {
+				const tables: Table[] = [];
+
+				for (let i = 0; i < result.length; i++) {
+					const data = result[i];
+					const table: Table = {
+						total: data.rows.length,
+						data: [...data.rows],
+					};
+
+					tables.push(table);
+				}
+
+				response.setSuccess(tables as unknown as JsonLikeObject);
+			} else {
+				response.setSuccess({
+					total: result.rowCount as number,
+					data: result.rows,
+				});
+			}
 		} catch (error: unknown) {
 			let message = (error as Error).message;
 			if (error instanceof AggregateError) message = (error as AggregateError).errors[0];

@@ -1,0 +1,248 @@
+{
+	"name": "Dashboard Charts Generator",
+	"description": "This workflow generates multiple dashboard charts based using a postgreSQL database and AI prompts.",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "*",
+			"path": "/:function?/:id?",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "filter-request",
+			"node": "@nanoservice-ts/if-else",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"filter-request": {
+			"conditions": [
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "dashboard-ui",
+							"node": "dashboard-ui",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === ''"
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "get-tables",
+							"node": "postgres-query",
+							"type": "module",
+							"set_var": true
+						},
+						{
+							"name": "get-relationships",
+							"node": "postgres-query",
+							"type": "module",
+							"set_var": true
+						},
+						{
+							"name": "query-generator",
+							"node": "multiple-query-generator",
+							"type": "module",
+							"set_var": true
+						},
+						{
+							"name": "get-queries",
+							"node": "array-map",
+							"type": "module"
+						},
+						{
+							"name": "query-code-review",
+							"node": "openai",
+							"type": "module"
+						},
+						{
+							"name": "clean-markdown-if-required",
+							"node": "mapper",
+							"type": "module"
+						},
+						{
+							"name": "get-charts-data",
+							"node": "postgres-query",
+							"type": "module",
+							"set_var": true
+						},
+						{
+							"name": "get-charts",
+							"node": "dashboard-charts-generator",
+							"type": "module"
+						},
+						{
+							"name": "create-response",
+							"node": "mapper",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"post\" && ctx.request.params.function === \"generate\""
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "save-dashboard",
+							"node": "memory-storage",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"post\" && ctx.request.params.function === \"dashboard\""
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "get-dashboard-by-id",
+							"node": "memory-storage",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === \"dashboard\" && ctx.request.params.id !== undefined"
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "get-dashboards",
+							"node": "memory-storage",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === \"dashboards\""
+				},
+				{
+					"type": "else",
+					"steps": [
+						{
+							"name": "method-not-allowed",
+							"node": "error",
+							"type": "module"
+						}
+					]
+				}
+			]
+		},
+		"dashboard-ui": {
+			"inputs": {}
+		},
+		"get-tables": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "SELECT distinct t1.table_name, t1.column_name, COALESCE(t2.attname, '_') as primary_key, udt_name as data_type FROM information_schema.columns as t1 LEFT JOIN (SELECT a.attname FROM pg_index i JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey) WHERE i.indisprimary) as t2 ON t1.column_name = t2.attname WHERE table_schema = 'public' ORDER BY t1.table_name, t1.column_name;"
+			}
+		},
+		"get-relationships": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "SELECT tc.constraint_name, tc.table_name, kcu.column_name, ccu.table_name AS foreign_table_name, ccu.column_name AS foreign_column_name FROM information_schema.table_constraints AS tc JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = tc.constraint_name WHERE tc.table_schema = 'public';"
+			}
+		},
+		"query-generator": {
+			"inputs": {
+				"columns": "js/ctx.vars['get-tables'].data",
+				"relationships": "js/ctx.vars['get-relationships'].data",
+				"prompt": "${ctx.request.body.prompt}"
+			}
+		},
+		"get-queries": {
+			"inputs": {
+				"array": "js/ctx.vars['query-generator'].data.queries",
+				"map": "data.query.replace(/\\n/g, ' ')"
+			}
+		},
+		"query-code-review": {
+			"inputs": {
+				"system": [
+					"You are an expert PostgreSQL SQL assistant specialized in query debugging, optimization, and best practices. Task:",
+					"Analyze and fix the given SQL queries.",
+					"Identify and correct syntax errors.",
+					"Optimize the query for performance and efficiency.",
+					"Ensure correctness based on the given table schema.",
+					"TABLE SCHEMA",
+					"js/JSON.stringify(ctx.vars['get-tables'], null, 2)",
+					"The team is always adding the wrong alias to the tables in complex queries like JOIN, INNER JOIN, LEFT JOIN, GROUP BY, you must identify and fix the errors.",
+					"Return the fixed version of the queries without comments or description.",
+					"RETURN a valid PostgreSQL SQL query FORMAT."
+				],
+				"prompt": [
+					"js/ctx.response.data.join(' ')",
+					"RETURN the fixed version of the queries without comments or description.",
+					"RETURN a valid PostgreSQL SQL query FORMAT."
+				]
+			}
+		},
+		"clean-markdown-if-required": {
+			"inputs": {
+				"model": {
+					"queries": "js/ctx.response.data.replace('```sql', '').replace('```', '')"
+				}
+			}
+		},
+		"get-charts-data": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "js/ctx.response.data.queries"
+			}
+		},
+		"get-charts": {
+			"inputs": {
+				"tables": "js/ctx.vars['get-tables'].data",
+				"records": "js/Array.isArray(ctx.vars['get-charts-data']) ? ctx.vars['get-charts-data'] : [ctx.vars['get-charts-data']]",
+				"queries": "js/ctx.vars['query-generator'].data.queries",
+				"prompt": "${ctx.request.body.prompt}"
+			}
+		},
+		"create-response": {
+			"inputs": {
+				"model": {
+					"queries": "js/ctx.vars['query-generator'].data.queries",
+					"total": "js/ctx.response.data.total",
+					"data": "js/ctx.response.data.data"
+				}
+			}
+		},
+		"save-dashboard": {
+			"inputs": {
+				"action": "set",
+				"key": "${ctx.request.body.id}",
+				"value": "js/ctx.request.body"
+			}
+		},
+		"get-dashboards": {
+			"inputs": {
+				"action": "get-all"
+			}
+		},
+		"get-dashboard-by-id": {
+			"inputs": {
+				"action": "get",
+				"key": "${ctx.request.params.id}"
+			}
+		},
+		"method-not-allowed": {
+			"inputs": {
+				"message": "Method not allowed"
+			}
+		}
+	}
+}

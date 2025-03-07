@@ -43,7 +43,6 @@ async function main() {
 			.command(".")
 			.description("Create a new Project")
 			.action(async (options: OptionValues) => {
-				console.log(options);
 				await analytics.trackCommandExecution({
 					command: "create project .",
 					args: options,

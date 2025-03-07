@@ -21,9 +21,9 @@ class Mapper {
 	public replaceString = (strData: string, ctx: Context, data: ParamsDictionary) => {
 		let str = strData;
 
-		if (str.length > 1000) {
-			throw new Error("Input too long");
-		}
+		// if (str.length > 15000) {
+		// 	throw new Error("Input too long");
+		// }
 		const regex = /\${(.*?)}/g;
 		const matches = str.match(regex);
 

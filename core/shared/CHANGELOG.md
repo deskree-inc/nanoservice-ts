@@ -1,5 +1,11 @@
 # @nanoservice-ts/shared
 
+## 0.0.8
+
+### Patch Changes
+
+- Added examples and create project' command to include examples and 'create node' command with options for type ('module' or 'class') and template ('class' or 'ui')
+
 ## 0.0.7
 
 ### Patch Changes

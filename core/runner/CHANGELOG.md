@@ -1,5 +1,13 @@
 # @nanoservice/runner
 
+## 0.1.18
+
+### Patch Changes
+
+- Added examples and create project' command to include examples and 'create node' command with options for type ('module' or 'class') and template ('class' or 'ui')
+- Updated dependencies
+  - @nanoservice-ts/shared@0.0.8
+
 ## 0.1.17
 
 ### Patch Changes

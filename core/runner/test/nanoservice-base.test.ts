@@ -48,7 +48,7 @@ test("Execute nanoService wrong inputs", async () => {
 		await nano.run(context);
 	} catch (e) {
 		// @ts-ignore
-		expect(e.message).toBe('requires property "data"');
+		expect(e.message).toBe('instance requires property "data"');
 	}
 });
 

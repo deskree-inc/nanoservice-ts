@@ -1,6 +1,5 @@
 import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
-import { inputSchema } from "./inputSchema";
 
 type ErrorNodeInputs = {
 	message: string;
@@ -12,7 +11,17 @@ export default class ErrorNode extends NanoService<ErrorNodeInputs> {
 
 		// Set the input "JSON Schema Format" here for automated validation
 		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
-		this.inputSchema = inputSchema;
+		this.inputSchema = {
+			$schema: "http://json-schema.org/draft-07/schema#",
+			title: "Generated schema for Root",
+			type: "object",
+			properties: {
+				message: {
+					type: "string",
+				},
+			},
+			required: ["message"],
+		};
 
 		// Set the output "JSON Schema Format" here for automated validation
 		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step

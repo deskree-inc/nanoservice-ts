@@ -35,7 +35,7 @@
 					"steps": [
 						{
 							"name": "weather-ui",
-							"node": "react-js",
+							"node": "weather-ui",
 							"type": "module"
 						}
 					],
@@ -46,7 +46,7 @@
 					"steps": [
 						{
 							"name": "method-not-allowed",
-							"node": "error-node",
+							"node": "error",
 							"type": "module"
 						}
 					]

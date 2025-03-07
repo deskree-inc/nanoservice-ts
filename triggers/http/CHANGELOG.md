@@ -1,5 +1,16 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.25
+
+### Patch Changes
+
+- Added examples and create project' command to include examples and 'create node' command with options for type ('module' or 'class') and template ('class' or 'ui')
+- Updated dependencies
+  - @nanoservice-ts/if-else@0.0.22
+  - @nanoservice-ts/api-call@0.1.21
+  - @nanoservice-ts/runner@0.1.18
+  - @nanoservice-ts/shared@0.0.8
+
 ## 0.0.24
 
 ### Patch Changes
