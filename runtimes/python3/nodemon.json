@@ -1,0 +1,10 @@
+{
+	"watch": ["*"],
+	"ext": "py",
+	"ignore": ["node_modules", ".git"],
+	"exec": "python3 server.py",
+	"env": {
+		"NODE_ENV": "local"
+	},
+	"ignoreRoot": [".git"]
+}
