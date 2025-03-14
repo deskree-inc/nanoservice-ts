@@ -1,3 +1,4 @@
+import json
 import grpc.aio # type: ignore
 import asyncio
 import os
@@ -25,8 +26,21 @@ class NodeService(node_pb2_grpc.NodeServiceServicer):
             return node_pb2.NodeResponse(Message=encode_response, Encoding="BASE64", Type="JSON")
         except Exception as e:
             stack_trace = traceback.format_exc()
-            message = str(e) + ", " + stack_trace
-            return node_pb2.NodeResponse(Message=message, Encoding="STRING", Type="TEXT")
+
+            error_message = {
+                "message": str(e),
+                "stack": stack_trace
+            }
+
+            # Check if the exception message is a valid JSON
+            if isinstance(e, Exception):
+                try:
+                    error_message = json.loads(str(e))
+                except json.JSONDecodeError:
+                    pass
+
+            encode_error = encode_message(error_message, "JSON")
+            return node_pb2.NodeResponse(Message=encode_error, Encoding="BASE64", Type="JSON")
 
 # Start the server
 async def serve():
@@ -34,9 +48,9 @@ async def serve():
     node_pb2_grpc.add_NodeServiceServicer_to_server(NodeService(), server)
 
     port = os.getenv("SERVER_PORT", "50051")
-    server.add_insecure_port(f"[::]:{port}")
+    server.add_insecure_port(f"0.0.0.0:{port}")
 
-    print("Server started on port 50051...")
+    print(f"Server started on port {port}...")
     await server.start()
     await server.wait_for_termination()
 

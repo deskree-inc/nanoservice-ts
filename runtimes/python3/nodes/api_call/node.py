@@ -51,12 +51,28 @@ class ApiCall(NanoService):
                     body = ctx.response.get('data', {})
 
             async with aiohttp.ClientSession() as session:
-                async with session.request(method, url, headers=headers, json=body) as resp:
-                    if responseType == "application/json":
-                        result = await resp.json()
-                    else:
-                        result = await resp.text()
-                    response.setSuccess(result)
+                if method == "GET" or method == "DELETE":
+                    async with session.get(url, headers=headers) as resp:
+                        if responseType == "application/json":
+                            if resp.status != 200:
+                                throw_error = await resp.text()
+                                raise Exception(throw_error)
+                            
+                            result = await resp.json()
+                        else:
+                            result = await resp.text()
+                        response.setSuccess(result)
+                else:
+                    async with session.request(method, url, headers=headers, json=body) as resp:
+                        if responseType == "application/json":
+                            if resp.status != 200:
+                                throw_error = await resp.text()
+                                raise Exception(throw_error)
+                            
+                            result = await resp.json()
+                        else:
+                            result = await resp.text()
+                        response.setSuccess(result)
         except Exception as error:
             err = GlobalError(error)
             err.setCode(500)

@@ -34,7 +34,10 @@ def decode_message(payload):
 def encode_message(message, message_type):
     # Step 1: Encode the message based on the type
     if message_type == "JSON":
-        encoded_message = json.dumps(message.to_dict())
+        if hasattr(message, 'to_dict'):
+            encoded_message = json.dumps(message.to_dict())
+        else:
+            encoded_message = json.dumps(message)
     elif message_type == "XML":
         encoded_message = ET.tostring(message).decode("utf-8")
     elif message_type == "TEXT":
