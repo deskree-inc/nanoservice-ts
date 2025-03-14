@@ -1,5 +1,13 @@
 # node-name
 
+## 0.0.17
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.19
+  - @nanoservice-ts/shared@0.0.9
+
 ## 0.0.16
 
 ### Patch Changes

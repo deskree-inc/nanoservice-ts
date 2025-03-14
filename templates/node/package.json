@@ -1,6 +1,6 @@
 {
 	"name": "node-name",
-	"version": "0.0.16",
+	"version": "0.0.17",
 	"description": "",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -18,8 +18,8 @@
 		"vitest": "^3.0.4"
 	},
 	"dependencies": {
-		"@nanoservice-ts/shared": "^0.0.8",
-		"@nanoservice-ts/runner": "^0.1.18",
+		"@nanoservice-ts/shared": "^0.0.9",
+		"@nanoservice-ts/runner": "^0.1.19",
 		"@nanoservice-ts/helper": "^0.1.4"
 	},
 	"private": true

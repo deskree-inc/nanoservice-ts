@@ -1,5 +1,13 @@
 # @nanoservice/runner
 
+## 0.1.19
+
+### Patch Changes
+
+- Python3 runtime implemented in the runner
+- Updated dependencies
+  - @nanoservice-ts/shared@0.0.9
+
 ## 0.1.18
 
 ### Patch Changes

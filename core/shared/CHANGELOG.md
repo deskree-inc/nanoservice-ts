@@ -1,5 +1,11 @@
 # @nanoservice-ts/shared
 
+## 0.0.9
+
+### Patch Changes
+
+- Python3 runtime implemented in the runner
+
 ## 0.0.8
 
 ### Patch Changes

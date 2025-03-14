@@ -1,5 +1,16 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.26
+
+### Patch Changes
+
+- Python3 runtime implemented in the runner
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.19
+  - @nanoservice-ts/shared@0.0.9
+  - @nanoservice-ts/if-else@0.0.23
+  - @nanoservice-ts/api-call@0.1.22
+
 ## 0.0.25
 
 ### Patch Changes

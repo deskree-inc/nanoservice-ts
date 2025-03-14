@@ -2,6 +2,7 @@
 // import { z } from "zod";
 import type { NodeBase } from "@nanoservice-ts/shared";
 import ConfigurationResolver from "./ConfigurationResolver";
+import NodeRuntime from "./NodeRuntime";
 import type RunnerNode from "./RunnerNode";
 import type RunnerNodeBase from "./RunnerNodeBase";
 import type Condition from "./types/Condition";
@@ -166,22 +167,63 @@ export default class Configuration implements Config {
 	}
 
 	protected async nodeResolver(node: RunnerNode): Promise<RunnerNode> {
-		if (node.type === "module") {
-			const nodeHandler = this.globalOptions?.nodes?.getNode(node.node);
-
-			if (!nodeHandler) {
-				throw new Error(`Node ${node.node} not found`);
-			}
-
-			const clone = Object.assign(Object.create(Object.getPrototypeOf(nodeHandler)), nodeHandler);
-			return clone as RunnerNode;
-		}
-
-		if (node.type === "local") {
-			const path = `${process.env.NODES_PATH}/${node.node}`;
-			return new (await import(path)).default() as Promise<RunnerNode>;
+		const node_types = this.nodeTypes();
+		if (node_types[node.type]) {
+			return await node_types[node.type].resolver(node, this.globalOptions as GlobalOptions);
 		}
 
 		throw new Error(`Node type ${node.type} not found`);
 	}
+
+	protected nodeTypes(): NodeResolverTypes {
+		return {
+			module: {
+				resolver: async (node: RunnerNode, opts: GlobalOptions) => await this.moduleResolver(node, opts),
+			},
+			local: {
+				resolver: async (node: RunnerNode, opts: GlobalOptions) => await this.localResolver(node),
+			},
+			"runtime.python3": {
+				resolver: async (node: RunnerNode, opts: GlobalOptions) => await this.runtimeResolver(node),
+			},
+		};
+	}
+
+	async runtimeResolver(node: RunnerNode): Promise<RunnerNode> {
+		const host = process.env.RUNTIME_PYTHON3_HOST || "localhost";
+		const port =
+			process.env.RUNTIME_PYTHON3_PORT !== undefined ? Number.parseInt(process.env.RUNTIME_PYTHON3_PORT) : 50051;
+
+		const runtime = new NodeRuntime();
+		runtime.assignHostAndPort(host, port);
+		(runtime as unknown as RunnerNode).node = node.node;
+		runtime.name = node.name;
+		runtime.active = node.active !== undefined ? node.active : true;
+		runtime.stop = node.stop !== undefined ? node.stop : false;
+		runtime.set_var = node.set_var !== undefined ? node.set_var : false;
+
+		return runtime as unknown as RunnerNode;
+	}
+
+	protected async moduleResolver(node: RunnerNode, opts: GlobalOptions): Promise<RunnerNode> {
+		const nodeHandler = opts?.nodes?.getNode(node.node);
+
+		if (!nodeHandler) {
+			throw new Error(`Node ${node.node} not found`);
+		}
+
+		const clone = Object.assign(Object.create(Object.getPrototypeOf(nodeHandler)), nodeHandler);
+		return clone as RunnerNode;
+	}
+
+	protected async localResolver(node: RunnerNode): Promise<RunnerNode> {
+		const path = `${process.env.NODES_PATH}/${node.node}`;
+		return new (await import(path)).default() as Promise<RunnerNode>;
+	}
 }
+
+type NodeResolverTypes = {
+	[key: string]: {
+		resolver: (node: RunnerNode, opts: GlobalOptions) => Promise<RunnerNode>;
+	};
+};
