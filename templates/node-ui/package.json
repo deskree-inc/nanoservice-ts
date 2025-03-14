@@ -1,6 +1,6 @@
 {
 	"name": "node-ui-name",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
@@ -30,8 +30,8 @@
 		"nodemon": "^3.1.9"
 	},
 	"dependencies": {
-		"@nanoservice-ts/shared": "^0.0.8",
-		"@nanoservice-ts/runner": "^0.1.18",
+		"@nanoservice-ts/shared": "^0.0.9",
+		"@nanoservice-ts/runner": "^0.1.19",
 		"@nanoservice-ts/helper": "^0.1.4",
 		"ejs": "^3.1.10"
 	},
