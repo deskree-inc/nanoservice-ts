@@ -54,7 +54,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 						message: "Select the nanoservice runtime",
 						options: [
 							{ label: "Typescript", value: "typescript", hint: "recommended" },
-							{ label: "Python3", value: "python3" },
+							{ label: "Python3", value: "python3", hint: "Alpha - Limited to MacOS and Linux" },
 						],
 					}),
 			},
@@ -68,6 +68,15 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 
 		nodeName = nanoctlNode.nodeName;
 		node_runtime = nanoctlNode.nodeRuntime;
+
+		if (node_runtime === "python3") {
+			// Show a warning message
+			console.log(
+				color.yellow(
+					"⚠️  Python3 runtime is currently in Alpha and is limited to MacOS and Linux. Please use Typescript for production.",
+				),
+			);
+		}
 
 		if (node_runtime !== "python3") {
 			const nanoctlNodeExtension = await p.group(
@@ -218,7 +227,10 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		}
 
 		if (!isDefault) s.stop(`Node "${nodeName}" created successfully.`);
-		if (!currentPath) console.log(`\nNavigate to the node directory by running: cd src/nodes/${nodeName}`);
+		if (!currentPath && node_runtime === "typescript")
+			console.log(`\nNavigate to the node directory by running: cd src/nodes/${nodeName}`);
+		if (!currentPath && node_runtime === "python3")
+			console.log(`\nNavigate to the node directory by running: cd runtimes/python3/nodes/${nodeName}`);
 		console.log(
 			`${currentPath ? "\n" : ""}Run the command "npm run build" or "npm run build:dev" to build the project.`,
 		);

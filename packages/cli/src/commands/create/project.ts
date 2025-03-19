@@ -81,6 +81,36 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 						],
 						initialValues: ["node"],
 					}),
+			},
+			{
+				onCancel: () => {
+					p.cancel("Operation canceled.");
+					process.exit(0);
+				},
+			},
+		);
+
+		projectName = nanoctlProject.projectName;
+		trigger = nanoctlProject.trigger;
+		runtimes = nanoctlProject.runtimes;
+
+		// Python3 Alpha Warning
+		if (runtimes.includes("python3")) {
+			// Show a warning message
+			console.log(color.yellow("⚠️  Python3 Runtime (Alpha Version) ⚠️."));
+			console.log(color.yellow("-----------------------------------------------------"));
+
+			console.log(color.yellow("- Requires **Python 3** to be installed."));
+			console.log(color.yellow("- Currently supported only on **MacOS**."));
+			console.log(color.yellow("- Experimental feature: Some functionality may be unstable or missing."));
+			console.log(color.yellow("- Recommended for testing purposes only."));
+			console.log(color.yellow("- For production, use **NodeJS (recommended)**."));
+
+			console.log(color.yellow("-----------------------------------------------------"));
+		}
+
+		const nanoctlExamplesProject = await p.group(
+			{
 				examples: () =>
 					p.select({
 						message: "Install the examples?",
@@ -98,10 +128,7 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 			},
 		);
 
-		projectName = nanoctlProject.projectName;
-		trigger = nanoctlProject.trigger;
-		examples = nanoctlProject.examples;
-		runtimes = nanoctlProject.runtimes;
+		examples = nanoctlExamplesProject.examples;
 	}
 
 	const s = p.spinner();
