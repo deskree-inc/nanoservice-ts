@@ -28,7 +28,7 @@ class NodeService(node_pb2_grpc.NodeServiceServicer):
             stack_trace = traceback.format_exc()
 
             error_message = {
-                "message": str(e),
+                "error": str(e),
                 "stack": stack_trace
             }
 
@@ -51,8 +51,18 @@ async def serve():
     server.add_insecure_port(f"0.0.0.0:{port}")
 
     print(f"Server started on port {port}...")
-    await server.start()
-    await server.wait_for_termination()
+
+    try:
+        await server.start()
+        await server.wait_for_termination()
+    except asyncio.CancelledError:
+        print("\nServer shutdown requested...")
+    finally:
+        await server.stop(grace=3)  # Graceful shutdown
+        print("Server stopped cleanly.")
 
 if __name__ == "__main__":
-    asyncio.run(serve())
+    try:
+        asyncio.run(serve())
+    except KeyboardInterrupt:
+        print("KeyboardInterrupt detected. Shutting down...")

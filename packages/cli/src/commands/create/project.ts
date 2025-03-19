@@ -1,4 +1,5 @@
 import child_process from "node:child_process";
+import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import util from "node:util";
@@ -31,6 +32,7 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 	let projectName: string = opts.name ? opts.name : "";
 	let trigger = "http";
 	let examples = false;
+	let runtimes = ["node"];
 
 	if (!isDefault) {
 		console.log(
@@ -70,6 +72,15 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 							//{ label: "GRPC", value: "grpc" }
 						],
 					}),
+				runtimes: () =>
+					p.multiselect({
+						message: "Select the runtimes to install",
+						options: [
+							{ label: "NodeJS", value: "node", hint: "recommended" },
+							{ label: "Python3", value: "python3" },
+						],
+						initialValues: ["node"],
+					}),
 				examples: () =>
 					p.select({
 						message: "Install the examples?",
@@ -90,6 +101,7 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 		projectName = nanoctlProject.projectName;
 		trigger = nanoctlProject.trigger;
 		examples = nanoctlProject.examples;
+		runtimes = nanoctlProject.runtimes;
 	}
 
 	const s = p.spinner();
@@ -158,6 +170,51 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 		packageJsonContent.version = "1.0.0";
 		packageJsonContent.author = "";
 
+		// Runtimes
+
+		if (runtimes.includes("python3")) {
+			// Setup the environment
+			const nanoctlDir = `${dirPath}/.nanoctl`;
+			fsExtra.ensureDirSync(nanoctlDir);
+			const runtimesDir = `${nanoctlDir}/runtimes`;
+			fsExtra.ensureDirSync(runtimesDir);
+			const pythonDir = `${runtimesDir}/python3`;
+			fsExtra.ensureDirSync(pythonDir);
+			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/runtimes/python3`, pythonDir);
+
+			// Setup the project
+			const runtimesProjectDir = `${dirPath}/runtimes`;
+			fsExtra.ensureDirSync(runtimesProjectDir);
+			const pythonProjectDir = `${runtimesProjectDir}/python3`;
+			fsExtra.ensureDirSync(pythonProjectDir);
+			fsExtra.symlinkSync(`${pythonDir}/nodes`, `${pythonProjectDir}/nodes`, "junction");
+			fsExtra.symlinkSync(`${pythonDir}/core`, `${pythonProjectDir}/core`, "junction");
+			fsExtra.symlinkSync(`${pythonDir}/requirement.txt`, `${pythonProjectDir}/requirement.txt`, "file");
+
+			// Install Python3 Packages
+			s.message("Installing python3 packages...");
+			await exec("npm install", { cwd: pythonDir });
+			await createPythonVenv(pythonDir);
+			await exec(
+				`bash -c "source ${pythonDir}/python3_runtime/bin/activate && pip3 install -r ${pythonDir}/requirements.txt"`,
+				{ cwd: pythonDir },
+			);
+
+			fsExtra.symlinkSync(`${pythonDir}/python3_runtime`, `${pythonProjectDir}/python3_runtime`, "junction");
+
+			packageJsonContent.scripts = {
+				...packageJsonContent.scripts,
+				dev: "nanoctl dev",
+			};
+
+			packageJsonContent.devDependencies = {
+				...packageJsonContent.devDependencies,
+				nanoctl: "^0.0.14",
+			};
+		}
+
+		// Examples
+
 		if (examples) {
 			packageJsonContent.dependencies = {
 				...packageJsonContent.dependencies,
@@ -190,4 +247,27 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 		if (!isDefault) s.stop((error as Error).message);
 		if (isDefault) console.log((error as Error).message);
 	}
+}
+
+function createPythonVenv(pythonProjectDir: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		const process = spawn("python3", ["-m", "venv", "python3_runtime"], {
+			cwd: pythonProjectDir,
+			stdio: "inherit",
+			shell: true,
+		});
+
+		process.on("close", (code) => {
+			if (code === 0) {
+				console.log("\n✅ Python3 virtual environment created successfully!");
+				resolve();
+			} else {
+				reject(new Error(`❌ Failed to create virtual environment. Exit code: ${code}`));
+			}
+		});
+
+		process.on("error", (err) => {
+			reject(new Error(`⚠️ Error creating virtual environment: ${err.message}`));
+		});
+	});
 }

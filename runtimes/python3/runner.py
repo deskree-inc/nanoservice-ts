@@ -11,7 +11,8 @@ class Runner:
 
     async def run(self):
         node: NodeBase = self.node_resolver(self.node_name, self.ctx.config)
-        return await node.process(self.ctx)
+        model = await node.process(self.ctx)
+        return model.data
     
     def node_resolver(self, node_name: str, config: Dict[str, Any]) -> NodeBase:
         node: NodeBase = self.nodes[node_name]

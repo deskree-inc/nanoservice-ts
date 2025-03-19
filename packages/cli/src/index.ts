@@ -4,6 +4,8 @@ import { Command, type OptionValues } from "commander";
 import fsExtra from "fs-extra";
 import { createNode } from "./commands/create/node.js";
 import { createProject } from "./commands/create/project.js";
+import { createWorkflow } from "./commands/create/workflow.js";
+import { devProject } from "./commands/dev/index.js";
 import { PosthogAnalytics } from "./services/posthog.js";
 import { getPackageVersion } from "./services/utils.js";
 
@@ -79,8 +81,51 @@ async function main() {
 				});
 			});
 
+		const workflow = program
+			.command("workflow")
+			.description("Create a new Workflow")
+			.option("-n, --name <value>", "Create a default Workflow")
+			.action(async (options: OptionValues) => {
+				await analytics.trackCommandExecution({
+					command: "create workflow",
+					args: options,
+					execution: async () => {
+						createWorkflow(options, false);
+					},
+				});
+			});
+
+		workflow
+			.command(".")
+			.description("Create a new Workflow")
+			.action(async (options: OptionValues) => {
+				await analytics.trackCommandExecution({
+					command: "create workflow",
+					args: options,
+					execution: async () => {
+						createWorkflow(options, true);
+					},
+				});
+			});
+
 		create.addCommand(project);
 		create.addCommand(node);
+		create.addCommand(workflow);
+
+		// Dev server
+
+		program
+			.command("dev")
+			.description("Start the development server")
+			.action(async (options: OptionValues) => {
+				await analytics.trackCommandExecution({
+					command: "dev",
+					args: options,
+					execution: async () => {
+						devProject(options);
+					},
+				});
+			});
 
 		program.parse(process.argv);
 	} catch (err) {
