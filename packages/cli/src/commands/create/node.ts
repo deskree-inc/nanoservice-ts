@@ -7,6 +7,7 @@ import type { OptionValues } from "commander";
 import figlet from "figlet";
 import fsExtra from "fs-extra";
 import color from "picocolors";
+import { python3_file } from "./utils/Examples.js";
 
 const exec = util.promisify(child_process.exec);
 
@@ -18,6 +19,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 	let nodeName: string = opts.name ? opts.name : "";
 	let nodeType = "";
 	let template = "";
+	let node_runtime = "";
 
 	if (!isDefault) {
 		console.log(
@@ -47,20 +49,12 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		const nanoctlNode = await p.group(
 			{
 				nodeName: () => resolveNodeName(),
-				nodeType: () =>
+				nodeRuntime: () =>
 					p.select({
-						message: "Select the nanoservice type",
+						message: "Select the nanoservice runtime",
 						options: [
-							{ label: "Module", value: "module", hint: "recommended" },
-							{ label: "Class", value: "class" },
-						],
-					}),
-				template: () =>
-					p.select({
-						message: "Select the template",
-						options: [
-							{ label: "Class", value: "class", hint: "recommended" },
-							{ label: "UI - EJS + ReactJS + TailwindCSS", value: "ui" },
+							{ label: "Typescript", value: "typescript", hint: "recommended" },
+							{ label: "Python3", value: "python3" },
 						],
 					}),
 			},
@@ -73,88 +67,154 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		);
 
 		nodeName = nanoctlNode.nodeName;
-		nodeType = nanoctlNode.nodeType;
-		template = nanoctlNode.template;
+		node_runtime = nanoctlNode.nodeRuntime;
+
+		if (node_runtime !== "python3") {
+			const nanoctlNodeExtension = await p.group(
+				{
+					nodeType: () =>
+						p.select({
+							message: "Select the nanoservice type",
+							options: [
+								{ label: "Module", value: "module", hint: "recommended" },
+								{ label: "Class", value: "class" },
+							],
+						}),
+					template: () =>
+						p.select({
+							message: "Select the template",
+							options: [
+								{ label: "Class", value: "class", hint: "recommended" },
+								{ label: "UI - EJS + ReactJS + TailwindCSS", value: "ui" },
+							],
+						}),
+				},
+				{
+					onCancel: () => {
+						p.cancel("Operation canceled.");
+						process.exit(0);
+					},
+				},
+			);
+
+			nodeType = nanoctlNodeExtension.nodeType;
+			template = nanoctlNodeExtension.template;
+		}
 	}
 
 	const s = p.spinner();
-	if (!isDefault) s.start("Creating the node...");
+	if (!isDefault) s.start(`Creating the ${node_runtime} node...`);
 
 	try {
 		// Prepare the project
 		const mainDirExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (!mainDirExists)
 			throw new Error(
-				"The nanoservice-ts repository was not found. Please run 'nanoctl create project' to clone the repository.",
+				"The nanoservice-ts repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
 			);
 
-		let dirPath = process.cwd();
-		if (!currentPath) {
-			// Validate the project
-			const currentDir = `${process.cwd()}/src`;
-			const nodeProjectDirExists = fsExtra.existsSync(currentDir);
-			if (!nodeProjectDirExists) throw new Error("ops1");
+		if (node_runtime === "typescript") {
+			let dirPath = process.cwd();
+			if (!currentPath) {
+				// Validate the project
+				const currentDir = `${process.cwd()}/src`;
+				const nodeProjectDirExists = fsExtra.existsSync(currentDir);
+				if (!nodeProjectDirExists) throw new Error("ops1");
 
-			// Prepare the node
-			const currentNodesDir = `${currentDir}/nodes`;
-			if (!isDefault) {
-				fsExtra.ensureDirSync(currentNodesDir);
-			} else {
-				const nodeDirExists = fsExtra.existsSync(currentNodesDir);
-				if (!nodeDirExists) throw new Error("ops1");
+				// Prepare the node
+				const currentNodesDir = `${currentDir}/nodes`;
+				if (!isDefault) {
+					fsExtra.ensureDirSync(currentNodesDir);
+				} else {
+					const nodeDirExists = fsExtra.existsSync(currentNodesDir);
+					if (!nodeDirExists) throw new Error("ops1");
+				}
+
+				dirPath = path.join(currentNodesDir, nodeName);
 			}
 
-			dirPath = path.join(currentNodesDir, nodeName);
+			if (!isDefault) s.message("Copying project files...");
+
+			/// Copy the node files
+			if (!currentPath) {
+				const nodeDirExists = fsExtra.existsSync(dirPath);
+				if (nodeDirExists) throw new Error("ops2");
+			}
+
+			if (nodeType === "module") {
+				if (template === "class") {
+					fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node`, dirPath);
+				}
+
+				if (template === "ui") {
+					fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node-ui`, dirPath);
+				}
+
+				// Change project name in package.json
+				const packageJson = `${dirPath}/package.json`;
+				const packageJsonContent = JSON.parse(fsExtra.readFileSync(packageJson, "utf8"));
+				packageJsonContent.name = nodeName;
+				packageJsonContent.version = "1.0.0";
+				packageJsonContent.author = "";
+				fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
+
+				// Install Packages
+				s.message("Installing packages...");
+				await exec("npm install", { cwd: dirPath });
+
+				// Build the project
+				s.message("Building the project...");
+				await exec("npm run build", { cwd: dirPath });
+			}
+
+			if (nodeType === "class") {
+				if (template === "class") {
+					fsExtra.ensureDirSync(dirPath);
+					fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node/index.ts`, `${dirPath}/index.ts`);
+				}
+
+				if (template === "ui") {
+					fsExtra.ensureDirSync(dirPath);
+					fsExtra.ensureDirSync(`${dirPath}/app`);
+					fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node-ui/app`, `${dirPath}/app`);
+					fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/index.ts`, `${dirPath}/index.ts`);
+					fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/inputSchema.ts`, `${dirPath}/inputSchema.ts`);
+					fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/index.html`, `${dirPath}/index.html`);
+				}
+			}
 		}
 
-		if (!isDefault) s.message("Copying project files...");
+		if (node_runtime === "python3") {
+			let dirPath = process.cwd();
+			if (!currentPath) {
+				// Validate the project
+				const currentDir = `${process.cwd()}/runtimes/python3`;
+				const nodeProjectDirExists = fsExtra.existsSync(currentDir);
+				if (!nodeProjectDirExists) throw new Error("ops3");
 
-		/// Copy the node files
-		if (!currentPath) {
-			const nodeDirExists = fsExtra.existsSync(dirPath);
-			if (nodeDirExists) throw new Error("ops2");
-		}
+				// Prepare the node
+				const currentNodesDir = `${currentDir}/nodes`;
+				if (!isDefault) {
+					fsExtra.ensureDirSync(currentNodesDir);
+				} else {
+					const nodeDirExists = fsExtra.existsSync(currentNodesDir);
+					if (!nodeDirExists) throw new Error("ops3");
+				}
 
-		if (nodeType === "module") {
-			if (template === "class") {
-				fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node`, dirPath);
+				dirPath = path.join(currentNodesDir, nodeName);
 			}
 
-			if (template === "ui") {
-				fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node-ui`, dirPath);
+			if (!isDefault) s.message("Copying project files...");
+
+			// Copy the node files
+			if (!currentPath) {
+				const nodeDirExists = fsExtra.existsSync(dirPath);
+				if (nodeDirExists) throw new Error("ops2");
 			}
 
-			// Change project name in package.json
-			const packageJson = `${dirPath}/package.json`;
-			const packageJsonContent = JSON.parse(fsExtra.readFileSync(packageJson, "utf8"));
-			packageJsonContent.name = nodeName;
-			packageJsonContent.version = "1.0.0";
-			packageJsonContent.author = "";
-			fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
-
-			// Install Packages
-			s.message("Installing packages...");
-			await exec("npm install", { cwd: dirPath });
-
-			// Build the project
-			s.message("Building the project...");
-			await exec("npm run build", { cwd: dirPath });
-		}
-
-		if (nodeType === "class") {
-			if (template === "class") {
-				fsExtra.ensureDirSync(dirPath);
-				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node/index.ts`, `${dirPath}/index.ts`);
-			}
-
-			if (template === "ui") {
-				fsExtra.ensureDirSync(dirPath);
-				fsExtra.ensureDirSync(`${dirPath}/app`);
-				fsExtra.copySync(`${GITHUB_REPO_LOCAL}/templates/node-ui/app`, `${dirPath}/app`);
-				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/index.ts`, `${dirPath}/index.ts`);
-				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/inputSchema.ts`, `${dirPath}/inputSchema.ts`);
-				fsExtra.copyFileSync(`${GITHUB_REPO_LOCAL}/templates/node-ui/index.html`, `${dirPath}/index.html`);
-			}
+			fsExtra.ensureDirSync(dirPath);
+			fsExtra.writeFileSync(`${dirPath}/node.py`, python3_file);
+			fsExtra.writeFileSync(`${dirPath}/__init__.py`, "");
 		}
 
 		if (!isDefault) s.stop(`Node "${nodeName}" created successfully.`);
@@ -178,6 +238,13 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 			console.log(
 				"The node you are trying to create already exists in the project.\n" +
 					"Please use a different name, or delete the existing node to create a new one.",
+			);
+		}
+		if (message === "ops3") {
+			console.log(
+				"Oops! It seems like you haven't created a project with python3 support yet... or have you? 🤔\n" +
+					"If you already did, you can navigate to it using: cd project-name\n" +
+					"Otherwise, you can create a new project with: npx nanoctl@latest create project",
 			);
 		}
 		if (message !== "ops1" && message !== "ops2") {
