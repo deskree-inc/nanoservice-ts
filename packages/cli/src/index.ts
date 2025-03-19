@@ -9,10 +9,11 @@ import { devProject } from "./commands/dev/index.js";
 import { PosthogAnalytics } from "./services/posthog.js";
 import { getPackageVersion } from "./services/utils.js";
 
+const version = await getPackageVersion();
+
 async function main() {
 	try {
 		const program = new Command();
-		const version = await getPackageVersion();
 		const HOME_DIR = `${os.homedir()}/.nanoctl`;
 		const cliConfigPath = `${HOME_DIR}/nanoctl.json`;
 
@@ -36,7 +37,7 @@ async function main() {
 					command: "create project",
 					args: options,
 					execution: async () => {
-						createProject(options, false);
+						createProject(options, version, false);
 					},
 				});
 			});
@@ -49,7 +50,7 @@ async function main() {
 					command: "create project .",
 					args: options,
 					execution: async () => {
-						createProject(options, true);
+						createProject(options, version, true);
 					},
 				});
 			});

@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.17
+
+### Patch Changes
+
+- Dynamically retrieve nanoctl version in new project setup
+
 ## 0.0.16
 
 ### Patch Changes
