@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.16
+
+### Patch Changes
+
+- Add Python3 runtime warning and installation requirement
+
 ## 0.0.15
 
 ### Patch Changes
