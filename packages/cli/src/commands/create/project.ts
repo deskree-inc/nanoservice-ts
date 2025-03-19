@@ -27,7 +27,7 @@ const options: Partial<SimpleGitOptions> = {
 
 const git: SimpleGit = simpleGit(options);
 
-export async function createProject(opts: OptionValues, currentPath = false) {
+export async function createProject(opts: OptionValues, version: string, currentPath = false) {
 	const isDefault = opts.name !== undefined;
 	let projectName: string = opts.name ? opts.name : "";
 	let trigger = "http";
@@ -236,7 +236,7 @@ export async function createProject(opts: OptionValues, currentPath = false) {
 
 			packageJsonContent.devDependencies = {
 				...packageJsonContent.devDependencies,
-				nanoctl: "^0.0.14",
+				nanoctl: `^${version}`,
 			};
 		}
 
