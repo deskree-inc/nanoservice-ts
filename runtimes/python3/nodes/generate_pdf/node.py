@@ -66,7 +66,7 @@ class GeneratePDF(NanoService):
                 pdf.ln()
 
             # Save PDF File
-            file_path = "nodes/generate_pdf/reports/sales_report.pdf"
+            file_path = "sales_report.pdf"
             pdf.output(file_path)
 
             # Read PDF File
