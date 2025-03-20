@@ -1,0 +1,63 @@
+{
+	"name": "rentals-pdf",
+	"description": "Generate a PDF from a rental database",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "get-rentals",
+			"node": "postgres-query",
+			"type": "module"
+		},
+		{
+			"name": "format-data",
+			"node": "array-map",
+			"type": "module"
+		},
+		{
+			"name": "generate-pdf",
+			"node": "generate-pdf",
+			"type": "runtime.python3"
+		},
+		{
+			"name": "response",
+			"node": "base64-pdf",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"get-rentals": {
+			"inputs": {
+				"host": "localhost",
+				"port": 5432,
+				"database": "dvdrental",
+				"user": "postgres",
+				"password": "example",
+				"query": "SELECT f.title as product, SUM(p.amount) as total, ROUND(SUM(p.amount) / COUNT(*), 2) as price, DATE_TRUNC('month', r.rental_date) AS rental_month, COUNT(*) AS quantity FROM rental r INNER JOIN inventory i ON i.inventory_id = r.inventory_id INNER JOIN film f ON f.film_id = i.film_id INNER JOIN payment p ON p.rental_id = r.rental_id GROUP BY r.inventory_id, rental_month, f.title ORDER BY total DESC LIMIT 20;"
+			}
+		},
+		"format-data": {
+			"inputs": {
+				"array": "js/ctx.response.data.data",
+				"map": "{ product: data.product, quantity: parseInt(data.quantity), total: parseInt(data.total), price: parseInt(data.price), rental_month: data.rental_month }"
+			}
+		},
+		"generate-pdf": {
+			"inputs": {
+				"title": "Top 20 Films by Revenue",
+				"sales_data": "js/ctx.response.data"
+			}
+		},
+		"response": {
+			"inputs": {
+				"base64": "${ctx.response.data.pdf_base64}"
+			}
+		}
+	}
+}
