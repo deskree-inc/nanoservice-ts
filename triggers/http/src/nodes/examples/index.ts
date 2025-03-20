@@ -6,6 +6,7 @@ import DashboardGeneratorUI from "./dashboard-generator/ui";
 import MapperNode from "./db-manager/MapperNode";
 import QueryGeneratorNode from "./db-manager/QueryGeneratorNode";
 import DatabaseUI from "./db-manager/ui";
+import FeedbackUI from "./feedback-ui";
 import MastraAgent from "./mastra-agent";
 import WeatherUI from "./mastra-agent/ui";
 import MongoQuery from "./mongodb-query";
@@ -34,6 +35,7 @@ const ExampleNodes = {
 	"weather-ui": new WeatherUI(),
 	"mastra-agent": new MastraAgent(),
 	"mongo-query": new MongoQuery(),
+	"feedback-ui": new FeedbackUI(),
 };
 
 export default ExampleNodes;
