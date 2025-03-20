@@ -31,8 +31,8 @@
 		"husky": "^9.1.7",
 		"lint-staged": "^15.4.3",
 		"nx": "20.4.0",
-		"typedoc": "^0.27.6",
-		"typedoc-plugin-markdown": "^4.4.1"
+		"typedoc": "^0.28.0",
+		"typedoc-plugin-markdown": "^4.5.0"
 	},
 	"lint-staged": {
 		"*": [
