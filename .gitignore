@@ -145,3 +145,4 @@ __pycache__/
 *.pyo
 *.pyd
 python3_runtime/
+*/**/sales_report.pdf

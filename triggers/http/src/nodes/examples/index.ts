@@ -1,3 +1,4 @@
+import Base64ToPDF from "./base64-pdf";
 import ArrayMapNode from "./dashboard-generator/ArrayMap";
 import DashboardChartsGenerator from "./dashboard-generator/DashboardChartsGenerator";
 import MemoryStorage from "./dashboard-generator/MemoryStorage";
@@ -36,6 +37,7 @@ const ExampleNodes = {
 	"mastra-agent": new MastraAgent(),
 	"mongo-query": new MongoQuery(),
 	"feedback-ui": new FeedbackUI(),
+	"base64-pdf": new Base64ToPDF(),
 };
 
 export default ExampleNodes;
