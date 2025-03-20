@@ -1,0 +1,97 @@
+{
+	"name": "feedback",
+	"description": "",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "*",
+			"path": "/:function?/:id?",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "filter-request",
+			"node": "@nanoservice-ts/if-else",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"filter-request": {
+			"conditions": [
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "feedback-ui",
+							"node": "feedback-ui",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === ''"
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "generate-sentiment",
+							"node": "generate-sentiment",
+							"type": "runtime.python3"
+						},
+						{
+							"name": "save-feedback",
+							"node": "memory-storage",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"post\" && ctx.request.params.function === \"create\""
+				},
+				{
+					"type": "if",
+					"steps": [
+						{
+							"name": "get-feedbacks",
+							"node": "memory-storage",
+							"type": "module"
+						}
+					],
+					"condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === \"all\""
+				},
+				{
+					"type": "else",
+					"steps": [
+						{
+							"name": "method-not-allowed",
+							"node": "error",
+							"type": "module"
+						}
+					]
+				}
+			]
+		},
+		"feedback-ui": {
+			"inputs": {}
+		},
+		"generate-sentiment": {
+			"inputs": {
+				"id": "${ctx.request.body.id}",
+				"title": "${ctx.request.body.title}",
+				"comment": "${ctx.request.body.comment}",
+				"sentiment": "${ctx.request.body.sentiment}",
+				"createdAt": "${ctx.request.body.createdAt}"
+			}
+		},
+		"save-feedback": {
+			"inputs": {
+				"action": "set",
+				"key": "${ctx.request.body.id}",
+				"value": "js/ctx.response.data"
+			}
+		},
+		"get-feedbacks": {
+			"inputs": {
+				"action": "get-all"
+			}
+		}
+	}
+}

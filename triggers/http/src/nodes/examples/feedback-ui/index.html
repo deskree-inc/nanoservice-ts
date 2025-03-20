@@ -1,0 +1,157 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript">
+      var ctx_base64 = "<%=ctx%>";
+    </script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto p-4" style="max-width: 800px">
+      <div id="root"></div>
+    </div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- React App Code -->
+    <script type="text/babel">
+      function App() {
+        const [feedbacks, setFeedbacks] = React.useState([]);
+        const [title, setTitle] = React.useState("");
+        const [comment, setComment] = React.useState("");
+
+        // Simulate a GET request to fetch initial feedback (empty array)
+        React.useEffect(() => {
+          setTimeout(async () => {
+            const read_api = "/feedback/all";
+            const response = await fetch(read_api);
+            let data = await response.json();
+            if (Array.isArray(data) === false) {
+              let rows = [];
+              let keys = Object.keys(data);
+              keys.forEach((key) => {
+                rows.push(data[key]);
+              });
+              data = [...rows];
+            }
+            setFeedbacks(data);
+          }, 100);
+        }, []);
+
+        // Simulate a POST request to add new feedback
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          const id = Math.floor(Math.random() * 10000);
+          const newFeedback = {
+            id,
+            title,
+            comment,
+            sentiment: "",
+            createdAt: new Date(),
+          };
+
+          // Send post with fetch API
+          const create_api = "/feedback/create";
+          const response = await fetch(create_api, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newFeedback),
+          });
+          const data = await response.json();
+          setFeedbacks((prev) => [data, ...prev]);
+          setTitle("");
+          setComment("");
+        };
+
+        return (
+          <div className="bg-white shadow-md p-6 rounded mt-10">
+            <h1
+              className="text-2xl font-bold mb-4"
+              style={{ color: "#007ACC" }}
+            >
+              Feedback App
+            </h1>
+            <form onSubmit={handleSubmit} className="mb-6">
+              <div className="mb-4">
+                <label className="block text-gray-700">Title</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Comments</label>
+                <textarea
+                  className="w-full p-2 border rounded"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                style={{ backgroundColor: "#007ACC" }}
+              >
+                Submit Feedback
+              </button>
+            </form>
+            <div>
+              <h2
+                className="text-xl font-semibold mb-2"
+                style={{ color: "#007ACC" }}
+              >
+                Feedback List
+              </h2>
+              {feedbacks.length === 0 ? (
+                <p className="text-gray-600">No feedback yet.</p>
+              ) : (
+                feedbacks
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                  .map((fb, index) => (
+                    <div className="flex flex-row justify-between items-start mb-4 p-4 border rounded">
+                    <div key={fb.id + "" + index}>
+                      <h3 className="font-bold">{fb.title}</h3>
+                      <small>{new Date(fb.createdAt).toLocaleString()}</small>
+                      <p>{fb.comment}</p>
+                    </div>
+                    <div className="flex items-center ml-4">
+                      {fb.sentiment === "+" ? (
+                      <div className="flex items-center">
+                        <span className="text-green-500 text-xl">😊</span>
+                        <span className="ml-2 text-green-500">Positive</span>
+                      </div>
+                      ) : fb.sentiment === "-" ? (
+                      <div className="flex items-center">
+                        <span className="text-red-500 text-xl">😞</span>
+                        <span className="ml-2 text-red-500">Negative</span>
+                      </div>
+                      ) : (
+                      <div className="flex items-center">
+                        <span className="text-gray-500 text-xl">😐</span>
+                        <span className="ml-2 text-gray-500">Neutral</span>
+                      </div>
+                      )}
+                    </div>
+                    </div>
+                ))
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
