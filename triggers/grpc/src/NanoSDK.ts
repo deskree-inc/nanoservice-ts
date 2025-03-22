@@ -1,12 +1,7 @@
 import fs from "node:fs";
 import type { JsonLikeObject } from "@nanoservice-ts/runner";
-import GrpcClient, {
-	type RpcOptions,
-	type WorkflowRequest,
-	type WorkflowResponse,
-	HttpVersionEnum,
-	TransportEnum,
-} from "./GrpcClient";
+import GrpcClient, { type RpcOptions, type WorkflowRequest, HttpVersionEnum, TransportEnum } from "./GrpcClient";
+import MessageDecode from "./MessageDecode";
 
 export default class NanoSDK {
 	public createClient(host?: string, token?: string) {
@@ -56,7 +51,7 @@ export class NanoSDKClient {
 		this.token = token;
 	}
 
-	public async python3(nodeName: string, inputs: JsonLikeObject): Promise<WorkflowResponse> {
+	public async python3(nodeName: string, inputs: JsonLikeObject): Promise<JsonLikeObject> {
 		const workflow = {
 			name: "Remote Node",
 			description: "Execution of remote node",
@@ -90,7 +85,7 @@ export class NanoSDKClient {
 		return await this.call(request);
 	}
 
-	public async nodejs(nodeName: string, inputs: JsonLikeObject, type = "module"): Promise<WorkflowResponse> {
+	public async nodejs(nodeName: string, inputs: JsonLikeObject, type = "module"): Promise<JsonLikeObject> {
 		const workflow = {
 			name: "Remote Node",
 			description: "Execution of remote node",
@@ -128,9 +123,11 @@ export class NanoSDKClient {
 		return await this.call(request);
 	}
 
-	protected async call(message: WorkflowRequest): Promise<WorkflowResponse> {
+	protected async call(message: WorkflowRequest): Promise<JsonLikeObject> {
 		const response = await this.client.call(message, { headers: { Authorization: `Bearer ${this.token}` } });
-		return response;
+		const decode = new MessageDecode();
+		const responseDecoded = decode.responseDecode(response);
+		return responseDecoded;
 	}
 }
 

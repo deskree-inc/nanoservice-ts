@@ -93,6 +93,26 @@ export default class MessageDecode {
 		return message as string;
 	}
 
+	responseDecode(response: WorkflowResponse): JsonLikeObject {
+		let message: JsonLikeObject = {};
+
+		switch (response.Encoding) {
+			case MessageEncoding[MessageEncoding.BASE64]: {
+				const messageStr = Buffer.from(response.Message, "base64").toString("utf-8");
+				message = this.decodeType(messageStr, response.Type) as unknown as JsonLikeObject;
+				break;
+			}
+			case MessageEncoding[MessageEncoding.STRING]: {
+				message = this.decodeType(response.Message, response.Type) as unknown as JsonLikeObject;
+				break;
+			}
+			default:
+				throw new Error(`Unsupported encoding: ${response.Encoding}`);
+		}
+
+		return message;
+	}
+
 	encodeType(message: string | object | Buffer<ArrayBuffer>, type: string): string {
 		switch (type) {
 			case MessageType[MessageType.JSON]:
