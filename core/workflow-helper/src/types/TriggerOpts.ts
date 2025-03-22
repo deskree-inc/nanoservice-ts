@@ -9,5 +9,5 @@ export const TriggerOptsSchema = z.object({
 
 export type TriggerOpts = z.infer<typeof TriggerOptsSchema>;
 
-export const TriggersSchema = z.enum(["http", "cron", "manual"]);
+export const TriggersSchema = z.enum(["http", "cron", "manual", "grpc"]);
 export type TriggersEnum = z.infer<typeof TriggersSchema>;

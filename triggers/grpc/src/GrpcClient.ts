@@ -27,6 +27,8 @@ export enum HttpVersionEnum {
 	HTTP2 = "2",
 }
 
+export type { WorkflowRequest, WorkflowResponse };
+
 export default class GrpcClient {
 	protected opts: RpcOptions;
 
@@ -65,7 +67,7 @@ export default class GrpcClient {
 	}
 }
 
-// let client = new FetchGrpc({
+// let client = new GrpcClient({
 //     host: "localhost",
 //     port: 8433,
 //     protocol: "http",

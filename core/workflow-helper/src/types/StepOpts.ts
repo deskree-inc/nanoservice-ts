@@ -15,7 +15,7 @@ export const StepOptsSchema = z.object({
 			invalid_type_error: "Node must be a string",
 		})
 		.min(5),
-	type: z.enum(["local", "module"]),
+	type: z.enum(["local", "module", "runtime.python3"]),
 	inputs: z.object({}).optional(),
 });
 

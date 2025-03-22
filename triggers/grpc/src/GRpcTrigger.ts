@@ -1,5 +1,12 @@
 import type { ConnectRouter } from "@connectrpc/connect";
-import { DefaultLogger, type GlobalOptions, NodeMap, TriggerBase, type TriggerResponse } from "@nanoservice-ts/runner";
+import {
+	DefaultLogger,
+	type GlobalOptions,
+	NodeMap,
+	type ParamsDictionary,
+	TriggerBase,
+	type TriggerResponse,
+} from "@nanoservice-ts/runner";
 import { type Context, GlobalError } from "@nanoservice-ts/shared";
 import { type Span, SpanStatusCode, metrics, trace } from "@opentelemetry/api";
 import fastify from "fastify";
@@ -7,7 +14,10 @@ import { v4 as uuid } from "uuid";
 import MessageDecode from "./MessageDecode";
 import nodes from "./Nodes";
 import workflows from "./Workflows";
-// import { readFileSync } from 'fs';
+import type RuntimeWorkflow from "./types/RuntimeWorkflow";
+
+import { type Step, Workflow } from "@nanoservice-ts/helper";
+import type { TriggerOpts } from "@nanoservice-ts/helper/dist/types/TriggerOpts";
 import {
 	MessageEncoding,
 	MessageType,
@@ -15,6 +25,12 @@ import {
 	type WorkflowResponse,
 	WorkflowService,
 } from "./gen/workflow_pb";
+
+enum NodeTypes {
+	MODULE = "module",
+	LOCAL = "local",
+	PYTHON3 = "runtime.python3",
+}
 
 export default class GRpcTrigger extends TriggerBase {
 	private server = fastify({
@@ -66,9 +82,11 @@ export default class GRpcTrigger extends TriggerBase {
 	async executeWorkflow(request: WorkflowRequest) {
 		const start = performance.now();
 		const coder = new MessageDecode();
-		const name = request.Name;
+		let name = request.Name;
 		const messageContext: Context = coder.requestDecode(request);
+		const runtimeWorkflow = messageContext as unknown as RuntimeWorkflow;
 		const id: string = (messageContext.request.query?.requestId as string) || (uuid() as string);
+		let remoteNodeExecution = false;
 
 		const defaultMeter = metrics.getMeter("default");
 		const workflow_runner_errors = defaultMeter.createCounter("workflow_errors", {
@@ -77,6 +95,44 @@ export default class GRpcTrigger extends TriggerBase {
 
 		return await this.tracer.startActiveSpan(`${name}`, async (span: Span) => {
 			try {
+				if (runtimeWorkflow !== undefined) {
+					const workflowModel = runtimeWorkflow.workflow;
+					const node_type = (workflowModel.steps[0] as unknown as ParamsDictionary).type;
+					let set_node_type: NodeTypes = NodeTypes.MODULE;
+					switch (node_type) {
+						case "runtime.python3":
+							set_node_type = NodeTypes.PYTHON3;
+							break;
+						case "local":
+							set_node_type = NodeTypes.LOCAL;
+							break;
+						default:
+							set_node_type = NodeTypes.MODULE;
+							break;
+					}
+
+					const trigger = Object.keys(workflowModel.trigger)[0];
+					const trigger_config =
+						((workflowModel.trigger as unknown as ParamsDictionary)[trigger] as unknown as TriggerOpts) || {};
+
+					const step: Step = Workflow({
+						name: "Python Runtime",
+						version: "1.0.0",
+						description: "Python Runtime",
+					})
+						.addTrigger((trigger as unknown as "http") || "grpc", trigger_config)
+						.addStep({
+							name: "node",
+							node: name,
+							type: set_node_type,
+							inputs: ((workflowModel.nodes as unknown as ParamsDictionary).node as unknown as ParamsDictionary).inputs,
+						});
+
+					this.nodeMap.workflows[id] = step;
+					name = id;
+					remoteNodeExecution = true;
+				}
+
 				await this.configuration.init(name, this.nodeMap);
 				let ctx: Context = this.createContext(undefined, name, id);
 				ctx.request = messageContext.request;
@@ -186,6 +242,9 @@ export default class GRpcTrigger extends TriggerBase {
 
 				return message;
 			} finally {
+				if (remoteNodeExecution) {
+					delete this.nodeMap.workflows[id];
+				}
 				span.end();
 			}
 		});
