@@ -1,5 +1,13 @@
 # @nanoservice-ts/if-else
 
+## 0.0.24
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/helper@0.1.5
+  - @nanoservice-ts/runner@0.1.20
+
 ## 0.0.23
 
 ### Patch Changes

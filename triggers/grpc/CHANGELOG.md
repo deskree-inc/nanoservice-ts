@@ -1,5 +1,16 @@
 # @nanoservice-ts/trigger-grpc
 
+## 0.0.8
+
+### Patch Changes
+
+- added GRPC remote node execution server and client (NodeJS)
+- Updated dependencies
+  - @nanoservice-ts/helper@0.1.5
+  - @nanoservice-ts/runner@0.1.20
+  - @nanoservice-ts/if-else@0.0.24
+  - @nanoservice-ts/api-call@0.1.23
+
 ## 0.0.7
 
 ### Patch Changes

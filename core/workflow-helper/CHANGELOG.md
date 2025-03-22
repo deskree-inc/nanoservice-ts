@@ -1,5 +1,11 @@
 # @nanoservice/helper
 
+## 0.1.5
+
+### Patch Changes
+
+- added GRPC remote node execution server and client (NodeJS)
+
 ## 0.1.4
 
 ### Patch Changes
