@@ -116,9 +116,9 @@ export default class GRpcTrigger extends TriggerBase {
 						((workflowModel.trigger as unknown as ParamsDictionary)[trigger] as unknown as TriggerOpts) || {};
 
 					const step: Step = Workflow({
-						name: "Python Runtime",
+						name: `Remote Node: ${name}`,
 						version: "1.0.0",
-						description: "Python Runtime",
+						description: "Remote Node",
 					})
 						.addTrigger((trigger as unknown as "http") || "grpc", trigger_config)
 						.addStep({
