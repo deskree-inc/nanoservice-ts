@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/trigger-http",
-	"version": "0.0.26",
+	"version": "0.0.27",
 	"description": "Trigger for HTTP requests",
 	"engines": {
 		"node": ">=18.0.0"
@@ -27,10 +27,10 @@
 		"typescript": "^5.8.2"
 	},
 	"dependencies": {
-		"@nanoservice-ts/api-call": "^0.1.22",
-		"@nanoservice-ts/helper": "^0.1.4",
-		"@nanoservice-ts/if-else": "^0.0.23",
-		"@nanoservice-ts/runner": "^0.1.19",
+		"@nanoservice-ts/api-call": "^0.1.23",
+		"@nanoservice-ts/helper": "^0.1.5",
+		"@nanoservice-ts/if-else": "^0.0.24",
+		"@nanoservice-ts/runner": "^0.1.20",
 		"@nanoservice-ts/shared": "^0.0.9",
 		"@opentelemetry/api": "^1.9.0",
 		"@opentelemetry/exporter-prometheus": "^0.57.2",

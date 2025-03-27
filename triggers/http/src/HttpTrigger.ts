@@ -1,4 +1,6 @@
-import type { GlobalOptions, TriggerResponse } from "@nanoservice-ts/runner";
+import { type Step, Workflow } from "@nanoservice-ts/helper";
+import type { TriggerOpts } from "@nanoservice-ts/helper/dist/types/TriggerOpts";
+import type { GlobalOptions, ParamsDictionary, TriggerResponse } from "@nanoservice-ts/runner";
 import { TriggerBase } from "@nanoservice-ts/runner";
 import { NodeMap } from "@nanoservice-ts/runner";
 import { DefaultLogger } from "@nanoservice-ts/runner";
@@ -8,9 +10,12 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 import { v4 as uuid } from "uuid";
+import MessageDecode from "./MessageDecode";
 import nodes from "./Nodes";
 import { handleDynamicRoute, validateRoute } from "./Util";
 import workflows from "./Workflows";
+import NodeTypes from "./types/NodeTypes";
+import type RuntimeWorkflow from "./types/RuntimeWorkflow";
 
 export default class HttpTrigger extends TriggerBase {
 	private app: Express = express();
@@ -62,7 +67,16 @@ export default class HttpTrigger extends TriggerBase {
 			this.app.use(["/:workflow", "/"], async (req: Request, res: Response): Promise<void> => {
 				const id: string = (req.query?.requestId as string) || (uuid() as string);
 				req.query.requestId = undefined;
-				const blueprintNameInPath: string = req.params.workflow;
+				let blueprintNameInPath: string = req.params.workflow;
+
+				let remoteNodeExecution = false;
+				let runtimeWorkflow: RuntimeWorkflow | undefined;
+				if (req.headers["x-nanoservice-execute-node"] === "true" && req.method.toLowerCase() === "post") {
+					remoteNodeExecution = true;
+					const coder = new MessageDecode();
+					const messageContext: Context = coder.requestDecode(req.body); // Collecting the context from the body
+					runtimeWorkflow = messageContext as unknown as RuntimeWorkflow;
+				}
 
 				const defaultMeter = metrics.getMeter("default");
 				const workflow_runner_errors = defaultMeter.createCounter("workflow_errors", {
@@ -72,6 +86,49 @@ export default class HttpTrigger extends TriggerBase {
 				await this.tracer.startActiveSpan(`${blueprintNameInPath}`, async (span: Span) => {
 					try {
 						const start = performance.now();
+						if (remoteNodeExecution && runtimeWorkflow !== undefined) {
+							const workflowModel = runtimeWorkflow.workflow;
+							const node_type = (workflowModel.steps[0] as unknown as ParamsDictionary).type;
+							let set_node_type: NodeTypes = NodeTypes.MODULE;
+							switch (node_type) {
+								case "runtime.python3":
+									set_node_type = NodeTypes.PYTHON3;
+									break;
+								case "local":
+									set_node_type = NodeTypes.LOCAL;
+									break;
+								default:
+									set_node_type = NodeTypes.MODULE;
+									break;
+							}
+
+							const trigger = Object.keys(workflowModel.trigger)[0];
+							const trigger_config =
+								((workflowModel.trigger as unknown as ParamsDictionary)[trigger] as unknown as TriggerOpts) || {};
+
+							let remoteNodeName = blueprintNameInPath + req.path;
+							if (remoteNodeName.substring(remoteNodeName.length - 1) === "/") {
+								remoteNodeName = remoteNodeName.substring(0, remoteNodeName.length - 1);
+							}
+
+							const step: Step = Workflow({
+								name: `Remote Node: ${remoteNodeName}`,
+								version: "1.0.0",
+								description: "Remote Node",
+							})
+								.addTrigger((trigger as unknown as "http") || "grpc", trigger_config)
+								.addStep({
+									name: "node",
+									node: remoteNodeName,
+									type: set_node_type,
+									inputs: ((workflowModel.nodes as unknown as ParamsDictionary).node as unknown as ParamsDictionary)
+										.inputs,
+								});
+
+							this.nodeMap.workflows[id] = step;
+							blueprintNameInPath = id;
+							remoteNodeExecution = true;
+						}
 
 						await this.configuration.init(blueprintNameInPath, this.nodeMap);
 						let ctx: Context = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
@@ -171,6 +228,9 @@ export default class HttpTrigger extends TriggerBase {
 							res.status(500).json({ error: (e as Error).message });
 						}
 					} finally {
+						if (remoteNodeExecution) {
+							delete this.nodeMap.workflows[id];
+						}
 						span.end();
 					}
 				});

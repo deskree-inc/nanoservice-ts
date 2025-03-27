@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test NanoSDK</title>
+    <script src="/sdk/javascript/nanosdk.min.js"></script>
+  </head>
+  <body>
+    <div id="output"></div>
+    <script type="module">
+      async function runTests() {
+        const host = "http://localhost:4000";
+        const token = "";
+        const requests = [
+          {
+            nodeName: "api_call",
+            type: "python3",
+            inputs: {
+              url: "https://countriesnow.space/api/v0.1/countries/capital",
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              responseType: "application/json",
+            },
+          },
+          {
+            nodeName: "@nanoservice-ts/api-call",
+            type: "nodejs",
+            inputs: {
+              url: "https://catfact.ninja/fact",
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              responseType: "application/json",
+            },
+          },
+        ];
+
+        const client = new NanoSDK().createHttpClient(host, token);
+
+        for (const request of requests) {
+          try {
+            const response = await client[request.type](
+              request.nodeName,
+              request.inputs,
+            );
+            const outputDiv = document.getElementById("output");
+            const pre = document.createElement("pre");
+            pre.textContent = `Response for ${request.inputs.url}:\n${JSON.stringify(response, null, 2)}`;
+            pre.style.overflow = "auto";
+            pre.style.maxHeight = "300px";
+            pre.style.border = "1px solid #ccc";
+            pre.style.padding = "10px";
+            pre.style.backgroundColor = "#f9f9f9";
+            outputDiv.appendChild(pre);
+          } catch (error) {
+            console.error(`Error for ${request.inputs.url}:`, error.message);
+          }
+        }
+      }
+
+      runTests();
+    </script>
+  </body>
+</html>

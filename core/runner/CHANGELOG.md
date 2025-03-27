@@ -1,5 +1,12 @@
 # @nanoservice/runner
 
+## 0.1.20
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/helper@0.1.5
+
 ## 0.1.19
 
 ### Patch Changes

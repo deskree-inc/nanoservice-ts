@@ -5,6 +5,7 @@ import { TransportEnum } from "./GrpcClient";
 import { HttpVersionEnum } from "./GrpcClient";
 import GrpcServer from "./GrpcServer";
 import { GrpcServerOptions } from "./GrpcServer";
+import NanoSDK from "./NanoSDK";
 import { WorkflowRequest, WorkflowResponse } from "./gen/workflow_pb";
 
 export {
@@ -17,4 +18,5 @@ export {
 	WorkflowResponse,
 	GrpcServer,
 	GrpcServerOptions,
+	NanoSDK,
 };

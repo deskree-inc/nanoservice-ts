@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Generator NanoSDK</title>
+    <script src="/sdk/javascript/nanosdk.min.js"></script>
+  </head>
+  <body>
+    <div id="output">
+        <!-- Create a button -->
+        <button onclick="runTests()">Generate PDF</button>
+    </div>
+    <script>
+      async function runTests() {
+        const host = "http://localhost:4000";
+        const token = "";
+
+        const client = new NanoSDK().createHttpClient(host, token);
+
+        // Get top 20 films by revenue
+        const inputs1 = {
+          host: "localhost",
+          port: 5432,
+          database: "dvdrental",
+          user: "${process.env.POSTGRESQL_USER}",
+          password: "${process.env.POSTGRESQL_PASSWORD}",
+          query:
+            "SELECT f.title as product, SUM(p.amount) as total, ROUND(SUM(p.amount) / COUNT(*), 2) as price, DATE_TRUNC('month', r.rental_date) AS rental_month, COUNT(*) AS quantity FROM rental r INNER JOIN inventory i ON i.inventory_id = r.inventory_id INNER JOIN film f ON f.film_id = i.film_id INNER JOIN payment p ON p.rental_id = r.rental_id GROUP BY r.inventory_id, rental_month, f.title ORDER BY total DESC LIMIT 20;",
+        };
+        const response1 = await client.nodejs("postgres-query", inputs1);
+
+        // Fix the data values
+        const inputs2 = {
+          array: response1.data.data,
+          map: "{ product: data.product, quantity: parseInt(data.quantity), total: parseInt(data.total), price: parseInt(data.price), rental_month: data.rental_month }",
+        };
+        const response2 = await client.nodejs("array-map", inputs2);
+
+        // Generate PDF
+        const inputs3 = {
+          title: "Top 20 Films by Revenue",
+          sales_data: response2.data,
+        };
+        const response3 = await client.python3("generate-pdf", inputs3);
+
+        // Generate Blob and Download the PDF
+        const inputs4 = {
+          base64: response3.data.pdf_base64,
+        };
+        const response4 = await client.nodejs("base64-pdf", inputs4);
+        const url = window.URL.createObjectURL(response4.rawData);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "file.pdf"; // Filename
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      }
+    </script>
+  </body>
+</html>
