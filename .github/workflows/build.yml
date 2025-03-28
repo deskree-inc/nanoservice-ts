@@ -2,7 +2,7 @@ name: Build Project
 
 on:
   push:
-    branches: [ feat/login-cli ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
