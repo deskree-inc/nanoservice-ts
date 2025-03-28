@@ -154,7 +154,13 @@ async function main() {
 					command: "logout",
 					args: options,
 					execution: async () => {
-						await logout(options);
+						await analytics.trackCommandExecution({
+							command: "logout",
+							args: options,
+							execution: async () => {
+								await logout(options);
+							},
+						});
 					},
 				});
 			});
