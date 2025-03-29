@@ -1,5 +1,5 @@
 import * as p from "@clack/prompts";
-import type { OptionValues } from "commander";
+import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
 
 import { tokenManager } from "../../services/local-token-manager.js";
 
@@ -62,3 +62,18 @@ export async function login(opts: OptionValues) {
 		process.exit(1);
 	}
 }
+
+// Login command
+program
+	.command("login")
+	.description("Login to Nanoservices")
+	.option("-t, --token <value>", "Login with a token")
+	.action(async (options: OptionValues) => {
+		await trackCommandExecution({
+			command: "login",
+			args: options,
+			execution: async () => {
+				await login(options);
+			},
+		});
+	});
