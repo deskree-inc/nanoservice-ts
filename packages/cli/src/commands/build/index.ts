@@ -45,7 +45,7 @@ async function initBuild(opts: OptionValues) {
 }
 
 async function createTarBall(opts: OptionValues) {
-	const fileName = `${crypto.randomUUID()}.tgz`;
+	const fileName = `${crypto.randomUUID()}.tar.gz`;
 	// const command = `npm pack ${opts.directory} --pack-destination ${opts.directory}`;
 	const command = `tar -czf ${opts.directory}/${fileName} -C ${opts.directory} --exclude=${fileName} --exclude=.nanoservice.json --exclude=.git --exclude=node_modules --exclude=package-lock.json --exclude=README.md .`;
 	const execResponse = await exec(command);
@@ -97,7 +97,7 @@ async function getBuildStatus(opts: OptionValues) {
 	return buildStatusData;
 }
 
-async function build(opts: OptionValues) {
+export async function build(opts: OptionValues) {
 	const logger = p.spinner();
 	try {
 		logger.start(`Building nanoservice in ${opts.directory}...`);
@@ -176,8 +176,8 @@ async function build(opts: OptionValues) {
 		if (status?.status?.condition?.status !== "True") throw new Error(status?.status?.condition?.message);
 		logger.stop("Build completed successfully", 0);
 	} catch (error) {
-		logger.stop(`Build Failed. ${error} - Build ID: ${opts.id}`, 1);
-		return;
+		if (opts.id) logger.stop(`Build Failed. ${error} - Build ID: ${opts.id}`, 1);
+		else logger.stop(`Build Failed. ${error}`, 1);
 	}
 }
 
