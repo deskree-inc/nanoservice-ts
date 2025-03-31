@@ -285,8 +285,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       posthog-node:
-        specifier: ^4.6.0
-        version: 4.10.2
+        specifier: ^4.11.1
+        version: 4.11.1
       simple-git:
         specifier: ^3.27.0
         version: 3.27.0
@@ -3499,8 +3499,8 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-node@4.10.2:
-    resolution: {integrity: sha512-mylSjhI3R69FF+2T/HT5ZcFnS0q22/U/JrvfkI4vEr+BLwjSOE8a3CvbXJEDzDXw44wg5iJuXBZYAEu15rvERg==}
+  posthog-node@4.11.1:
+    resolution: {integrity: sha512-Hdby0Rq2K1rzjHxQdUmFBEP2UqAR/tY4d0WbNp7GxkYUK0YZvAD15MkeorSo4b8X7zgosHfQJVRxGx0HWSYPBA==}
     engines: {node: '>=15.0.0'}
 
   prettier@2.8.8:
@@ -7510,7 +7510,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  posthog-node@4.10.2:
+  posthog-node@4.11.1:
     dependencies:
       axios: 1.8.4
     transitivePeerDependencies:
