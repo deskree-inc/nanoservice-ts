@@ -56,7 +56,6 @@ async function createTarBall(opts: OptionValues) {
 
 async function storeFiles(opts: OptionValues) {
 	const file = await fs.readFile(`${opts.directory}/${opts.tarball}`);
-	// const file = await fs.readFile("/Users/ernestochan/Desktop/context.tar.gz");
 	const requestOptions: RequestInit = {
 		method: "PUT",
 		headers: {
@@ -151,7 +150,7 @@ export async function build(opts: OptionValues) {
 		do {
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 			status = await getBuildStatus(opts);
-			logger.message(status?.status?.condition?.reason ?? "Unknown reason");
+			logger.message(`Build ${status?.status?.condition?.reason}`);
 		} while (status?.status?.condition?.status === "Unknown");
 
 		// Store the build result
@@ -176,8 +175,10 @@ export async function build(opts: OptionValues) {
 		if (status?.status?.condition?.status !== "True") throw new Error(status?.status?.condition?.message);
 		logger.stop("Build completed successfully", 0);
 	} catch (error) {
+		if (opts.tarball && fs.existsSync(opts.tarball)) fs.removeSync(opts.tarball);
 		if (opts.id) logger.stop(`Build Failed. ${error} - Build ID: ${opts.id}`, 1);
 		else logger.stop(`Build Failed. ${error}`, 1);
+		console.error(error);
 	}
 }
 

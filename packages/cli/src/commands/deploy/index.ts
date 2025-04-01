@@ -1,11 +1,40 @@
 import * as p from "@clack/prompts";
 import fs from "fs-extra";
+import color from "picocolors";
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
 
 import { NANOSERVICE_URL } from "../../services/constants.js";
 import { tokenManager } from "../../services/local-token-manager.js";
 
 import { build as buildCommand } from "../build/index.js";
+
+type StatusType = {
+	conditions?: Array<{
+		type?: string;
+		status?: string;
+		lastTransitionTime?: string;
+	}>;
+	latestCreatedRevisionName?: string;
+	latestReadyRevisionName?: string;
+	observedGeneration?: number;
+	traffic?: Array<{
+		percent?: number;
+		latestRevision?: string;
+		revisionName?: string;
+	}>;
+};
+
+async function getDeploymentStatus(opts: OptionValues): Promise<StatusType> {
+	const deploymentStatus = await fetch(`${NANOSERVICE_URL}/deploy-status/${opts.name}`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${opts.token}`,
+		},
+	});
+	if (!deploymentStatus.ok) throw new Error(deploymentStatus.statusText);
+	const deploymentStatusData = await deploymentStatus.json();
+	return deploymentStatusData.data;
+}
 
 async function deploy(opts: OptionValues) {
 	const logger = p.spinner();
@@ -44,6 +73,8 @@ async function deploy(opts: OptionValues) {
 		// getting last build id
 		if (!json.lastBuild) throw new Error("No last build found. Please build first.");
 		if (!json.lastBuild.id) throw new Error("No last build id found. Please build first.");
+		if (!json.lastBuild.reason) throw new Error("No last build status found. Please build first.");
+		if (json.lastBuild.reason !== "Succeeded") throw new Error("Last build was not successful. Please build again.");
 		opts.id = json.lastBuild.id;
 
 		// get token
@@ -66,15 +97,36 @@ async function deploy(opts: OptionValues) {
 		const deploymentData = await deployment.json();
 		if (deploymentData.error) throw new Error(deploymentData.error);
 
+		// Check deployment status
+		let isReady = false;
+		let deploymentStatus: StatusType = {};
+		do {
+			logger.message("Deploying...");
+			await new Promise((resolve) => setTimeout(resolve, 2000));
+			deploymentStatus = await getDeploymentStatus(opts);
+			isReady = true;
+			for (const condition of deploymentStatus?.conditions || []) {
+				if (condition.status !== "True") {
+					isReady = false;
+					break;
+				}
+			}
+		} while (!isReady);
+
 		// Update .nanoservice.json with deployment results
 		logger.message("Updating .nanoservice.json with deployment results...");
+		deploymentData.data.status = deploymentStatus;
 		json.deployments = json.deployments || [];
 		json.deployments.push(deploymentData);
 		json.lastDeployment = deploymentData;
 		fs.writeJSONSync(nanoserviceFile, json, { spaces: 2 });
 
 		logger.message("Deployment completed");
-		logger.stop("Nanoservice deployed successfully!");
+		logger.stop(
+			`Nanoservice deployed successfully! ${color.gray(`Version: ${deploymentStatus?.latestReadyRevisionName}`)}`,
+			0,
+		);
+		p.log.success(`Service live at: ${color.greenBright(deploymentData?.data?.url)}`);
 	} catch (error) {
 		logger.stop(`Error: ${error}`, 1);
 	}

@@ -138,6 +138,9 @@ export async function createProject(opts: OptionValues, version: string, current
 		// Prepare the project
 		const dirPath = !currentPath ? path.join(process.cwd(), projectName) : process.cwd();
 
+		// Add permissions to the directory
+		fsExtra.chmodSync(dirPath, 0o755);
+
 		if (!isDefault) s.message("Gathering project files");
 
 		const githubLocalExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
