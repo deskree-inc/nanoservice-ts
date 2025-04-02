@@ -174,11 +174,13 @@ export async function build(opts: OptionValues) {
 
 		if (status?.status?.condition?.status !== "True") throw new Error(status?.status?.condition?.message);
 		logger.stop("Build completed successfully", 0);
+		return true;
 	} catch (error) {
 		if (opts.tarball && fs.existsSync(opts.tarball)) fs.removeSync(opts.tarball);
 		if (opts.id) logger.stop(`Build Failed. ${error} - Build ID: ${opts.id}`, 1);
 		else logger.stop(`Build Failed. ${error}`, 1);
 		console.error(error);
+		return false;
 	}
 }
 

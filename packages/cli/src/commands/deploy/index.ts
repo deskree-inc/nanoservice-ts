@@ -36,7 +36,7 @@ async function getDeploymentStatus(opts: OptionValues): Promise<StatusType> {
 	return deploymentStatusData.data;
 }
 
-async function deploy(opts: OptionValues) {
+export async function deploy(opts: OptionValues) {
 	const logger = p.spinner();
 	try {
 		logger.start("Deploying nanoservice...");
@@ -127,8 +127,10 @@ async function deploy(opts: OptionValues) {
 			0,
 		);
 		p.log.success(`Service live at: ${color.greenBright(deploymentData?.data?.url)}`);
+		return true;
 	} catch (error) {
 		logger.stop(`Error: ${error}`, 1);
+		return false;
 	}
 }
 
