@@ -11,6 +11,8 @@ import { build as buildCommand } from "../build/index.js";
 type StatusType = {
 	conditions?: Array<{
 		type?: string;
+		reason?: string;
+		message?: string;
 		status?: string;
 		lastTransitionTime?: string;
 	}>;
@@ -106,6 +108,7 @@ export async function deploy(opts: OptionValues) {
 			deploymentStatus = await getDeploymentStatus(opts);
 			isReady = true;
 			for (const condition of deploymentStatus?.conditions || []) {
+				if (condition.reason) throw new Error(condition.message);
 				if (condition.status !== "True") {
 					isReady = false;
 					break;
