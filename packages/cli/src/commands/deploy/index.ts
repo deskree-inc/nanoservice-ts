@@ -102,13 +102,17 @@ export async function deploy(opts: OptionValues) {
 		// Check deployment status
 		let isReady = false;
 		let deploymentStatus: StatusType = {};
+		let errorCount = 0;
 		do {
 			logger.message("Deploying...");
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 			deploymentStatus = await getDeploymentStatus(opts);
 			isReady = true;
 			for (const condition of deploymentStatus?.conditions || []) {
-				if (condition.reason) throw new Error(condition.message);
+				if (condition.reason) {
+					errorCount++;
+					if (errorCount > 3) throw new Error(condition.message);
+				}
 				if (condition.status !== "True") {
 					isReady = false;
 					break;
