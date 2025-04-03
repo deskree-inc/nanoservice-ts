@@ -9,7 +9,14 @@ import figlet from "figlet";
 import fsExtra from "fs-extra";
 import color from "picocolors";
 import simpleGit, { type SimpleGit, type SimpleGitOptions } from "simple-git";
-import { examples_url, node_file, package_dependencies, package_dev_dependencies } from "./utils/Examples.js";
+import {
+	examples_url,
+	node_file,
+	package_dependencies,
+	package_dev_dependencies,
+	supervisord_nodejs,
+	supervisord_python,
+} from "./utils/Examples.js";
 
 const exec = util.promisify(child_process.exec);
 
@@ -168,7 +175,7 @@ export async function createProject(opts: OptionValues, version: string, current
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/workflows`, workflowsDir);
 
 		// Add permissions to the directory
-		fsExtra.chmodSync(dirPath, 0o755);
+		fsExtra.chownSync(dirPath, os.userInfo().uid, os.userInfo().gid);
 
 		// Examples
 
@@ -257,6 +264,12 @@ export async function createProject(opts: OptionValues, version: string, current
 		}
 
 		fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
+
+		// Create supervisord.conf
+		const supervisordConfPath = `${dirPath}/supervisord.conf`;
+		let supervisordConfContent = supervisord_nodejs;
+		if (runtimes.includes("python3")) supervisordConfContent += supervisord_python;
+		fsExtra.writeFileSync(supervisordConfPath, supervisordConfContent);
 
 		// Install Packages
 		s.message("Installing packages...");
