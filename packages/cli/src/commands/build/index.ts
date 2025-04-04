@@ -47,7 +47,7 @@ async function initBuild(opts: OptionValues) {
 async function createTarBall(opts: OptionValues) {
 	const fileName = `${crypto.randomUUID()}.tar.gz`;
 	// const command = `npm pack ${opts.directory} --pack-destination ${opts.directory}`;
-	const command = `tar -czf ${opts.directory}/${fileName} -C ${opts.directory} --exclude=${fileName} --exclude=.nanoservice.json --exclude=.git --exclude=node_modules --exclude=package-lock.json --exclude=README.md .`;
+	const command = `tar -czf ${opts.directory}/${fileName} -C ${opts.directory} --exclude=${fileName} --exclude=.nanoservice.json --exclude=.git --exclude=node_modules --exclude=package-lock.json --exclude=README.md --exclude=.nanoctl/runtimes/python3/python3_runtime/lib .`;
 	const execResponse = await exec(command);
 	if (execResponse.stderr) throw new Error(`Error creating tarball: ${execResponse.stderr}`);
 
