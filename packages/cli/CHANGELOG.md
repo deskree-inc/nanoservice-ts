@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.18
+
+### Patch Changes
+
+- Added JS sdk examples to the project
+
 ## 0.0.17
 
 ### Patch Changes
