@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.19
+
+### Patch Changes
+
+- Added CLI commands: login, logout, build and deploy
+
 ## 0.0.18
 
 ### Patch Changes
