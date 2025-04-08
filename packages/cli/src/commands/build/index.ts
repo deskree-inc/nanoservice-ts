@@ -1,9 +1,7 @@
 import child_process from "node:child_process";
-import util from "node:util";
 import * as p from "@clack/prompts";
 import fs from "fs-extra";
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
-const exec = util.promisify(child_process.exec);
 
 import { NANOSERVICE_URL } from "../../services/constants.js";
 import { tokenManager } from "../../services/local-token-manager.js";
@@ -44,14 +42,47 @@ async function initBuild(opts: OptionValues) {
 	return initBuildData;
 }
 
+async function exec(command: string, args: string[]) {
+	await new Promise<void>((resolve, reject) => {
+		const tarProcess = child_process.spawn(command, args);
+
+		tarProcess.on("close", (code) => {
+			if (code === 0) {
+				resolve();
+			} else {
+				reject(new Error(`Tar process exited with code ${code}`));
+			}
+		});
+
+		tarProcess.on("error", (err) => {
+			reject(err);
+		});
+	});
+}
+
 async function createTarBall(opts: OptionValues) {
 	const fileName = `${crypto.randomUUID()}.tar.gz`;
-	// const command = `npm pack ${opts.directory} --pack-destination ${opts.directory}`;
-	const command = `tar -czf ${opts.directory}/${fileName} -C ${opts.directory} --exclude=${fileName} --exclude=.nanoservice.json --exclude=.git --exclude=node_modules --exclude=package-lock.json --exclude=README.md --exclude=.nanoctl/runtimes/python3/python3_runtime/lib .`;
-	const execResponse = await exec(command);
-	if (execResponse.stderr) throw new Error(`Error creating tarball: ${execResponse.stderr}`);
+	const args = [
+		"-czf",
+		`${opts.directory}/${fileName}`,
+		"-C",
+		opts.directory,
+		`--exclude=${fileName}`,
+		"--exclude=.nanoservice.json",
+		"--exclude=.git",
+		"--exclude=node_modules",
+		"--exclude=package-lock.json",
+		"--exclude=README.md",
+		"--exclude=.nanoctl/runtimes/python3/python3_runtime/lib",
+		".",
+	];
 
-	return execResponse.stdout !== "" ? execResponse.stdout : fileName;
+	try {
+		await exec("tar", args);
+	} catch (error) {
+		throw new Error(`Failed to create tarball: ${error}`);
+	}
+	return fileName;
 }
 
 async function storeFiles(opts: OptionValues) {
