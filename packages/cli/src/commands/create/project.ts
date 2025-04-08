@@ -189,6 +189,7 @@ export async function createProject(opts: OptionValues, version: string, current
 		} else {
 			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/development`, `${nodesDir}/examples/infra`);
 			fsExtra.writeFileSync(`${dirPath}/src/Nodes.ts`, node_file);
+			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/sdk`, `${dirPath}/public/sdk`);
 		}
 
 		// Create .env.local file
