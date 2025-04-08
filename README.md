@@ -144,7 +144,7 @@ To contribute to the Nanoservice documentation, follow these steps:
 
 1. Fork the project
 
-- Go to the [Nanoservice repository](https://github.com/deskree-inc/nanoservice-ts) and fork it to your GitHub account.
+     - Go to the [Nanoservice repository](https://github.com/deskree-inc/nanoservice-ts) and fork it to your GitHub account.
 
 2. Clone the project to your local machine
 
@@ -155,28 +155,32 @@ To contribute to the Nanoservice documentation, follow these steps:
 ```
 cd nanoservice-ts
 ```
-4. Run the application in development mode
+4. Add the upstream remote
+```
+git remote add upstream https://github.com/deskree-inc/nanoservice-ts.git
+```
+5. Run the application in development mode
 
 ```
 npx mintlify dev
 ```
-5. Create a new branch for your changes
+6. Create a new branch for your changes
 ```bash
 git checkout -b "name-of-your-branch"
 ```
-6. Stage your changes
+7. Stage your changes
 ```
   git add .
 ```
-7. Commit the changes
+8. Commit the changes
 ```
 git commit -m "first_commit"
 ```
-8. Push your changes
+9. Push your changes
 ```
 git push origin name-of-your-branch
 ```
-9. Create a pull request
+10. Create a pull request
 
 <!-- LICENSE -->
 ## License
