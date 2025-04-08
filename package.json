@@ -28,6 +28,8 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@changesets/cli": "^2.27.12",
+		"@types/jest": "^29.5.14",
+		"@types/node": "^22.14.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.4.3",
 		"nx": "20.4.0",

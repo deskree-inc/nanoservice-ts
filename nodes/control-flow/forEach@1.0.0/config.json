@@ -1,0 +1,71 @@
+{
+	"name": "forEach",
+	"version": "1.0.0",
+	"description": "Iterates over a collection, executing steps for each item",
+	"group": "FLOW_CONTROL",
+	"config": {
+		"type": "object",
+		"properties": {
+			"collection": {
+				"type": ["array", "object"],
+				"description": "The collection to iterate over (array or object)"
+			},
+			"steps": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "Name of the step"
+						},
+						"node": {
+							"type": "string",
+							"description": "Node to execute"
+						},
+						"type": {
+							"type": "string",
+							"description": "Type of the step",
+							"default": "local"
+						}
+					},
+					"required": ["name", "node", "type"]
+				},
+				"description": "Steps to execute for each item"
+			},
+			"execution": {
+				"type": "string",
+				"enum": ["sequential", "parallel"],
+				"default": "sequential",
+				"description": "Execution mode (sequential or parallel)"
+			},
+			"concurrency": {
+				"type": "number",
+				"default": 5,
+				"description": "Maximum concurrent executions in parallel mode"
+			},
+			"errorHandling": {
+				"type": "string",
+				"enum": ["continue", "stop"],
+				"default": "continue",
+				"description": "Error handling behavior"
+			}
+		},
+		"required": ["collection", "steps"],
+		"example": {
+			"collection": [],
+			"steps": [],
+			"execution": "sequential",
+			"concurrency": 5,
+			"errorHandling": "continue"
+		}
+	},
+	"inputs": {
+		"type": ["array", "object"],
+		"description": "Collection to iterate over"
+	},
+	"output": {
+		"type": "array",
+		"description": "Results from each iteration"
+	}
+}
