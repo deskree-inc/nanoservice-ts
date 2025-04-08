@@ -7,22 +7,22 @@ export async function login(opts: OptionValues) {
 	let token = tokenManager.getToken();
 	const NANOSERVICES_TOKEN = process.env.NANOSERVICES_TOKEN as string;
 
-	const resolveTokenType = async (): Promise<string> => {
-		const tokenType = await p.select({
-			message: "Choose the authentication method",
-			options: [
-				{ value: "token", label: "Provide token manually", hint: "Recommended" },
-				{ value: "token", label: "Authenticate via web", hint: "Comming soon" },
-			],
-		});
+	// const resolveTokenType = async (): Promise<string> => {
+	// 	const tokenType = await p.select({
+	// 		message: "Choose the authentication method",
+	// 		options: [
+	// 			{ value: "token", label: "Provide token manually", hint: "Recommended" },
+	// 			{ value: "token", label: "Authenticate via web", hint: "Comming soon" },
+	// 		],
+	// 	});
 
-		if (p.isCancel(tokenType)) {
-			p.cancel("Authentiecation cancelled.");
-			process.exit(0);
-		}
+	// 	if (p.isCancel(tokenType)) {
+	// 		p.cancel("Authentiecation cancelled.");
+	// 		process.exit(0);
+	// 	}
 
-		return tokenType;
-	};
+	// 	return tokenType;
+	// };
 
 	const resolveToken = async (): Promise<string> => {
 		let token = process.env.NANOSERVICES_TOKEN;
@@ -42,8 +42,9 @@ export async function login(opts: OptionValues) {
 
 	try {
 		if (!token && !NANOSERVICES_TOKEN && !opts.token) {
-			const tokenType = await resolveTokenType();
-			if (tokenType === "token") token = await resolveToken();
+			// const tokenType = await resolveTokenType();
+			// if (tokenType === "token")
+			token = await resolveToken();
 		} else if (opts.token) {
 			token = opts.token;
 		} else if (NANOSERVICES_TOKEN) {
