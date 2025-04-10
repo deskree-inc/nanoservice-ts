@@ -132,6 +132,56 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+<!-- CONTRIBUTING TO THE NANOSERVICE DOCUMENTATION -->
+## Contributing to the Nanoservice Documentation
+
+### Prerequisites
+Make sure you have the following installed on your system:
+
+- [Node.js](https://nodejs.org/)
+
+To contribute to the Nanoservice documentation, follow these steps:
+
+1. Fork the project
+
+     - Go to the [Nanoservice repository](https://github.com/deskree-inc/nanoservice-ts) and fork it to your GitHub account.
+
+2. Clone the project to your local machine
+
+```
+   git clone https://github.com/deskree-inc/nanoservice-ts.git
+```
+3. Navigate to the project directory
+```
+cd nanoservice-ts
+```
+4. Add the upstream remote
+```
+git remote add upstream https://github.com/deskree-inc/nanoservice-ts.git
+```
+5. Run the application in development mode
+
+```
+npx mintlify dev
+```
+6. Create a new branch for your changes
+```bash
+git checkout -b "name-of-your-branch"
+```
+7. Stage your changes
+```
+  git add .
+```
+8. Commit the changes
+```
+git commit -m "first_commit"
+```
+9. Push your changes
+```
+git push origin name-of-your-branch
+```
+10. Create a pull request
+
 <!-- LICENSE -->
 ## License
 
