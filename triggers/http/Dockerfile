@@ -17,8 +17,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 COPY . .
 
+
 # Install Python dependencies
-RUN pip install --no-cache-dir -r ./.nanoctl/runtimes/python3/requirements.txt
+RUN if [ -f ./.nanoctl/runtimes/python3/requirements.txt ]; then \
+    pip install --no-cache-dir -r ./.nanoctl/runtimes/python3/requirements.txt; \
+    fi
 
 # Install Node.js dependencies
 RUN npm install
@@ -26,7 +29,7 @@ RUN npm install
 RUN npm run build
 
 # Configure Supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Set environment variables
 ENV WORKFLOWS_PATH=/app/workflows
