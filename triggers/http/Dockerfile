@@ -29,7 +29,7 @@ RUN npm install
 RUN npm run build
 
 # Configure Supervisor
-# COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Set environment variables
 ENV WORKFLOWS_PATH=/app/workflows

@@ -17,8 +17,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 COPY . .
 
+
 # Install Python dependencies
-RUN pip install --no-cache-dir -r ./.nanoctl/runtimes/python3/requirements.txt
+RUN if [ -f ./.nanoctl/runtimes/python3/requirements.txt ]; then \
+    pip install --no-cache-dir -r ./.nanoctl/runtimes/python3/requirements.txt; \
+    fi
 
 # Install Node.js dependencies
 RUN npm install
