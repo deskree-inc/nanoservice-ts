@@ -31,7 +31,7 @@
 		"figlet": "^1.8.0",
 		"fs-extra": "^11.2.0",
 		"picocolors": "^1.1.1",
-		"posthog-node": "^4.6.0",
+		"posthog-node": "^4.11.3",
 		"simple-git": "^3.27.0",
 		"type-fest": "^4.34.1",
 		"typescript": "^5.5.4",
