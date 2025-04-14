@@ -175,7 +175,11 @@ export async function createProject(opts: OptionValues, version: string, current
 		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/workflows`, workflowsDir);
 
 		// Add permissions to the directory
-		fsExtra.chownSync(dirPath, os.userInfo().uid, os.userInfo().gid);
+		try {
+			fsExtra.chownSync(dirPath, os.userInfo().uid, os.userInfo().gid);
+		} catch (error) {
+			console.error(`Failed to change ownership of directory ${dirPath}:`, error);
+		}
 
 		// Examples
 

@@ -1,4 +1,5 @@
 import child_process from "node:child_process";
+import crypto from "node:crypto";
 import * as p from "@clack/prompts";
 import fs from "fs-extra";
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
