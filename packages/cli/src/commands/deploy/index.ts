@@ -114,7 +114,7 @@ export async function deploy(opts: OptionValues) {
 			deploymentStatus = await getDeploymentStatus(opts);
 			isReady = true;
 			for (const condition of deploymentStatus?.conditions || []) {
-				if (condition.reason) {
+				if (condition.reason?.includes("Failed")) {
 					errorCount++;
 					if (errorCount > 3) throw new Error(condition.message);
 				}
