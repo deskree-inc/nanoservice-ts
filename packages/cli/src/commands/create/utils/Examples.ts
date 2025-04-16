@@ -99,4 +99,35 @@ const workflow_template = `
 }
 `;
 
-export { node_file, package_dependencies, package_dev_dependencies, python3_file, examples_url, workflow_template };
+const supervisord_nodejs = `
+[supervisord]
+nodaemon=true
+
+[program:nodejs_app]
+command=npm start
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/nodejs.err.log
+stdout_logfile=/var/log/nodejs.out.log
+`;
+
+const supervisord_python = `
+[program:python_app]
+command=python3 /app/.nanoctl/runtimes/python3/server.py
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/python.err.log
+stdout_logfile=/var/log/python.out.log
+`;
+export {
+	node_file,
+	package_dependencies,
+	package_dev_dependencies,
+	python3_file,
+	examples_url,
+	workflow_template,
+	supervisord_nodejs,
+	supervisord_python,
+};
