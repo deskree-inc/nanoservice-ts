@@ -8,6 +8,7 @@ import { createWorkflow } from "./commands/create/workflow.js";
 import { devProject } from "./commands/dev/index.js";
 import { PosthogAnalytics } from "./services/posthog.js";
 import { getPackageVersion } from "./services/utils.js";
+import helloAndrea from "./commands/HelloAndrea.js";
 
 const version = await getPackageVersion();
 
@@ -112,6 +113,8 @@ async function main() {
 		create.addCommand(project);
 		create.addCommand(node);
 		create.addCommand(workflow);
+		program.addCommand(helloAndrea);
+
 
 		// Dev server
 
