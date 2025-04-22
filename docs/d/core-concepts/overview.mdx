@@ -5,7 +5,12 @@ title: Overview
 # Nanoservice-ts Architecture: Trigger, Workflow (Runner), and Nodes
 
 ## Overview  
-In **nanoservice-ts**, workflows are structured as sequences of **Nanoservices (Nodes)**, which execute specific tasks within an isolated, container-based environment. Workflows are triggered by predefined events, ensuring automated execution and precise orchestration.
+
+In **nanoservice-ts**, workflows are composed of sequences of modular **Nanoservices (Nodes)**, each responsible for executing a specific, isolated task within a container-based environment. These workflows are automatically triggered by predefined events—such as HTTP requests, scheduled (cron) jobs, event-driven messages, or data updates—which serve as entry points into the system.
+
+Once activated, a Workflow Runner orchestrates the execution of Nodes based on the defined workflow logic, handling data flow, execution order, dependencies, and control logic.
+
+This architecture enables fully automated, event-driven execution, with a clean separation of concerns between event activation (Triggers), workflow coordination (Runner), and task execution (Nodes).
 
 ## Core Components  
 
