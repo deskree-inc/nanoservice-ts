@@ -6,7 +6,7 @@
 	"exec_metrics": "node -r ts-node/register -r ./src/opentelemetry_metrics.ts --env-file=.env.local ./src/index.ts",
 	"exec_tracing": "node -r ts-node/register -r ./src/opentelemetry_traces.ts --env-file=.env.local ./src/index.ts",
 	"exec_metrics_tracing": "node -r ts-node/register -r ./src/opentelemetry_metrics.ts -r ./src/opentelemetry_traces.ts --env-file=.env.local ./src/index.ts",
-	"exec": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
+	"exec": "node -r ./src/opentelemetry_metrics.ts -r ts-node/register --env-file=.env.local ./src/index.ts",
 	"env": {
 		"NODE_ENV": "local"
 	},

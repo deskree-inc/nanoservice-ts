@@ -242,4 +242,28 @@ export default class HttpTrigger extends TriggerBase {
 			});
 		});
 	}
+
+	startMetricsServer(): Promise<Express> {
+		return new Promise((done) => {
+			const metricsApp = express();
+			const metricsPort = process.env.METRICS_PORT || 8000;
+			metricsApp.listen(metricsPort, () => {
+				this.logger.log(`Metrics server is running at http://localhost:${metricsPort}/metrics`);
+			});
+			metricsApp.get("/metrics", async (_req: Request, res: Response) => {
+				res.setHeader("Content-Type", "text/plain");
+				const [tsMetrics, pyMetrics] = await Promise.all([
+					fetch("http://localhost:9091/metrics")
+						.then((res) => res.text())
+						.catch(() => ""),
+					fetch("http://localhost:9092/metrics")
+						.then((res) => res.text())
+						.catch(() => ""),
+				]);
+				const metricsData = tsMetrics + pyMetrics;
+				res.status(200).send(metricsData);
+			});
+			done(metricsApp);
+		});
+	}
 }

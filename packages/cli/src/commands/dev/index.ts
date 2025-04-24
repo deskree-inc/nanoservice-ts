@@ -17,7 +17,7 @@ export async function devProject(opts: OptionValues) {
 				"--config",
 				"./.nanoctl/runtimes/python3/nodemon.json",
 				"--exec",
-				"./.nanoctl/runtimes/python3/python3_runtime/bin/python3",
+				"opentelemetry-instrument ./.nanoctl/runtimes/python3/python3_runtime/bin/python3",
 				"./.nanoctl/runtimes/python3/server.py",
 			],
 			name: "Python3 Runner",
