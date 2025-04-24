@@ -2,11 +2,49 @@
 title: Overview
 ---
 
-In nanoservices, a workflow outlines the sequence of **nodes** (execution steps), their configuration, data flow, and the **trigger** that starts the workflow.
+A workflow is a sequence of tasks or nodes that are executed automatically based on specific triggers or conditions.
+Each node in a workflow performs a defined operation, and the output of one node may serve as input to the next.
+
+#### Workflows can be used for: ####
+
+- Automating tasks such as sending notifications, processing data
+
+- Integrating services such as connecting APIs, processing requests
+
+- Managing logic flow such as conditional execution based on inputs
 
 ---
 
 <Tip>All workflows are defined in the `/workflows` directory of the project</Tip>
+
+## Workflow Folder Structure
+In a well-structured nanoservice project, workflows are usually placed in a dedicated directory called workflows. 
+Each workflow is stored in its own subdirectory to keep things organized and modular.
+
+Here’s an example of the recommended folder structure:
+
+```text
+/nanoservice-ts
+├── workflows/
+│   ├── email-notification/
+│   │   ├── workflow.json
+│   │   ├── send-email.ts
+│   │   └── log-action.ts
+│   └── order-processing/
+│       ├── workflow.json
+│       ├── validate-order.ts
+│       └── create-invoice.ts
+
+```
+- `workflows/`: The root directory that contains all workflows in the project.
+
+- `your-workflow-name/`: A subdirectory for a specific workflow such as email-notification and order-processing.
+
+- `workflow.json`: Defines the entire structure of the workflow, including triggers, nodes, and their relationships.
+
+- `nodeX.ts`: Individual TypeScript files that implement the functionality of each node within the workflow.
+
+
 
 ## Workflow Structure & Format
 <CodeGroup>
