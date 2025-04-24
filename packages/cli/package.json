@@ -16,13 +16,13 @@
 	"files": ["dist", "node_modules"],
 	"scripts": {
 		"build": "rm -rf dist && npx tsc",
-		"build:dev": "sudo tsc --watch",
+		"build:dev": "tsc --watch",
 		"test:dev": "vitest",
 		"test": "vitest run",
 		"typecheck": "tsc --noEmit --incremental",
 		"clean": "rm -rf dist && rm -rf node_modules",
-		"install:local": "sudo npm link",
-		"uninstall:local": "sudo npm rm --global nanoctl",
+		"install:local": "npm link",
+		"uninstall:local": "npm rm --global nanoctl",
 		"dev": "npm run uninstall:local && npm run install:local && npm run build:dev && nanoctl --help"
 	},
 	"keywords": ["nanoctl", "cli", "nanoservice", "nanoservice-ts"],
