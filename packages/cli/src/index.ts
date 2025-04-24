@@ -1,19 +1,24 @@
 #! /usr/bin/env node
 import os from "node:os";
-import { Command, type OptionValues } from "commander";
 import fsExtra from "fs-extra";
 import { createNode } from "./commands/create/node.js";
 import { createProject } from "./commands/create/project.js";
 import { createWorkflow } from "./commands/create/workflow.js";
 import { devProject } from "./commands/dev/index.js";
+import { type OptionValues, program } from "./services/commander.js";
 import { PosthogAnalytics } from "./services/posthog.js";
 import { getPackageVersion } from "./services/utils.js";
+
+// Commands
+import "./commands/login/index.js";
+import "./commands/logout/index.js";
+import "./commands/build/index.js";
+import "./commands/deploy/index.js";
 
 const version = await getPackageVersion();
 
 async function main() {
 	try {
-		const program = new Command();
 		const HOME_DIR = `${os.homedir()}/.nanoctl`;
 		const cliConfigPath = `${HOME_DIR}/nanoctl.json`;
 

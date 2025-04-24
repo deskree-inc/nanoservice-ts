@@ -11,5 +11,5 @@ export async function getPackageVersion() {
 	const pkgJsonPath = path.join(__dirname, "..", "..", "package.json");
 
 	const content = (await fs.readJSON(pkgJsonPath)) as PackageJson;
-	return content.version as string;
+	return content?.version as string;
 }

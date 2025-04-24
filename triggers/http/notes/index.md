@@ -46,3 +46,6 @@ Now that you understand the basics, dive deeper into `nanoservice-ts` with the f
 - [Creating Workflows](./CLI_Commands/Create_Workflow.md)  
 - [Creating Custom Nodes](./CLI_Commands/Create_Node.md)
 - [Examples](./examples.md)
+- [Authentication](./CLI_Commands/Authentication.md)
+- [Building](./CLI_Commands/Building.md)
+- [Deployment](./CLI_Commands/Deployment.md)
