@@ -18,23 +18,20 @@ if(os.getenv("ENABLE_METRICS") == "true"):
 
 def set_metrics(metrics_data):
     node_time = otelmetrics.get_meter("default").create_gauge(
-        name="node_time",
-        description="Time taken to execute the node",
-        unit="ms"
+        name="workflow_time",
+        description="Time taken to execute the node"
     )
     node_time.set(metrics_data['time']['duration'], {"node_name": metrics_data['name']})
 
     node_memory = otelmetrics.get_meter("default").create_gauge(
-        name="node_memory",
-        description="Memory used by the node",
-        unit="bytes"
+        name="workflow_memory",
+        description="Memory used by the node"
     )
     node_memory.set(metrics_data['memory']['total'], {"node_name": metrics_data['name']})
 
     node_cpu = otelmetrics.get_meter("default").create_gauge(
-        name="node_cpu",
-        description="CPU used by the node",
-        unit="cores"
+        name="workflow_cpu",
+        description="CPU used by the node"
     )
     node_cpu.set(metrics_data['cpu']['usage'], {"node_name": metrics_data['name']})
     
@@ -46,12 +43,12 @@ class NodeService(node_pb2_grpc.NodeServiceServicer):
     async def ExecuteNode(self, request, context):
         
         node_error = otelmetrics.get_meter("default").create_counter(
-            name="node_error_counter",
+            name="workflow_errors",
             description="Count of node errors",
             unit="1"
         )
         node_success = otelmetrics.get_meter("default").create_counter(
-            name="node_success_counter",
+            name="workflow",
             description="Count of node successes",
             unit="1"
         )
