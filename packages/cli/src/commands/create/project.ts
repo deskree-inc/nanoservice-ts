@@ -152,14 +152,7 @@ export async function createProject(opts: OptionValues, version: string, current
 			fsExtra.removeSync(GITHUB_REPO_LOCAL);
 		}
 
-		const REPO_LOCAL = process.env.LOCAL_REPO_CLONE || "/Users/ernestochan/Desktop/Repositories/nanoservice-ts";
-		if (REPO_LOCAL) {
-			fsExtra.copySync(REPO_LOCAL, GITHUB_REPO_LOCAL);
-			console.log(`Using local repo clone: ${REPO_LOCAL} to ${GITHUB_REPO_LOCAL}`);
-		} else {
-			await git.clone(GITHUB_REPO_REMOTE, GITHUB_REPO_LOCAL);
-			console.log(`Cloning the repository from ${GITHUB_REPO_REMOTE} to ${GITHUB_REPO_LOCAL}`);
-		}
+		await git.clone(GITHUB_REPO_REMOTE, GITHUB_REPO_LOCAL);
 
 		if (!isDefault) s.message("Copying project files...");
 

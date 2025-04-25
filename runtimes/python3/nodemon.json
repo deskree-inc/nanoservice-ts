@@ -2,12 +2,13 @@
 	"watch": ["*"],
 	"ext": "py",
 	"ignore": ["node_modules", ".git"],
-	"exec": "opentelemetry-instrument python3 server.py",
+	"exec": "python3 server.py",
 	"env": {
 		"NODE_ENV": "local",
 		"OTEL_TRACES_EXPORTER": "none",
 		"OTEL_METRICS_EXPORTER": "prometheus",
-		"OTEL_LOGS_EXPORTER": "none"
+		"OTEL_LOGS_EXPORTER": "none",
+		"ENABLE_METRICS": "true"
 	},
 	"ignoreRoot": [".git"]
 }

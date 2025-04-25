@@ -20,6 +20,7 @@ resource = Resource(attributes={
 reader = PrometheusMetricReader()
 
 # Set up MeterProvider with the PrometheusMetricReader
+# if metrics.get_meter_provider() is None:
 provider = MeterProvider(resource=resource, metric_readers=[reader])
 metrics.set_meter_provider(provider)
 
@@ -28,13 +29,5 @@ start_http_server(port=9092)
 
 # Create a meter and a counter
 meter = metrics.get_meter(__name__)
-counter = meter.create_counter(
-    name="example_counter",
-    description="An example counter",
-    unit="1"
-)
-
-# Record a metric
-counter.add(1)
 
 logger.info("Prometheus metrics server started on port 9092")

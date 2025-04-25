@@ -9,9 +9,36 @@ from runner import Runner
 import traceback
 from core.types.context import Context
 
-from opentelemetry_traces import tracer
-from opentelemetry_metrics import metrics as otelmetrics
+from opentelemetry import metrics as otelmetrics
 from util.metrics.main import Metrics
+
+
+if(os.getenv("ENABLE_METRICS") == "true"):
+    import opentelemetry_metrics
+
+def set_metrics(metrics_data):
+    node_time = otelmetrics.get_meter("default").create_gauge(
+        name="node_time",
+        description="Time taken to execute the node",
+        unit="ms"
+    )
+    node_time.set(metrics_data['time']['duration'], {"node_name": metrics_data['name']})
+
+    node_memory = otelmetrics.get_meter("default").create_gauge(
+        name="node_memory",
+        description="Memory used by the node",
+        unit="bytes"
+    )
+    node_memory.set(metrics_data['memory']['total'], {"node_name": metrics_data['name']})
+
+    node_cpu = otelmetrics.get_meter("default").create_gauge(
+        name="node_cpu",
+        description="CPU used by the node",
+        unit="cores"
+    )
+    node_cpu.set(metrics_data['cpu']['usage'], {"node_name": metrics_data['name']})
+    
+
 
 
 # Implement the service
@@ -20,64 +47,67 @@ class NodeService(node_pb2_grpc.NodeServiceServicer):
         
         node_error = otelmetrics.get_meter("default").create_counter(
             name="node_error_counter",
-            description="Count of node errors"
+            description="Count of node errors",
+            unit="1"
         )
         node_success = otelmetrics.get_meter("default").create_counter(
             name="node_success_counter",
-            description="Count of node successes"
+            description="Count of node successes",
+            unit="1"
         )
+
+
         metrics = Metrics()
 
-        with tracer.start_as_current_span("NodeService.ExecuteNode") as span:
-            # Set attributes for the span
-            span.set_attribute("node_name", request.Name)
-            try:
-                # Start the metrics
-                metrics.start()
-        
-                # Decode the message
-                name = request.Name
-                context: Context = decode_message(request)
 
-                # Run the node
-                runner = Runner(name, context)
+        try:
+            # Start the metrics
+            metrics.start()
+    
+            # Decode the message
+            name = request.Name
+            context: Context = decode_message(request)
 
-                response = await runner.run()
-                encode_response = encode_message(response, "JSON")
+            # Run the node
+            runner = Runner(name, context)
 
-                node_success.add(1, {"node_name": request.Name})
-                return node_pb2.NodeResponse(Message=encode_response, Encoding="BASE64", Type="JSON")
-            except Exception as e:
-                # Increment the error counter
-                node_error.add(1, {"node_name": request.Name})
-                stack_trace = traceback.format_exc()
+            response = await runner.run()
+            encode_response = encode_message(response, "JSON")
 
-                error_message = {
-                    "error": str(e),
-                    "stack": stack_trace
-                }
+            node_success.add(1, {"node_name": request.Name})
+            return node_pb2.NodeResponse(Message=encode_response, Encoding="BASE64", Type="JSON")
+        except Exception as e:
+            # Increment the error counter
+            node_error.add(1, {"node_name": request.Name})
+            stack_trace = traceback.format_exc()
 
-                # Check if the exception message is a valid JSON
-                if isinstance(e, Exception):
-                    try:
-                        error_message = json.loads(str(e))
-                    except json.JSONDecodeError:
-                        pass
+            error_message = {
+                "error": str(e),
+                "stack": stack_trace
+            }
 
-                encode_error = encode_message(error_message, "JSON")
-                return node_pb2.NodeResponse(Message=encode_error, Encoding="BASE64", Type="JSON")
-            finally:
-                # Stop the metrics
-                metrics.stop()
+            # Check if the exception message is a valid JSON
+            if isinstance(e, Exception):
+                try:
+                    error_message = json.loads(str(e))
+                except json.JSONDecodeError:
+                    pass
 
-                # Get the metrics
-                metrics_data = metrics.get_metrics()
-                
-                # Add the metrics to the span
-                span.set_attribute("metrics", metrics_data)
+            encode_error = encode_message(error_message, "JSON")
+            return node_pb2.NodeResponse(Message=encode_error, Encoding="BASE64", Type="JSON")
+        finally:
+            # Stop the metrics
+            metrics.stop()
 
-                # clear the metrics
-                metrics.clear()
+            # Get the metrics
+            metrics_data = metrics.get_metrics()
+            metrics_data['name'] = request.Name
+
+            # Set the metrics
+            set_metrics(metrics_data)   
+
+            # clear the metrics
+            metrics.clear()
 
 # Start the server
 async def serve():

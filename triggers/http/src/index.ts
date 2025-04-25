@@ -23,8 +23,6 @@ export default class App {
 	async run() {
 		this.tracer.startActiveSpan("initialization", async (span: Span) => {
 			await this.httpTrigger.listen();
-			// run metrics server
-			await this.httpTrigger.startMetricsServer();
 			this.initializer = performance.now() - this.initializer;
 
 			this.logger.log(`Server initialized in ${(this.initializer).toFixed(2)}ms`);
