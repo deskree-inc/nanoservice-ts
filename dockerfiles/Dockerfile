@@ -37,6 +37,7 @@ ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
 ENV APP_NAME=nanoservice-http
 ENV ENABLE_METRICS=true
+ENV OTEL_METRICS_EXPORTER=prometheus
 
 
 EXPOSE 4000/tcp 
