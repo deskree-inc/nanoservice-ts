@@ -145,4 +145,8 @@ __pycache__/
 *.pyo
 *.pyd
 python3_runtime/
-*/**/sales_report.pdf
+*/**/sales_report.pdf.env.local
+*.bak
+.terraform/
+terraform.tfstate*
+.terraform.lock.hcl
