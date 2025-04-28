@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.19
+
+### Patch Changes
+
+- set_var bug fixed and CLI deployment support
+
 ## 0.0.18
 
 ### Patch Changes

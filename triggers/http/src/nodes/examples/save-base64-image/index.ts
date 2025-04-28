@@ -25,7 +25,7 @@ export default class SaveImageBase64 extends NanoService<InputType> {
 			type: "object",
 			properties: {
 				base64: { type: "string" },
-				path: { type: "string" },
+				dir_path: { type: "string" },
 			},
 			required: ["base64"],
 		};

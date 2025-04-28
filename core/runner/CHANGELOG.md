@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.21
+
+### Patch Changes
+
+- set_var bug fixed and CLI deployment support
+
 ## 0.1.20
 
 ### Patch Changes
