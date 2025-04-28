@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.0
+
+### Minor Changes
+
+- login, build and deploy with deskree serverless
+
 ## 0.0.20
 
 ### Patch Changes
