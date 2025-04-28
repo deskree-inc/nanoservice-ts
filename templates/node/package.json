@@ -19,7 +19,7 @@
 	},
 	"dependencies": {
 		"@nanoservice-ts/shared": "^0.0.9",
-		"@nanoservice-ts/runner": "^0.1.19",
+		"@nanoservice-ts/runner": "^0.1.21",
 		"@nanoservice-ts/helper": "^0.1.4"
 	},
 	"private": true

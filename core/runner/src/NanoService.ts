@@ -87,6 +87,7 @@ export default abstract class NanoService<T> extends NodeBase {
 				[this.name]: (result as unknown as JsonLikeObject).data,
 			};
 			this.setVar(ctx, vars as unknown as VarsContext);
+			response.data = ctx.response || {};
 		} else {
 			response.data = result;
 			(response.data as unknown as NanoService<T>).contentType = this.contentType;
