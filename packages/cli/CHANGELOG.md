@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.0.20
+
+### Patch Changes
+
+- Implemented build and deploy command
+
 ## 0.0.19
 
 ### Patch Changes
