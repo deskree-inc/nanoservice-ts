@@ -331,8 +331,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       '@nanoservice-ts/runner':
-        specifier: ^0.1.19
-        version: 0.1.19
+        specifier: ^0.1.21
+        version: 0.1.21
       '@nanoservice-ts/shared':
         specifier: ^0.0.9
         version: 0.0.9
@@ -353,8 +353,8 @@ importers:
         specifier: ^0.1.4
         version: 0.1.4
       '@nanoservice-ts/runner':
-        specifier: ^0.1.19
-        version: 0.1.19
+        specifier: ^0.1.21
+        version: 0.1.21
       '@nanoservice-ts/shared':
         specifier: ^0.0.9
         version: 0.0.9
@@ -430,17 +430,17 @@ importers:
         specifier: ^2.0.1
         version: 2.0.2(@bufbuild/protobuf@2.2.5)(@connectrpc/connect@2.0.2(@bufbuild/protobuf@2.2.5))
       '@nanoservice-ts/api-call':
-        specifier: ^0.1.23
-        version: 0.1.23
+        specifier: ^0.1.24
+        version: 0.1.24
       '@nanoservice-ts/helper':
         specifier: ^0.1.5
         version: 0.1.5
       '@nanoservice-ts/if-else':
-        specifier: ^0.0.24
-        version: 0.0.24
+        specifier: ^0.0.25
+        version: 0.0.25
       '@nanoservice-ts/runner':
-        specifier: ^0.1.20
-        version: 0.1.20
+        specifier: ^0.1.21
+        version: 0.1.21
       '@nanoservice-ts/shared':
         specifier: ^0.0.9
         version: 0.0.9
@@ -500,17 +500,17 @@ importers:
   triggers/http:
     dependencies:
       '@nanoservice-ts/api-call':
-        specifier: ^0.1.23
-        version: 0.1.23
+        specifier: ^0.1.24
+        version: 0.1.24
       '@nanoservice-ts/helper':
         specifier: ^0.1.5
         version: 0.1.5
       '@nanoservice-ts/if-else':
-        specifier: ^0.0.24
-        version: 0.0.24
+        specifier: ^0.0.25
+        version: 0.0.25
       '@nanoservice-ts/runner':
-        specifier: ^0.1.20
-        version: 0.1.20
+        specifier: ^0.1.21
+        version: 0.1.21
       '@nanoservice-ts/shared':
         specifier: ^0.0.9
         version: 0.0.9
@@ -1567,8 +1567,8 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@nanoservice-ts/api-call@0.1.23':
-    resolution: {integrity: sha512-b+/Rls+CZRk3igR7YKsvffyquWy6bL3eA+ulsHMKYWmvUPsgExVnrDSYLeApHSmJfJk9vX9Lbzc/sTzHPCaAFg==}
+  '@nanoservice-ts/api-call@0.1.24':
+    resolution: {integrity: sha512-DtMYJD6Cf2/uFU67K5Ao+EjC9uiSDHdL0vjorthHbX397YjG5ubZluDATZBLMCnvYgsKHZASuVI9TxuEzInbcw==}
     engines: {node: '>=18.0.0'}
 
   '@nanoservice-ts/helper@0.1.4':
@@ -1579,16 +1579,12 @@ packages:
     resolution: {integrity: sha512-tIyOPldkC7KeXTmeKn8MAOJ/kIqe9V4uBRPdc0fR5IuZ/D8xDAVRR6oF52YGcEel4Jp+77pNfYJZxi/Vnma0wQ==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/if-else@0.0.24':
-    resolution: {integrity: sha512-hkH6RYhQcauGpoO5Uo+0f5kD7VC24wUfOOAwy2Kj4gGmWwQ/qKTEBZSNwZTLJD3+pbNh+U2U9fuBaJcQuG8JOw==}
+  '@nanoservice-ts/if-else@0.0.25':
+    resolution: {integrity: sha512-J6xFWNc5D803gYdcWlFgE8y+0LRZqBn2Wjwnq3SbjuuiJ/CZszh7BSo2jYUsKJSz4v0hEfWpHTfyJ4/0Ive1Lg==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/runner@0.1.19':
-    resolution: {integrity: sha512-3/tU0uI8EXmHRSRap8Qp0OjA1qcF01X+aTZQvjHk4Oi8+R+Rg/6Eb1T28B6qSanWV+e4WfeTcMHWH4qxijfSrA==}
-    engines: {node: '>=18.0.0'}
-
-  '@nanoservice-ts/runner@0.1.20':
-    resolution: {integrity: sha512-zpbwkACrM20oUgYCipJpVVqZFY/rKEEG/43zImk55unHpF2SgjFuFMZuPCVUMABqOFBUWiSSGs9oh162Ugxwlg==}
+  '@nanoservice-ts/runner@0.1.21':
+    resolution: {integrity: sha512-OdeBaZcYK6AmA7ngNeWszZtSdCM+NTTcQC97JkB6CsN7HDz0jrFxANReRlXaXMIjYyXe7IwbeGi1XLGo/6MZZw==}
     engines: {node: '>=18.0.0'}
 
   '@nanoservice-ts/shared@0.0.9':
@@ -5438,9 +5434,9 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@nanoservice-ts/api-call@0.1.23':
+  '@nanoservice-ts/api-call@0.1.24':
     dependencies:
-      '@nanoservice-ts/runner': 0.1.20
+      '@nanoservice-ts/runner': 0.1.21
       '@nanoservice-ts/shared': 0.0.9
       lodash: 4.17.21
 
@@ -5452,32 +5448,14 @@ snapshots:
     dependencies:
       zod: 3.24.2
 
-  '@nanoservice-ts/if-else@0.0.24':
+  '@nanoservice-ts/if-else@0.0.25':
     dependencies:
       '@nanoservice-ts/helper': 0.1.5
-      '@nanoservice-ts/runner': 0.1.20
+      '@nanoservice-ts/runner': 0.1.21
       '@nanoservice-ts/shared': 0.0.9
       lodash: 4.17.21
 
-  '@nanoservice-ts/runner@0.1.19':
-    dependencies:
-      '@bufbuild/protobuf': 2.2.5
-      '@connectrpc/connect': 2.0.2(@bufbuild/protobuf@2.2.5)
-      '@connectrpc/connect-node': 2.0.2(@bufbuild/protobuf@2.2.5)(@connectrpc/connect@2.0.2(@bufbuild/protobuf@2.2.5))
-      '@grpc/grpc-js': 1.13.2
-      '@grpc/proto-loader': 0.7.13
-      '@nanoservice-ts/helper': 0.1.4
-      '@nanoservice-ts/shared': 0.0.9
-      '@opentelemetry/api': 1.9.0
-      fast-xml-parser: 5.0.9
-      jsonschema: 1.5.0
-      lodash: 4.17.21
-      smol-toml: 1.3.1
-      uuid: 11.1.0
-      yaml: 2.7.0
-      zod: 3.24.2
-
-  '@nanoservice-ts/runner@0.1.20':
+  '@nanoservice-ts/runner@0.1.21':
     dependencies:
       '@bufbuild/protobuf': 2.2.5
       '@connectrpc/connect': 2.0.2(@bufbuild/protobuf@2.2.5)
