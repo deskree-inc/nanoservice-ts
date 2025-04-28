@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.1
+
+### Patch Changes
+
+- Added milvus docker-compose file to infra dir in examples
+
 ## 0.1.0
 
 ### Minor Changes
