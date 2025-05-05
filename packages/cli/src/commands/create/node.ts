@@ -7,6 +7,7 @@ import type { OptionValues } from "commander";
 import figlet from "figlet";
 import fsExtra from "fs-extra";
 import color from "picocolors";
+import { manager as pm } from "../../services/package-manager.js";
 import { python3_file } from "./utils/Examples.js";
 
 const exec = util.promisify(child_process.exec);
@@ -15,6 +16,7 @@ const HOME_DIR = `${os.homedir()}/.nanoctl`;
 const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
 
 export async function createNode(opts: OptionValues, currentPath = false) {
+	const manager = await pm.getManager();
 	const isDefault = opts.name !== undefined;
 	let nodeName: string = opts.name ? opts.name : "";
 	let nodeType = "";
@@ -169,11 +171,11 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 
 				// Install Packages
 				s.message("Installing packages...");
-				await exec("npm install", { cwd: dirPath });
+				await exec(`${manager} install`, { cwd: dirPath });
 
 				// Build the project
 				s.message("Building the project...");
-				await exec("npm run build", { cwd: dirPath });
+				await exec(`${manager} run build`, { cwd: dirPath });
 			}
 
 			if (nodeType === "class") {
