@@ -74,10 +74,7 @@
 				"groups": [
 					{
 						"group": "Overview",
-						"pages": [
-							"c/overview/architecture",
-							"c/overview/how-to-contribute"
-						]
+						"pages": ["c/overview/architecture", "c/overview/how-to-contribute"]
 					},
 					{
 						"group": "Core",
@@ -248,4 +245,4 @@
 			"family": "Space Grotesk"
 		}
 	}
-} 
+}
