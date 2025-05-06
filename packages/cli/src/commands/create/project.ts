@@ -242,7 +242,7 @@ export async function createProject(opts: OptionValues, version: string, current
 
 			// Install Python3 Packages
 			s.message("Installing python3 packages...");
-			await exec(`${manager} install`, { cwd: pythonDir });
+			await exec(manager.INSTALL, { cwd: pythonDir });
 			await createPythonVenv(pythonDir);
 			await exec(
 				`bash -c "source ${pythonDir}/python3_runtime/bin/activate && pip3 install -r ${pythonDir}/requirements.txt"`,
@@ -285,7 +285,7 @@ export async function createProject(opts: OptionValues, version: string, current
 
 		// Install Packages
 		s.message("Installing packages...");
-		await exec(`${manager} install`, { cwd: dirPath });
+		await exec(manager.INSTALL, { cwd: dirPath });
 
 		// Create a new project
 		if (!isDefault) s.stop(`Project "${projectName}" created successfully.`);

@@ -171,11 +171,11 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 
 				// Install Packages
 				s.message("Installing packages...");
-				await exec(`${manager} install`, { cwd: dirPath });
+				await exec(manager.INSTALL, { cwd: dirPath });
 
 				// Build the project
 				s.message("Building the project...");
-				await exec(`${manager} run build`, { cwd: dirPath });
+				await exec(manager.BUILD, { cwd: dirPath });
 			}
 
 			if (nodeType === "class") {
@@ -238,6 +238,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		);
 		console.log("For more documentation, visit https://nanoservice.xyz/docs/d/core-concepts/nodes");
 	} catch (error) {
+		console.log(error);
 		if (!isDefault) s.stop("An error occurred");
 
 		const message = (error as Error).message;
