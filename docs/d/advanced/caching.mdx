@@ -1,0 +1,230 @@
+---
+title: Caching Strategies
+---
+
+Caching is a powerful technique to improve the performance and reduce the load on your Nanoservice-ts applications and their downstream dependencies (like databases or external APIs). By storing frequently accessed or computationally expensive data temporarily, you can serve requests faster and reduce latency.
+
+Nanoservice-ts itself doesn't prescribe a specific caching solution, but you can integrate various caching strategies and libraries within your Nodes.
+
+## Why Use Caching?
+
+-   **Improved Performance:** Serve data from a fast cache instead of re-fetching or re-computing it.
+-   **Reduced Latency:** Faster response times for users or calling services.
+-   **Lower Load on Backend Systems:** Decrease the number of requests to databases, external APIs, or computationally intensive processes.
+-   **Cost Savings:** Reduced API usage or database load can lead to lower operational costs.
+-   **Increased Availability:** If a backend service is temporarily unavailable, cached data might still be servable (stale-while-revalidate patterns).
+
+## Common Caching Strategies
+
+### 1. In-Memory Caching (Node-Level or Shared Service)
+
+For data that is frequently accessed and doesn't change too often, you can implement in-memory caching directly within a Node or a shared caching service.
+
+**a. Node-Specific In-Memory Cache:**
+
+```typescript
+// Inside a Node (e.g., src/nodes/product-details-node/index.ts)
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+
+// A simple in-memory cache with TTL (Time To Live)
+const productCache = new Map<string, { data: any, expiry: number }>();
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+type InputType = { productId: string };
+type OutputType = { product: any };
+
+export default class ProductDetailsNode extends NanoService<InputType, OutputType> {
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response = new NanoServiceResponse();
+    const { productId } = inputs;
+
+    // Check cache first
+    const cachedItem = productCache.get(productId);
+    if (cachedItem && cachedItem.expiry > Date.now()) {
+      ctx.logger.info(`Serving product ${productId} from cache.`);
+      response.setSuccess(cachedItem.data);
+      return response;
+    }
+
+    try {
+      ctx.logger.info(`Fetching product ${productId} from source.`);
+      // Simulate fetching product data from a database or external API
+      const productData = await this.fetchProductFromSource(productId);
+      if (!productData) {
+        response.setError(new GlobalError("Product not found", 404));
+        return response;
+      }
+
+      // Store in cache
+      productCache.set(productId, { data: { product: productData }, expiry: Date.now() + CACHE_TTL_MS });
+      response.setSuccess({ product: productData });
+
+    } catch (error: unknown) {
+      // ... error handling ...
+    }
+    return response;
+  }
+
+  private async fetchProductFromSource(productId: string): Promise<any> {
+    // Replace with actual data fetching logic
+    return new Promise(resolve => setTimeout(() => resolve({ id: productId, name: `Product ${productId}`, price: Math.random() * 100 }), 500));
+  }
+}
+```
+
+**Considerations for Node-Specific In-Memory Cache:**
+
+-   **Simplicity:** Easy to implement for simple use cases.
+-   **Scope:** Cache is local to the Node instance. If your Nanoservice-ts application runs multiple instances (e.g., in a clustered Node.js environment or serverless functions), each instance will have its own separate cache, leading to inconsistencies or lower cache hit rates.
+-   **Memory Usage:** Be mindful of memory consumption, especially if caching large objects or many items.
+-   **Cache Invalidation:** Implementing robust cache invalidation can be tricky.
+
+**b. Shared In-Memory Caching Service:**
+
+You can create a singleton caching service that can be injected into multiple Nodes.
+
+```typescript
+// src/services/cache.service.ts
+class InMemoryCacheService {
+  private cache = new Map<string, { data: any, expiry: number }>();
+  private defaultTtl: number;
+
+  constructor(defaultTtlMs: number = 5 * 60 * 1000) {
+    this.defaultTtl = defaultTtlMs;
+  }
+
+  get<T>(key: string): T | undefined {
+    const item = this.cache.get(key);
+    if (item && item.expiry > Date.now()) {
+      return item.data as T;
+    }
+    this.cache.delete(key); // Remove expired item
+    return undefined;
+  }
+
+  set<T>(key: string, data: T, ttlMs?: number): void {
+    const expiry = Date.now() + (ttlMs || this.defaultTtl);
+    this.cache.set(key, { data, expiry });
+  }
+
+  del(key: string): void {
+    this.cache.delete(key);
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+}
+export const cacheService = new InMemoryCacheService();
+```
+
+This `cacheService` can then be injected into Nodes via their constructor (see [Dependency Injection](./../fundamentals/dependency-injection.mdx)). This still has the multi-instance limitation if not using a distributed cache.
+
+### 2. Distributed Caching (Redis, Memcached)
+
+For applications that run in a distributed environment (multiple instances) or require a more robust, scalable, and persistent caching solution, use a dedicated distributed caching system like Redis or Memcached.
+
+**Integration Steps:**
+
+1.  **Set up Cache Server:** Deploy and configure a Redis or Memcached server (or use a managed cloud service like AWS ElastiCache, Azure Cache for Redis, Google Cloud Memorystore).
+2.  **Install Client Library:** Add the appropriate Node.js client library to your Nanoservice-ts project (e.g., `ioredis` for Redis, `memcached` for Memcached).
+    ```bash
+    npm install ioredis
+    # or
+    npm install memcached
+    ```
+3.  **Create a Cache Service:** Develop a service that encapsulates the logic for interacting with the distributed cache.
+
+**Example: Redis Cache Service (Simplified)**
+
+```typescript
+// src/services/redis-cache.service.ts
+import Redis from "ioredis";
+
+class RedisCacheService {
+  private client: Redis;
+  private defaultTtlSeconds: number;
+
+  constructor(connectionString: string, defaultTtlSeconds: number = 300) {
+    this.client = new Redis(connectionString);
+    this.defaultTtlSeconds = defaultTtlSeconds;
+    this.client.on("error", (err) => console.error("Redis Client Error", err));
+  }
+
+  async get<T>(key: string): Promise<T | undefined> {
+    try {
+      const data = await this.client.get(key);
+      return data ? JSON.parse(data) as T : undefined;
+    } catch (error) {
+      console.error("Redis GET error", error);
+      return undefined; // On error, treat as cache miss
+    }
+  }
+
+  async set<T>(key: string, data: T, ttlSeconds?: number): Promise<void> {
+    try {
+      const value = JSON.stringify(data);
+      const ttl = ttlSeconds || this.defaultTtlSeconds;
+      await this.client.set(key, value, "EX", ttl);
+    } catch (error) {
+      console.error("Redis SET error", error);
+    }
+  }
+
+  async del(key: string): Promise<void> {
+    try {
+      await this.client.del(key);
+    } catch (error) {
+      console.error("Redis DEL error", error);
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    await this.client.quit();
+  }
+}
+
+// Initialize with connection string from environment variables
+export const redisCacheService = new RedisCacheService(process.env.REDIS_URL || "redis://localhost:6379");
+```
+
+4.  **Inject and Use in Nodes:** Inject this `redisCacheService` into your Nodes and use it similarly to the in-memory cache example, but with `async/await` for all cache operations.
+
+**Benefits of Distributed Caching:**
+
+-   **Shared Cache:** All instances of your application share the same cache.
+-   **Scalability:** Can handle much larger datasets and higher throughput.
+-   **Persistence (Optional with Redis):** Redis can be configured for data persistence.
+-   **Advanced Features:** Systems like Redis offer features like pub/sub for cache invalidation, various data structures, etc.
+
+### 3. HTTP Caching
+
+If your Nanoservice-ts application exposes HTTP APIs, you can leverage standard HTTP caching headers to allow clients (browsers, mobile apps, other services) or intermediate proxies (CDNs, reverse proxies) to cache responses.
+
+-   **`Cache-Control`:** Specifies directives for caching mechanisms in both requests and responses (e.g., `public`, `private`, `max-age=<seconds>`, `no-cache`, `no-store`).
+-   **`ETag` (Entity Tag):** An identifier for a specific version of a resource. Clients can send this back in an `If-None-Match` header. If the resource hasn't changed, the server can respond with a `304 Not Modified` status, saving bandwidth.
+-   **`Last-Modified`:** Indicates the last modification date of a resource. Clients can send this in an `If-Modified-Since` header for conditional requests.
+
+Your Nanoservice Nodes that generate HTTP responses (often the final Node in a workflow or a Node that directly constructs the HTTP response) can set these headers.
+
+## Cache Invalidation Strategies
+
+One of the hardest problems in caching is cache invalidation: ensuring that stale data is removed or updated in the cache when the underlying source data changes.
+
+-   **Time-To-Live (TTL):** The simplest strategy. Data expires from the cache after a set duration. Good for data that can tolerate some staleness.
+-   **Write-Through Caching:** Data is written to the cache and the backend store simultaneously. Ensures cache consistency but can add latency to write operations.
+-   **Write-Back (or Write-Behind) Caching:** Data is written to the cache first, and then asynchronously written to the backend store. Faster writes, but risk of data loss if the cache fails before data is persisted.
+-   **Cache-Aside (Lazy Loading):** The application requests data from the cache. If it's a miss, the application fetches from the backend, stores it in the cache, and then returns it. This is the pattern shown in the in-memory and Redis examples above.
+-   **Explicit Invalidation:** When data changes in the backend store, explicitly delete or update the corresponding entry in the cache.
+    -   Can be triggered by events, hooks in your data layer, or messages via a pub/sub system (e.g., Redis pub/sub).
+
+## Considerations for Nanoservice-ts
+
+-   **Granularity:** Decide whether to cache the output of individual Nodes or the entire result of a Workflow.
+-   **Cache Key Design:** Choose meaningful and unique cache keys. Often based on input parameters that define the data being cached (e.g., `product:123`, `user:abc:profile`).
+-   **Serialization:** Data stored in distributed caches (like Redis) often needs to be serialized (e.g., to JSON) before storing and deserialized upon retrieval.
+-   **Error Handling for Cache Operations:** Your caching logic should gracefully handle cache failures (e.g., if Redis is temporarily down). Typically, on a cache error, you should fall back to fetching from the source, treating it as a cache miss.
+-   **Monitoring Cache Performance:** Track cache hit/miss rates, latency, and memory/storage usage of your cache.
+
+Integrating caching effectively can significantly enhance your Nanoservice-ts application. Choose the strategy that best fits your data access patterns, consistency requirements, and infrastructure.

@@ -1,0 +1,166 @@
+---
+title: Dependency Injection
+---
+
+# Fundamentals: Dependency Injection in Nanoservice-ts
+
+Dependency Injection (DI) is a design pattern in which a class receives its dependencies from an external source rather than creating them itself. This promotes loose coupling, making code more modular, testable, and maintainable. While Nanoservice-ts primarily focuses on Nodes as self-contained units orchestrated by Workflows, the concept of managing dependencies for Nodes or shared services is still relevant.
+
+Nanoservice-ts itself might not have a full-fledged, complex DI container like some larger frameworks (e.g., NestJS or Spring) out-of-the-box for every Node instance, as Nodes are often instantiated once at startup. However, patterns for managing dependencies can still be applied.
+
+## How Dependencies are Typically Handled
+
+### 1. Constructor Injection for Registered Nodes
+
+When Nodes are registered in `src/Nodes.ts`, they are instantiated. If a Node has dependencies (e.g., a database service, an HTTP client, a configuration object), these can be injected via its constructor at the point of instantiation.
+
+**Example: A Node with a Database Service Dependency**
+
+First, let's assume you have a shared database service:
+
+```typescript
+// src/services/database.service.ts
+export class DatabaseService {
+  private connectionString: string;
+
+  constructor(connectionString: string) {
+    this.connectionString = connectionString;
+    // Initialize database connection pool, etc.
+    console.log(`DatabaseService initialized with: ${this.connectionString}`);
+  }
+
+  async query(sql: string, params: any[]): Promise<any[]> {
+    // Simulate a database query
+    console.log(`Executing query: ${sql} with params: ${JSON.stringify(params)}`);
+    if (sql.startsWith("SELECT * FROM users WHERE id")) {
+      return [{ id: params[0], name: "Test User", email: "test@example.com" }];
+    }
+    return [];
+  }
+}
+
+// Create a singleton instance of the service
+export const dbService = new DatabaseService(process.env.DATABASE_URL || "default_connection_string");
+```
+
+Now, your Node can receive this service via its constructor:
+
+```typescript
+// src/nodes/user-fetcher-node/index.ts
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type DatabaseService } from "../../services/database.service"; // Adjust path as needed
+
+type InputType = { userId: string };
+type OutputType = { userData: any };
+
+export default class UserFetcherNode extends NanoService<InputType, OutputType> {
+  private dbService: DatabaseService;
+
+  constructor(dbService: DatabaseService) {
+    super();
+    this.dbService = dbService;
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response = new NanoServiceResponse();
+    ctx.logger.info("UserFetcherNode executed", { userId: inputs.userId });
+    try {
+      const userData = await this.dbService.query("SELECT * FROM users WHERE id = ?", [inputs.userId]);
+      if (userData.length === 0) {
+        response.setError(new GlobalError("User not found", 404));
+      } else {
+        response.setSuccess({ userData: userData[0] });
+      }
+    } catch (error: unknown) {
+      const err = error as Error;
+      ctx.logger.error("Error fetching user", { error: err.message });
+      response.setError(new GlobalError(err.message, 500));
+    }
+    return response;
+  }
+}
+```
+
+Then, in `src/Nodes.ts`, you instantiate `UserFetcherNode` with the `dbService`:
+
+```typescript
+// src/Nodes.ts
+import type { NodeBase } from "@nanoservice-ts/shared";
+import UserFetcherNode from "./nodes/user-fetcher-node";
+import { dbService } from "./services/database.service"; // Import the service instance
+
+const nodes: { [key: string]: NodeBase; } = {
+  "user-fetcher": new UserFetcherNode(dbService),
+  // ... other nodes
+};
+
+export default nodes;
+```
+
+**Advantages:**
+
+-   **Explicit Dependencies:** Dependencies are clearly stated in the constructor.
+-   **Testability:** Nodes can be easily tested by mocking their dependencies and passing the mocks to the constructor.
+-   **Type Safety:** TypeScript ensures that the correct type of dependency is provided.
+
+### 2. Using Singleton Services
+
+As shown in the `DatabaseService` example above, you can create singleton instances of your services and import them directly where needed (either in the Node constructor or even within the `handle` method, though constructor injection is generally preferred for testability).
+
+```typescript
+// src/services/another.service.ts
+class AnotherServiceInternal {
+  constructor() { /* ... */ }
+  doSomething() { /* ... */ }
+}
+export const anotherService = new AnotherServiceInternal(); // Singleton instance
+
+// src/nodes/some-other-node/index.ts
+import { anotherService } from "../../services/another.service";
+
+// ... inside handle method ...
+// anotherService.doSomething();
+```
+
+**Considerations:**
+
+-   This pattern is simpler for globally shared services.
+-   It can make testing slightly harder if the singleton is directly imported and used within methods, as mocking becomes more involved (e.g., using `jest.mock`). Constructor injection is often better for testability.
+
+### 3. Configuration via Environment Variables / Workflow Inputs
+
+For simple configuration values (API keys, URLs, feature flags), these are typically not "injected" in the traditional DI sense but are accessed via:
+
+-   **Environment Variables:** `process.env.API_KEY` (can be passed to service constructors or used directly).
+-   **Workflow Inputs:** Values passed into a Node via its `inputs` in the workflow JSON, which can themselves be sourced from environment variables (`{{env.API_KEY}}`) or trigger data.
+
+See [Fundamentals: Configuration](./configuration.mdx).
+
+### 4. Context Object (`ctx`) for Shared Utilities
+
+The `ctx` object primarily provides shared utilities like `ctx.logger`. It is generally not used as a full-fledged DI container for arbitrary services, as this would make the context object very large and less predictable. See [Fundamentals: Context](./context.mdx).
+
+## When to Use Dependency Injection Patterns
+
+-   **Shared Services:** When multiple Nodes need to use the same instance of a service (e.g., database connection pool, HTTP client with specific configurations, caching service).
+-   **External Dependencies:** For any dependency that a Node relies on but doesn’t create itself.
+-   **Improving Testability:** DI makes it easier to replace real dependencies with mocks or stubs during unit testing.
+-   **Managing Complexity:** For Nodes with many dependencies, constructor injection keeps the `handle` method cleaner and focused on its core logic.
+
+## Nanoservice-ts and DI Frameworks
+
+Nanoservice-ts, by default, doesn’t impose a specific DI framework. The patterns described above (constructor injection, singletons) are common in TypeScript and Node.js development and fit well with the Nanoservice-ts model where Nodes are often long-lived instances registered at startup.
+
+If your application grows very large and you require more sophisticated DI capabilities (e.g., lifecycle management for services, scopes, decorators for injection), you could potentially integrate a lightweight DI library (like InversifyJS, Tsyringe) to manage your services, and then inject these managed services into your Nanoservice Nodes via their constructors when registering them in `src/Nodes.ts`.
+
+However, for most Nanoservice-ts use cases, the simpler patterns of constructor injection with manually managed or singleton services are often sufficient and maintain clarity.
+
+## Summary
+
+-   Nanoservice-ts primarily uses **constructor injection** for providing dependencies to Nodes when they are instantiated and registered in `src/Nodes.ts`.
+-   **Singleton services** can be created and imported for globally shared functionalities.
+-   The `ctx` object provides shared utilities like logging but is not a general-purpose DI container.
+-   Focus on making Nodes testable by clearly defining their dependencies.
+
+By applying these DI principles, you can build more robust, modular, and testable Nanoservice-ts applications.

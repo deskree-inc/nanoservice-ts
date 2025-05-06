@@ -1,0 +1,180 @@
+---
+title: "Example: AI Workflow Documentation Generator"
+---
+
+# Example: AI Workflow Documentation Generator (`workflow-docs`)
+
+This complex example demonstrates a multi-node workflow designed to automatically generate documentation for Nanoservice workflows and nodes using the OpenAI API.
+
+## Use Case & Demo
+
+As highlighted in the Nanoservice-ts Beginner Guide, the corresponding workflow (`workflows/json/workflow-docs.json`) serves as an excellent visual demonstration. It showcases how multiple nodes can collaborate to:
+
+1.  Read workflow or node source code.
+2.  Send the code to an AI model (OpenAI GPT-4o) with specific instructions.
+3.  Receive generated Markdown documentation from the AI.
+4.  Render this documentation in a user-friendly HTML format via a dedicated UI node.
+
+This provides a practical example of using Nanoservice-ts for AI-powered automation tasks involving code analysis and content generation.
+
+## Overview
+
+The core idea is to read the source code of workflow files (JSON) and node files (TypeScript), feed this content to an AI model (like GPT-4o) with appropriate prompts, and generate Markdown documentation.
+
+## Node Components
+
+This example consists of several interconnected nodes and utility classes:
+
+1.  **`OpenAI.ts` (`OpenAI` Node):**
+    - **Purpose:** Interacts with the OpenAI API to generate text based on provided prompts and system instructions.
+    - **Functionality:**
+        - Uses the `@ai-sdk/openai` and `ai` libraries.
+        - Takes `system` instructions (array of strings), `prompt` (array of strings), and an optional `cache_key` as input.
+        - Initializes the OpenAI client using the `OPENAI_API_KEY` environment variable.
+        - Calls `generateText` with the specified model (e.g., "gpt-4o"), system instructions, prompt, and temperature.
+        - **Caching:** Uses the `InMemory` singleton to cache results. If a `cache_key` is provided and a value exists in the cache, it returns the cached value directly without calling the API.
+    - **Key Code Snippet:**
+      ```typescript
+      // src/nodes/examples/workflow-docs/OpenAI.ts
+      import { createOpenAI } from "@ai-sdk/openai";
+      import { /* ... Nanoservice imports ... */ } from "@nanoservice-ts/runner";
+      import { /* ... Shared imports ... */ } from "@nanoservice-ts/shared";
+      import { generateText } from "ai";
+      import InMemory from "./InMemory"; // Import the cache
+
+      // ... Input Type Definition ...
+
+      export default class OpenAI extends NanoService<InputType> {
+        constructor() {
+          super();
+          // ... Input Schema Definition ...
+          this.contentType = "text/html"; // Note: Content type might be better as application/json or text/plain
+        }
+
+        async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+          const response: NanoServiceResponse = new NanoServiceResponse();
+          try {
+            const cache = InMemory.getInstance();
+            const cachedValue =
+              inputs.cache_key !== undefined && inputs.cache_key !== ""
+                ? cache.get(inputs.cache_key)
+                : undefined;
+
+            if (cachedValue) {
+              response.setSuccess(cachedValue);
+            } else {
+              const openai = createOpenAI({
+                compatibility: "strict",
+                apiKey: process.env.OPENAI_API_KEY,
+              });
+
+              const { text } = await generateText({
+                model: openai("gpt-4o"),
+                system: inputs.system?.join(","),
+                prompt: inputs.prompt.join(","),
+                temperature: 0.2,
+              });
+
+              // Cache the result if cache_key is provided
+              if (inputs.cache_key) {
+                  cache.set(inputs.cache_key, text);
+              }
+              response.setSuccess(text);
+            }
+          } catch (error: unknown) {
+            // ... Error Handling ...
+            response.setError(nodeError);
+          }
+          return response;
+        }
+      }
+      ```
+
+2.  **`FileManager.ts` (`FileManager` Node):**
+    - **Purpose:** Reads the content of a specified file.
+    - **Functionality:** Takes a `path` string as input. Uses Node.js `fs.readFileSync` to read the file content synchronously and returns it.
+
+3.  **`DirectoryManager.ts` (`DirectoryManager` Node):**
+    - **Purpose:** Intended to manage directories, but the current implementation only reads a single directory path.
+    - **Functionality:** Takes a `path` string as input. Uses Node.js `fs.readdirSync` to read the directory contents (names of files/subdirectories). It returns the *list* of directory contents.
+    - **Note:** The name suggests more functionality (like listing files recursively or creating directories) might be intended or added later.
+
+4.  **`ErrorNode.ts` (`ErrorNode` Node):**
+    - **Purpose:** A simple utility node designed specifically to throw an error.
+    - **Functionality:** Takes a `message` string as input and immediately throws an Error with that message. Useful for testing error handling paths in workflows.
+
+5.  **`InMemory.ts` (Singleton Class):**
+    - **Purpose:** Provides a simple, non-persistent, in-memory key-value store.
+    - **Functionality:** Implements the Singleton pattern (`getInstance`). Provides `get`, `set`, `delete`, and `clear` methods to manage string data associated with string keys.
+    - **Usage:** Used by the `OpenAI` node for caching API responses.
+
+6.  **`ui/index.ts` (`WorkflowDocsUI` Node - Assumed):**
+    - **Purpose:** Serves the web interface for interacting with the documentation generator.
+    - **Functionality:** Likely serves an HTML page (using EJS or similar) that allows users to input a workflow/node path, trigger the generation process via an HTTP request to the corresponding workflow, and displays the returned documentation.
+
+## Likely Workflow (`workflows/json/workflow-docs.json`)
+
+While the specific workflow JSON isn't provided here, a typical flow would be:
+
+1.  **Trigger:** User accesses the UI (served by `workflow-docs/ui`) in their browser.
+2.  **User Input:** The user provides the path to a workflow or node file via the UI.
+3.  **HTTP Request:** The UI sends an HTTP request (likely POST) to the endpoint defined in `workflow-docs.json`'s trigger (e.g., `/workflow-docs/generate`).
+4.  **Read File(s):** The workflow uses `FileManager` (or `DirectoryManager` + `FileManager`) to read the content of the target source file(s) based on the path from the request.
+5.  **Generate Documentation:** The file content is passed as part of the `prompt` to the `OpenAI` node, along with system instructions on how to generate the documentation.
+6.  **Cache & Return:** The `OpenAI` node calls the API (or retrieves from cache), caches the new result if applicable, and returns the generated documentation text.
+7.  **Display:** The workflow returns the generated text to the UI node, which then renders it on the web page for the user.
+
+## Key Concepts Illustrated
+
+- **AI-Powered Code Documentation:** Using LLMs to understand code and generate documentation.
+- **Multi-Node Workflows:** Combining several specialized nodes (`FileManager`, `OpenAI`, UI nodes) to achieve a complex task.
+- **File System Interaction:** Reading files and directories using Node.js `fs` module within nodes.
+- **Caching Strategy:** Implementing a simple in-memory cache using a Singleton pattern to reduce redundant API calls and improve performance.
+- **AI SDK Integration:** Using libraries like `@ai-sdk/openai` and `ai` for streamlined interaction with LLMs.
+- **Utility Nodes:** Creating reusable nodes for common tasks (file reading, error generation).
+- **UI Integration:** Serving a web interface to trigger and display results from a backend workflow.
+
+## Setup
+
+- Requires an OpenAI API key set in the `OPENAI_API_KEY` environment variable.
+- Requires necessary libraries to be installed: `@ai-sdk/openai`, `ai`.
+- Assumes the Nanoservice-ts project structure and runtime environment.
+- Ensure the example database is running if any related nodes are used (`cd src/nodes/examples/infra && docker-compose up -d`).
+
+## Registration
+
+Register the necessary nodes in `src/Nodes.ts`:
+
+```typescript
+// src/Nodes.ts
+import type { NodeBase } from "@nanoservice-ts/shared";
+import OpenAI from "./nodes/examples/workflow-docs/OpenAI";
+import FileManager from "./nodes/examples/workflow-docs/FileManager";
+import DirectoryManager from "./nodes/examples/workflow-docs/DirectoryManager";
+import ErrorNode from "./nodes/examples/workflow-docs/ErrorNode";
+// Assuming a UI node exists in ui/index.ts
+import WorkflowDocsUI from "./nodes/examples/workflow-docs/ui";
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  "workflow-docs-openai": new OpenAI(),
+  "workflow-docs-file": new FileManager(),
+  "workflow-docs-dir": new DirectoryManager(),
+  "workflow-docs-error": new ErrorNode(),
+  "workflow-docs-ui": new WorkflowDocsUI(), // Register the UI node
+  // ... other nodes
+};
+
+export default nodes;
+```
+
+## Viewing the Example
+
+Once the development server (`npm run dev`) is running:
+
+1.  Ensure you have configured your `.env.local` with `OPENAI_API_KEY`.
+2.  Navigate to the following URL in your browser:
+    `http://localhost:4000/workflow-docs`
+
+This URL corresponds to the `workflow-docs.json` workflow file and should load the UI served by the `workflow-docs/ui` node, allowing you to interact with the documentation generator.

@@ -1,0 +1,120 @@
+---
+title: "Example: AI Database Manager"
+---
+
+# Example: AI Database Manager (`db-manager`)
+
+This example demonstrates using AI to generate SQL queries for database interaction based on schema and natural language prompts, coupled with a web interface for user interaction.
+
+## Use Case & Demo
+
+As highlighted in the Nanoservice-ts Beginner Guide, the corresponding workflow (`workflows/json/db-manager.json`) provides a compelling visual demonstration. It allows users to:
+
+1.  Connect to a database (the example uses PostgreSQL).
+2.  Explore the database schema (tables and columns).
+3.  Provide natural language prompts (e.g., "Show me customers from Canada ordered by name").
+4.  See the AI-generated SQL query based on the prompt and schema.
+5.  Execute the query and view the results.
+
+This showcases the power of combining AI (for query generation) with database interaction and a user interface, all orchestrated by a Nanoservice-ts workflow.
+
+## Example Functionality
+
+- **Input:** Triggered via a web UI (`db-manager/ui`), accepting a natural language prompt related to a specific database table (e.g., "Show me all users from Brazil"). Requires access to the table's schema.
+- **Processing:**
+    1.  Retrieves the schema for the target table (likely using `postgres-query`).
+    2.  Uses an AI model (OpenAI GPT-4o via `QueryGeneratorNode`) to generate a single SQL query based on the schema and the user prompt.
+    3.  Executes the generated SQL query against a PostgreSQL database (using the `postgres-query` node).
+    4.  (Potentially) Processes the results using `MapperNode` (though its current implementation seems basic).
+    5.  Provides a web interface (`DatabaseUI`) using EJS to interact with the system and display results.
+- **Output:** Renders an HTML interface, displaying the results of the executed query.
+
+## Node Components
+
+Key nanoservices involved in this example include:
+
+1.  **`QueryGeneratorNode.ts`:**
+    - **Purpose:** Generates a single SQL query based on a table schema and a user prompt.
+    - **Functionality:** Takes `table_name`, `columns` (schema), and `prompt` as input. It formats the schema information and uses `generateText` from the `ai` library with OpenAI (`gpt-4o`) to produce a SQL query. The system prompt instructs the AI to act as a SQL expert and return only the valid PostgreSQL query string.
+    - **Output:** A JSON object containing the generated `query` string. It also attempts to store the query in `ctx.vars.query`.
+
+2.  **`MapperNode.ts`:**
+    - **Purpose:** Appears intended for data mapping or transformation, but the current implementation is very basic.
+    - **Functionality:** Takes an object named `model` as input. The `handle` method currently just wraps the input `model` within a `data` key in the success response (`{ data: inputs.model }`). Its specific role in the overall `db-manager` functionality isn't fully realized in this code snippet and might be a placeholder or intended for future expansion.
+    - **Output:** A JSON object containing the original input `model` under a `data` key.
+
+3.  **`ui/index.ts` (`DatabaseUI`):**
+    - **Purpose:** Renders the web interface for the database manager.
+    - **Functionality:** Uses EJS to render an HTML page (`ui/index.html`). It reads the template file and renders it, likely providing an interface for users to select tables, view schemas, enter prompts, and see query results.
+    - **Output:** An HTML page (`text/html`).
+
+4.  **`postgres-query/index.ts` (`PostgresQuery` - from another example folder):**
+    - **Purpose:** Executes arbitrary SQL queries against a PostgreSQL database.
+    - **Functionality:** Used by the workflow to fetch schema information and execute the AI-generated queries.
+
+## Example Workflow (`workflows/json/db-manager.json`)
+
+A possible workflow could be:
+
+1.  **Trigger:** HTTP GET request to `/db-manager` served by `DatabaseUI`.
+2.  **User Interaction (UI):** User selects a table, views schema, enters a prompt (e.g., "find users created this month"). The UI sends this information via another HTTP request (e.g., POST `/db-manager/query`).
+3.  **Get Schema:** A step using `postgres-query` to fetch column information for the selected table.
+4.  **Generate Query:** Use `QueryGeneratorNode`, providing the table name, schema, and user prompt.
+5.  **Execute Query:** Use `postgres-query` with the SQL generated in the previous step.
+6.  **(Optional) Map Results:** Use `MapperNode` if any transformation is needed (though its current utility is limited).
+7.  **Return Results:** Send the query results back to the UI for display.
+
+## Key Concepts Illustrated
+
+- **AI for SQL Generation:** Using `generateText` with OpenAI to translate natural language into SQL.
+- **Schema-Aware AI:** Providing table schema context to the AI for accurate query generation.
+- **UI Integration:** Serving an HTML interface using EJS for user interaction.
+- **Database Interaction:** Generating and executing SQL against a database.
+- **Workflow Orchestration:** Combining UI, AI, and database nodes in a sequence.
+
+## Setup
+
+- Requires `OPENAI_API_KEY` environment variable.
+- Requires PostgreSQL database connection details (for the `postgres-query` node), typically set via environment variables (`POSTGRES_USER`, `POSTGRES_PASSWORD`, etc.).
+- Requires the example PostgreSQL database to be running. Start it using Docker Compose:
+  ```bash
+  cd src/nodes/examples/infra
+  docker-compose up -d
+  ```
+
+## Registration
+
+Register the nodes in `src/Nodes.ts`:
+
+```typescript
+// src/Nodes.ts
+import type { NodeBase } from "@nanoservice-ts/shared";
+import QueryGeneratorNode from "./nodes/examples/db-manager/QueryGeneratorNode";
+import MapperNode from "./nodes/examples/db-manager/MapperNode";
+import DatabaseUI from "./nodes/examples/db-manager/ui";
+// Assuming postgres-query is also registered
+import PostgresQuery from "./nodes/examples/postgres-query"; 
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  "db-manager-query-generator": new QueryGeneratorNode(),
+  "db-manager-mapper": new MapperNode(),
+  "db-manager-ui": new DatabaseUI(),
+  "postgres-query": new PostgresQuery(),
+  // ... other nodes
+};
+
+export default nodes;
+```
+
+## Viewing the Example
+
+Once the development server (`npm run dev`) is running:
+
+1.  Ensure the example database is running (`docker-compose up -d` in `src/nodes/examples/infra`).
+2.  Ensure you have configured your `.env.local` with `OPENAI_API_KEY` and PostgreSQL connection details.
+3.  Navigate to the following URL in your browser:
+    `http://localhost:4000/db-manager`
+
+This URL corresponds to the `db-manager.json` workflow file and should load the UI served by the `db-manager/ui` node.

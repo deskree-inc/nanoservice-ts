@@ -1,0 +1,25 @@
+---
+title: Deployment
+---
+
+**Http Trigger** includes the Dockerfile. Hence, you can deploy it to any cloud service like AWS, GCP, Azure, Digital Ocean, etc.
+
+---
+
+You can also deploy using `docker compose` in development or staging environment using our `docker-compose.yml` and configurations files included in the `/infra`
+directory.
+
+To get the templates, you must clone our github repository into your local computer.
+
+```sh
+git clone https://github.com/deskree-inc/nanoservice-ts.git nanoservice-ts
+cd nanoservice-ts
+cd infra
+
+docker compose up -d
+```
+
+You can then deploy your application via any methods that support Docker containers. To learn more about deploying Docker containers, please refer to the official Docker documentation [here](https://docs.docker.com/get-started/). To learn more about deploying to a specific cloud provider, please refer to their respective documentation.
+
+<Tip>`nanoservice-ts` also comes with Observability & Monitoring setup via Grafana. To learm more about it, please refer to the [Observability & Monitoring](/docs/d/advanced/monitoring-observability) section.</Tip>
+```sh

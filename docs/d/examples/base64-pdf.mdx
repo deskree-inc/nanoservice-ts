@@ -1,0 +1,149 @@
+---
+title: "Example: Base64 to PDF"
+---
+
+# Example Node: Base64 to PDF (`base64-pdf`)
+
+This example demonstrates a Node that takes a Base64 encoded string as input and returns the decoded data as a PDF buffer. This is useful for scenarios where PDF data is transmitted or stored in Base64 format and needs to be served as an actual PDF file.
+
+## Node Functionality
+
+- **Input:** Expects a JSON object containing a single key `base64` with a string value representing the Base64 encoded PDF.
+- **Processing:** Decodes the incoming Base64 string into a raw binary buffer.
+- **Output:** Returns the raw PDF buffer with the `Content-Type` header set to `application/pdf`.
+
+## Node Code (`src/nodes/examples/base64-pdf/index.ts`)
+
+```typescript
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+
+// Define Input Type
+type InputType = {
+  base64: string;
+};
+
+/**
+ * Represents a Node service that decodes a Base64 string into a PDF.
+ * This class is responsible for handling requests and providing responses
+ * with automated validation using JSON Schema.
+ */
+export default class Base64ToPDF extends NanoService<InputType> {
+  /**
+   * Initializes a new instance of the Base64ToPDF class.
+   * Sets up the input JSON Schema for automated validation and sets the output content type.
+   */
+  constructor() {
+    super();
+    // Define the expected input structure
+    this.inputSchema = {
+      type: "object",
+      properties: {
+        base64: { type: "string", description: "Base64 encoded PDF content" },
+      },
+      required: ["base64"],
+    };
+    // Output schema is empty as we return raw buffer data
+    this.outputSchema = {}; 
+    // Set the response content type to indicate a PDF file
+    this.contentType = "application/pdf";
+  }
+
+  /**
+   * Handles the incoming request and returns a response containing the PDF buffer.
+   *
+   * @param ctx - The context of the request.
+   * @param inputs - The input data containing the base64 string.
+   * @returns A promise that resolves to an INanoServiceResponse object.
+   */
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+    try {
+      // Decode base64 string to a Buffer
+      const base64 = inputs.base64;
+      const pdfBuffer = Buffer.from(base64, "base64");
+
+      // Return the decoded PDF buffer directly in the success response.
+      // The framework will handle sending this buffer with the correct content type.
+      response.setSuccess(pdfBuffer as unknown as string); // Cast needed due to generic typing
+
+    } catch (error: unknown) {
+      // Handle potential errors during decoding or processing
+      const nodeError: GlobalError = new GlobalError(
+        error instanceof Error ? error.message : "Failed to decode Base64 to PDF"
+      );
+      nodeError.setCode(500);
+      nodeError.setStack(error instanceof Error ? error.stack : undefined);
+      nodeError.setName(this.name || "Base64ToPDF"); // Use node name if available
+      response.setError(nodeError);
+      ctx.logger.error("Error in Base64ToPDF node", { error: nodeError });
+    }
+    return response;
+  }
+}
+
+```
+
+## Key Concepts Illustrated
+
+- **Input Schema:** The `inputSchema` in the constructor defines that the node requires a `base64` string property.
+- **Content Type:** Setting `this.contentType = "application/pdf";` instructs the framework (specifically the HTTP trigger handler) to set the correct `Content-Type` header in the HTTP response.
+- **Returning Buffers:** The `handle` method decodes the Base64 string into a `Buffer` using Node.js built-in functionality (`Buffer.from(..., 'base64')`). This buffer is then passed to `response.setSuccess()`. The framework handles sending this binary data correctly.
+- **Error Handling:** A standard `try...catch` block is used to handle potential errors during the decoding process.
+
+## Registration
+
+To use this node, you would register it in your `src/Nodes.ts` file:
+
+```typescript
+// src/Nodes.ts
+import type { NodeBase } from "@nanoservice-ts/shared";
+import Base64ToPDF from "./nodes/examples/base64-pdf"; // Adjust path as needed
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  // Use a descriptive name for registration
+  "base64-to-pdf": new Base64ToPDF(), 
+  // ... other nodes
+};
+
+export default nodes;
+```
+
+## Example Workflow (`workflows/json/generate-pdf.json`)
+
+This node could be used in a workflow triggered by an HTTP POST request containing the Base64 data in its body.
+
+```json
+{
+  "name": "generate-pdf-from-base64",
+  "description": "Receives Base64 encoded data via POST and returns a PDF file.",
+  "version": "1.0.0",
+  "trigger": {
+    "http": {
+      "method": "POST",
+      "path": "/generate-pdf",
+      "accept": "application/json" // Expects JSON input
+    }
+  },
+  "steps": [
+    {
+      "name": "decode-pdf-step",
+      "node": "base64-to-pdf", // Matches the registration name in Nodes.ts
+      "type": "module"
+    }
+  ],
+  "nodes": {
+    "decode-pdf-step": {
+      "inputs": {
+        // Map the entire request body to the node's input
+        // Assumes the body is { "base64": "..." }
+        "base64": "{{trigger.body.base64}}" 
+      }
+    }
+  }
+}
+```
+
+When a POST request is made to `/generate-pdf` with a JSON body like `{"base64": "JVBERi0xLjQKJ..."}`, this workflow will execute the `base64-to-pdf` node, which decodes the string and returns the PDF file directly to the client.

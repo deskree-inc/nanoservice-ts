@@ -1,0 +1,155 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [shared/src](/docs/ref/shared/src/README) / GlobalLogger
+
+# Class: `abstract` GlobalLogger
+
+Defined in: [core/shared/src/GlobalLogger.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L3)
+
+## Implements
+
+- [`LoggerContext`](/docs/ref/shared/src/type-aliases/LoggerContext)
+
+## Constructors
+
+### new GlobalLogger()
+
+> **new GlobalLogger**(): [`GlobalLogger`](/docs/ref/shared/src/classes/GlobalLogger)
+
+Defined in: [core/shared/src/GlobalLogger.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L6)
+
+#### Returns
+
+[`GlobalLogger`](/docs/ref/shared/src/classes/GlobalLogger)
+
+## Properties
+
+### logs
+
+> `protected` **logs**: `string`[]
+
+Defined in: [core/shared/src/GlobalLogger.ts:4](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L4)
+
+## Methods
+
+### error()
+
+> `abstract` **error**(`message`, `stack`): `void`
+
+Defined in: [core/shared/src/GlobalLogger.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L12)
+
+#### Parameters
+
+##### message
+
+`string`
+
+##### stack
+
+`string`
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+`LoggerContext.error`
+
+***
+
+### getLogs()
+
+> **getLogs**(): `string`[]
+
+Defined in: [core/shared/src/GlobalLogger.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L14)
+
+#### Returns
+
+`string`[]
+
+#### Implementation of
+
+`LoggerContext.getLogs`
+
+***
+
+### getLogsAsBase64()
+
+> **getLogsAsBase64**(): `string`
+
+Defined in: [core/shared/src/GlobalLogger.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L22)
+
+#### Returns
+
+`string`
+
+#### Implementation of
+
+`LoggerContext.getLogsAsBase64`
+
+***
+
+### getLogsAsText()
+
+> **getLogsAsText**(): `string`
+
+Defined in: [core/shared/src/GlobalLogger.ts:18](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L18)
+
+#### Returns
+
+`string`
+
+#### Implementation of
+
+`LoggerContext.getLogsAsText`
+
+***
+
+### log()
+
+> `abstract` **log**(`message`): `void`
+
+Defined in: [core/shared/src/GlobalLogger.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L10)
+
+#### Parameters
+
+##### message
+
+`string`
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+`LoggerContext.log`
+
+***
+
+### logLevel()
+
+> `abstract` **logLevel**(`level`, `message`): `void`
+
+Defined in: [core/shared/src/GlobalLogger.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalLogger.ts#L11)
+
+#### Parameters
+
+##### level
+
+`string`
+
+##### message
+
+`string`
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+`LoggerContext.logLevel`

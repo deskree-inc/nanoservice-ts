@@ -1,0 +1,139 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [shared/src](/docs/ref/shared/src/README) / MemoryUsage
+
+# Class: MemoryUsage
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L5)
+
+## Extends
+
+- `default`
+
+## Constructors
+
+### new MemoryUsage()
+
+> **new MemoryUsage**(): [`MemoryUsage`](/docs/ref/shared/src/classes/MemoryUsage)
+
+#### Returns
+
+[`MemoryUsage`](/docs/ref/shared/src/classes/MemoryUsage)
+
+#### Inherited from
+
+`MetricsBase.constructor`
+
+## Properties
+
+### counter
+
+> `protected` **counter**: `number` = `0`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L9)
+
+***
+
+### max\_val
+
+> `protected` **max\_val**: `number` = `0`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L7)
+
+***
+
+### min\_val
+
+> `protected` **min\_val**: `number` = `0`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L6)
+
+***
+
+### total\_val
+
+> `protected` **total\_val**: `number` = `0`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L8)
+
+## Methods
+
+### clear()
+
+> **clear**(): `void`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:36](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L36)
+
+#### Returns
+
+`void`
+
+***
+
+### getMetrics()
+
+> **getMetrics**(): `object`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:26](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L26)
+
+#### Returns
+
+`object`
+
+##### global\_free\_memory
+
+> **global\_free\_memory**: `number`
+
+##### global\_memory
+
+> **global\_memory**: `number`
+
+##### max
+
+> **max**: `number`
+
+##### min
+
+> **min**: `number`
+
+##### total
+
+> **total**: `number`
+
+#### Overrides
+
+`MetricsBase.getMetrics`
+
+***
+
+### start()
+
+> **start**(): `void`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L11)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+`MetricsBase.start`
+
+***
+
+### stop()
+
+> **stop**(): `void`
+
+Defined in: [core/shared/src/utils/MemoryUsage.ts:24](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/utils/MemoryUsage.ts#L24)
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+`MetricsBase.stop`

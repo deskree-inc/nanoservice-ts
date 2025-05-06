@@ -1,0 +1,435 @@
+---
+title: Overview
+---
+
+<Tip> **Node** is designed to perform a specific, reusable task within a workflow. </Tip>
+
+---
+# Initialization
+## NPX
+<Tip> The npx package for nanoservice-ts is a command-line tool designed to simplify the creation and setup of nanoservice projects, nodes, and more. To learn more, visit [NPX](/docs/d/core-concepts/npx).</Tip>
+
+To create a node, run the following cli command:
+
+<Steps>
+  <Step title="Run the command">
+  ```bash
+  npx nanoctl@latest create node
+  ```
+  </Step>
+  <Step title="Follow the interactive prompts">
+   ```plaintext
+    Assign a name to the node: for example `api-call`
+   ```
+  </Step>
+    <Step title="Install dependencies and start coding">
+   ```bash
+    cd nodes/api-call
+    npm install
+    ```
+  </Step>
+</Steps>
+This will create a new node in the `nodes/` directory of the project. To learn how to create a new project, visit [Quickstart](/docs/d/quickstart) or [NPX](/docs/d/core-concepts/npx) documentation.__
+
+# Directory Structure
+```bash
+node-template/
+│── test/                        # Folder for testing the node
+│   └── index.test.ts            # Tests for the custom node
+│── config.json                  # JSON schema for node configuration
+│── index.ts                     # Main logic of the custom node
+│── nodemon.json                 # Config for development using nodemon
+│── package.json                 # Project configuration and dependencies
+│── README.md                    # Documentation for the custom node
+└── tsconfig.json                # TypeScript configuration
+```
+
+## Dependencies - `package.json`
+
+The `package.json` includes necessary scripts and dependencies for building, testing, and running the node. When working on the core logic of your node in the `index.ts` file you can install any dependencides of this node there.
+
+```json
+{
+	"name": "@nanoservice-ts/api-call",
+	"version": "0.1.4",
+	"description": "Node for making api requrests",
+	"author": "Deskree",
+	"scripts": {
+		"start:dev": "npx nodemon",
+		"build": "rimraf ./dist && tsc",
+		"build:dev": "tsc --watch"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^22.13.4",
+		"@types/lodash": "^4.14.196",
+		"nodemon": "^3.1.9",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.1.3",
+		"rimraf": "^6.0.1"
+	},
+	"dependencies": {
+		"@deskree/blueprint-shared": "0.0.21",
+		"@nanoservice-ts/runner": "0.1.14",
+		"lodash": "^4.17.21"
+	},
+	"private": true
+}
+```
+
+---
+
+## Creating logic - `index.ts`
+It is the main file where the core logic of the node is written. You can import any installed packagse and use like any other typescript file. However, there are a few rules to follow:
+
+1. Each node needs to have a `handle` method.
+2. If a node receives input from the previous node or request body, it should be defined in the `inputSchema` property. Otherwise, a type of `any` will be used.
+3. If a node returns a response, it should be defined in the `outputSchema` property. Otherwise, a type of `any` will be used.
+4. The `handle` method should return the output data or a promise that resolves to the output data.
+5. `NodeError` class should be used to throw errors in the node.
+
+Here is an example of a node structure that has been created via `npx nanoctl@latest create node`:
+
+```typescript
+import type { BlueprintContext } from "@deskree/blueprint-shared";
+import {
+	type INanoServiceResponse,
+	type JsonLikeObject,
+	NanoService,
+	NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+
+type InputType = {
+	// Define the input type here
+	message: string;
+}
+
+export default class Node extends NanoService<InputType> {
+	constructor() {
+		super();
+
+		this.inputSchema = {};
+		this.outputSchema = {};
+	}
+
+	async handle(ctx: BlueprintContext, inputs: InputType): Promise<INanoServiceResponse> {
+		const response: NanoServiceResponse = new NanoServiceResponse();
+
+		try {
+			response.setSuccess(inputs.message);
+		} catch (error: unknown) {
+			const nodeError: BlueprintError = new BlueprintError((error as Error).message);
+			nodeError.setCode(500);
+			nodeError.setStack((error as Error).stack);
+			nodeError.setName(this.name);
+			response.setError(nodeError); // Set the error
+		}
+
+		return response;
+	}
+}
+```
+
+### `handle` method
+Each node needs to have a `handle` method where all the core logic of the node is written. It accepts two parameters: `ctx` and `inputs` and returns a promise of `NanoServiceResponse`.
+```typescript
+async handle(ctx: BlueprintContext, inputs: InputType): Promise<INanoServiceResponse> {
+  // Core logic of the node
+}
+```
+
+<ParamField path="ctx" type="bojcet">
+  Contains context received by the node from the workflow when it is executed. To learn more about CTX, visit [CTX](/docs/d/core-concepts/workflows#ctx).
+</ParamField>
+<ParamField path="inputs" type="object">
+  Is the data that is being passed to the node when it is executed (from previous nodes) or instantiated (from the static configurations of the workflows)
+</ParamField>
+
+### `inputSchema` and `outputSchema`
+
+These properties define the input and output data that is being passed to the node when it is executed. The `inputSchema` and `outputSchema` are optional and can be defined as `any` if not required. Both of them follow [JSON Schema](https://json-schema.org/learn/getting-started-step-by-step) format and are in the constructor of the main node class.
+
+<Tip> The `constructor` accept `config` parameter that can be used to pass the configuration to the node in case certain properties need to be defined on build</Tip>
+
+``` typescript
+	export default class NodeExample extends NanoService {
+	constructor(config: JsonLikeObject) {
+		super();
+
+		// Set the input "JSON Schema Format" here for automated validation
+		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+		this.inputSchema = {
+		};
+
+		// Set the output "JSON Schema Format" here for automated validation
+		// Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+		this.outputSchema = {
+		};
+
+	}
+```
+
+### `@nanoservice-ts/runner` methods, classes, and interfaces
+
+`nanoservice-ts` also contains a number of helpers methods and classes that can be used in the node. To learn more, visit [Reference](/docs/ref).
+
+---
+
+## Configuration - `config.json`
+
+Defines the [JSON Schema](https://json-schema.org/learn/getting-started-step-by-step) for the node configuration. This file defines inputs, outputs, and configurations of each node to ensure that a user passes the required parameters.
+<Info>At the moment, the `config.json` file is not used during the node creation and workflows run, but only inside [Deskree](https://deskree.com) platfomr. However, it is recommended to define the configuration schema there as it will be used in the near future</Info>
+
+### Full example 
+
+```json
+{
+	"name": "node-name",
+	"description": "",
+	"version": "1.0.0",
+	"group": "API",
+	"config": {
+		"type": "object",
+		"properties": {
+			"inputs": {
+				"type": "object",
+				"properties": {},
+				"required": []
+			}
+		},
+		"required": ["inputs"],
+		"example": {
+			"inputs": {
+				"properties": {}
+			}
+		}
+	},
+	"input": {
+		"anyOf": [
+			{
+				"type": "object"
+			},
+			{
+				"type": "array"
+			},
+			{
+				"type": "string"
+			}
+		],
+		"description": "This node accepts an object as input from the previous node or request body"
+	},
+	"output": {
+		"type": "object",
+		"description": "The response from the API call"
+	},
+	"steps": {
+		"type": "boolean",
+		"default": false
+	},
+	"functions": {
+		"type": "array"
+	}
+}
+```
+### Definitions
+
+<ParamField path="name" type="string">
+  The name of the node
+</ParamField>
+<ParamField path="description" type="string">
+ A brief explanation of what the workflow does.
+</ParamField>
+<ParamField path="version" type="string">
+  The version of the workflow, useful for managing updates.
+</ParamField>
+<ParamField path="group" type="string">
+  A category of the node used for internal classification.
+</ParamField>
+<ParamField path="config" type="config object">
+  A [JSON Schema](https://json-schema.org/learn/getting-started-step-by-step) that defines the node configuration, which is the data that is being passed to the node when it is instantiated, unlike `input` that is being passed to the node when it is executed.
+</ParamField>
+<ParamField path="input" type="input object">
+  A [JSON Schema](https://json-schema.org/learn/getting-started-step-by-step) that defines the input data that is being passed to the node when it is executed.
+</ParamField>
+<ParamField path="output" type="output object">
+  A [JSON Schema](https://json-schema.org/learn/getting-started-step-by-step) that defines the output data that is being returned from the node when it is executed.
+</ParamField>
+<ParamField path="steps" type="steps object">
+  TBD
+</ParamField>
+<ParamField path="functions" type="functions object">
+  TBD
+</ParamField>
+
+---
+
+## Documenting
+
+It is highly recommended to document the node for better understanding and maintainability. In the near future, we will streamle the process of sharing the nodes with the community, hence the documentation will become a vital part of the project. Currently, the documentation is supported via the following files:
+* `README.md`
+* `CHANGELOG.md`
+
+---
+
+## Testing, Debugging & Running
+
+Nodes created via `npx` command or templates include a test folder and a sample test file (index.test.ts) to validate your node's logic.
+### Directory Structure
+```bash
+node-template/
+├── test/
+│   └── index.test.ts
+├── index.ts
+├── config.json
+└── package.json
+```
+### Writing Test Cases
+Use tools like Jest or Mocha (based on the provided template). The default template includes a basic example to validate your node logic. Example of an `index.test.ts` file:
+
+```typescript
+import { beforeAll, expect, test } from "vitest";
+import Node from "../index";
+import ctx from "./helper";
+
+let node: Node;
+
+beforeAll(() => {
+	node = new Node();
+	node.name = "api-call";
+});
+
+// Validate Hello World from Node
+test("Hello World from Node", async () => {
+	const response = await node.handle(ctx(), {});
+	expect({ message: "Hello World from Node!" }, response.data);
+});
+```
+
+To run the test, use the following command:
+
+```bash
+npm run test
+```
+
+IF you need to debug the node, you can run it in the development mode using the following command:
+
+```bash
+npm run test:dev
+```
+This command uses `nodemon` to restart your node every time you save a change, simplifying the development process. If you want to adjust the process, you access the configuration in the `nodemon.json` file:
+
+
+```json
+{
+  "watch": ["index.ts", "config.json"],
+  "ext": "ts,json",
+  "exec": "ts-node index.ts"
+}
+```
+
+### Debugging Techniques
+
+<CardGroup cols={1}>
+  <Card title="Logging Output" icon="square-1">
+    Use `console.log()` statements to log variables or responses during execution. Example:
+	```typescript
+	console.log("API Response:", result);
+	```
+  </Card>
+  <Card title="Manual Testing" icon="square-2">
+    If an error occurs, the BlueprintNode class captures the stack trace and returns a structured error. Check the error logs to locate issues:
+	```typescript
+	try {
+    // logic
+	} catch (error) {
+		console.error("Error:", error.message);
+	}
+	```
+  </Card>
+  <Card title="Manual Testing" icon="square-3">
+    ```bash
+	curl -X POST http://localhost:4000/workflow -H "Content-Type: application/json" -d '{}'
+	```
+  </Card>
+</CardGroup>
+
+---
+
+## Publishing nodes to npm
+
+Publishing your custom nodes to npm allows other developers to easily install and use them in their workflows.
+
+Follow these steps to publish your custom node to the npm registry:
+
+<Steps>
+  <Step title="Create an npm Account">
+    If you don’t already have an npm account, sign up at https://www.npmjs.com/signup.
+	Run the following command in your terminal to log in to your npm account:
+
+	```bash
+	npm login
+	```
+	Provide your username, password, and email.
+  </Step>
+  <Step title="Update the package.json File">
+    Ensure that your package.json is correctly configured:
+
+	Set the name of your node (use a scoped name like @yourusername/node-name for clarity).
+
+	Add the appropriate version following semantic versioning.
+
+	Provide a description and keywords to make your node discoverable.
+
+	Example package.json:
+
+	```json
+	{
+		"name": "@yourusername/api-call",
+		"version": "1.0.0",
+		"description": "A custom node for API calls in nanoservice-ts",
+		"main": "index.js",
+		"scripts": {
+			"build": "tsc",
+			"start": "node index.js"
+		},
+		"keywords": ["nanoservice", "custom-node", "api-call"],
+		"license": "MIT",
+		"dependencies": {},
+		"devDependencies": {
+			"typescript": "^5.1.3"
+		}
+	}
+	```
+  </Step>
+  <Step title="Build the Node">
+    If your project uses TypeScript, ensure it is built into JavaScript before publishing:
+	```bash
+	npm run build
+	```
+  </Step>
+  <Step title="Publish to npm">
+    Run the following command in your project directory:
+	```bash
+	npm publish --access public
+	```
+	Use the --access public flag to ensure the package is publicly accessible.
+  </Step>
+  <Step title="Verify Your Node">
+    After publishing:
+	* Verify your node is available on npm by visiting https://www.npmjs.com/package/@yourusername/node-name.
+	* Test the node by installing it in a fresh project:
+	```bash
+	npm install @yourusername/api-call
+	```
+  </Step>
+  <Step title="Keep Your Node Updated">
+    When making changes:
+	* Update the version number in package.json (e.g., 1.0.0 -> 1.0.1).
+	* Rebuild the project.
+	* Run `npm publish` again to push updates.
+  </Step>
+</Steps>
+
+## Complex Nodes
+
+<Tip> Complex nodes are nodes that return steps instead of data (ex. [control flow nodes](/docs/d/core-concepts/nodes-built-in))</Tip>

@@ -1,0 +1,110 @@
+---
+title: Context Object (`ctx`)
+---
+
+# Fundamentals: Context Object (`ctx`)
+
+In Nanoservice-ts, the **Context Object**, conventionally named `ctx`, plays a vital role in the execution of Nodes within a Workflow. It is an object passed as the first argument to every Node's `async handle(ctx: Context, inputs: InputType)` method. The primary purpose of the `ctx` object is to provide Nodes with access to shared resources, utilities, and potentially request-scoped or workflow-scoped information.
+
+## Core Features of the Context Object
+
+### 1. Logger (`ctx.logger`)
+
+One of the most consistently available and crucial components of the `ctx` object is the logger instance.
+
+```typescript
+// Inside a Node's handle method
+async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+  ctx.logger.info("Node execution started", { inputKeys: Object.keys(inputs) });
+  // ... rest of the logic
+  return response;
+}
+```
+
+-   **Purpose:** Allows Nodes to log messages (debug, info, warn, error) in a standardized way.
+-   **Benefits:**
+    -   Centralized log configuration (format, level, destination) managed by the Nanoservice-ts runtime.
+    -   Facilitates structured logging if the underlying logger supports it.
+    -   Essential for debugging and monitoring application behavior.
+-   Refer to [Techniques: Logging](./../techniques/logging.mdx) for best practices on using the logger.
+
+### 2. Trigger Information (`ctx.trigger` - Potentially)
+
+Depending on the Nanoservice-ts runtime and the type of trigger that initiated the workflow, the `ctx` object *may* contain information about the trigger itself.
+
+```typescript
+// Example: Accessing HTTP trigger details (conceptual)
+async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+  if (ctx.trigger?.type === "http") {
+    ctx.logger.info("Request received", {
+      path: ctx.trigger.path,
+      method: ctx.trigger.method,
+      ip: ctx.trigger.ipAddress // Hypothetical property
+    });
+  }
+  // ...
+  return response;
+}
+```
+
+-   **Content:** Could include details like HTTP method, path, query parameters, headers, or information about a scheduled event.
+-   **Availability:** The exact structure and availability of `ctx.trigger` would be defined by the Nanoservice-ts framework specification. Input data from triggers is more commonly accessed via the `{{trigger...}}` templating in the workflow JSON and passed as `inputs` to the first Node(s).
+
+### 3. Workflow-Scoped Data (Correlation IDs, etc.)
+
+The context can be a place to carry data that is relevant to the entire workflow execution, such as a **Correlation ID** (or Trace ID).
+
+-   **Purpose:** A unique identifier for a single request or transaction that flows through multiple Nodes.
+-   **Usage:** If a correlation ID is generated (e.g., by an initial trigger-handling mechanism or an early Node in the workflow), it can be attached to `ctx` (if the context is designed to be mutable or if a new context is created and passed along) and used in all subsequent log messages for that transaction.
+
+```typescript
+// Conceptual: Assuming correlationId is added to ctx
+ctx.logger.info("Processing step for user", {
+  userId: inputs.userId,
+  correlationId: ctx.correlationId 
+});
+```
+
+**Note on Mutability:** Whether `ctx` is mutable or if new context objects are created for downstream Nodes is an important design consideration for the framework. Generally, direct mutation of a shared context by multiple Nodes can lead to complex state management. Nanoservice-ts might favor passing data explicitly or using dedicated context-manipulation Nodes if workflow-scoped data needs to be altered.
+
+### 4. Access to Shared Services/Configuration (Dependency Injection - Conceptual)
+
+In more advanced scenarios or frameworks with built-in dependency injection, the `ctx` object *could* potentially provide access to shared services or configurations that Nodes might need.
+
+```typescript
+// Hypothetical example if ctx provided service access
+// async handle(ctx: Context & { dbService: MyDbService }, inputs: InputType) {
+//   const user = await ctx.dbService.findUser(inputs.userId);
+//   ...
+// }
+```
+
+However, Nanoservice-ts typically encourages Nodes to be self-contained or receive dependencies through their constructor if they are long-lived services registered with the system. Simpler configuration values are often accessed via environment variables (`{{env.VAR_NAME}}` in workflow inputs) or passed as inputs to the Node.
+
+See [Fundamentals: Dependency Injection](./dependency-injection.mdx) for a more detailed discussion on how dependencies might be handled.
+
+## `Context` Type
+
+The `Context` type is usually provided by the `@nanoservice-ts/shared` package or a similar core package. It defines the expected shape of the context object.
+
+```typescript
+import { type Context } from "@nanoservice-ts/shared";
+```
+
+## Best Practices for Using `ctx`
+
+1.  **Primarily Use `ctx.logger`:** This is the most common and standardized use of the context object.
+2.  **Avoid Over-reliance for Data Passing:** While `ctx` *could* be used to pass data between Nodes in a workflow, Nanoservice-ts primarily uses the input/output mechanism of Nodes and workflow templating (`{{stepName.output.field}}`) for data flow. Overusing `ctx` for general data passing can make workflows harder to understand and debug, as the data flow is less explicit.
+3.  **Read-Only (Mostly):** Treat the `ctx` object as read-only within your Node's `handle` method as much as possible, unless the framework explicitly supports and documents context mutation patterns (e.g., for adding a correlation ID early in the flow).
+4.  **Understand its Scope:** The `ctx` object is typically scoped to a single workflow execution. Information in `ctx` from one workflow execution will not be visible in another.
+
+## Customizing Context (Advanced)
+
+Some frameworks allow for the customization or extension of the context object, perhaps through middleware or at the point where the Nanoservice-ts engine is initialized. This could be used to inject application-specific services or values into the context for all Nodes.
+
+If Nanoservice-ts supports this, the documentation would specify how to:
+
+-   Define an extended context type.
+-   Provide a factory or middleware to augment the context before it reaches the Nodes.
+
+The `ctx` object is a simple yet powerful mechanism that provides Nodes with essential runtime utilities, primarily logging, and can serve as a conduit for request-scoped or workflow-scoped information when designed carefully within the framework's conventions.

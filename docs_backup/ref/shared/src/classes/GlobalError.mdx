@@ -1,0 +1,249 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [shared/src](/docs/ref/shared/src/README) / GlobalError
+
+# Class: GlobalError
+
+Defined in: [core/shared/src/GlobalError.ts:4](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L4)
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### new GlobalError()
+
+> **new GlobalError**(`msg`): [`GlobalError`](/docs/ref/shared/src/classes/GlobalError)
+
+Defined in: [core/shared/src/GlobalError.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L7)
+
+#### Parameters
+
+##### msg
+
+`undefined` | `string`
+
+#### Returns
+
+[`GlobalError`](/docs/ref/shared/src/classes/GlobalError)
+
+#### Overrides
+
+`Error.constructor`
+
+## Properties
+
+### context
+
+> **context**: [`ErrorContext`](/docs/ref/shared/src/type-aliases/ErrorContext)
+
+Defined in: [core/shared/src/GlobalError.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L5)
+
+***
+
+### message
+
+> **message**: `string`
+
+Defined in: node\_modules/.pnpm/typescript@5.7.3/node\_modules/typescript/lib/lib.es5.d.ts:1077
+
+#### Inherited from
+
+`Error.message`
+
+***
+
+### name
+
+> **name**: `string`
+
+Defined in: node\_modules/.pnpm/typescript@5.7.3/node\_modules/typescript/lib/lib.es5.d.ts:1076
+
+#### Inherited from
+
+`Error.name`
+
+***
+
+### stack?
+
+> `optional` **stack**: `string`
+
+Defined in: node\_modules/.pnpm/typescript@5.7.3/node\_modules/typescript/lib/lib.es5.d.ts:1078
+
+#### Inherited from
+
+`Error.stack`
+
+***
+
+### prepareStackTrace()?
+
+> `static` `optional` **prepareStackTrace**: (`err`, `stackTraces`) => `any`
+
+Defined in: node\_modules/.pnpm/@types+node@22.13.4/node\_modules/@types/node/globals.d.ts:143
+
+Optional override for formatting stack traces
+
+#### Parameters
+
+##### err
+
+`Error`
+
+##### stackTraces
+
+`CallSite`[]
+
+#### Returns
+
+`any`
+
+#### See
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
+#### Inherited from
+
+`Error.prepareStackTrace`
+
+***
+
+### stackTraceLimit
+
+> `static` **stackTraceLimit**: `number`
+
+Defined in: node\_modules/.pnpm/@types+node@22.13.4/node\_modules/@types/node/globals.d.ts:145
+
+#### Inherited from
+
+`Error.stackTraceLimit`
+
+## Methods
+
+### hasJson()
+
+> **hasJson**(): `boolean`
+
+Defined in: [core/shared/src/GlobalError.ts:27](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L27)
+
+#### Returns
+
+`boolean`
+
+***
+
+### setCode()
+
+> **setCode**(`code`?): `void`
+
+Defined in: [core/shared/src/GlobalError.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L14)
+
+#### Parameters
+
+##### code?
+
+`number`
+
+#### Returns
+
+`void`
+
+***
+
+### setJson()
+
+> **setJson**(`json`?): `void`
+
+Defined in: [core/shared/src/GlobalError.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L17)
+
+#### Parameters
+
+##### json?
+
+`Record`\<`string`, `unknown`\>
+
+#### Returns
+
+`void`
+
+***
+
+### setName()
+
+> **setName**(`name`?): `void`
+
+Defined in: [core/shared/src/GlobalError.ts:23](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L23)
+
+#### Parameters
+
+##### name?
+
+`string`
+
+#### Returns
+
+`void`
+
+***
+
+### setStack()
+
+> **setStack**(`stack`?): `void`
+
+Defined in: [core/shared/src/GlobalError.ts:20](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L20)
+
+#### Parameters
+
+##### stack?
+
+`string`
+
+#### Returns
+
+`void`
+
+***
+
+### toString()
+
+> **toString**(): `string`
+
+Defined in: [core/shared/src/GlobalError.ts:31](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/shared/src/GlobalError.ts#L31)
+
+Returns a string representation of an object.
+
+#### Returns
+
+`string`
+
+***
+
+### captureStackTrace()
+
+> `static` **captureStackTrace**(`targetObject`, `constructorOpt`?): `void`
+
+Defined in: node\_modules/.pnpm/@types+node@22.13.4/node\_modules/@types/node/globals.d.ts:136
+
+Create .stack property on a target object
+
+#### Parameters
+
+##### targetObject
+
+`object`
+
+##### constructorOpt?
+
+`Function`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+`Error.captureStackTrace`

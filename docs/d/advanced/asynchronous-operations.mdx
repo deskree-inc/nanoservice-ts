@@ -1,0 +1,155 @@
+---
+title: Asynchronous Operations
+---
+
+Modern backend applications frequently deal with asynchronous operations, such as making HTTP requests to external APIs, querying databases, reading files, or handling long-running tasks. Nanoservice-ts, being built on Node.js and TypeScript, fully embraces `async/await` for managing asynchronous code gracefully within Nodes.
+
+## `async/await` in Node `handle` Methods
+
+The `handle` method of a Nanoservice Node is an `async` function, meaning it inherently supports the use of `await` for Promises.
+
+```typescript
+// Inside a Node's handle method
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import axios from "axios"; // Example HTTP client
+
+type InputType = { apiUrl: string };
+type OutputType = { data: any };
+
+export default class ApiFetcherNode extends NanoService<InputType, OutputType> {
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response = new NanoServiceResponse();
+    ctx.logger.info("Fetching data from external API", { url: inputs.apiUrl });
+
+    try {
+      // Use await to handle the Promise returned by axios.get
+      const apiResponse = await axios.get(inputs.apiUrl);
+      
+      if (apiResponse.status !== 200) {
+        throw new Error(`API request failed with status ${apiResponse.status}`);
+      }
+
+      response.setSuccess({ data: apiResponse.data });
+      ctx.logger.info("Successfully fetched data from API");
+
+    } catch (error: unknown) {
+      const err = error as Error;
+      ctx.logger.error("Error fetching data from API", { error: err.message, url: inputs.apiUrl });
+      response.setError(new GlobalError(err.message, 500));
+    }
+    return response;
+  }
+}
+```
+
+**Key Points:**
+
+-   **Non-Blocking:** Using `async/await` ensures that your Node does not block the Node.js event loop while waiting for I/O operations to complete. This is crucial for maintaining application performance and responsiveness, allowing the server to handle other requests concurrently.
+-   **Cleaner Code:** `async/await` provides a more synchronous-looking code style compared to traditional Promise chains (`.then().catch()`) or callbacks, making asynchronous logic easier to read and reason about.
+-   **Error Handling:** `try...catch` blocks can be used naturally with `await` to handle errors from asynchronous operations.
+
+## Common Asynchronous Operations in Nodes
+
+-   **HTTP Requests:** Fetching data from or sending data to external APIs (using libraries like `axios`, `node-fetch`, or the built-in `http/https` modules).
+-   **Database Queries:** Interacting with databases (SQL or NoSQL) using asynchronous database drivers or ORMs/ODMs (e.g., `pg`, `mysql2`, `mongodb`, TypeORM, Prisma, Mongoose).
+-   **File System Operations:** Reading from or writing to files using the asynchronous methods of the `fs` module (e.g., `fs.promises.readFile`).
+-   **Message Queue Interactions:** Publishing messages to or consuming messages from queues (e.g., RabbitMQ, Kafka, AWS SQS) using their respective client libraries.
+-   **Third-Party SDKs:** Many SDKs for cloud services (AWS, Azure, GCP) provide asynchronous methods for interacting with their services.
+-   **`setTimeout` / `setInterval` (less common directly in handle):** While possible, long delays or intervals are usually managed by triggers (e.g., Schedule Triggers) rather than long-running `handle` methods.
+
+## Promises
+
+Under the hood, `async/await` is syntactic sugar over Promises. It's important to understand how Promises work:
+
+-   A Promise represents the eventual completion (or failure) of an asynchronous operation and its resulting value.
+-   You can create your own Promises if you are wrapping callback-based APIs or performing custom asynchronous tasks.
+
+```typescript
+function legacyCallbackApi(input: string, callback: (error: Error | null, result?: string) => void) {
+  setTimeout(() => {
+    if (input === "fail") {
+      callback(new Error("Failed intentionally"));
+    } else {
+      callback(null, `Processed: ${input}`);
+    }
+  }, 100);
+}
+
+async function promiseWrappedLegacyApi(input: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    legacyCallbackApi(input, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result!);
+      }
+    });
+  });
+}
+
+// In a Node's handle method:
+// const processedData = await promiseWrappedLegacyApi(inputs.someValue);
+```
+
+## Parallel Asynchronous Operations
+
+If your Node needs to perform multiple independent asynchronous operations, you can run them in parallel to improve efficiency using `Promise.all()` or `Promise.allSettled()`.
+
+-   **`Promise.all(promisesArray)`:** Waits for all promises in the array to resolve. If *any* promise rejects, `Promise.all()` immediately rejects with the reason of the first rejected promise.
+
+```typescript
+async handle(ctx: Context, inputs: any): Promise<INanoServiceResponse> {
+  const response = new NanoServiceResponse();
+  try {
+    const [userData, productData] = await Promise.all([
+      axios.get("https://api.example.com/users/123"),
+      axios.get("https://api.example.com/products/456")
+    ]);
+    response.setSuccess({ user: userData.data, product: productData.data });
+  } catch (error) {
+    // ... handle error ...
+  }
+  return response;
+}
+```
+
+-   **`Promise.allSettled(promisesArray)`:** Waits for all promises to settle (either resolve or reject). It returns an array of objects, each describing the outcome of a promise (status: `'fulfilled'` or `'rejected'`, and `value` or `reason`). This is useful when you want to process the results of all operations, even if some fail.
+
+```typescript
+async handle(ctx: Context, inputs: any): Promise<INanoServiceResponse> {
+  const response = new NanoServiceResponse();
+  const results = await Promise.allSettled([
+    axios.get("https://api.example.com/endpoint1"),
+    axios.get("https://api.example.com/endpoint2-might-fail")
+  ]);
+
+  const successfulResults: any[] = [];
+  results.forEach(result => {
+    if (result.status === "fulfilled") {
+      successfulResults.push(result.value.data);
+    } else {
+      ctx.logger.warn("An optional API call failed", { reason: result.reason });
+    }
+  });
+  response.setSuccess({ aggregatedData: successfulResults });
+  return response;
+}
+```
+
+## Timeouts and Retries
+
+For external calls, consider implementing timeouts and retry mechanisms.
+
+-   **Timeouts:** Many HTTP clients (like `axios`) allow you to configure timeouts for requests. If a timeout is not natively supported by an async operation, you might need to race it with a `Promise` that rejects after a certain duration.
+-   **Retries:** For transient network issues or temporary service unavailability, implement a retry strategy (e.g., exponential backoff). Libraries like `async-retry` can simplify this.
+
+## Best Practices
+
+1.  **Always `await` Promises:** If a function returns a Promise, `await` it or return the Promise directly from your `async` function. Not doing so can lead to unhandled promise rejections or unexpected behavior.
+2.  **Avoid Mixing Callbacks and Promises/`async/await` Unnecessarily:** Stick to `async/await` for consistency where possible.
+3.  **Handle Errors Appropriately:** Use `try...catch` for expected errors from `await`ed operations.
+4.  **Be Mindful of Concurrency:** Use `Promise.all()` for parallel independent operations but be cautious not to overwhelm downstream services or exceed connection limits.
+5.  **Keep Nodes Focused:** Even with `async/await`, if a Node's logic becomes overly complex with many asynchronous steps, consider breaking it down into smaller, more focused Nodes orchestrated by a Workflow.
+
+By effectively using `async/await` and understanding Promise patterns, you can build efficient, non-blocking, and maintainable Nanoservice-ts Nodes that interact seamlessly with various asynchronous resources.

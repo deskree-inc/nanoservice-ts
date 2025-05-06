@@ -1,0 +1,79 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [runner/src](/docs/ref/runner/src/README) / LocalStorage
+
+# Class: LocalStorage
+
+Defined in: [core/runner/src/LocalStorage.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/LocalStorage.ts#L10)
+
+## Extends
+
+- [`ResolverBase`](/docs/ref/runner/src/classes/ResolverBase)
+
+## Constructors
+
+### new LocalStorage()
+
+> **new LocalStorage**(): [`LocalStorage`](/docs/ref/runner/src/classes/LocalStorage)
+
+#### Returns
+
+[`LocalStorage`](/docs/ref/runner/src/classes/LocalStorage)
+
+#### Inherited from
+
+[`ResolverBase`](/docs/ref/runner/src/classes/ResolverBase).[`constructor`](/docs/ref/runner/src/classes/ResolverBase#constructors)
+
+## Methods
+
+### createContext()
+
+> **createContext**(`logger`?): `Context`
+
+Defined in: [core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/ResolverBase.ts#L9)
+
+#### Parameters
+
+##### logger?
+
+`GlobalLogger`
+
+#### Returns
+
+`Context`
+
+#### Inherited from
+
+[`ResolverBase`](/docs/ref/runner/src/classes/ResolverBase).[`createContext`](/docs/ref/runner/src/classes/ResolverBase#createcontext)
+
+***
+
+### get()
+
+> **get**(`name`, `workflowLocator`, `fileType`?): `Promise`\<[`Config`](/docs/ref/runner/src/type-aliases/Config)\>
+
+Defined in: [core/runner/src/LocalStorage.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/LocalStorage.ts#L11)
+
+#### Parameters
+
+##### name
+
+`string`
+
+##### workflowLocator
+
+`WorkflowLocator`
+
+##### fileType?
+
+`string`
+
+#### Returns
+
+`Promise`\<[`Config`](/docs/ref/runner/src/type-aliases/Config)\>
+
+#### Overrides
+
+[`ResolverBase`](/docs/ref/runner/src/classes/ResolverBase).[`get`](/docs/ref/runner/src/classes/ResolverBase#get)

@@ -1,0 +1,81 @@
+---
+title: Overview
+---
+
+Welcome to Nanoservice-ts! This framework is designed to help you build modular, scalable, and maintainable backend applications, microservices, and automation workflows with ease using TypeScript.
+
+Nanoservice-ts empowers developers by providing a structured approach to breaking down complex processes into small, reusable, and independently deployable units called **Nodes**. These Nodes are then orchestrated by declarative **Workflows**, which define the logic flow, data transformation, and interaction between different services and components.
+
+## The Core Philosophy: Why Nanoservice-ts?
+
+In today's rapidly evolving technological landscape, backend development often faces challenges such as:
+
+-   **Monolithic Complexity:** Large, tightly coupled applications become difficult to understand, modify, and scale.
+-   **Slow Development Cycles:** Changes in one part of a monolith can have unintended consequences elsewhere, leading to extensive testing and slower releases.
+-   **Technology Lock-in:** Monoliths can make it hard to adopt new technologies or integrate diverse services.
+-   **Scalability Issues:** Scaling individual parts of a monolithic application efficiently can be challenging.
+
+Nanoservice-ts addresses these challenges by promoting a **nanoservice architecture** at a granular level. Instead of building large microservices, you build even smaller, highly focused "nanoservices" (our Nodes) that do one thing well. This approach offers several key benefits:
+
+-   **Modularity & Reusability:** Nodes are self-contained and can be reused across multiple Workflows and even projects.
+-   **Improved Maintainability:** Smaller code units are easier to understand, debug, and maintain.
+-   **Enhanced Testability:** Individual Nodes can be tested in isolation, simplifying the testing process.
+-   **Faster Development:** Teams can work on different Nodes concurrently, and new features can often be implemented by composing existing Nodes.
+-   **Clear Separation of Concerns:** Business logic (in Nodes) is separated from orchestration logic (in Workflows).
+-   **Scalability:** While Nanoservice-ts itself runs as a single application process by default, the modular design allows for patterns where specific, high-load workflows or nodes could potentially be scaled independently in more advanced deployment scenarios.
+
+## Key Components
+
+Nanoservice-ts revolves around a few core components:
+
+1.  **Nodes:**
+    -   The fundamental building blocks. Each Node is a TypeScript class responsible for a single, specific task (e.g., fetching data from an API, querying a database, transforming data, sending a notification).
+    -   Nodes have defined input and output schemas, ensuring clear contracts.
+    -   See [Fundamentals: Nodes](./nodes.mdx) for an in-depth explanation.
+
+2.  **Workflows:**
+    -   Declarative JSON definitions that orchestrate the execution of Nodes.
+    -   Workflows define the sequence of steps, how data flows between Nodes, and conditional logic.
+    -   They act as the "glue" that connects various Nodes to achieve a larger business process.
+    -   See [Fundamentals: Workflows](./workflows.mdx) for more details.
+
+3.  **Triggers:**
+    -   Mechanisms that initiate the execution of a Workflow.
+    -   Common triggers include HTTP requests (for building APIs), scheduled events (for cron-like jobs), or potentially events from message queues.
+    -   Triggers provide the entry point and initial data for a Workflow.
+    -   See [Fundamentals: Triggers](./triggers.mdx) to learn more.
+
+4.  **`nanoctl` (CLI):**
+    -   The command-line interface for Nanoservice-ts.
+    -   Used to scaffold new projects, generate Nodes and Workflows, and manage your application.
+    -   Simplifies development and enforces project structure conventions.
+    -   See [CLI: Overview](./../cli/overview.mdx).
+
+5.  **Context (`ctx`):**
+    -   An object passed to each Node during execution.
+    -   Provides access to shared utilities like a logger (`ctx.logger`) and can potentially carry state or configuration through a workflow execution (though direct mutation is often handled by specific context-manipulation nodes).
+
+## How It Fits Together
+
+1.  You **define a Trigger** (e.g., an HTTP endpoint like `/api/users`).
+2.  When the Trigger condition is met (e.g., an HTTP POST request arrives at `/api/users`), it **initiates a specific Workflow**.
+3.  The Workflow **executes a series of Nodes** in the defined order.
+4.  Each Node performs its task, potentially taking input from the trigger or previous Nodes, and producing output.
+5.  Data **flows between Nodes** as specified in the Workflow definition.
+6.  The Workflow can make **conditional decisions** to execute or skip certain Nodes.
+7.  Finally, the Workflow produces an **overall result**, which might be an HTTP response, data stored in a database, or a notification sent.
+
+## Who is Nanoservice-ts For?
+
+Nanoservice-ts is well-suited for:
+
+-   Developers building backend APIs and microservices who value modularity and clear separation of concerns.
+-   Teams looking to automate complex business processes by orchestrating various internal and external services.
+-   Engineers creating data pipelines, ETL jobs, or integration workflows.
+-   Anyone who wants to build robust, testable, and maintainable backend systems with TypeScript.
+
+## Getting Started
+
+Ready to dive in? The best way to start is by following our [Installation](./installation.mdx) guide and then moving on to [First Steps](./first-steps.mdx) to build your first Node and Workflow.
+
+We are excited to see what you build with Nanoservice-ts!
