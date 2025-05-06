@@ -19,14 +19,7 @@
 		"readme": "none",
 		"entryPoints": ["./core/runner/src/index.ts", "./core/shared/src/index.ts"],
 		"plugin": ["typedoc-plugin-markdown"],
-		"publicPath": "https://rp",
-		"fileExtension": ".mdx",
-		"outputs": [
-			{
-				"name": "markdown",
-				"path": "./docs/ref"
-			}
-		]
+		"out": "./docs/ref"
 	},
 	"include": ["./core/**/*"],
 	"exclude": ["node_modules", "README.md", "LICENSE"]

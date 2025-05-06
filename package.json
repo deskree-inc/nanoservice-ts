@@ -8,7 +8,7 @@
 	"scripts": {
 		"ci:publish": "pnpm publish -r --access public",
 		"doc:dev": "cd docs && npx mintlify dev",
-		"doc:generate": "npx typedoc && node ./docs/generateRefLinks.js",
+		"doc:generate": "npx typedoc --skipErrorChecking && node ./docs/generateRefLinks.js",
 		"prepare": "husky",
 		"lint": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
 		"test": "nx run-many -t test",
