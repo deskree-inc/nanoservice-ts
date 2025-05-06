@@ -238,7 +238,6 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		);
 		console.log("For more documentation, visit https://nanoservice.xyz/docs/d/core-concepts/nodes");
 	} catch (error) {
-		console.log(error);
 		if (!isDefault) s.stop("An error occurred");
 
 		const message = (error as Error).message;
