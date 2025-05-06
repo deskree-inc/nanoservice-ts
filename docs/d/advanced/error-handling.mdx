@@ -1,0 +1,173 @@
+---
+title: Error Handling Strategies
+---
+
+Robust error handling is critical for building reliable and maintainable Nanoservice-ts applications. Errors can occur at various levels: within a Node, during workflow execution, or at the trigger level. A comprehensive strategy involves anticipating potential failures, handling them gracefully, logging them effectively, and providing meaningful feedback.
+
+This guide discusses common error types and strategies for handling them in Nanoservice-ts.
+
+## Error Handling within Nodes
+
+Nodes are the primary location for business logic, and thus, a common source of errors. Each Node's `handle` method should be designed to manage its own potential failures.
+
+### Using `try...catch` Blocks
+
+The most fundamental way to handle errors within a Node is by wrapping its core logic in a `try...catch` block.
+
+```typescript
+// Inside a Node's handle method
+async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+  const response = new NanoServiceResponse();
+  try {
+    // Your Node's primary logic (e.g., API calls, DB queries, computations)
+    const result = await someAsynchronousOperation(inputs.someValue);
+    if (!result) {
+      throw new Error("Operation returned no result when one was expected.");
+    }
+    response.setSuccess({ data: result });
+  } catch (error: unknown) {
+    const err = error as Error; // Type assertion
+    ctx.logger.error(`Error in ${this.constructor.name}: ${err.message}`, { 
+      nodeInputs: inputs,
+      stack: err.stack,
+      // Add any other relevant context for debugging
+    });
+
+    // Create a standardized error object
+    const globalError = new GlobalError(err.message, 500); // Default to 500 Internal Server Error
+    
+    // You can customize the error code based on the error type
+    if (err.name === 'ValidationError') { // Example custom error type
+      globalError.setCode(400); // Bad Request
+    } else if ((err as any).isAxiosError && (err as any).response?.status) {
+        globalError.setCode((err as any).response.status);
+        globalError.setMessage((err as any).response?.data?.message || err.message);
+    }
+    
+    response.setError(globalError);
+  }
+  return response;
+}
+```
+
+**Key Practices:**
+
+1.  **Specific Error Types:** Whenever possible, throw or catch specific error types (e.g., `ValidationError`, `DatabaseConnectionError`) rather than generic `Error` objects. This allows for more granular error handling.
+2.  **Logging Context:** When logging errors using `ctx.logger.error()`, include relevant context such as Node inputs, error stack traces, and any other information that can help diagnose the issue.
+3.  **`NanoServiceResponse.setError()`:** Use `response.setError(new GlobalError(message, code))` to signal that the Node execution failed. The `GlobalError` object typically includes a message and an HTTP-like status code.
+4.  **Consistent Error Structure:** The `GlobalError` class helps maintain a consistent error structure that the workflow engine can understand.
+
+### Input Validation Errors
+
+-   **Schema Validation:** Nanoservice-ts automatically validates Node inputs against the `inputSchema` defined in the Node's `package.json` before the `handle` method is called. If validation fails, the Node execution typically errors out, and the workflow engine handles this.
+-   **Custom Validation:** For more complex validation logic that cannot be expressed in JSON Schema, perform checks at the beginning of your `handle` method and throw an error (or set an error response) if validation fails.
+
+```typescript
+if (!inputs.email || !inputs.email.includes('@')) {
+  response.setError(new GlobalError("Invalid email format provided.", 400));
+  return response;
+}
+```
+
+## Error Handling in Workflows
+
+Workflows orchestrate Nodes, and errors from Nodes can affect the workflow's execution path.
+
+### Default Behavior
+
+By default, if a Node in a workflow step returns an error, the workflow execution halts at that step. The error from the Node is typically propagated as the error of the entire workflow.
+
+### `onError` Step Property
+
+The `onError` property within a step definition in the workflow JSON allows you to customize behavior when a specific step fails:
+
+```json
+// In workflows/json/my-workflow.json
+{
+  // ... other workflow properties ...
+  "steps": [
+    {
+      "name": "critical-step",
+      "node": "some-critical-node",
+      "type": "module"
+      // Default onError is effectively "failWorkflow"
+    },
+    {
+      "name": "optional-step",
+      "node": "some-optional-node",
+      "type": "module",
+      "onError": "continue" // If this step fails, workflow continues
+    },
+    {
+      "name": "cleanup-step",
+      "node": "cleanup-resources-node",
+      "type": "module",
+      // This step might run even if optional-step failed, if its condition is met
+      // or if it's designed to always run (e.g., in a conceptual finally block)
+      "condition": "{{optional-step.error != null || optional-step.output != null}}" // Example: run if optional-step was attempted
+    }
+  ],
+  "nodes": {
+    // ... node configurations ...
+  }
+}
+```
+
+-   **`onError: "failWorkflow"` (Default):** The workflow stops, and the error is reported.
+-   **`onError: "continue"`:** The workflow continues to the next step. The error information from the failed step becomes available in the workflow context (e.g., `{{failedStepName.error.message}}`, `{{failedStepName.error.code}}`). This allows subsequent steps to react to the failure.
+
+### Try/Catch Patterns in Workflows (Conceptual)
+
+While not a direct JSON keyword, you can simulate try/catch blocks using conditional logic and the `onError: "continue"` property:
+
+1.  **"Try" Block:** A sequence of steps.
+2.  **"Catch" Block:** A subsequent step (or sequence of steps) that has a `condition` checking if a preceding step in the "try" block failed (e.g., `"condition": "{{previousStep.error != null}}"`). This block would then execute error handling logic (e.g., logging, sending a notification, attempting a fallback).
+3.  **"Finally" Block:** A step that is designed to run regardless of success or failure of preceding steps. This can be achieved by careful conditioning or by ensuring it's the last step after an `onError: "continue"` sequence.
+
+More advanced workflow engines might offer explicit try/catch/finally constructs.
+
+### Workflow `output` for Errors
+
+The `output.error` section in your workflow JSON defines how the final error response is structured if the workflow fails, especially for HTTP triggers:
+
+```json
+"output": {
+  "success": { /* ... */ },
+  "error": {
+    "statusCode": "{{error.code || 500}}", // Use error code from Node or default
+    "body": {
+      "errorMessage": "{{error.message || 'An unexpected workflow error occurred.'}}",
+      "workflowName": "{{workflow.name}}",
+      "failedStep": "{{error.stepName}}" // If available from the engine
+    }
+  }
+}
+```
+
+## Trigger-Level Errors
+
+Errors can also occur before a workflow even starts or when processing the trigger itself:
+
+-   **HTTP Triggers:** Invalid request format, malformed JSON body, authentication/authorization failures handled by middleware before the trigger.
+-   **Schedule Triggers:** Issues with the scheduling service itself.
+
+These errors are typically handled by the underlying Nanoservice-ts runtime or the web server infrastructure. Ensure your application logging captures these.
+
+## Logging as a Key Component
+
+Comprehensive logging is indispensable for effective error handling and debugging.
+
+-   **Use `ctx.logger` extensively:** Log informational messages, warnings, and especially errors with as much context as possible.
+-   **Structured Logging:** Log errors as JSON objects or a similar structured format. This makes them easier to parse, search, and analyze in log management systems (e.g., ELK stack, Splunk, Datadog).
+-   **Log Levels:** Utilize different log levels (`debug`, `info`, `warn`, `error`) appropriately. Configure log levels per environment (e.g., `debug` in development, `info` or `warn` in production).
+-   **Correlation IDs:** If possible, include a correlation ID in your logs that traces a single request or transaction through multiple Nodes and Workflows. This can be invaluable for debugging distributed or complex processes.
+
+## General Best Practices
+
+1.  **Fail Fast, Fail Loud:** For unrecoverable errors, it's often better to let the operation fail clearly and quickly rather than trying to continue in an inconsistent state.
+2.  **Idempotency:** Design Nodes and Workflows to be idempotent where possible, especially if retries are involved. This means an operation can be performed multiple times with the same input and produce the same outcome without unintended side effects.
+3.  **User-Friendly Error Messages:** For errors that will be exposed to end-users (e.g., via API responses), provide clear, user-friendly messages that don't expose sensitive internal details.
+4.  **Monitoring and Alerting:** Set up monitoring for error rates and critical failures. Configure alerts to notify your team when error thresholds are exceeded or specific critical errors occur.
+5.  **Testing Error Paths:** Explicitly test error conditions in your unit tests (for Nodes) and integration/end-to-end tests (for Workflows). Verify that errors are handled as expected and that appropriate responses are generated.
+
+By implementing a robust error handling strategy across Nodes, Workflows, and your application's infrastructure, you can build more resilient and reliable Nanoservice-ts applications.

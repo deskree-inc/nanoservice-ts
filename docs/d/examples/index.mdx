@@ -1,0 +1,92 @@
+---
+title: Introduction to Examples
+---
+
+# Introduction to Nanoservice-ts Examples
+
+This section provides a guide to understanding and running the example workflows and nodes included in the Nanoservice-ts starter project. These examples showcase various features and integrations, providing practical demonstrations of the platform's capabilities.
+
+## Getting Started with Examples
+
+When you create a new project using the `nanoctl` CLI, you have the option to include these examples:
+
+```bash
+npx nanoctl@latest create project
+```
+
+During the setup, when prompted "Install the examples?", choose **YES**.
+
+This generates a project structure that includes:
+
+- **Example Workflows:** Located in `workflows/json/`.
+- **Example Nanoservices (Nodes):** Located in `src/nodes/examples/`.
+- **Infrastructure:** A PostgreSQL Docker setup in `src/nodes/examples/infra/`.
+- **Development Server:** Ready to run with `npm run dev`.
+
+## Environment Configuration
+
+Before running the examples, ensure your environment is configured correctly:
+
+1.  **`.env.local` File:** The CLI creates this file. You need to add or verify the following variables (especially if using examples that require them):
+    ```dotenv
+    OPENAI_API_KEY=your_openai_key # Required for AI examples
+    POSTGRESQL_PASSWORD=example    # Default for the example DB
+    POSTGRESQL_USER=postgres       # Default for the example DB
+    POSTGRESQL_HOST=localhost      # Default for the example DB
+    POSTGRESQL_DB=dvdrental        # Default for the example DB
+    POSTGRESQL_PORT=5432           # Default for the example DB
+    ```
+2.  **Start Example Database:** Many examples use the provided PostgreSQL database. Start it using Docker Compose:
+    ```bash
+    cd src/nodes/examples/infra # Navigate to the infra directory
+    docker-compose up -d        # Start the database in detached mode
+    ```
+3.  **Start Development Server:** Run the local server from your project root:
+    ```bash
+    npm run dev
+    ```
+
+## Understanding Workflow + Nanoservice Architecture
+
+Workflows (`workflows/json/*.json`) orchestrate how nodes are triggered and executed.
+
+- **Trigger:** Defines how the workflow starts (e.g., an HTTP request).
+- **Steps:** An array defining the sequence of nodes to execute.
+- **Nodes:** Configuration for each specific node instance used in the steps.
+
+**Connecting Workflows to Code:**
+
+1.  **Workflow Step:** Look at the `steps` array in a workflow JSON file. Each step has a `node` property (e.g., `"node": "postgres-query"`).
+2.  **Node Registration:** This `node` name corresponds to a key in the `nodes` object defined in `src/Nodes.ts`.
+3.  **Node Implementation:** The `src/Nodes.ts` file imports the actual Node class (e.g., `import PostgresQuery from "./nodes/examples/postgres-query";`) and maps the registered name to an instance (`"postgres-query": new PostgresQuery()`).
+
+This allows you to trace the execution flow from the workflow definition to the specific TypeScript code being executed.
+
+## Understanding the `ctx` (Context) Object
+
+The `ctx` object is crucial as it carries state and data throughout a workflow's execution, passed from one node to the next.
+
+Key properties include:
+
+- **`ctx.request`:** Contains details about the initial trigger, especially for HTTP triggers (e.g., `ctx.request.body`, `ctx.request.query`, `ctx.request.headers`).
+- **`ctx.response.data`:** Holds the data returned by the *previously* executed node in the workflow sequence.
+- **`ctx.vars`:** A general-purpose object for storing temporary values that need to be passed between steps *within the same workflow execution*. To populate `ctx.vars` from a node's output, you must set `"set_var": true` for that node's configuration within the workflow's `nodes` section.
+
+## Viewing Examples in the Browser
+
+Once the development server is running (usually on `http://localhost:4000`), you can access the example workflows that have an HTTP trigger directly via your browser.
+
+The URL path corresponds to the workflow's filename (without the `.json` extension).
+
+**Example:**
+
+- **Workflow File:** `workflows/json/workflow-docs.json`
+- **Browser URL:** `http://localhost:4000/workflow-docs`
+
+Similarly:
+
+- `db-manager.json` -> `http://localhost:4000/db-manager`
+- `dashboard-gen.json` -> `http://localhost:4000/dashboard-gen`
+- `feedback.json` -> `http://localhost:4000/feedback`
+
+Explore the different example pages linked in the sidebar to see these concepts in action!

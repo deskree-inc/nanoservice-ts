@@ -1,0 +1,231 @@
+---
+title: File Handling in Nodes
+---
+
+Nanoservice-ts Nodes may need to interact with the file system to read input files, write output files, process data from files, or integrate with storage services like Amazon S3.
+
+This guide covers common patterns for file handling within Nanoservice-ts Nodes, including reading, writing, and working with file streams, as well as considerations for integrating with cloud storage.
+
+## Reading Files
+
+Nodes can read files from the local file system using Node.js built-in `fs` (File System) module, specifically its promise-based API (`fs.promises`).
+
+### Reading a Text File
+
+```typescript
+// src/nodes/my-file-reader-node/index.ts
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import * as fs from 'fs/promises'; // Using fs.promises for async operations
+import * as path from 'path';
+
+type InputType = { filePath: string }; // Relative or absolute path to the file
+type OutputType = { fileContent: string };
+
+export default class MyFileReaderNode extends NanoService<InputType> {
+  constructor() {
+    super();
+    this.inputSchema = {
+      type: "object",
+      properties: { filePath: { type: "string" } },
+      required: ["filePath"]
+    };
+    // Output schema for fileContent
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+    // Consider resolving path relative to a project root or a specific data directory
+    // For security, be very careful with user-provided file paths.
+    // const resolvedPath = path.resolve(process.env.DATA_DIRECTORY || './data', inputs.filePath);
+    const resolvedPath = inputs.filePath; // Assuming path is safe or pre-validated
+
+    try {
+      ctx.logger.info(`Reading file from: ${resolvedPath}`);
+      const fileContent = await fs.readFile(resolvedPath, { encoding: 'utf8' });
+      
+      response.setSuccess({ fileContent });
+      ctx.logger.debug(`File read successfully: ${resolvedPath}`);
+
+    } catch (error: unknown) {
+      const err = error as NodeJS.ErrnoException;
+      ctx.logger.error("Error reading file", { path: resolvedPath, code: err.code, message: err.message });
+      let userMessage = "Failed to read file.";
+      if (err.code === 'ENOENT') {
+        userMessage = "File not found.";
+      }
+      response.setError(new GlobalError(userMessage, 500));
+    }
+    return response;
+  }
+}
+```
+
+### Reading a Binary File (e.g., Image)
+
+```typescript
+// ... (similar structure, but read as a Buffer)
+    try {
+      // ...
+      const fileBuffer = await fs.readFile(resolvedPath);
+      // To send binary data, you might Base64 encode it or handle it as a Buffer
+      response.setSuccess({ fileData: fileBuffer.toString('base64'), encoding: 'base64' });
+      // ...
+    } catch (error: unknown) {
+      // ...
+    }
+// ...
+```
+
+## Writing Files
+
+Similarly, Nodes can write data to files using `fs.promises.writeFile`.
+
+### Writing a Text File
+
+```typescript
+// src/nodes/my-file-writer-node/index.ts
+// ... (imports and class structure similar to reader)
+
+type InputType = { filePath: string; content: string };
+type OutputType = { message: string; filePath: string };
+
+// ... (constructor with inputSchema)
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+    const resolvedPath = inputs.filePath; // Again, be cautious with path construction
+
+    try {
+      ctx.logger.info(`Writing content to file: ${resolvedPath}`);
+      // Ensure directory exists or create it if necessary (fs.mkdir with recursive: true)
+      // const dirPath = path.dirname(resolvedPath);
+      // await fs.mkdir(dirPath, { recursive: true });
+      
+      await fs.writeFile(resolvedPath, inputs.content, { encoding: 'utf8' });
+      
+      response.setSuccess({ message: "File written successfully", filePath: resolvedPath });
+      ctx.logger.debug(`File written successfully: ${resolvedPath}`);
+
+    } catch (error: unknown) {
+      const err = error as NodeJS.ErrnoException;
+      ctx.logger.error("Error writing file", { path: resolvedPath, message: err.message });
+      response.setError(new GlobalError("Failed to write file.", 500));
+    }
+    return response;
+  }
+// ...
+```
+
+## Working with File Streams
+
+For large files, using streams is more memory-efficient than reading the entire file into memory at once.
+
+```typescript
+// Example: Processing a large CSV file line by line using streams
+import * as fsSync from 'fs'; // fs/promises doesn't directly expose createReadStream in the same way for some patterns
+import * as readline from 'readline';
+
+// ... (inside handle method)
+    try {
+      const fileStream = fsSync.createReadStream(resolvedPath);
+      const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+      });
+
+      let processedLines = 0;
+      const processedData: any[] = [];
+
+      for await (const line of rl) {
+        // Process each line (e.g., parse CSV, transform data)
+        // Example: const columns = line.split(',');
+        // processedData.push({ col1: columns[0], col2: columns[1] });
+        processedLines++;
+        if (processedLines % 1000 === 0) {
+          ctx.logger.debug(`Processed ${processedLines} lines...`);
+        }
+      }
+
+      response.setSuccess({ message: `Successfully processed ${processedLines} lines.`, data: processedData /* or summary */ });
+      ctx.logger.info(`Finished processing file: ${resolvedPath}, ${processedLines} lines.`);
+
+    } catch (error: unknown) {
+      // ... (error handling)
+    }
+// ...
+```
+
+## Integrating with Cloud Storage (e.g., Amazon S3)
+
+For cloud-native applications, files are often stored in services like Amazon S3, Google Cloud Storage, or Azure Blob Storage. You would use their respective SDKs within your Nodes.
+
+### Example: Downloading a File from S3 (Conceptual)
+
+```typescript
+// src/nodes/s3-downloader-node/index.ts
+// Assumes aws-sdk v2 or v3 is installed and configured
+// For AWS SDK v3 (recommended):
+// import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+// import { Readable } from "stream";
+
+// ... (imports, class structure)
+
+// const s3Client = new S3Client({ region: process.env.AWS_REGION });
+
+type InputType = { bucketName: string; fileKey: string };
+type OutputType = { fileContentBase64: string }; // Or stream, or save to local temp path
+
+// ... (constructor)
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+    /*
+    // AWS SDK v3 Example Snippet
+    try {
+      ctx.logger.info(`Downloading from S3: s3://${inputs.bucketName}/${inputs.fileKey}`);
+      const command = new GetObjectCommand({
+        Bucket: inputs.bucketName,
+        Key: inputs.fileKey,
+      });
+      const s3Response = await s3Client.send(command);
+
+      if (s3Response.Body instanceof Readable) {
+        const chunks: Buffer[] = [];
+        for await (const chunk of s3Response.Body) {
+          chunks.push(Buffer.from(chunk));
+        }
+        const fileBuffer = Buffer.concat(chunks);
+        response.setSuccess({ fileContentBase64: fileBuffer.toString('base64') });
+      } else {
+        throw new Error("S3 response body is not a readable stream.");
+      }
+    } catch (error: unknown) {
+      const err = error as Error;
+      ctx.logger.error("Error downloading from S3", { message: err.message });
+      response.setError(new GlobalError("Failed to download file from S3.", 500));
+    }
+    */
+    // Placeholder for actual implementation
+    response.setError(new GlobalError("S3 download not fully implemented in this example.", 501));
+    return response;
+  }
+// ...
+```
+
+-   **SDK Usage:** Use the official SDK for the cloud storage provider.
+-   **Credentials:** Configure SDK credentials securely, typically via environment variables or IAM roles (for services running in AWS, for example).
+-   **Streaming:** SDKs often support streaming downloads/uploads for large files.
+
+## Best Practices for File Handling in Nodes
+
+1.  **Path Safety:** Be extremely cautious when constructing file paths from user inputs to prevent path traversal vulnerabilities. Sanitize inputs or resolve paths relative to a secure, predefined base directory.
+2.  **Error Handling:** File operations can fail for many reasons (file not found, permissions issues, disk full). Implement robust `try...catch` blocks and provide meaningful error responses.
+3.  **Asynchronous Operations:** Always use the asynchronous versions of file system methods (e.g., `fs.promises` or stream-based approaches) to avoid blocking the Node.js event loop.
+4.  **Resource Management:** Ensure file streams or handles are properly closed, especially in case of errors, to prevent resource leaks.
+5.  **Large Files:** Use streams for processing large files to avoid loading the entire file content into memory, which can lead to performance issues or crashes.
+6.  **Temporary Files:** If you need to create temporary files, use a dedicated temporary directory (e.g., using the `os.tmpdir()` method and a library like `tmp` or `tempy` to generate unique filenames) and ensure these files are cleaned up afterwards.
+7.  **Permissions:** Be mindful of the file system permissions of the environment where your Nanoservice-ts application is running. The application process needs appropriate read/write access to the directories it interacts with.
+8.  **Configuration:** For paths to common data directories or S3 bucket names, use environment variables or workflow inputs for configurability.
+
+By incorporating these techniques, you can build Nanoservice-ts Nodes that reliably and efficiently handle file-based operations, whether on a local file system or with cloud storage services.

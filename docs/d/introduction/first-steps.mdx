@@ -1,0 +1,290 @@
+---
+title: First Steps
+---
+
+This guide will walk you through creating your first Nanoservice-ts project, building a simple Node, and orchestrating it with a Workflow. By the end, you'll have a basic understanding of the core development loop.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+-   **Node.js and npm/yarn:** Nanoservice-ts is built on Node.js. We recommend using a recent LTS version of Node.js (e.g., v18 or v20). npm is bundled with Node.js; yarn can be installed separately.
+-   **Access to a terminal or command prompt.**
+
+## 1. Create a New Nanoservice-ts Project
+
+Let's start by scaffolding a new project using the `nanoctl` CLI. The easiest way to use `nanoctl` is via `npx`, which ensures you're always using the latest version.
+
+Open your terminal and run:
+
+```bash
+npx nanoctl@latest create project
+```
+
+The CLI will prompt you for a project name. Let's call it `my-first-nanoservice-app`.
+
+```
+? What is your project name? › my-first-nanoservice-app
+```
+
+After you enter the name, `nanoctl` will create a new directory with that name and set up the basic project structure, including installing necessary dependencies.
+
+Navigate into your new project directory:
+
+```bash
+cd my-first-nanoservice-app
+```
+
+Take a moment to explore the generated [Project Structure](./project-structure.mdx).
+
+## 2. Create Your First Node
+
+Nodes are the building blocks of your application logic. Let's create a simple Node that takes a name as input and returns a greeting message.
+
+Run the `nanoctl create node` command:
+
+```bash
+npx nanoctl@latest create node
+```
+
+The CLI will ask for some details:
+
+-   **Node Name:** Enter `hello-node`.
+-   **Description:** Enter `A simple node that returns a greeting.`.
+-   **Category:** Enter `Examples`.
+
+This will generate a new directory `src/nodes/hello-node/` containing two files:
+
+-   `index.ts`: The TypeScript file where you'll write your Node's logic.
+-   `package.json`: Contains metadata and schemas for your Node.
+
+### Define Node Schemas
+
+Open `src/nodes/hello-node/package.json`. We need to define the `inputSchema` and `outputSchema` for our Node.
+
+Modify it to look like this:
+
+```json
+{
+  "name": "hello-node",
+  "version": "1.0.0",
+  "description": "A simple node that returns a greeting.",
+  "category": "Examples",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name to include in the greeting."
+      }
+    },
+    "required": ["name"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "description": "The generated greeting message."
+      }
+    },
+    "required": ["message"]
+  }
+}
+```
+
+### Implement Node Logic
+
+Now, open `src/nodes/hello-node/index.ts` and update its content:
+
+```typescript
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+
+type InputType = { name: string };
+type OutputType = { message: string };
+
+export default class HelloNode extends NanoService<InputType, OutputType> {
+  constructor() {
+    super();
+    // Schemas are now primarily defined in package.json
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response = new NanoServiceResponse();
+    ctx.logger.info(`HelloNode received name: ${inputs.name}`);
+
+    try {
+      if (!inputs.name || typeof inputs.name !== 'string') {
+        // This basic validation can also be caught by the inputSchema
+        throw new Error("Input 'name' must be a non-empty string.");
+      }
+
+      const message = `Hello, ${inputs.name}! Welcome to Nanoservice-ts.`;
+      const output: OutputType = { message };
+      response.setSuccess(output);
+
+    } catch (error: unknown) {
+      const err = error as Error;
+      ctx.logger.error("Error in HelloNode", { error: err.message });
+      response.setError(new GlobalError(err.message, 400)); // 400 for bad input
+    }
+
+    return response;
+  }
+}
+```
+
+### Register Your Node
+
+For the framework to recognize your new Node, you need to register it in `src/Nodes.ts`.
+
+Open `src/Nodes.ts` and modify it:
+
+```typescript
+import type { NodeBase } from "@nanoservice-ts/shared";
+import HelloNode from "./nodes/hello-node"; // Import your new node
+// import ExampleNode from "./nodes/example-node"; // Remove or comment out the default example if it exists
+
+const nodes: { [key: string]: NodeBase; } = {
+  // "example-node": new ExampleNode(), // Remove or comment out
+  "hello-node": new HelloNode(), // Add your node here
+};
+
+export default nodes;
+```
+
+## 3. Create a Workflow to Use Your Node
+
+Now, let's create a Workflow that uses our `hello-node`.
+
+Run the `nanoctl create workflow` command:
+
+```bash
+npx nanoctl@latest create workflow
+```
+
+Provide the following details:
+
+-   **Workflow Name:** `greet-user-workflow`
+-   **Description:** `A workflow that greets a user via an HTTP request.`
+-   **Trigger Type:** Select `HTTP`.
+-   **HTTP Path:** `/greet`
+-   **HTTP Method:** Select `POST`.
+
+This will create `workflows/json/greet-user-workflow.json`.
+
+Open `workflows/json/greet-user-workflow.json` and modify it to use your `hello-node`:
+
+```json
+{
+  "name": "greet-user-workflow",
+  "version": "1.0.0",
+  "description": "A workflow that greets a user via an HTTP request.",
+  "trigger": {
+    "http": {
+      "method": "POST",
+      "path": "/greet"
+    }
+  },
+  "steps": [
+    {
+      "name": "greeting-step",
+      "node": "hello-node", // Use the registered name of your node
+      "type": "module"
+    }
+  ],
+  "nodes": {
+    "greeting-step": {
+      "inputs": {
+        "name": "{{trigger.body.userName}}" // We expect 'userName' in the POST request body
+      }
+    }
+  },
+  "output": {
+    "success": {
+      "statusCode": 200,
+      "body": {
+        "greetingResponse": "{{greeting-step.output.message}}"
+      }
+    },
+    "error": {
+      "statusCode": 500,
+      "body": {
+        "error": "{{error.message}}"
+      }
+    }
+  }
+}
+```
+
+## 4. Run Your Nanoservice-ts Application
+
+Now that you have a Node and a Workflow, it's time to run your application.
+
+In your project's root directory, start the development server:
+
+```bash
+npm run dev
+```
+
+This command typically uses `nodemon` to watch for file changes and automatically restart the server. You should see output indicating that the server has started, usually on a port like `4000` (this can be configured in `.env.local` or `package.json` scripts).
+
+```
+[Nanoservice] Engine started on port 4000
+[Nanoservice] Workflow "greet-user-workflow" loaded with HTTP POST trigger on /greet
+[Nanoservice] Registered node: hello-node
+...
+```
+
+## 5. Test Your Workflow
+
+You can test your HTTP-triggered workflow using a tool like `curl`, Postman, or Insomnia.
+
+Using `curl` from another terminal window:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"userName": "Nanoservice Developer"}' http://localhost:4000/greet
+```
+
+**Expected Response:**
+
+```json
+{
+  "greetingResponse": "Hello, Nanoservice Developer! Welcome to Nanoservice-ts."
+}
+```
+
+You should also see log output in the terminal where your Nanoservice-ts application is running, including the message from `ctx.logger.info` in your `HelloNode`.
+
+**Try sending an invalid request (e.g., without `userName`):**
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{}' http://localhost:4000/greet
+```
+
+This might result in an error from the input schema validation or your Node's explicit check, demonstrating error handling:
+
+```json
+{
+  "error": "Input 'name' must be a non-empty string."
+}
+```
+(The exact error message might vary based on schema validation or your node logic.)
+
+## Congratulations!
+
+You've successfully created your first Nanoservice-ts project, built a custom Node, orchestrated it with a Workflow, and tested it via an HTTP trigger.
+
+## Next Steps
+
+From here, you can explore more advanced topics:
+
+-   Dive deeper into [Nodes](./nodes.mdx), [Workflows](./workflows.mdx), and [Triggers](./triggers.mdx).
+-   Learn about [Configuration](./configuration.mdx) and [Project Structure](./project-structure.mdx).
+-   Explore [Techniques](./../techniques/asynchronous-operations.mdx) for asynchronous operations, database integration, and more.
+-   Check out the [Examples](./../examples/index.mdx) for more complex use cases.
+
+Happy building with Nanoservice-ts!

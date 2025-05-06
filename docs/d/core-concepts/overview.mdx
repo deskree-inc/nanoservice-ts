@@ -1,62 +1,134 @@
 ---
-title: Overview
+title: CLI Overview
 ---
 
-# Nanoservice-ts Architecture: Trigger, Workflow (Runner), and Nodes
+The Nanoservice-ts Command Line Interface (`nanoctl`) is your primary tool for scaffolding, developing, and managing Nanoservice-ts applications. It streamlines common tasks, enforces project structure, and helps you get up and running quickly.
 
-## Overview  
+## Purpose of `nanoctl`
 
-In **nanoservice-ts**, workflows are composed of sequences of modular **Nanoservices (Nodes)**, each responsible for executing a specific, isolated task within a container-based environment. These workflows are automatically triggered by predefined events—such as HTTP requests, scheduled (cron) jobs, event-driven messages, or data updates—which serve as entry points into the system.
+`nanoctl` is designed to:
 
-Once activated, a Workflow Runner orchestrates the execution of Nodes based on the defined workflow logic, handling data flow, execution order, dependencies, and control logic.
+-   **Scaffold New Projects:** Create a new Nanoservice-ts project with a standard directory structure and essential configuration files.
+-   **Generate Components:** Quickly generate boilerplate code for new Nodes and Workflows, including their respective `index.ts` and `package.json` (for Nodes) or workflow JSON files.
+-   **Manage Dependencies (Potentially):** While primarily relying on npm/yarn, future versions might offer more integrated dependency management for nodes.
+-   **Run Development Servers:** (Often handled by npm scripts calling `nodemon` and the Nanoservice runner, but `nanoctl` might offer direct commands in the future).
+-   **Build for Production:** (Similarly, often an npm script, but `nanoctl` could provide build commands).
+-   **Deployment Assistance (Future):** Potentially offer commands to help package or deploy Nanoservice-ts applications.
 
-This architecture enables fully automated, event-driven execution, with a clean separation of concerns between event activation (Triggers), workflow coordination (Runner), and task execution (Nodes).
+## Installation
 
-## Core Components  
+As covered in the [Installation Guide](./../introduction/installation.mdx), the recommended way to use `nanoctl` is via `npx` to ensure you always have the latest version:
 
-### 1. Trigger (Event Activation)  
-A **Trigger** is the initiating event that starts a workflow. It can be:  
-- **API Calls** – External or internal HTTP requests.  
-- **Scheduled Events** – Time-based execution (e.g., cron jobs).  
-- **Message Queues** – Pub/Sub or event-driven triggers.  
-- **Database Events** – Data updates triggering a workflow.  
-
-### 2. Workflow (Runner)
-The **Workflow (Runner)** is responsible for:  
-- **Orchestrating Execution** – Determines the order and dependencies of nodes.  
-- **Managing State** – Ensures data flows correctly between nodes.  
-- **Error Handling** – Implements retries and failure policies.  
-
-It functions as a real-time execution engine, dynamically allocating resources and ensuring that each nanoservice runs in an **isolated** environment.
-
-### 3. Nodes (Nanoservices)
-Nodes are the **smallest executable units** within a workflow. Each node:  
-- Executes independently within a **containerized environment**.  
-- **Processes input, applies business logic, and produces output**.  
-- Can be **stateless or stateful**, depending on workflow requirements.  
-- Is designed for **scalability and modularity** (reusable across workflows).  
-
-## Execution Flow  
-
-```mermaid
-graph LR;
-    Trigger -->|Activates| Workflow(Runner);
-    Workflow(Runner) -->|Executes| Node1;
-    Workflow(Runner) -->|Executes| Node2;
-    Workflow(Runner) -->|Executes| Node3;
-    Node1 -->|Processes Data| Node2;
-    Node2 -->|Transforms Data| Node3;
-    Node3 -->|Final Output| Output;
-
-    subgraph "Workflow Execution"
-        Node1
-        Node2
-        Node3
-    end
+```bash
+npx nanoctl@latest <command>
 ```
 
-1. **Trigger Activates Workflow** – A defined event (API call, scheduler, or message queue) activates the workflow runner.  
-2. **Workflow Orchestrates Execution** – The runner determines the execution order of nodes, ensuring dependencies are met.  
-3. **Nodes Process Data** – Each node executes in its own container, performing its designated task.  
-4. **Data Flows Between Nodes** – Sequential or parallel execution enables transformation and enrichment of data.  
-5. **Final Output is Produced** – The processed data is either stored, returned via API, or used to trigger another workflow.  
+Alternatively, you can install it globally:
+
+```bash
+# Using npm
+npm install -g @nanoservice-ts/cli
+
+# Using yarn
+yarn global add @nanoservice-ts/cli
+```
+
+If installed globally, you can use the `nanoctl` command directly.
+
+## Core Commands
+
+Here are some of the fundamental commands provided by `nanoctl`.
+
+### `nanoctl create project`
+
+This command initializes a new Nanoservice-ts project.
+
+```bash
+npx nanoctl@latest create project
+```
+
+It will prompt you for a project name and then create a new directory with that name, setting up:
+
+-   Standard project directories (`src/`, `workflows/`, `src/nodes/`).
+-   Core configuration files (`package.json`, `tsconfig.json`, `.gitignore`, `nodemon.json`, `Dockerfile`).
+-   Basic example Node and Workflow (often, or a very minimal setup).
+-   Installs necessary base dependencies like `@nanoservice-ts/runner` and `@nanoservice-ts/shared`.
+
+### `nanoctl create node`
+
+This command scaffolds a new Nanoservice Node within an existing project.
+
+```bash
+# Navigate to your project root first
+cd my-nanoservice-project
+npx nanoctl@latest create node
+```
+
+It will prompt for:
+
+-   **Node Name:** (e.g., `data-validator`, `email-sender`). This name is used for the directory and often as the default registration key.
+-   **Description:** A brief explanation of the Node's purpose.
+-   **Category:** A category for organizing your Nodes (e.g., `Utilities`, `Integrations`, `AI`).
+
+This command creates:
+
+-   A new directory: `src/nodes/<node-name>/`
+-   `src/nodes/<node-name>/index.ts`: A template TypeScript file for your Node class, extending `NanoService`.
+-   `src/nodes/<node-name>/package.json`: A `package.json` file for the Node, including placeholders for `inputSchema` and `outputSchema`.
+
+You will then need to implement the Node logic in `index.ts` and define its schemas in its `package.json`.
+
+### `nanoctl create workflow`
+
+This command generates a new Workflow definition file.
+
+```bash
+# Navigate to your project root first
+cd my-nanoservice-project
+npx nanoctl@latest create workflow
+```
+
+It will prompt for:
+
+-   **Workflow Name:** (e.g., `process-new-order`, `daily-data-sync`).
+-   **Description:** A brief explanation of the Workflow's purpose.
+-   **Trigger Type:** (e.g., `HTTP`, `Schedule`).
+-   **Trigger-Specific Details:** (e.g., for HTTP: path and method; for Schedule: cron expression).
+
+This command creates a new JSON file in the `workflows/json/` directory (e.g., `workflows/json/process-new-order.json`) with a basic structure for the workflow, including the trigger definition and empty `steps` and `nodes` sections.
+
+## Command Structure (General)
+
+`nanoctl` commands typically follow a pattern:
+
+```bash
+nanoctl [command] [subcommand] [options]
+```
+
+-   **`command`**: The main action group (e.g., `create`).
+-   **`subcommand`**: The specific item to act upon (e.g., `project`, `node`, `workflow`).
+-   **`options`**: Optional flags to modify behavior (e.g., `--help`, `--version`, or command-specific options).
+
+### Getting Help
+
+You can usually get help for `nanoctl` or a specific command by using the `--help` flag:
+
+```bash
+npx nanoctl@latest --help
+npx nanoctl@latest create --help
+npx nanoctl@latest create node --help
+```
+
+## Future Possibilities
+
+The `nanoctl` CLI is an evolving tool. Future enhancements might include:
+
+-   Commands for listing registered nodes and available workflows.
+-   More sophisticated build and packaging commands.
+-   Integration with testing frameworks.
+-   Deployment helpers for common platforms.
+-   Commands to update project dependencies or migrate configurations.
+
+Refer to the official Nanoservice-ts documentation or the CLI's help output for the most up-to-date list of commands and features.
+
+By leveraging `nanoctl`, you can significantly speed up your Nanoservice-ts development process and ensure consistency across your projects.

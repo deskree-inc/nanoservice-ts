@@ -1,0 +1,171 @@
+---
+title: "Example: Feedback UI"
+---
+
+# Example Node: Feedback UI (`feedback-ui`)
+
+This example demonstrates a simple Nanoservice node that serves a static HTML user interface, primarily used as the front-end for the `feedback.json` workflow.
+
+## Use Case & Demo
+
+This UI node is a key component of the `feedback.json` workflow, which is highlighted in the Nanoservice-ts Beginner Guide as a **Multi-Runtime Workflow Example**. The overall workflow demonstrates:
+
+1.  **Data Collection:** This `feedback-ui` node serves an HTML form to collect user feedback.
+2.  **Multi-Runtime Processing:** When the form is submitted, the workflow likely sends the feedback data to another node (potentially written in Python, as mentioned in the guide) for analysis (e.g., sentiment analysis using OpenAI).
+
+This showcases how Nanoservice-ts can integrate components written in different languages (TypeScript for the UI, Python for analysis) within a single workflow.
+
+## Node Functionality
+
+- **Input:** None explicitly defined (empty input schema `{}`).
+- **Processing:** Reads an `index.html` file located within the node's directory, compiles it using the EJS templating engine (though no dynamic data seems to be passed in this example), and prepares the rendered HTML content.
+- **Output:** Returns the rendered HTML content with the `Content-Type` header set to `text/html`.
+
+## Node Code (`src/nodes/examples/feedback-ui/index.ts`)
+
+```typescript
+import fs from "node:fs";
+import path from "node:path";
+import {
+  type INanoServiceResponse,
+  type JsonLikeObject, // Note: JsonLikeObject is imported but not used in the type definition
+  NanoService,
+  NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import ejs from "ejs";
+
+// Resolve the root directory of the node
+const rootDir = path.resolve(__dirname, ".");
+
+// Define Input Type (currently unused)
+type InputType = JsonLikeObject; // Could be refined if inputs were needed
+
+export default class FeedbackUI extends NanoService<InputType> {
+  constructor() {
+    super();
+
+    // No specific input schema is defined for this simple UI node
+    this.inputSchema = {};
+
+    // No specific output schema is defined as it returns HTML
+    this.outputSchema = {};
+
+    // Set the response content type to HTML
+    this.contentType = "text/html";
+  }
+
+  /**
+   * Helper function to resolve paths relative to the node's root directory.
+   */
+  root(relPath: string): string {
+    return path.resolve(rootDir, relPath);
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+    const view_path = "index.html"; // Path to the HTML template within the node's directory
+
+    try {
+      // Read the HTML template file
+      const content = fs.readFileSync(this.root(view_path), "utf8");
+
+      // Compile the EJS template
+      // 'client: false' ensures server-side rendering
+      const render = ejs.compile(content, { client: false });
+
+      // Render the HTML (passing an empty object as no dynamic data is used here)
+      const html = render({});
+
+      // Set the rendered HTML as the successful response
+      response.setSuccess(html);
+
+    } catch (error: unknown) {
+      // Handle potential errors (e.g., file not found)
+      const nodeError: GlobalError = new GlobalError(
+        error instanceof Error ? error.message : "Failed to render Feedback UI"
+      );
+      nodeError.setCode(500);
+      nodeError.setStack(error instanceof Error ? error.stack : undefined);
+      nodeError.setName(this.name || "FeedbackUI");
+      response.setError(nodeError);
+      ctx.logger.error("Error in FeedbackUI node", { error: nodeError });
+    }
+
+    return response;
+  }
+}
+```
+
+## Accompanying HTML (`src/nodes/examples/feedback-ui/index.html`)
+
+This file contains the actual HTML structure, CSS, and potentially client-side JavaScript for the feedback form. It would be rendered by the `FeedbackUI` node.
+
+## Key Concepts Illustrated
+
+- **Serving HTML:** Demonstrates how a Nanoservice node can serve dynamic or static HTML content.
+- **EJS Templating:** Uses EJS for server-side HTML rendering.
+- **File System Access:** Reads local files (`index.html`) using Node.js `fs` module.
+- **Content Type:** Sets the `contentType` property to `text/html`.
+- **Path Resolution:** Uses `path.resolve` and `__dirname` to locate template files.
+- **Multi-Runtime Integration (Workflow Level):** This node serves as the front-end for a workflow (`feedback.json`) that integrates services potentially written in different languages (e.g., Python for analysis).
+
+## Registration
+
+Register the node in `src/Nodes.ts`:
+
+```typescript
+// src/Nodes.ts
+import type { NodeBase } from "@nanoservice-ts/shared";
+import FeedbackUI from "./nodes/examples/feedback-ui"; // Adjust path as needed
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  "feedback-ui": new FeedbackUI(),
+  // ... other nodes
+};
+
+export default nodes;
+```
+
+## Example Workflow (`workflows/json/feedback.json`)
+
+This node is typically the first step in the `feedback.json` workflow, triggered by an HTTP GET request to display the form.
+
+```json
+{
+  "name": "feedback-workflow", // Example name
+  "description": "Collects and analyzes user feedback.",
+  "version": "1.0.0",
+  "trigger": {
+    "http": {
+      "method": "GET", // Trigger to show the form
+      "path": "/feedback"
+    }
+    // Additional triggers might exist for POST (form submission)
+  },
+  "steps": [
+    {
+      "name": "render-feedback-ui",
+      "node": "feedback-ui", // Matches the registration name
+      "type": "module"
+    }
+    // Subsequent steps would handle form submission and analysis
+  ],
+  "nodes": {
+    "render-feedback-ui": {
+      "inputs": {}
+    }
+  }
+}
+```
+
+## Viewing the Example
+
+Once the development server (`npm run dev`) is running:
+
+1.  Navigate to the following URL in your browser:
+    `http://localhost:4000/feedback`
+
+This URL corresponds to the `feedback.json` workflow file (specifically, the GET trigger) and should load the UI served by the `feedback-ui` node.

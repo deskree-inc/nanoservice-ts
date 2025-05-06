@@ -1,0 +1,226 @@
+---
+title: "Example: PostgreSQL Query"
+---
+
+# Example Node: PostgreSQL Query (`postgres-query`)
+
+This node provides a reusable and essential component for executing arbitrary SQL queries against a PostgreSQL database. It serves as a fundamental building block for many other examples.
+
+## Use Case
+
+As highlighted in the Nanoservice-ts Beginner Guide, `postgres-query` is a key example nanoservice used within various workflows. Its primary purpose is to bridge the gap between Nanoservice workflows and a PostgreSQL database, allowing other nodes or workflows to:
+
+- Fetch data (e.g., for display in a UI, for processing by AI).
+- Retrieve database schema information.
+- Insert, update, or delete data (though the examples primarily focus on querying).
+
+It is used extensively by examples like `db-manager` and `dashboard-generator`.
+
+## Node Functionality
+
+- **Input:** Requires database connection details (`host`, `port`, `database`, `user`, `password` - often sourced from environment variables) and the `query` string to execute. It also accepts an optional boolean `set_var` (defaulting to `false`) which, if `true`, attempts to store the query result in `ctx.vars.query_result`.
+- **Processing:** Uses the `pg` (node-postgres) library to connect to the specified PostgreSQL database and execute the provided SQL query.
+- **Output:** Returns a JSON object containing the `total` number of rows affected or returned, and the `data` (the actual rows returned by the query, if any).
+
+## Node Code (`src/nodes/examples/postgres-query/index.ts`)
+
+```typescript
+import {
+  type INanoServiceResponse,
+  type JsonLikeObject,
+  NanoService,
+  NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import pg from "pg"; // node-postgres library
+
+// Define Input Type
+type PostgresQueryInputs = {
+  user?: string;
+  password?: string;
+  host?: string;
+  port?: number;
+  database?: string;
+  query: string;
+  set_var?: boolean; // Optional: Store result in context.vars
+};
+
+// Define Output Structure (simplified)
+type Table = {
+  total: number;
+  data: unknown[];
+};
+
+export default class PostgresQuery extends NanoService<PostgresQueryInputs> {
+  constructor() {
+    super();
+
+    // Define Input Schema (using JSON Schema format)
+    this.inputSchema = {
+      $schema: "http://json-schema.org/draft-04/schema#",
+      type: "object",
+      properties: {
+        user: { type: "string", description: "Database user name" },
+        password: { type: "string", description: "Database password" },
+        host: { type: "string", description: "Database host address" },
+        port: { type: "number", description: "Database port number" },
+        database: { type: "string", description: "Database name" },
+        query: { type: "string", description: "SQL query to execute" },
+        set_var: {
+          type: "boolean",
+          description: "Store result in ctx.vars.query_result",
+          default: false,
+        },
+      },
+      required: ["query"], // Only query is strictly required, others might use defaults or env vars
+    };
+
+    // Define Output Schema
+    this.outputSchema = {
+      $schema: "http://json-schema.org/draft-04/schema#",
+      type: "object",
+      properties: {
+        total: { type: "number", description: "Number of rows returned/affected" },
+        data: { type: "array", description: "Query result rows" },
+      },
+      required: ["total", "data"],
+    };
+  }
+
+  async handle(
+    ctx: Context,
+    inputs: PostgresQueryInputs
+  ): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+    const { query, set_var = false, ...connectionConfig } = inputs;
+
+    // Use environment variables as fallback for connection details
+    const config = {
+      user: connectionConfig.user ?? process.env.POSTGRES_USER,
+      password: connectionConfig.password ?? process.env.POSTGRES_PASSWORD,
+      host: connectionConfig.host ?? process.env.POSTGRES_HOST,
+      port: connectionConfig.port ?? parseInt(process.env.POSTGRES_PORT || "5432"),
+      database: connectionConfig.database ?? process.env.POSTGRES_DB,
+    };
+
+    const client = new pg.Client(config);
+
+    try {
+      await client.connect();
+      ctx.logger.info(`Executing query: ${query}`);
+      const result = await client.query(query);
+
+      const output: Table = {
+        total: result.rowCount ?? 0,
+        data: result.rows,
+      };
+
+      // Optionally store result in context variables
+      if (set_var) {
+        if (!ctx.vars) ctx.vars = {};
+        ctx.vars.query_result = output.data;
+        ctx.logger.info("Query result stored in ctx.vars.query_result");
+      }
+
+      response.setSuccess(output);
+      ctx.logger.info(`Query executed successfully, ${output.total} rows returned.`);
+
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "PostgreSQL query failed";
+      ctx.logger.error(`PostgreSQL Error: ${errorMessage}`, { query });
+      const nodeError: GlobalError = new GlobalError(errorMessage);
+      nodeError.setCode(500);
+      nodeError.setStack(error instanceof Error ? error.stack : undefined);
+      nodeError.setName(this.name || "PostgresQuery");
+      response.setError(nodeError);
+
+    } finally {
+      // Ensure the client connection is closed
+      await client.end();
+    }
+
+    return response;
+  }
+}
+```
+
+## Accompanying README (`src/nodes/examples/postgres-query/README.md`)
+
+The README provides context on configuration and setting up a test database:
+
+- **Configuration:** Shows an example `inputs` block for a workflow step using this node, specifying connection details and a sample query.
+- **Database Setup:** Includes instructions to use Docker Compose (`infra/development/docker-compose.yml`) to spin up a pre-populated PostgreSQL database (`dvdrental`) for testing.
+
+## Key Concepts Illustrated
+
+- **Database Interaction:** Connecting to and querying a PostgreSQL database using the `pg` library.
+- **Configuration Flexibility:** Accepting connection details via direct input or falling back to environment variables (`POSTGRES_USER`, `POSTGRES_PASSWORD`, etc.).
+- **Input/Output Schemas:** Defining clear schemas for input parameters and the expected output structure.
+- **Context Variables:** Demonstrates optionally storing results in the workflow context (`ctx.vars`) using the `set_var` input.
+- **Error Handling:** Includes `try...catch...finally` block to handle connection/query errors and ensure the database client is closed.
+- **Reusability:** Acts as a core component used by multiple other example workflows.
+
+## Setup
+
+1.  **Environment Variables:** Ensure PostgreSQL connection details are set in your `.env.local` file or as system environment variables:
+    - `POSTGRES_USER` (default: `postgres`)
+    - `POSTGRES_PASSWORD` (default: `example`)
+    - `POSTGRES_HOST` (default: `localhost`)
+    - `POSTGRES_DB` (default: `dvdrental`)
+    - `POSTGRES_PORT` (default: `5432`)
+2.  **Database Running:** The example PostgreSQL database must be running. Start it using Docker Compose from the `infra` directory:
+    ```bash
+    cd src/nodes/examples/infra
+    docker-compose up -d
+    ```
+3.  **Dependencies:** The `pg` library needs to be installed (`npm install pg` or `yarn add pg`).
+
+## Registration
+
+Register the node in `src/Nodes.ts`:
+
+```typescript
+// src/Nodes.ts
+import type { NodeBase } from "@nanoservice-ts/shared";
+import PostgresQuery from "./nodes/examples/postgres-query"; // Adjust path as needed
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  "postgres-query": new PostgresQuery(),
+  // ... other nodes
+};
+
+export default nodes;
+```
+
+## Example Workflow Step
+
+As shown in the README, a workflow step using this node might look like this:
+
+```json
+{
+  "name": "get-films-from-db",
+  "node": "postgres-query",
+  "type": "module",
+  "inputs": {
+    // Connection details can be omitted if using environment variables
+    // "host": "localhost", 
+    // "port": 5432,       
+    // "database": "dvdrental", 
+    // "user": "postgres",  
+    // "password": "example", 
+    "query": "SELECT * FROM \"film\" ORDER BY \"title\" LIMIT 50",
+    "set_var": true // Store results in ctx.vars.query_result
+  }
+}
+```
+
+## Viewing the Example
+
+This node itself does not have a user interface or a dedicated workflow URL to access directly in the browser. It is a backend component used by other workflows. To see it in action, run examples like:
+
+- **DB Manager:** `http://localhost:4000/db-manager`
+- **Dashboard Generator:** `http://localhost:4000/dashboard-gen`
+
+These examples utilize the `postgres-query` node to interact with the database.

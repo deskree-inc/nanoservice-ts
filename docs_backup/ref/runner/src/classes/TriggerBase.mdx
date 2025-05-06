@@ -1,0 +1,151 @@
+[**nanoservice-ts v0.1.0**](/docs/ref/README)
+
+***
+
+[nanoservice-ts](/docs/ref/README) / [runner/src](/docs/ref/runner/src/README) / TriggerBase
+
+# Class: `abstract` TriggerBase
+
+Defined in: [core/runner/src/TriggerBase.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L9)
+
+## Extends
+
+- `default`
+
+## Constructors
+
+### new TriggerBase()
+
+> **new TriggerBase**(): [`TriggerBase`](/docs/ref/runner/src/classes/TriggerBase)
+
+Defined in: [core/runner/src/TriggerBase.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L12)
+
+#### Returns
+
+[`TriggerBase`](/docs/ref/runner/src/classes/TriggerBase)
+
+#### Overrides
+
+`Trigger.constructor`
+
+## Properties
+
+### configuration
+
+> **configuration**: [`Configuration`](/docs/ref/runner/src/classes/Configuration)
+
+Defined in: [core/runner/src/TriggerBase.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L10)
+
+## Methods
+
+### createContext()
+
+> **createContext**(`logger`?, `blueprintPath`?, `id`?): `Context`
+
+Defined in: [core/runner/src/TriggerBase.ts:90](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L90)
+
+#### Parameters
+
+##### logger?
+
+`LoggerContext`
+
+##### blueprintPath?
+
+`string`
+
+##### id?
+
+`string`
+
+#### Returns
+
+`Context`
+
+***
+
+### endCounter()
+
+> **endCounter**(`start`): `number`
+
+Defined in: [core/runner/src/TriggerBase.ts:122](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L122)
+
+#### Parameters
+
+##### start
+
+`number`
+
+#### Returns
+
+`number`
+
+***
+
+### getConfiguration()
+
+> **getConfiguration**(): [`Configuration`](/docs/ref/runner/src/classes/Configuration)
+
+Defined in: [core/runner/src/TriggerBase.ts:19](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L19)
+
+#### Returns
+
+[`Configuration`](/docs/ref/runner/src/classes/Configuration)
+
+***
+
+### getRunner()
+
+> **getRunner**(): [`Runner`](/docs/ref/runner/src/classes/Runner)
+
+Defined in: [core/runner/src/TriggerBase.ts:23](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L23)
+
+#### Returns
+
+[`Runner`](/docs/ref/runner/src/classes/Runner)
+
+***
+
+### listen()
+
+> `abstract` **listen**(): `Promise`\<`number`\>
+
+Defined in: [core/runner/src/TriggerBase.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L17)
+
+#### Returns
+
+`Promise`\<`number`\>
+
+#### Overrides
+
+`Trigger.listen`
+
+***
+
+### run()
+
+> **run**(`ctx`): `Promise`\<[`TriggerResponse`](/docs/ref/runner/src/type-aliases/TriggerResponse)\>
+
+Defined in: [core/runner/src/TriggerBase.ts:27](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L27)
+
+#### Parameters
+
+##### ctx
+
+`Context`
+
+#### Returns
+
+`Promise`\<[`TriggerResponse`](/docs/ref/runner/src/type-aliases/TriggerResponse)\>
+
+***
+
+### startCounter()
+
+> **startCounter**(): `number`
+
+Defined in: [core/runner/src/TriggerBase.ts:118](https://github.com/deskree-inc/nanoservice-ts/blob/3ff7c6796e400e5bcd826090854040c1559068d4/core/runner/src/TriggerBase.ts#L118)
+
+#### Returns
+
+`number`

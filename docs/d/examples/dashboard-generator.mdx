@@ -1,0 +1,134 @@
+---
+title: "Example: AI Dashboard Generator"
+---
+
+# Example: AI Dashboard Generator (`dashboard-generator`)
+
+This complex example showcases the power of Nanoservice-ts combined with AI to automatically generate dashboard charts based on a database schema and a natural language prompt. It involves multiple interconnected nodes, including AI-powered query and chart generation, database interaction, and a user interface.
+
+## Use Case & Demo
+
+As highlighted in the Nanoservice-ts Beginner Guide, the corresponding workflow (`workflows/json/dashboard-gen.json`) is one of the best visual demos. It allows users to:
+
+1.  Connect to a database (the example uses PostgreSQL).
+2.  Provide a natural language prompt describing the desired dashboard insights (e.g., "Show me total sales per month and top 5 products by revenue").
+3.  See the AI generate multiple SQL queries based on the prompt and database schema.
+4.  See the AI generate Chart.js configurations based on the query results.
+5.  View the final dashboard with dynamically generated charts rendered in the browser.
+
+This demonstrates an end-to-end process of using AI for data analysis and visualization, orchestrated by Nanoservice-ts.
+
+## Example Functionality
+
+- **Input:** Typically triggered via a UI (`dashboard-generator/ui`), taking a natural language prompt describing the desired dashboard insights. It also requires access to the target database schema.
+- **Processing:**
+    1.  Retrieves the database schema (columns and relationships).
+    2.  Uses an AI model (OpenAI GPT-4o via `MultipleQueryGeneratorNode`) to generate multiple SQL queries based on the schema and the user prompt.
+    3.  Executes these SQL queries against a PostgreSQL database (likely using the `postgres-query` node).
+    4.  Uses the AI model again (via `DashboardChartsGenerator`) to generate Chart.js configuration objects based on the query results, schema, and prompt.
+    5.  Provides a web interface (`DashboardGeneratorUI`) built with EJS and React to display the generated charts.
+- **Output:** Renders an HTML dashboard displaying the dynamically generated charts.
+
+## Node Components
+
+Key nanoservices involved in this example include:
+
+1.  **`MultipleQueryGeneratorNode.ts`:**
+    - **Purpose:** Takes database schema (columns, relationships) and a user prompt as input.
+    - **Functionality:** Uses `generateObject` from the `ai` library with OpenAI (`gpt-4o`) to generate an array of SQL queries tailored for visualization. It includes a detailed system prompt instructing the AI on how to generate effective PostgreSQL queries for dashboards.
+    - **Output:** A JSON object containing the generated SQL queries, suggested chart titles, and chart types.
+
+2.  **`DashboardChartsGenerator.ts`:**
+    - **Purpose:** Takes the database schema, query results, original queries, and user prompt as input.
+    - **Functionality:** Uses `generateObject` with OpenAI (`gpt-4o`) to generate an array of Chart.js configuration objects. The system prompt guides the AI to select appropriate chart types and map data correctly.
+    - **Output:** A JSON object containing an array of Chart.js configurations.
+
+3.  **`MemoryStorage.ts` & `InMemory.ts`:**
+    - **Purpose:** Provide a simple in-memory key-value store using the Singleton pattern (`InMemory`).
+    - **Functionality:** `MemoryStorage` acts as a Nanoservice node wrapper around the `InMemory` singleton, allowing workflows to `get`, `set`, `delete`, or `clear` data.
+    - **Use Case:** Potentially used for caching database schema or intermediate results.
+
+4.  **`ArrayMap.ts`:**
+    - **Purpose:** A utility node to apply a mapping function to each element of an input array.
+    - **Functionality:** Takes an `array` and a `map` string (e.g., `item.name`) and extracts the specified value from each object.
+
+5.  **`ui/index.ts` (`DashboardGeneratorUI`):**
+    - **Purpose:** Renders the final HTML dashboard.
+    - **Functionality:** Uses EJS to render an HTML page (`ui/index.html`). It receives the generated Chart.js configurations and injects them into the template, which likely uses React and Chart.js client-side.
+    - **Output:** An HTML page (`text/html`).
+
+6.  **`postgres-query/index.ts` (`PostgresQuery` - from another example folder):**
+    - **Purpose:** Executes SQL queries against a PostgreSQL database.
+    - **Functionality:** Used by the workflow to fetch schema information and execute the AI-generated queries.
+
+## Example Workflow (`workflows/json/dashboard-gen.json`)
+
+While the specific `dashboard-gen.json` is not provided here, a likely workflow would involve these steps:
+
+1.  **Trigger:** An HTTP trigger (e.g., GET `/dashboard-gen`) linked to the `DashboardGeneratorUI` node, or a POST trigger accepting a prompt.
+2.  **Get Schema:** A step using `postgres-query` to fetch table and column information.
+3.  **(Optional) Cache Schema:** Use `MemoryStorage` (`set` action) to cache the schema.
+4.  **Generate Queries:** Use `MultipleQueryGeneratorNode`, providing the schema and user prompt.
+5.  **Execute Queries:** Loop through the generated queries (using `postgres-query` steps).
+6.  **Generate Charts:** Use `DashboardChartsGenerator`, providing schema, query results, original queries, and prompt.
+7.  **Render UI:** Use `DashboardGeneratorUI`, passing the generated chart configurations to the EJS template.
+
+## Key Concepts Illustrated
+
+- **AI Integration:** Using `@ai-sdk/openai` and `generateObject` for structured JSON output (SQL queries, Chart.js configs).
+- **Complex Workflows:** Orchestrating multiple nodes (AI, DB, UI, utilities).
+- **Database Interaction:** Generating and executing SQL queries against PostgreSQL.
+- **Dynamic UI Generation:** Creating data visualizations based on dynamic inputs and AI generation.
+- **In-Memory Caching:** Using a simple singleton pattern for temporary storage.
+- **Templating Engine:** Using EJS for server-side rendering.
+
+## Setup
+
+- Requires `OPENAI_API_KEY` environment variable.
+- Requires PostgreSQL database connection details (configured via environment variables).
+- Requires the example PostgreSQL database to be running. Start it using Docker Compose:
+  ```bash
+  cd src/nodes/examples/infra
+  docker-compose up -d
+  ```
+
+## Registration
+
+These nodes would need to be registered in `src/Nodes.ts`:
+
+```typescript
+// src/Nodes.ts
+import type { NodeBase } from "@nanoservice-ts/shared";
+import MultipleQueryGeneratorNode from "./nodes/examples/dashboard-generator/MultipleQueryGeneratorNode";
+import DashboardChartsGenerator from "./nodes/examples/dashboard-generator/DashboardChartsGenerator";
+import MemoryStorage from "./nodes/examples/dashboard-generator/MemoryStorage";
+import ArrayMapNode from "./nodes/examples/dashboard-generator/ArrayMap";
+import DashboardGeneratorUI from "./nodes/examples/dashboard-generator/ui";
+// Assuming postgres-query is also registered
+import PostgresQuery from "./nodes/examples/postgres-query"; 
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  "dashboard-query-generator": new MultipleQueryGeneratorNode(),
+  "dashboard-charts-generator": new DashboardChartsGenerator(),
+  "memory-storage": new MemoryStorage(),
+  "array-map": new ArrayMapNode(),
+  "dashboard-generator-ui": new DashboardGeneratorUI(),
+  "postgres-query": new PostgresQuery(),
+  // ... other nodes
+};
+
+export default nodes;
+```
+
+## Viewing the Example
+
+Once the development server (`npm run dev`) is running:
+
+1.  Ensure the example database is running (`docker-compose up -d` in `src/nodes/examples/infra`).
+2.  Ensure you have configured your `.env.local` with `OPENAI_API_KEY` and PostgreSQL connection details.
+3.  Navigate to the following URL in your browser:
+    `http://localhost:4000/dashboard-gen`
+
+This URL corresponds to the `dashboard-gen.json` workflow file and should load the UI served by the `dashboard-generator/ui` node.

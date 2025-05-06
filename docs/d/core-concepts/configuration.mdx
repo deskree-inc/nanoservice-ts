@@ -1,0 +1,147 @@
+---
+title: Configuration
+---
+
+# Configuration in Nanoservice-ts
+
+Proper configuration is essential for managing application behavior across different environments (development, staging, production) and for securely handling sensitive information like API keys and database credentials.
+
+Nanoservice-ts applications can be configured using several mechanisms, primarily environment variables and node-specific configurations within workflows.
+
+## Environment Variables
+
+Environment variables are a standard way to provide configuration to applications. They are external to your application code and can be set differently for each environment where your application runs.
+
+### `.env.local` File
+
+For local development, Nanoservice-ts projects typically include a `.env.local` file in the project root. This file is used to define environment variables that will be loaded when you run your application locally (e.g., using `npm run dev`).
+
+**Example `.env.local`:**
+
+```env
+# .env.local
+NODE_ENV=development
+PORT=4000
+
+# API Keys
+THIRD_PARTY_API_KEY=your_local_api_key_here
+
+# Database Connection (Example)
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=localuser
+DB_PASSWORD=localpassword
+DB_NAME=mydatabase
+
+# Logging
+LOG_LEVEL=debug
+```
+
+**Important:**
+
+-   The `.env.local` file should **not** be committed to version control (it should be listed in your `.gitignore` file) because it may contain sensitive credentials.
+-   For production or other deployed environments, environment variables should be set directly on the server, through your hosting provider's interface, or via container orchestration tools (e.g., Docker environment variables, Kubernetes ConfigMaps/Secrets).
+
+### Accessing Environment Variables
+
+Within your Nanoservice-ts Nodes or other application code, you can access environment variables using `process.env` (in Node.js environments):
+
+```typescript
+// Inside a Node's handle method or constructor
+const apiKey = process.env.THIRD_PARTY_API_KEY;
+const logLevel = process.env.LOG_LEVEL || "info"; // Provide a default
+
+ctx.logger.info(`Current log level: ${logLevel}`);
+if (!apiKey) {
+  ctx.logger.warn("THIRD_PARTY_API_KEY is not set!");
+}
+```
+
+In Workflow JSON definitions, you can access environment variables using the `{{env.VARIABLE_NAME}}` templating syntax when defining node inputs:
+
+```json
+// In a workflow JSON file, within the "nodes" configuration
+"my-api-call-node-step": {
+  "inputs": {
+    "apiKey": "{{env.THIRD_PARTY_API_KEY}}",
+    "baseUrl": "{{env.API_BASE_URL}}"
+  }
+}
+```
+
+## Node-Specific Configurations (via Workflow Inputs)
+
+Many configuration parameters are specific to a particular Node instance within a Workflow. These are typically passed as inputs to the Node, defined in the `nodes` section of your Workflow JSON.
+
+**Example:**
+
+```json
+// In workflows/json/my-data-processing-workflow.json
+{
+  "name": "my-data-processing-workflow",
+  // ... trigger, other sections ...
+  "steps": [
+    {
+      "name": "fetch-external-data",
+      "node": "generic-http-request-node", // Assuming a generic HTTP node
+      "type": "module"
+    },
+    {
+      "name": "transform-data",
+      "node": "my-data-transformer-node",
+      "type": "module"
+    }
+  ],
+  "nodes": {
+    "fetch-external-data": {
+      "inputs": {
+        "url": "https://api.example.com/data",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer {{env.EXTERNAL_API_TOKEN}}"
+        },
+        "timeoutMilliseconds": 5000 // Node-specific config
+      }
+    },
+    "transform-data": {
+      "inputs": {
+        "rawData": "{{fetch-external-data.output.body}}",
+        "transformationMode": "strict" // Node-specific config
+      }
+    }
+  }
+}
+```
+
+In this example:
+
+-   The `generic-http-request-node` is configured with a specific `url`, `method`, `headers` (which itself uses an environment variable), and a `timeoutMilliseconds` value.
+-   The `my-data-transformer-node` is configured with a `transformationMode`.
+
+These input values are then available within the respective Node's `handle` method via the `inputs` parameter.
+
+## Secrets Management Best Practices
+
+Handling sensitive information like API keys, database passwords, and private certificates requires special care:
+
+1.  **Never Hardcode Secrets:** Do not embed secrets directly in your source code or commit them to version control.
+2.  **Use Environment Variables:** Store secrets in environment variables. For local development, use `.env.local` (and ensure it's in `.gitignore`). For deployed environments, use the mechanisms provided by your hosting platform or orchestration tools.
+3.  **Limit Access:** Ensure that only necessary services and personnel have access to production secrets.
+4.  **Use Dedicated Secret Management Tools (for advanced scenarios):** For more complex applications or organizations with stringent security requirements, consider using dedicated secret management services like HashiCorp Vault, AWS Secrets Manager, Google Cloud Secret Manager, or Azure Key Vault. These tools provide features like centralized storage, access control, auditing, and secret rotation.
+5.  **Principle of Least Privilege:** Grant nodes and workflows only the permissions and access to secrets they absolutely need to perform their function.
+
+## Configuration Loading Order (Conceptual)
+
+While Nanoservice-ts itself might not impose a strict multi-file configuration loading system (like some frameworks that load `config.default.js`, `config.production.js`, etc.), the primary mechanism is through environment variables, which are then made available to the application runtime.
+
+-   Environment variables set directly in the operating system or container environment take precedence.
+-   Variables in `.env.local` are typically loaded for local development if not overridden by system-level environment variables.
+
+## Best Practices for Configuration
+
+-   **Centralize where possible, but allow overrides:** Define common configurations (like API endpoints for different environments) as environment variables.
+-   **Be explicit:** Clearly define what each configuration option does, either in comments in your `.env.local.example` file or in your documentation.
+-   **Validate critical configurations:** At application startup or within nodes, check for the presence and validity of essential configuration values. Log warnings or throw errors if critical configurations are missing.
+-   **Separate configuration from code:** Keep your application logic clean by externalizing configuration values.
+
+By effectively managing configuration using environment variables and workflow inputs, you can build flexible and secure Nanoservice-ts applications that can be easily adapted to different environments and requirements.

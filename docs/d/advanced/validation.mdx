@@ -1,0 +1,154 @@
+---
+title: Validation
+---
+
+# Techniques: Validation in Nanoservice-ts
+
+Data validation is a cornerstone of robust application development. In Nanoservice-ts, validation ensures that Nodes receive data in the expected format and that their outputs also conform to predefined schemas. This helps prevent runtime errors, improves data integrity, and makes Nodes more predictable and reliable.
+
+Nanoservice-ts primarily employs schema-based validation, complemented by the ability to perform custom validation logic within Nodes.
+
+## 1. Schema-Based Validation
+
+This is the primary and recommended method for validating inputs and outputs of Nanoservice Nodes.
+
+### `inputSchema`
+
+Each Node defines an `inputSchema` in its `package.json` file. This schema, written in [JSON Schema](https://json-schema.org/) format, describes the expected structure, data types, required fields, and other constraints for the data that the Node receives as input.
+
+**Example `inputSchema` in `src/nodes/my-node/package.json`:**
+
+```json
+{
+  // ... other metadata ...
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "userId": {
+        "type": "string",
+        "description": "The unique identifier for the user.",
+        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$" // e.g., UUID
+      },
+      "quantity": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100
+      },
+      "email": {
+        "type": "string",
+        "format": "email"
+      }
+    },
+    "required": ["userId", "quantity"]
+  }
+}
+```
+
+**How it Works:**
+
+-   Before a Node's `handle` method is executed by the Nanoservice-ts runtime, the input data provided to the Node (from the workflow definition) is automatically validated against this `inputSchema`.
+-   If the input data fails validation (e.g., a required field is missing, a data type is incorrect, a pattern doesn't match, or a constraint like `minimum` is violated), the Nanoservice-ts runtime will typically prevent the `handle` method from being called and will signal an error for that Node step.
+-   This automatic validation reduces boilerplate validation code within the Node itself and ensures that the `handle` method can largely assume the input data conforms to the expected structure.
+
+### `outputSchema`
+
+Similarly, Nodes can define an `outputSchema` in their `package.json`. This schema describes the structure and constraints of the data that the Node is expected to produce upon successful execution.
+
+**Example `outputSchema`:**
+
+```json
+{
+  // ... other metadata ...
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "statusMessage": {
+        "type": "string"
+      },
+      "processedId": {
+        "type": "string"
+      }
+    },
+    "required": ["statusMessage", "processedId"]
+  }
+}
+```
+
+**How it Works:**
+
+-   After a Node's `handle` method successfully completes and returns data via `response.setSuccess(outputData)`, the Nanoservice-ts runtime *may* validate this `outputData` against the `outputSchema`.
+-   If the output data fails validation, it could result in an error for the Node step, even if the `handle` method itself completed without throwing an exception. This helps catch bugs where a Node produces unexpected or malformed output.
+-   Enforcing output schemas ensures that downstream Nodes in a workflow receive data in a predictable format.
+
+**Benefits of Schema-Based Validation:**
+
+-   **Declarative:** Validation rules are clearly defined in a declarative format.
+-   **Automatic:** The runtime handles the validation, reducing boilerplate in Node code.
+-   **Early Error Detection:** Errors due to malformed data are caught early.
+-   **Clear Contracts:** Schemas serve as clear contracts for what a Node expects and produces, improving integration and understandability.
+-   **Tooling:** JSON Schemas can be used by other tools for documentation generation, UI generation (in visual workflow builders), or mock data generation.
+
+## 2. Custom Validation within Nodes
+
+While schema-based validation covers many common cases, sometimes you need more complex or dynamic validation logic that cannot be easily expressed in JSON Schema.
+
+In such scenarios, you can implement custom validation logic directly within the Node's `handle` method.
+
+```typescript
+// Inside a Node's handle method
+async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+  const response = new NanoServiceResponse();
+  try {
+    // Custom validation for a business rule
+    if (inputs.productType === "restricted" && !inputs.hasSpecialPermit) {
+      ctx.logger.warn("Attempt to access restricted product without permit", inputs);
+      response.setError(new GlobalError("Special permit required for restricted products.", 403)); // Forbidden
+      return response;
+    }
+
+    // Another custom check
+    const item = await someDatabaseLookup(inputs.itemId);
+    if (!item || item.status === "inactive") {
+      response.setError(new GlobalError(`Item ${inputs.itemId} is not available.`, 404)); // Not Found
+      return response;
+    }
+
+    // ... rest of the Node logic ...
+    response.setSuccess({ processedItem: item });
+
+  } catch (error: unknown) {
+    // ... error handling ...
+  }
+  return response;
+}
+```
+
+**When to Use Custom Validation:**
+
+-   **Complex Business Rules:** When validation depends on intricate business logic that goes beyond simple data structure and type checks.
+-   **Cross-Field Validation:** When the validity of one field depends on the value of another in a complex way.
+-   **Database/External Lookups:** When validation requires checking data against a database or an external service (e.g., checking if a user ID exists, if a coupon code is valid).
+-   **Dynamic Validation Rules:** If validation rules change based on other system states or configurations.
+
+**Best Practices for Custom Validation:**
+
+-   **Perform Early:** Execute custom validation checks as early as possible within the `handle` method to avoid unnecessary processing if the data is invalid.
+-   **Clear Error Messages:** Return clear and specific error messages using `response.setError(new GlobalError(message, statusCode))`.
+-   **Appropriate Status Codes:** Use meaningful status codes (e.g., 400 for Bad Request, 403 for Forbidden, 404 for Not Found) if the error will be translated into an HTTP response.
+-   **Combine with Schema Validation:** Custom validation should complement, not entirely replace, schema-based validation. Use `inputSchema` for basic structure and type checks, and custom logic for more complex rules.
+
+## Error Reporting
+
+When validation fails (either schema-based or custom):
+
+-   **Schema Validation Failures:** The Nanoservice-ts runtime typically generates an error, halting the Node's execution. The workflow engine then handles this error according to the workflow's error handling configuration (e.g., `onError` property of the step).
+-   **Custom Validation Failures:** Your Node should use `response.setError(new GlobalError(message, code))` to signal the failure. This error is then processed by the workflow engine.
+
+## Summary
+
+Nanoservice-ts promotes a robust validation strategy by combining:
+
+-   **Automatic, declarative schema-based validation** for Node inputs and outputs using `inputSchema` and `outputSchema` in `package.json`.
+-   **Custom, imperative validation logic** within Node `handle` methods for complex business rules or checks requiring external data.
+
+This layered approach ensures data integrity, improves Node reliability, and contributes to a more stable and predictable application.

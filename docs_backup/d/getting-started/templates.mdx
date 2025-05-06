@@ -1,0 +1,87 @@
+---
+title: Using Templates
+---
+
+The Templates folder in the nanoservice-ts GitHub repository provides pre-built templates that help developers and contributors quickly set up projects, create custom nodes, or extend the ecosystem.
+
+Whether you're starting as a developer or a contributor, these templates ensure a faster and easier workflow setup.  
+
+---
+
+# Available Templates
+
+### Create Custom Nodes
+
+Use this template to build your own **custom nodes** for nanoservice-ts.
+
+Custom nodes can be packaged and published to npmjs, making them reusable across the community.
+
+Key Files:
+
+* `config.json`: Configure inputs, outputs, and node metadata.
+
+* `index.ts`: Write the core logic of your custom node.
+
+### Create Triggers
+
+Use this template to build **triggers** that initiate workflows (e.g., HTTP, Scheduled Jobs).
+
+Triggers are essential for connecting workflows to external events.
+
+Key File:
+
+* `index.ts`: Write the logic for handling the trigger event.
+
+### Starter Workflow Templates
+
+Quickly initialize a project with pre-defined workflows.
+
+Examples include HTTP APIs, scheduled workflows, and custom logic examples.
+
+--- 
+
+# How to Use Templates
+
+<Tabs>
+  <Tab title="For Developers">
+    <Steps>
+      <Step title="Clone the Repository">
+        1. Clone the Repository:
+        ```bash
+        git clone https://github.com/deskree-inc/nanoservice-ts.git
+        cd nanoservice-ts/templates
+        ```
+      </Step>
+      <Step title="Pick a Template">
+        Choose the folder corresponding to your use case:
+        * `custom-nodes/`
+        * `triggers/`
+      </Step>
+      <Step title="Extend the Project">
+        Modify or extend the template files based on your needs. Install dependencies and test locally.
+      </Step>
+      <Step title="Publish to npm (optional)">
+        Package your custom node or trigger and publish it to npmjs to share it with the community.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="For Contributors">
+    <Steps>
+        <Step title="Fork the repository">
+          ```bash
+          gh repo fork https://github.com/deskree-inc/nanoservice-ts.git
+          ```
+        </Step>
+        <Step title="Use the templates to">
+          * Build new nodes or triggers.
+          * Submit your improvements via pull request
+        </Step>
+      </Steps>
+  </Tab>
+</Tabs>
+
+## Benefits of Using Templates
+
+- **Faster Development**: Get started in minutes without worrying about configuration details.
+- **Pre-Built Configurations**: Includes everything you need to create functional workflows, such as folder structures, dependencies, and example files.
+- **Best Practices**: Incorporates recommended patterns for scalability, maintainability, and performance.
