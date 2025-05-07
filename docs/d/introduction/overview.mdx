@@ -13,47 +13,158 @@ title: Overview
   alt="Hero Dark"
 />
 
-**nanoservice-ts** is an open-source framework empowering developers to build lightweight, modular, and scalable backend applications with nanoservices.
+## nanoservice-ts
 
-## What are nanoservices?
-Nanoservices are the smallest, independently executable units of backend functionality, designed to:
-* **Focus on a Single Responsibility**: Each nanoservice performs one well-defined task.
-* **Be Lightweight and Modular**: Minimal dependencies, optimized for reusability.
-* **Enable Independent Execution**: Containerized to ensure isolation and scalability.
+#### A new kind of backend development.
 
-## Why nanoservices?
-Traditional backend architectures, whether monolithic or microservices-based, often overcomplicate development and scaling. Nanoservices overcome these challenges by:
-* **Simplifying Development**: Write small, focused units of logic.
-* **Optimizing Resource Usage**: Scale individual services based on need.
-* **Enhancing Workflow Flexibility**: Combine nanoservices into dynamic workflows tailored to complex backend processes.
+Most backend frameworks focus on features. `nanoservice-ts` focuses on **clarity**. It gives developers the power to build **modular, testable, observable** systems from the ground up—without having to adopt complex orchestration platforms or serverless lock-in.
 
-## What nanoservices-ts is for?
-**nanoservice-ts** provides a developer-first framework for adopting the nanoservices architecture, offering:
+As a `nanoservice-ts` developer, you don’t build backends by routing HTTP requests into controllers. You build **workflows** composed of focused **nodes**, observe them in real time, test each unit independently, and deploy them across runtimes or teams.
 
-* **Ease of Use**: An intuitive TypeScript-powered API for defining workflows and nodes.
-* **Streamlined Setup**: Start quickly with pre-configured templates and an npx CLI tool.
-* **Modularity at Scale**: Build backend systems with reusable, independent components.
+This is backend development that finally feels **intentional**, **measurable**, and **scalable in design**, even before it’s deployed.
 
+## Why nanoservice-ts?
 
-## Key Features?
+Because backend development shouldn't be a black box.
 
-🚀 **Modular Architecture**
-Break down backend logic into reusable, containerized nanoservices that simplify management and scaling.
+### Traditional frameworks:
 
-🛠️ **Code-First Workflow Definition**
-Leverage TypeScript to programmatically define workflows and nodes, avoiding manual JSON creation.
+* Mix logic across controllers, services, and middleware
+* Make it hard to write isolated tests
+* Offer little to no runtime observability
+* Limit flexibility in how and where code runs
 
-⚙️ **Custom Nodes**
-Build, share, and reuse nodes tailored to specific tasks. Compose these into complex, maintainable workflows.
+### nanoservice-ts gives you:
 
-🧩 **Pre-Built Templates**
-Kickstart your projects with templates for common backend needs, including HTTP APIs, scheduled tasks, and custom workflows.
+* A structured way to build with **nodes** and **workflows**
+* Built-in support for **test-driven development**
+* Real-time **metrics via Prometheus**
+* **Multi-runtime** support for logic written in Node.js, Python, Bun, and more
+* SDKs to invoke logic from any system—even legacy ones
 
-🔄 **Reusability by Design**
-Reuse nanoservices across workflows and projects to reduce redundancy and speed up development.
+It’s not a serverless platform. It’s not a monolith. It’s **a clean developer-first architecture** for building composable logic that can evolve over time.
 
-💻 **Developer-Centric CLI**
-A powerful CLI simplifies project creation, node management, and deployment. Start in seconds with npx nanoservice-cli.
+## The Developer Experience
 
-🤝 **Community-Powered Ecosystem**
-Access and contribute to a growing library of community-built nodes and workflows. Collaborate and share innovation.
+Being a `nanoservice-ts` developer means:
+
+* You write **small, focused nodes** with pure logic.
+* You compose those nodes into **workflows**, defining clear logic flows.
+* You run your service with `npm run dev` and immediately get **real-time Prometheus metrics** on execution time, CPU/memory usage, and data I/O.
+* You test every node independently with simple unit tests—because the architecture makes it natural.
+* You reuse nodes across multiple workflows.
+* You expose your workflows via **multiple triggers** like HTTP or gRPC—with no extra code.
+
+And when it's time to **modernize existing legacy systems**, the `nanoservice-ts` SDKs make it possible to **invoke individual nodes directly** from a wide range of programming environments—including older or enterprise-grade languages.
+
+The SDKs act as a **bridge**—letting you modernize **one node at a time**, without needing a full rewrite or migration.
+
+This isn’t just about what you build—it’s about **how confidently and clearly you build it.**
+
+## Key Concepts
+
+### Nodes
+
+A **node** is the smallest unit of logic—self-contained, reusable, and testable. Nodes are registered and grouped in the `src/nodes.ts` file.
+
+### Workflows
+
+A **workflow** defines how multiple nodes execute together. It includes branching logic, context passing, and output formatting. Workflows are defined in JSON.
+
+### Context
+
+The **CTX** is a shared execution object that flows through your workflow. It carries:
+
+* Parameters
+* Inputs and outputs
+* Secrets
+* Runtime metadata
+
+### Triggers
+
+Workflows can be triggered by:
+
+* HTTP
+* gRPC
+* More to come (e.g. Cron, events, queues)
+
+Triggers are defined declaratively and allow the same logic to be accessed from multiple interfaces.
+
+## CLI-First Development
+
+Everything starts with the official CLI, `nanoctl`:
+
+### Create a project:
+
+```bash
+npx nanoctl create project my-backend
+```
+
+### Run locally:
+
+```bash
+npm run dev
+```
+
+### Build:
+
+```bash
+npx nanoctl build
+```
+
+### Deploy:
+
+```bash
+npx nanoctl deploy
+```
+
+Projects include Prometheus metrics out of the box and provide optional Docker + Grafana dashboards for real-time introspection.
+
+## Built for the Modern Stack—and the Legacy One
+
+### Runtimes supported today:
+
+* Node.js
+* Bun
+* Python 3
+
+### Runtimes on the roadmap:
+
+* C# / .NET
+* Java
+* Go
+* Rust
+* PHP
+
+You can even combine multiple runtimes in the same project, giving teams the freedom to write in the right tool for the task.
+
+## SDKs That Bridge Eras
+
+The nanoservice-ts SDKs let you call any registered node from external code—no matter the language.
+
+This means you can:
+
+* **Keep your existing system** (e.g., a .NET 2.0 ERP or a Java 8 financial service) fully operational
+* Gradually **offload business logic** into modular nanoservice nodes
+* **Invoke those nodes** as remote functions via HTTP or gRPC, using lightweight SDKs tailored for each language
+* Keep old systems running while introducing modular, testable logic
+
+For example:
+
+* A legacy **.NET 3.5 desktop application** can call a Python node that performs ML-based pricing.
+* A **Java 8 backend** can delegate PDF generation to a Bun-based node.
+* A **Spring Boot system** can execute a reusable workflow written entirely in TypeScript.
+* A **VB6 app** (through a .NET wrapper) can send data to a modern, testable workflow.
+
+## Summary
+
+`nanoservice-ts` is not an orchestration platform or cloud service. It’s something different.
+
+It’s a **developer architecture**. One that gives you:
+
+* Clear, modular logic design
+* Native support for testing and observability
+* Runtime and language flexibility
+* Smooth integration with new and old systems
+
+And most importantly: it’s a framework that **trusts you to build systems that grow well.**
