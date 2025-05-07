@@ -9,6 +9,7 @@ import figlet from "figlet";
 import fsExtra from "fs-extra";
 import color from "picocolors";
 import simpleGit, { type SimpleGit, type SimpleGitOptions } from "simple-git";
+import { manager as pm } from "../../services/package-manager.js";
 import {
 	examples_url,
 	node_file,
@@ -35,6 +36,8 @@ const options: Partial<SimpleGitOptions> = {
 const git: SimpleGit = simpleGit(options);
 
 export async function createProject(opts: OptionValues, version: string, currentPath = false) {
+	const availableManagers = await pm.getAvailableManagers();
+	let manager = await pm.getManager();
 	const isDefault = opts.name !== undefined;
 	let projectName: string = opts.name ? opts.name : "";
 	let trigger = "http";
@@ -217,6 +220,19 @@ export async function createProject(opts: OptionValues, version: string, current
 		packageJsonContent.version = "1.0.0";
 		packageJsonContent.author = "";
 
+		// Get the package manager
+		if (availableManagers.length > 1) {
+			s.message("Multiple package managers detected. Please select one.");
+			const selectedManager = await p.select({
+				message: "Select the package manager",
+				options: availableManagers.map((manager) => ({
+					label: manager,
+					value: manager,
+				})),
+			});
+			manager = await pm.getManager(selectedManager as string);
+		}
+
 		// Runtimes
 
 		if (runtimes.includes("python3")) {
@@ -240,7 +256,7 @@ export async function createProject(opts: OptionValues, version: string, current
 
 			// Install Python3 Packages
 			s.message("Installing python3 packages...");
-			await exec("npm install", { cwd: pythonDir });
+			await exec(manager.INSTALL, { cwd: pythonDir });
 			await createPythonVenv(pythonDir);
 			await exec(
 				`bash -c "source ${pythonDir}/python3_runtime/bin/activate && pip3 install -r ${pythonDir}/requirements.txt"`,
@@ -283,7 +299,7 @@ export async function createProject(opts: OptionValues, version: string, current
 
 		// Install Packages
 		s.message("Installing packages...");
-		await exec("npm install", { cwd: dirPath });
+		await exec(manager.INSTALL, { cwd: dirPath });
 
 		// Create a new project
 		if (!isDefault) s.stop(`Project "${projectName}" created successfully.`);

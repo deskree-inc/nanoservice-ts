@@ -54,7 +54,7 @@ export async function deploy(opts: OptionValues) {
 		const json = fs.readJSONSync(nanoserviceFile);
 
 		// Validate name with regex, should allow letters and dashes only without numbers
-		const nameRegex = /^[a-zA-Z](?:[a-zA-Z-]*[a-zA-Z])?$/;
+		const nameRegex = /^[a-z](?:[a-z-]*[a-z])?$/;
 		if (!nameRegex.test(opts.name))
 			throw new Error(`Invalid name ${opts.name}. Name should only contain letters and dashes.`);
 
