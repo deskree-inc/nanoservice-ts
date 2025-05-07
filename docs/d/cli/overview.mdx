@@ -1,0 +1,67 @@
+---
+title: CLI Overview
+---
+
+# Nanoservice-ts CLI (`nanoctl`)
+
+The Nanoservice-ts Command Line Interface (CLI), `nanoctl`, is an essential tool for developing, managing, and deploying your Nanoservice-ts applications. It provides a set of commands to streamline common tasks, from project scaffolding to Node and Workflow creation.
+
+## What is `nanoctl`?
+
+`nanoctl` is designed to enhance developer productivity by automating repetitive tasks and providing a consistent interface for interacting with the Nanoservice-ts framework.
+
+Key functionalities typically include:
+
+*   **Project Initialization**: Creating new Nanoservice-ts projects with a standard directory structure and boilerplate code.
+*   **Code Generation (Scaffolding)**: Generating new Nodes, Workflows, and potentially other components with basic templates.
+*   **Development Server**: Running a local development server to test your workflows.
+*   **Building & Packaging**: Preparing your application for deployment.
+*   **Deployment Commands**: Assisting with deploying your Nanoservice-ts applications to various environments (though this might also involve other platform-specific tools).
+*   **Authentication/Login**: Commands to authenticate with Nanoservice-ts services or platforms (e.g., Deskree).
+
+## Installation / Usage
+
+As mentioned in the [First Steps](../introduction/first-steps.mdx) guide, you can often use `nanoctl` directly via `npx` without a global installation, ensuring you always use the latest version:
+
+```bash
+npx nanoctl@latest <command>
+```
+
+Alternatively, you might install it globally if you prefer, or it might be included as a development dependency in your project.
+
+```bash
+npm install -g nanoctl
+# or add to project devDependencies
+# npm install --save-dev nanoctl
+```
+Refer to the official Nanoservice-ts installation instructions for the recommended approach.
+
+## Common Command Categories
+
+This section of the documentation will cover the main commands provided by `nanoctl`, grouped by their purpose:
+
+*   **[Project Management](./project.mdx)**: Commands related to creating and managing Nanoservice-ts projects.
+    *   `nanoctl create project <project-name>`
+*   **[Node Management](./nodes.mdx)**: Commands for scaffolding and managing Nodes.
+    *   `nanoctl create node <node-name>`
+*   **[Workflow Management](./workflows.mdx)**: Commands for scaffolding and managing Workflows.
+    *   `nanoctl create workflow <workflow-name>`
+*   **[Authentication](./login.mdx)**: Commands for logging into Nanoservice-ts platforms or services.
+    *   `nanoctl login`
+*   **[Build Process](./build.mdx)**: Commands related to building your application for production.
+    *   `nanoctl build` (conceptual)
+*   **[Deployment](./deploy.mdx)**: Commands to assist with deploying your application.
+    *   `nanoctl deploy` (conceptual)
+
+## Getting Help
+
+Most CLI tools provide a way to get help directly from the command line. You can usually try:
+
+```bash
+nanoctl --help
+nanoctl <command> --help
+```
+
+This will display a list of available commands or specific options for a given command.
+
+Explore the sub-sections for detailed explanations and examples of each `nanoctl` command group.

@@ -1,0 +1,27 @@
+---
+title: CLI Deployment
+---
+
+# CLI: Deployment (`nanoctl deploy`)
+
+**This page is a placeholder.**
+
+This section will describe deployment-related commands provided by `nanoctl`, such as a conceptual `nanoctl deploy` command.
+
+## Intended Content (`nanoctl deploy`)
+
+*   **Purpose**: To deploy your Nanoservice-ts application (after it has been built with `nanoctl build`) to a target environment. This could be a cloud platform, a serverless environment, or a custom Nanoservice-ts hosting solution.
+*   **Usage**:
+    ```bash
+    nanoctl deploy [environment] [options]
+    ```
+*   **Target Environments**: Information on supported deployment targets (e.g., Deskree Serverless, AWS Lambda, Google Cloud Run, Kubernetes, Docker).
+*   **Configuration**: How deployment settings are configured (e.g., via a deployment configuration file, environment variables, or command-line options).
+    *   Specifying environment-specific variables.
+    *   Resource allocation (memory, CPU).
+    *   Scaling parameters.
+*   **Deployment Process**: An overview of what happens during deployment (e.g., uploading build artifacts, configuring triggers, setting up services).
+*   **Rollbacks & Versioning**: Information on how `nanoctl deploy` handles different versions of your application and if it supports rollbacks.
+*   **Status & Logs**: Commands to check deployment status or view deployment logs (`nanoctl status <deployment-id>`, `nanoctl logs <deployment-id>` - conceptual).
+
+Content for this command will be added once detailed information about its implementation in `nanoctl` is available and how it integrates with various deployment platforms like Deskree Serverless, AWS Lambda, and GCP Cloud Run as mentioned in the user feedback.

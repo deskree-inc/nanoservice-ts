@@ -1,0 +1,152 @@
+---
+title: gRPC Communication
+---
+
+# gRPC Triggers and Nodes in Nanoservice-ts
+
+gRPC is a high-performance, open-source universal RPC (Remote Procedure Call) framework developed by Google. It uses Protocol Buffers (Protobuf) as its Interface Definition Language (IDL) and for message serialization, and typically runs over HTTP/2 for efficient communication.
+
+Nanoservice-ts can leverage gRPC for inter-service communication, offering a typed, efficient, and polyglot way to build services. This page covers how Nanoservice-ts supports gRPC through triggers and specialized nodes.
+
+## gRPC Triggers
+
+A gRPC Trigger allows a Nanoservice-ts [Workflow](../introduction/workflows.mdx) to be initiated by an incoming gRPC request. This is ideal for backend services that need to communicate with each other with low latency and strong contracts.
+
+### Configuration
+
+As seen in the [Triggers](../introduction/triggers.mdx) section and based on findings in the Nanoservice-ts repository (e.g., `triggers/grpc/`), a gRPC trigger is configured within a workflow definition. Key configuration elements include:
+
+*   **`type: "gRPC"`**: Identifies the trigger as gRPC-based.
+*   **`config`**: An object containing specific settings for the gRPC trigger:
+    *   **`protoPath`** (string, required): The file path to the `.proto` definition file that describes the service, its RPC methods, and message types (e.g., `protos/myservice.proto`).
+    *   **`service`** (string, required): The name of the gRPC service defined in the `.proto` file that this trigger will serve (e.g., `MyGreeterService`).
+    *   **`method`** (string, required): The specific RPC method within the service that this workflow will handle (e.g., `SayHello`).
+    *   **(Optional) `port`**: The port on which the gRPC server (or the Nanoservice-ts runtime acting as one) will listen. This might also be a global configuration for the runtime.
+    *   **(Optional) Other configurations**: Such as TLS settings, package name if not inferred, etc.
+
+### Example: gRPC Trigger Configuration (Conceptual)
+
+```json
+// In workflow.json
+{
+  "name": "handleSayHelloGrpcRequest",
+  "trigger": {
+    "type": "gRPC",
+    "config": {
+      "protoPath": "protos/greeter.proto",
+      "service": "Greeter",
+      "method": "SayHello"
+      // "port": 50051 // Port might be globally configured
+    }
+  },
+  "nodes": [
+    // ... nodes to handle the SayHello RPC method ...
+  ]
+}
+```
+
+**Associated `greeter.proto` (Conceptual):**
+```protobuf
+syntax = "proto3";
+
+package greeter;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+```
+This workflow would be invoked when a gRPC client calls the `SayHello` method of the `Greeter` service.
+
+### Request Data in Context
+
+When a gRPC trigger fires, the incoming request message (deserialized from Protobuf) is made available in the workflow's [Context Object](../introduction/context.mdx). For the example above, `context.trigger.request.name` might contain the value from the `HelloRequest` message.
+
+## Common gRPC-Related Nodes
+
+While the primary interaction with gRPC is often through triggers (for services *provided* by Nanoservice-ts), workflows might also need to *call* other gRPC services.
+
+### 1. `gRPC.Request` Node (or similar - Conceptual)
+
+This type of Node would be used to make outbound gRPC calls from within a Nanoservice-ts workflow to external gRPC services.
+
+*   **Purpose**: To invoke RPC methods on other gRPC services.
+*   **Key Inputs (Conceptual)**:
+    *   `protoPath`: Path to the `.proto` file defining the client stub.
+    *   `serviceAddress`: The address (e.g., `hostname:port`) of the target gRPC service.
+    *   `serviceName`: The name of the service to call.
+    *   `methodName`: The RPC method to invoke.
+    *   `requestMessage`: The request message object (conforming to the Protobuf definition).
+    *   `metadata`: Optional gRPC metadata (headers).
+    *   `deadline`: Optional deadline for the call.
+*   **Key Outputs (Conceptual)**:
+    *   `responseMessage`: The response message object from the gRPC service.
+    *   `error`: Any error encountered during the call.
+
+**Example Usage in a Workflow (Conceptual):**
+```json
+{
+  "id": "call_external_grpc_service",
+  "node": "gRPC.Request", // Hypothetical node name
+  "input": {
+    "protoPath": "protos/external_service.proto",
+    "serviceAddress": "external-service.example.com:50052",
+    "serviceName": "ExternalDataService",
+    "methodName": "GetData",
+    "requestMessage": {
+      "itemId": "{{trigger.request.itemId}}" // Assuming itemId comes from an initial gRPC trigger
+    }
+  },
+  "next_node_id": "process_grpc_response"
+}
+```
+
+### 2. `gRPC.SetResponse` Node (or similar)
+
+For gRPC-triggered workflows, a specialized node is needed to send the response back to the gRPC client. This node would take a message object (conforming to the RPC method's response type in the `.proto` file) and send it.
+
+*   **Purpose**: To construct and send the gRPC response in a gRPC-triggered workflow.
+*   **Key Inputs (Conceptual)**:
+    *   `responseMessage`: The message object to send as the reply.
+    *   `(Optional) errorDetails`: If an error occurred, details to construct a gRPC error status.
+
+**Example Usage in a Workflow (Conceptual):**
+```json
+// For the SayHello example triggered workflow
+{
+  "id": "send_grpc_reply",
+  "node": "gRPC.SetResponse", // Hypothetical node name
+  "input": {
+    "responseMessage": {
+      // Assuming a previous node (e.g., "construct_greeting") put this in context
+      "message": "Hello, {{context.greeting_message}}!"
+    }
+  }
+}
+```
+
+## Generating gRPC Code
+
+Working with gRPC typically involves a code generation step from your `.proto` files. Nanoservice-ts or its associated tooling (like `bufbuild/buf` which seems to be used in the `triggers/grpc` directory of the Nanoservice-ts repo) would handle generating the necessary TypeScript interfaces and service definitions from your Protobufs. This allows for strong typing both for the trigger handlers and for any client code within Nodes.
+
+The `triggers/grpc/buf.yaml` and `triggers/grpc/buf.gen.yaml` files in the Nanoservice-ts repository suggest the use of Buf for managing Protobuf builds and code generation, which is a common and recommended practice.
+
+## Benefits of using gRPC with Nanoservice-ts
+
+*   **Performance**: gRPC is generally more performant than REST/JSON due to HTTP/2 and binary serialization with Protobuf.
+*   **Strongly Typed Contracts**: `.proto` files provide a clear, language-agnostic contract for your services, reducing integration errors.
+*   **Streaming**: gRPC supports various streaming modes (unary, server-streaming, client-streaming, bidirectional-streaming), which can be powerful for certain Nanoservice-ts workflows.
+*   **Code Generation**: Simplifies development by automatically generating client and server stubs.
+
+By integrating gRPC capabilities, Nanoservice-ts allows developers to build highly efficient and robust backend systems suitable for complex, performance-sensitive applications.
