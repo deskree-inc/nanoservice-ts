@@ -1,0 +1,108 @@
+---
+title: Context Object
+---
+
+# The Context Object in Nanoservice-ts
+
+The Context Object is a crucial component in Nanoservice-ts that facilitates data sharing and state management across different [Nodes](./nodes.mdx) within a single [Workflow](./workflows.mdx) execution instance. It acts as a shared memory space, allowing Nodes to pass information to subsequent Nodes, access initial trigger data, and maintain state throughout the lifecycle of a workflow run.
+
+## What is the Context Object?
+
+When a [Trigger](./triggers.mdx) initiates a Workflow, Nanoservice-ts creates a unique Context Object for that specific workflow instance. This object persists throughout the execution of that instance and is accessible to every Node within it.
+
+Key characteristics of the Context Object:
+
+*   **Instance-Specific**: Each run of a workflow gets its own isolated Context Object. Data in one workflow instance does not interfere with another.
+*   **Shared State**: Nodes can read from and write to the Context Object, allowing them to share data and state dynamically.
+*   **Data Carrier**: It carries initial data from the trigger (e.g., HTTP request body, query parameters, message payload) and makes it available to all Nodes.
+*   **Configuration & Services**: It can also be used to provide access to configuration values, shared services, or utility functions that Nodes might need.
+
+## Structure and Usage
+
+The exact structure and API of the Context Object might depend on the specific Nanoservice-ts runtime and SDK version. However, it generally provides methods to:
+
+*   **Get data**: Retrieve values stored in the context, often using a key-based or path-based accessor (e.g., `context.get('userId')`, `context.get('trigger.body.name')`).
+*   **Set data**: Store new values or update existing ones in the context (e.g., `context.set('processedData', result)`).
+*   **Access trigger data**: A dedicated section or namespace within the context usually holds the data that initiated the workflow (e.g., `context.trigger.headers`, `context.trigger.payload`).
+*   **Access workflow metadata**: Information like `workflowInstanceId`, `workflowName`, etc.
+
+### Conceptual Example of Context Usage in a Node
+
+```typescript
+// Inside a Node's execute method (conceptual)
+import { NanoserviceNode, NodeInput, NodeOutput, Context } from 'nanoservice-ts-sdk'; // Hypothetical SDK import
+
+interface MyNodeInput { /* ... */ }
+interface MyNodeOutput { /* ... */ }
+
+export class MyCustomNode implements NanoserviceNode<MyNodeInput, MyNodeOutput> {
+  async execute(input: NodeInput<MyNodeInput>, context: Context): Promise<NodeOutput<MyNodeOutput>> {
+    // 1. Get data from the trigger via context
+    const customerId = context.get('trigger.query.customerId');
+
+    // 2. Get data set by a previous node
+    const previousStepResult = context.get('previousNodeOutput.someData');
+
+    // Perform some logic using customerId and previousStepResult
+    const processedInfo = `Processed for ${customerId} with ${previousStepResult}`;
+
+    // 3. Set data for subsequent nodes
+    context.set('myCustomNode.processedInfo', processedInfo);
+    context.set('sharedCounter', (context.get('sharedCounter') || 0) + 1);
+
+    // Log using workflow instance ID from context
+    console.log(`[${context.workflowInstanceId}] MyCustomNode processed: ${processedInfo}`);
+
+    return {
+      data: { /* output specific to this node */ }
+    };
+  }
+}
+```
+
+## Data Flow and Immutability
+
+While the Context Object allows for shared mutable state, it's essential to be mindful of how data is modified. Some Nanoservice-ts implementations or best practices might encourage treating parts of the context (like initial trigger data) as immutable to prevent unintended side effects.
+
+Nodes typically read the data they need from the context (or directly from their `input` which is often populated from the context by the workflow engine), perform their operations, and then write their results back to the context if those results need to be accessed by subsequent nodes.
+
+## Best Practices for Using the Context Object
+
+*   **Clear Naming Conventions**: Use consistent and descriptive keys when setting data in the context to avoid collisions and improve readability (e.g., `nodeName.outputKey`, `shared.config.apiKey`).
+*   **Minimize Global State**: While the context is shared, avoid overusing it as a global dumping ground. Prefer passing data explicitly through Node inputs and outputs when the data flow is linear and simple.
+*   **Schema Awareness**: Be aware of the data types you are storing and retrieving. While the context itself might be flexible, Nodes often expect specific data types as per their `inputSchema`.
+*   **Error Handling Data**: The context can also be used to store error information if a Node fails, which can then be picked up by error handling Nodes or branches in the workflow.
+*   **Security Considerations**: Be cautious about storing sensitive information in the context, especially if logs or full context dumps are generated for debugging. Sanitize or avoid storing raw sensitive data if possible.
+
+## Context in Workflow Definitions
+
+In workflow JSON definitions, you often reference context data to populate Node inputs:
+
+```json
+// ... inside a workflow definition ...
+{
+  "id": "fetch_user_details",
+  "node": "Database.GetUserById",
+  "input": {
+    // Get 'userId' from the trigger's query parameters via the context
+    "userId": "{{trigger.query.userId}}"
+  },
+  "next_node_id": "process_user_data"
+},
+{
+  "id": "log_user_email",
+  "node": "Utils.Logger",
+  "input": {
+    // Get 'email' from the output of the 'fetch_user_details' node, 
+    // which would have been placed into the context (e.g., context.fetch_user_details.email)
+    // The exact path depends on how the previous node structures its output in the context.
+    "message": "User email: {{nodes.fetch_user_details.output.email}}" // Example path
+  }
+}
+// ...
+```
+*(The `{{...}}` syntax is a common templating mechanism for accessing context data in workflow definitions, but the exact syntax can vary.)*
+
+The Context Object is a powerful mechanism that enables dynamic and flexible workflows in Nanoservice-ts. Understanding how to use it effectively is key to building robust and maintainable nanoservice applications.
+
+Next, learn about what initiates workflows: [Triggers](./triggers.mdx).

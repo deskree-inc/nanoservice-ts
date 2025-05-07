@@ -1,0 +1,172 @@
+---
+title: Routing Logic Example
+---
+
+# Example: Implementing Routing Logic in a Workflow
+
+This example demonstrates how to implement conditional routing or branching logic within a Nanoservice-ts workflow. Based on certain input data or the result of a previous node, the workflow will take different paths.
+
+For this scenario, let's create a fun workflow: "Fact Cats vs. Country Info."
+If the input query contains "cat", it fetches a cat fact. If it contains "country", it fetches information about a specified country. Otherwise, it returns a default message.
+
+## Purpose
+
+*   Showcase the use of a conditional logic Node (e.g., `Core.Condition`, `Utils.Switch`, or similar).
+*   Illustrate how to define different execution paths based on a condition.
+*   Demonstrate dynamic workflow behavior.
+
+## Prerequisites
+
+*   A Nanoservice-ts project.
+*   Internet access for external API calls.
+*   Nodes for:
+    *   Making HTTP requests (e.g., `Http.Request`).
+    *   Conditional logic (e.g., `Core.Condition` or a custom node that can evaluate conditions).
+    *   Logging (e.g., `Utils.Logger`).
+    *   Setting HTTP response (e.g., `Http.SetResponse`).
+
+## APIs Used
+
+*   Cat Facts: `https://catfact.ninja/fact`
+*   Country Info: `https://restcountries.com/v3.1/name/{countryName}` (e.g., `https://restcountries.com/v3.1/name/canada`)
+
+## Node(s) Used (Conceptual)
+
+1.  **`Http.Request`**: To call external APIs.
+2.  **`Utils.Logger`**: For logging.
+3.  **`Http.SetResponse`**: To send the final HTTP response.
+4.  **`Core.Condition` (or similar)**: A node that evaluates an input string or condition and routes to different `next_node_id`s based on the outcome.
+    *   **Input Schema (Conceptual for `Core.Condition`)**:
+        *   `value`: The value to check (e.g., `{{trigger.query.topic}}`).
+        *   `cases`: An array of objects, each with:
+            *   `matches`: A string or regex to match against `value`.
+            *   `nextNodeId`: The ID of the node to go to if this case matches.
+        *   `defaultNextNodeId`: The ID of the node to go to if no cases match.
+
+## Workflow Definition (`routing-example.json`)
+
+Let's assume the workflow is triggered by an HTTP GET request to `/info-router?topic={searchTerm}&value={optionalValue}`.
+
+```json
+{
+  "name": "infoRouterWorkflow",
+  "trigger": {
+    "type": "Http",
+    "config": {
+      "path": "/info-router",
+      "method": "GET" // Expects query parameters: topic, value (optional)
+    }
+  },
+  "nodes": [
+    {
+      "id": "1_log_start",
+      "node": "Utils.Logger",
+      "input": {
+        "message": "InfoRouter workflow started. Topic: {{trigger.query.topic}}, Value: {{trigger.query.value}}"
+      },
+      "next_node_id": "2_route_logic"
+    },
+    {
+      "id": "2_route_logic",
+      "node": "Core.Condition", // Hypothetical conditional node
+      "input": {
+        "value": "{{trigger.query.topic}}", // Value to check from query param
+        "cases": [
+          {
+            "matches": "cat", // If topic contains "cat"
+            "nextNodeId": "3a_fetch_cat_fact"
+          },
+          {
+            "matches": "country", // If topic contains "country"
+            "nextNodeId": "3b_fetch_country_info"
+          }
+        ],
+        "defaultNextNodeId": "3c_default_response"
+      }
+    },
+    // Path A: Cat Fact
+    {
+      "id": "3a_fetch_cat_fact",
+      "node": "Http.Request",
+      "input": {
+        "url": "https://catfact.ninja/fact",
+        "method": "GET"
+      },
+      "next_node_id": "4a_set_cat_response"
+    },
+    {
+      "id": "4a_set_cat_response",
+      "node": "Http.SetResponse",
+      "input": {
+        "statusCode": 200,
+        "body": "{{nodes.3a_fetch_cat_fact.output.body}}"
+      }
+    },
+    // Path B: Country Info
+    {
+      "id": "3b_fetch_country_info",
+      "node": "Http.Request",
+      "input": {
+        // Using the 'value' query parameter for the country name
+        "url": "https://restcountries.com/v3.1/name/{{trigger.query.value}}",
+        "method": "GET"
+      },
+      "next_node_id": "4b_set_country_response"
+    },
+    {
+      "id": "4b_set_country_response",
+      "node": "Http.SetResponse",
+      "input": {
+        "statusCode": 200,
+        "body": "{{nodes.3b_fetch_country_info.output.body[0]}}" // API returns an array
+      }
+    },
+    // Path C: Default Response
+    {
+      "id": "3c_default_response",
+      "node": "Http.SetResponse",
+      "input": {
+        "statusCode": 400,
+        "body": {
+          "message": "Invalid topic. Please specify 'cat' or 'country' in the topic query parameter. For country, also provide a 'value' parameter for the country name."
+        }
+      }
+    }
+  ]
+}
+```
+
+**Explanation:**
+
+1.  **Trigger**: An HTTP GET request to `/info-router`.
+2.  **Node `1_log_start`**: Logs the incoming query parameters.
+3.  **Node `2_route_logic` (`Core.Condition`)**: This is the routing node.
+    *   It inspects the `topic` query parameter (`{{trigger.query.topic}}`).
+    *   If `topic` contains "cat", it jumps to node `3a_fetch_cat_fact`.
+    *   If `topic` contains "country", it jumps to node `3b_fetch_country_info`.
+    *   Otherwise, it jumps to the default node `3c_default_response`.
+4.  **Path A (Cat Fact)**:
+    *   `3a_fetch_cat_fact`: Calls the cat fact API.
+    *   `4a_set_cat_response`: Sets the HTTP response with the cat fact.
+5.  **Path B (Country Info)**:
+    *   `3b_fetch_country_info`: Calls the REST Countries API using the `value` query parameter for the country name.
+    *   `4b_set_country_response`: Sets the HTTP response with the country information (taking the first element of the array response).
+6.  **Path C (Default)**:
+    *   `3c_default_response`: Sets a 400 Bad Request response with an error message.
+
+## How to Run
+
+1.  Save the JSON as `routing-example.json` in your project `workflows/` directory.
+2.  Ensure your Nanoservice-ts project has the `Http.Request`, `Utils.Logger`, `Http.SetResponse`, and a conditional node like `Core.Condition` (or adapt to the available conditional node).
+3.  Start your Nanoservice-ts runner (`npm run dev`).
+4.  Test the different routes:
+    *   **Cat Fact**: `http://localhost:4000/info-router?topic=cat`
+    *   **Country Info**: `http://localhost:4000/info-router?topic=country&value=france`
+    *   **Default/Error**: `http://localhost:4000/info-router?topic=dog` or `http://localhost:4000/info-router`
+
+## Expected Outcome
+
+*   Depending on the URL you use, you will receive either a cat fact, information about the specified country, or the default error message.
+*   The console logs will show the initial topic and value, helping you trace the execution.
+
+This example illustrates a fundamental pattern in workflow design: controlling the execution path based on data. You can adapt this using various conditional nodes or custom logic to build complex, dynamic applications.
