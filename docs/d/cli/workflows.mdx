@@ -1,14 +1,14 @@
 ---
-title: CLI Workflow Management
+title: Workflow Management
 ---
 
-# CLI: Workflow Management (`nanoctl create workflow`)
+## CLI: Workflow Management (`nanoctl create workflow`)
 
-[Workflows](../introduction/workflows.mdx) are central to Nanoservice-ts, defining the orchestration of [Nodes](../introduction/nodes.mdx) to implement business logic. The `nanoctl` CLI helps in scaffolding new workflow definition files, primarily through the `create workflow` command.
+[Workflows](../introduction/workflows.mdx) are central to Nanoservice-TS, defining the orchestration of [Nodes](../introduction/nodes.mdx) to implement business logic. The `nanoctl` CLI helps in scaffolding new workflow definition files, primarily through the `create workflow` command.
 
 ## `nanoctl create workflow <workflow-name>`
 
-This command is used to generate a new workflow definition file within your Nanoservice-ts project.
+This command is used to generate a new workflow definition file within your Nanoservice-TS project.
 
 **Purpose**: To create a boilerplate JSON file for a new workflow, placing it in the `workflows/` directory of your project. This file will contain a basic structure that you can then customize to define your specific sequence of nodes and trigger configuration.
 
@@ -94,6 +94,6 @@ The CLI will then likely prompt for the trigger type and other details, then gen
 *   **Descriptive Node IDs**: Use meaningful `id` values for your nodes within the workflow JSON (e.g., `"log_start"`, `"validate_input"`, `"fetch_user_data"`) to make the workflow definition easier to read and debug.
 *   **Error Handling**: Plan for error paths in your workflow by using `on_error_node_id` or conditional logic to handle failures in nodes gracefully.
 
-The `create workflow` command simplifies the initial setup of workflow definition files, allowing you to quickly start outlining the logic and orchestration of your Nanoservice-ts application.
+The `create workflow` command simplifies the initial setup of workflow definition files, allowing you to quickly start outlining the logic and orchestration of your Nanoservice-TS application.
 
 Next, learn about [authentication-related CLI commands](./login.mdx).

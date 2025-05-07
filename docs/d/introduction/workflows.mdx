@@ -2,9 +2,9 @@
 title: Workflows
 ---
 
-# Workflows in Nanoservice-ts
+## Concept
 
-A Workflow in Nanoservice-ts is a fundamental concept representing a sequence or graph of interconnected [Nodes](./nodes.mdx) that collectively achieve a specific piece of business logic. Workflows define how data flows between Nodes and the precise order of their execution. They are the backbone of your application, orchestrating individual nanoservices (Nodes) to perform complex tasks.
+A Workflow in Nanoservice-TS is a fundamental concept representing a sequence or graph of interconnected [Nodes](./nodes.mdx) that collectively achieve a specific piece of business logic. Workflows define how data flows between Nodes and the precise order of their execution. They are the backbone of your application, orchestrating individual nanoservices (Nodes) to perform complex tasks.
 
 ## What is a Workflow?
 
@@ -18,7 +18,7 @@ Workflows are typically initiated by [Triggers](./triggers.mdx), such as an inco
 
 ## Defining Workflows
 
-Nanoservice-ts primarily uses JSON to define workflows. This declarative approach makes workflows easy to understand, visualize, and manage. A workflow definition typically includes:
+Nanoservice-TS primarily uses JSON to define workflows. This declarative approach makes workflows easy to understand, visualize, and manage. A workflow definition typically includes:
 
 *   **`name`**: A unique identifier for the workflow.
 *   **`trigger`**: Configuration for the event that starts the workflow (e.g., HTTP method and path).
@@ -70,13 +70,13 @@ In this example:
 2.  The first node (`id: "1"`) is a `Utils.Logger` that logs a message. It uses data from the trigger (`{{trigger.path}}`).
 3.  Upon successful completion of node "1", node "2" (`Http.SetResponse`) is executed, which sends a JSON response back to the client.
 
-While JSON is the primary method, Nanoservice-ts architecture also supports programmatic workflow definition in TypeScript for more dynamic or complex scenarios, though JSON is generally recommended for clarity and tooling support.
+While JSON is the primary method, Nanoservice-TS architecture also supports programmatic workflow definition in TypeScript for more dynamic or complex scenarios, though JSON is generally recommended for clarity and tooling support.
 
 ## Workflow Execution
 
 When a trigger event occurs:
 
-1.  The Nanoservice-ts runtime identifies the corresponding workflow.
+1.  The Nanoservice-TS runtime identifies the corresponding workflow.
 2.  A new instance of the workflow is created.
 3.  A [Context Object](./context.mdx) is initialized for this instance, containing trigger data and other relevant information.
 4.  The runtime begins executing the nodes as defined in the workflow, passing data between them via the Context Object or direct input/output mapping.
@@ -89,7 +89,7 @@ When a trigger event occurs:
 *   **Data Flow Management**: Explicitly define how data is passed and transformed between Nodes.
 *   **Error Handling**: Define specific paths for error conditions within the workflow.
 *   **Conditional Logic & Branching**: More advanced workflows can include conditional execution paths (e.g., using a `Core.Condition` node or similar logic) to branch the flow based on data.
-*   **Parallel Execution**: Some Nanoservice-ts runtimes or specific node types might support parallel execution of independent branches within a workflow for improved performance (consult specific runtime documentation).
+*   **Parallel Execution**: Some Nanoservice-TS runtimes or specific node types might support parallel execution of independent branches within a workflow for improved performance (consult specific runtime documentation).
 
 ## Creating Workflows
 
@@ -101,6 +101,6 @@ nanoctl create workflow <workflow-name>
 
 This command will typically generate a boilerplate workflow JSON file in your project's `workflows/` directory, which you can then customize.
 
-Understanding workflows is crucial for effectively using Nanoservice-ts. They are the primary means by which you will build and structure your application logic.
+Understanding workflows is crucial for effectively using Nanoservice-TS. They are the primary means by which you will build and structure your application logic.
 
 Next, learn about the individual building blocks: [Nodes](./nodes.mdx).

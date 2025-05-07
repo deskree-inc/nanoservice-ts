@@ -28,11 +28,7 @@
             "group": "Fundamentals",
             "pages": [
               "d/fundamentals/overview",
-              "d/fundamentals/architecture-comparison",
-              "d/fundamentals/atomic-vs-nanoservice",
-              "d/fundamentals/http",
-              "d/fundamentals/grpc",
-              "d/fundamentals/mcp-server"
+              "d/fundamentals/architecture-comparison"
             ]
           },
           {
@@ -48,6 +44,12 @@
             ]
           },
           {
+            "group": "Triggers",
+            "pages": [
+              "d/triggers/http"
+            ]
+          },
+          {
             "group": "Examples",
             "pages": [
               "d/examples/index",
@@ -59,7 +61,6 @@
               "d/examples/dashboard-generator",
               "d/examples/base64-pdf",
               "d/examples/feedback-ui",
-              "d/examples/mastra-agent",
               "d/examples/postgres-query"
             ]
           },
@@ -67,9 +68,7 @@
             "group": "Deployment",
             "pages": [
               "d/deployment/index",
-              "d/deployment/deskree-serverless",
-              "d/deployment/aws-lambda",
-              "d/deployment/gcp-cloud-run"
+              "d/deployment/deskree-serverless"
             ]
           }
         ]

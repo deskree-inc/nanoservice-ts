@@ -2,26 +2,26 @@
 title: First Steps
 ---
 
-# First Steps with Nanoservice-ts
+## Starting
 
-This guide will walk you through setting up your Nanoservice-ts development environment and creating your first nanoservice-based application. We aim to get you up and running as quickly as possible.
+This guide will walk you through setting up your Nanoservice-TS development environment and creating your first nanoservice-based application. We aim to get you up and running as quickly as possible.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 
-*   **Node.js**: Nanoservice-ts is built on Node.js. We recommend using the latest LTS version. You can download it from [nodejs.org](https://nodejs.org/).
+*   **Node.js**: Nanoservice-TS is built on Node.js. We recommend using the latest LTS version. You can download it from [nodejs.org](https://nodejs.org/).
 *   **npm** (or **yarn**): npm is included with Node.js. If you prefer yarn, ensure it is installed.
 
 ## Installation
 
-The primary way to interact with Nanoservice-ts and manage your projects is through our Command Line Interface (CLI), `nanoctl`.
+The primary way to interact with Nanoservice-TS and manage your projects is through our Command Line Interface (CLI), `nanoctl`.
 
 You don't need to install `nanoctl` globally to start. You can use `npx` to run the latest version directly:
 
 ## Creating Your First Project
 
-Let's create a new Nanoservice-ts project. Open your terminal and run:
+Let's create a new Nanoservice-TS project. Open your terminal and run:
 
 ```bash
 npx nanoctl@latest create project
@@ -36,7 +36,7 @@ The CLI will prompt you for a project name and potentially other configuration o
   hello-world - A simple project with a pre-built HTTP workflow
 ```
 
-Let's choose the `hello-world` template for a quick start. This will create a new directory named `my-first-app` (or whatever you named your project) with the basic Nanoservice-ts project structure and an example workflow.
+Let's choose the `hello-world` template for a quick start. This will create a new directory named `my-first-app` (or whatever you named your project) with the basic Nanoservice-TS project structure and an example workflow.
 
 Navigate into your new project directory:
 
@@ -83,7 +83,7 @@ The `hello-world` template comes with a simple HTTP workflow. To run it locally:
     # yarn install
     ```
 
-2.  **Start the Nanoservice-ts runner** in development mode:
+2.  **Start the Nanoservice-TS runner** in development mode:
     ```bash
     npm run dev
     # or
@@ -98,15 +98,15 @@ The `hello-world` template comes with a simple HTTP workflow. To run it locally:
     You should receive a response like:
     ```json
     {
-      "message": "Hello from Nanoservice-ts!"
+      "message": "Hello from Nanoservice-TS!"
     }
     ```
 
-Congratulations! You've successfully created and run your first Nanoservice-ts application.
+Congratulations! You've successfully created and run your first Nanoservice-TS application.
 
 ## Next Steps
 
-Now that you have a basic understanding of how to set up and run a Nanoservice-ts project, you can explore further:
+Now that you have a basic understanding of how to set up and run a Nanoservice-TS project, you can explore further:
 
 *   Learn more about [Nodes](./nodes.mdx) - the building blocks of your application.
 *   Understand [Workflows](./workflows.mdx) in more detail.

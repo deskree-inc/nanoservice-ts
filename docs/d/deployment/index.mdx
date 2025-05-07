@@ -2,38 +2,38 @@
 title: Deployment Overview
 ---
 
-# Deploying Nanoservice-ts Applications
+## Time to Deploy
 
-Once you have developed and tested your Nanoservice-ts application, the next step is to deploy it to a production or staging environment. This section provides an overview of deployment strategies and considerations for Nanoservice-ts applications.
+Once you have developed and tested your Nanoservice-TS application, the next step is to deploy it to a production or staging environment. This section provides an overview of deployment strategies and considerations for Nanoservice-TS applications.
 
-Nanoservice-ts applications, being composed of workflows and nodes, can be deployed to various environments, from serverless platforms to containerized setups.
+Nanoservice-TS applications, being composed of workflows and nodes, can be deployed to various environments, from serverless platforms to containerized setups.
 
 ## Key Deployment Considerations
 
 *   **Environment Configuration**: Managing environment-specific configurations (e.g., API keys, database connection strings, service URLs) securely is crucial. This often involves using environment variables or a configuration management service.
-*   **Scalability**: Choose a deployment platform that can scale your Nanoservice-ts application based on demand. Serverless platforms often provide auto-scaling capabilities.
+*   **Scalability**: Choose a deployment platform that can scale your Nanoservice-TS application based on demand. Serverless platforms often provide auto-scaling capabilities.
 *   **Monitoring and Logging**: Implement robust logging within your Nodes and Workflows. Integrate with monitoring tools to track the health, performance, and errors of your deployed application.
 *   **CI/CD (Continuous Integration/Continuous Deployment)**: Set up a CI/CD pipeline to automate the build, test, and deployment process. This ensures consistent and reliable deployments.
 *   **Cold Starts (for Serverless)**: If deploying to serverless platforms, be aware of potential cold start latencies and consider strategies to mitigate them if they impact your application (e.g., provisioned concurrency, keep-warm techniques).
-*   **Resource Management**: Understand the resource requirements (CPU, memory) of your Nanoservice-ts runtime and individual workflows to provision your deployment environment appropriately.
+*   **Resource Management**: Understand the resource requirements (CPU, memory) of your Nanoservice-TS runtime and individual workflows to provision your deployment environment appropriately.
 
 ## Common Deployment Targets
 
-Nanoservice-ts applications can be deployed to a variety of platforms. The user feedback specifically mentioned interest in the following:
+Nanoservice-TS applications can be deployed to a variety of platforms. The user feedback specifically mentioned interest in the following:
 
-*   **[Deskree Serverless](./deskree-serverless.mdx)**: (Placeholder) Deploying to Deskree's serverless offering, which might provide native support or optimized integration for Nanoservice-ts.
-*   **[AWS Lambda](./aws-lambda.mdx)**: (Placeholder) Packaging and deploying Nanoservice-ts applications as AWS Lambda functions, often fronted by API Gateway for HTTP triggers or integrated with other AWS services for event-driven workflows.
-*   **[Google Cloud Run](./gcp-cloud-run.mdx)**: (Placeholder) Deploying Nanoservice-ts applications as containerized services on Google Cloud Run, which offers a fully managed serverless platform for containers.
+*   **[Deskree Serverless](./deskree-serverless.mdx)**: (Placeholder) Deploying to Deskree's serverless offering, which might provide native support or optimized integration for Nanoservice-TS.
+*   **[AWS Lambda](./aws-lambda.mdx)**: (Placeholder) Packaging and deploying Nanoservice-TS applications as AWS Lambda functions, often fronted by API Gateway for HTTP triggers or integrated with other AWS services for event-driven workflows.
+*   **[Google Cloud Run](./gcp-cloud-run.mdx)**: (Placeholder) Deploying Nanoservice-TS applications as containerized services on Google Cloud Run, which offers a fully managed serverless platform for containers.
 
 Other potential deployment targets include:
 
 *   **Other Serverless Platforms**: Azure Functions, Cloudflare Workers, etc.
-*   **Container Orchestration Platforms**: Kubernetes, Docker Swarm. Your Nanoservice-ts application can be packaged as a Docker container and managed by these platforms.
-*   **Virtual Machines or Bare Metal**: Traditional deployment, where you manage the underlying infrastructure and the Nanoservice-ts runtime environment.
+*   **Container Orchestration Platforms**: Kubernetes, Docker Swarm. Your Nanoservice-TS application can be packaged as a Docker container and managed by these platforms.
+*   **Virtual Machines or Bare Metal**: Traditional deployment, where you manage the underlying infrastructure and the Nanoservice-TS runtime environment.
 
 ## General Deployment Steps (Conceptual)
 
-1.  **Build Your Application**: Use `nanoctl build` (or an equivalent build process) to create a production-ready package of your Nanoservice-ts application. This typically includes transpiled JavaScript, workflow definitions, node configurations, and any other necessary assets.
+1.  **Build Your Application**: Use `nanoctl build` (or an equivalent build process) to create a production-ready package of your Nanoservice-TS application. This typically includes transpiled JavaScript, workflow definitions, node configurations, and any other necessary assets.
 2.  **Configure Environment Variables**: Set up environment-specific configurations for your target deployment environment.
 3.  **Choose a Deployment Strategy**: Select the platform and method for deployment (e.g., serverless function, container image).
 4.  **Package for Deployment**: Adapt your build output for the chosen platform (e.g., create a ZIP file for Lambda, build a Docker image for Cloud Run/Kubernetes).

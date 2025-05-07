@@ -2,15 +2,15 @@
 title: HTTP Communication
 ---
 
-# HTTP Triggers and Nodes in Nanoservice-ts
+## Concept
 
-HTTP (Hypertext Transfer Protocol) is the foundation of data communication for the World Wide Web and is a primary mechanism for building APIs and web services. Nanoservice-ts provides robust support for creating HTTP-triggered workflows and using Nodes that interact via HTTP.
+HTTP (Hypertext Transfer Protocol) is the foundation of data communication for the World Wide Web and is a primary mechanism for building APIs and web services. Nanoservice-TS provides robust support for creating HTTP-triggered workflows and using Nodes that interact via HTTP.
 
-This page covers how Nanoservice-ts handles HTTP communication, focusing on HTTP triggers and common HTTP-related Nodes.
+This page covers how Nanoservice-TS handles HTTP communication, focusing on HTTP triggers and common HTTP-related Nodes.
 
 ## HTTP Triggers
 
-An HTTP Trigger allows a Nanoservice-ts [Workflow](../introduction/workflows.mdx) to be initiated by an incoming HTTP request. This is essential for building RESTful APIs, webhooks, or any service that needs to respond to web requests.
+An HTTP Trigger allows a Nanoservice-TS [Workflow](../introduction/workflows.mdx) to be initiated by an incoming HTTP request. This is essential for building RESTful APIs, webhooks, or any service that needs to respond to web requests.
 
 ### Configuration
 
@@ -20,7 +20,7 @@ As shown in the [Triggers](../introduction/triggers.mdx) section, an HTTP trigge
 *   **`config`**: An object containing specific settings for the HTTP trigger:
     *   **`path`** (string, required): The URL path that will activate this workflow (e.g., `/users`, `/products/{productId}`). Path parameters (like `{productId}`) are supported and become available in the workflow's [Context Object](../introduction/context.mdx).
     *   **`method`** (string, required): The HTTP method the trigger listens for (e.g., `GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `OPTIONS`).
-    *   **(Optional) Other configurations**: Depending on the Nanoservice-ts runtime, there might be options for CORS, authentication middleware, request size limits, etc.
+    *   **(Optional) Other configurations**: Depending on the Nanoservice-TS runtime, there might be options for CORS, authentication middleware, request size limits, etc.
 
 ### Example: HTTP Trigger for a POST Request
 
@@ -55,7 +55,7 @@ When an HTTP trigger fires, information from the incoming HTTP request is popula
 
 ## Common HTTP-Related Nodes
 
-Nanoservice-ts workflows often involve Nodes that either make HTTP requests to external services or control the HTTP response sent back to the client that triggered the workflow.
+Nanoservice-TS workflows often involve Nodes that either make HTTP requests to external services or control the HTTP response sent back to the client that triggered the workflow.
 
 ### 1. `Http.Request` Node (or similar)
 
@@ -127,7 +127,7 @@ As seen in the [Single Page UI Example](../examples/single-page-ui.mdx), some No
     *   `statusCode` (number, default: 200).
     *   `headers` (object, often defaults `Content-Type` to `text/html`).
 
-## Best Practices for HTTP in Nanoservice-ts
+## Best Practices for HTTP in Nanoservice-TS
 
 *   **Statelessness**: Aim for stateless HTTP-triggered workflows where possible. Each request should contain all necessary information, or rely on data fetched by Nodes within that workflow instance.
 *   **Idempotency**: For `PUT` or `DELETE` operations, or any operation that might be retried, strive for idempotency where appropriate.
@@ -135,8 +135,8 @@ As seen in the [Single Page UI Example](../examples/single-page-ui.mdx), some No
 *   **Input Validation**: Validate incoming request data (body, query, params) early in your workflow, often using a dedicated validation Node or the `inputSchema` of your first processing Node.
 *   **Security**: Be mindful of security best practices:
     *   Validate and sanitize all inputs.
-    *   Implement authentication and authorization (this might be handled by a gateway in front of Nanoservice-ts or by dedicated Nodes/middleware within the workflow).
+    *   Implement authentication and authorization (this might be handled by a gateway in front of Nanoservice-TS or by dedicated Nodes/middleware within the workflow).
     *   Be careful with what data is logged from requests and responses.
     *   Use HTTPS.
 
-HTTP communication is a cornerstone of modern web applications, and Nanoservice-ts provides the necessary tools through triggers and specialized Nodes to build powerful and flexible HTTP-based services.
+HTTP communication is a cornerstone of modern web applications, and Nanoservice-TS provides the necessary tools through triggers and specialized Nodes to build powerful and flexible HTTP-based services.
