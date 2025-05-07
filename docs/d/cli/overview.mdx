@@ -2,22 +2,20 @@
 title: Overview
 ---
 
-## Nanoservice-TS CLI (`nanoctl`)
-
-The Nanoservice-TS Command Line Interface (CLI), `nanoctl`, is an essential tool for developing, managing, and deploying your Nanoservice-TS applications. It provides a set of commands to streamline common tasks, from project scaffolding to Node and Workflow creation.
+The **nanoservice-ts** Command Line Interface (CLI), `nanoctl`, is an essential tool for developing, managing, and deploying your **nanoservice-ts** applications. It provides a set of commands to streamline common tasks, from project scaffolding to Node and Workflow creation.
 
 ## What is `nanoctl`?
 
-`nanoctl` is designed to enhance developer productivity by automating repetitive tasks and providing a consistent interface for interacting with the Nanoservice-TS framework.
+`nanoctl` is designed to enhance developer productivity by automating repetitive tasks and providing a consistent interface for interacting with the **nanoservice-ts** framework.
 
 Key functionalities typically include:
 
-*   **Project Initialization**: Creating new Nanoservice-TS projects with a standard directory structure and boilerplate code.
+*   **Project Initialization**: Creating new **nanoservice-ts** projects with a standard directory structure and boilerplate code.
 *   **Code Generation (Scaffolding)**: Generating new Nodes, Workflows, and potentially other components with basic templates.
 *   **Development Server**: Running a local development server to test your workflows.
 *   **Building & Packaging**: Preparing your application for deployment.
-*   **Deployment Commands**: Assisting with deploying your Nanoservice-TS applications to various environments (though this might also involve other platform-specific tools).
-*   **Authentication/Login**: Commands to authenticate with Nanoservice-TS services or platforms (e.g., Deskree).
+*   **Deployment Commands**: Assisting with deploying your **nanoservice-ts** applications to various environments (though this might also involve other platform-specific tools).
+*   **Authentication/Login**: Commands to authenticate with **nanoservice-ts** services or platforms (e.g., Deskree).
 
 ## Installation / Usage
 
@@ -27,31 +25,24 @@ As mentioned in the [First Steps](../introduction/first-steps.mdx) guide, you ca
 npx nanoctl@latest <command>
 ```
 
-Alternatively, you might install it globally if you prefer, or it might be included as a development dependency in your project.
-
-```bash
-npm install -g nanoctl
-# or add to project devDependencies
-# npm install --save-dev nanoctl
-```
-Refer to the official Nanoservice-TS installation instructions for the recommended approach.
+Refer to the official **nanoservice-ts** installation instructions for the recommended approach.
 
 ## Common Command Categories
 
 This section of the documentation will cover the main commands provided by `nanoctl`, grouped by their purpose:
 
-*   **[Project Management](./project.mdx)**: Commands related to creating and managing Nanoservice-TS projects.
-    *   `nanoctl create project <project-name>`
+*   **[Project Management](./project.mdx)**: Commands related to creating and managing **nanoservice-ts** projects.
+    *   `npx nanoctl@latest create project`
 *   **[Node Management](./nodes.mdx)**: Commands for scaffolding and managing Nodes.
-    *   `nanoctl create node <node-name>`
+    *   `npx nanoctl@latest create node`
 *   **[Workflow Management](./workflows.mdx)**: Commands for scaffolding and managing Workflows.
-    *   `nanoctl create workflow <workflow-name>`
-*   **[Authentication](./login.mdx)**: Commands for logging into Nanoservice-TS platforms or services.
-    *   `nanoctl login`
+    *   `npx nanoctl@latest create workflow`
+*   **[Authentication](./login.mdx)**: Commands for logging into **nanoservice-ts** platforms or services.
+    *   `npx nanoctl@latest login` or `npx nanoctl@latest logout`
 *   **[Build Process](./build.mdx)**: Commands related to building your application for production.
-    *   `nanoctl build` (conceptual)
+    *   `npx nanoctl@latest build`
 *   **[Deployment](./deploy.mdx)**: Commands to assist with deploying your application.
-    *   `nanoctl deploy` (conceptual)
+    *   `npx nanoctl@latest deploy`
 
 ## Getting Help
 
