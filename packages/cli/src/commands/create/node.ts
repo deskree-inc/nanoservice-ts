@@ -16,7 +16,8 @@ const HOME_DIR = `${os.homedir()}/.nanoctl`;
 const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
 
 export async function createNode(opts: OptionValues, currentPath = false) {
-	const manager = await pm.getManager();
+	const availableManagers = await pm.getAvailableManagers();
+	let manager = await pm.getManager();
 	const isDefault = opts.name !== undefined;
 	let nodeName: string = opts.name ? opts.name : "";
 	let nodeType = "";
@@ -168,6 +169,18 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 				packageJsonContent.version = "1.0.0";
 				packageJsonContent.author = "";
 				fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
+
+				if (availableManagers.length > 1) {
+					s.message("Multiple package managers detected. Please select one.");
+					const selectedManager = await p.select({
+						message: "Select the package manager",
+						options: availableManagers.map((manager) => ({
+							label: manager,
+							value: manager,
+						})),
+					});
+					manager = await pm.getManager(selectedManager as string);
+				}
 
 				// Install Packages
 				s.message("Installing packages...");

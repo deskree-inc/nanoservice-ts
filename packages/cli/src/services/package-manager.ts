@@ -3,8 +3,6 @@ import { promisify } from "node:util";
 
 const executor = promisify(_exec);
 
-const PACKAGE_MANAGERS = ["pnpm", "yarn", "npm"]; // Priority order
-
 const isWindows = process.platform === "win32";
 
 type PackageManagerType = {
@@ -13,6 +11,7 @@ type PackageManagerType = {
 		BUILD: string;
 	};
 };
+
 const COMMANDS: PackageManagerType = {
 	pnpm: {
 		INSTALL: "pnpm install",
@@ -27,6 +26,7 @@ const COMMANDS: PackageManagerType = {
 		BUILD: "npm run build",
 	},
 };
+const PACKAGE_MANAGERS = Object.keys(COMMANDS);
 
 class PackageManager {
 	private static instance: PackageManager;
@@ -52,7 +52,18 @@ class PackageManager {
 		}
 	}
 
-	public async getManager(): Promise<PackageManagerType[string]> {
+	public async getAvailableManagers(): Promise<string[]> {
+		const availableManagers: string[] = [];
+		for (const manager of PACKAGE_MANAGERS) {
+			if (await this.isAvailable(manager)) {
+				availableManagers.push(manager);
+			}
+		}
+		return availableManagers;
+	}
+
+	public async getManager(preferedManager?: string): Promise<PackageManagerType[string]> {
+		if (preferedManager) return COMMANDS[preferedManager];
 		if (this.detectedManager) return COMMANDS[this.detectedManager];
 
 		for (const manager of PACKAGE_MANAGERS) {

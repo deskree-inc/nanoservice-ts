@@ -36,7 +36,8 @@ const options: Partial<SimpleGitOptions> = {
 const git: SimpleGit = simpleGit(options);
 
 export async function createProject(opts: OptionValues, version: string, currentPath = false) {
-	const manager = await pm.getManager();
+	const availableManagers = await pm.getAvailableManagers();
+	let manager = await pm.getManager();
 	const isDefault = opts.name !== undefined;
 	let projectName: string = opts.name ? opts.name : "";
 	let trigger = "http";
@@ -218,6 +219,19 @@ export async function createProject(opts: OptionValues, version: string, current
 		packageJsonContent.name = projectName;
 		packageJsonContent.version = "1.0.0";
 		packageJsonContent.author = "";
+
+		// Get the package manager
+		if (availableManagers.length > 1) {
+			s.message("Multiple package managers detected. Please select one.");
+			const selectedManager = await p.select({
+				message: "Select the package manager",
+				options: availableManagers.map((manager) => ({
+					label: manager,
+					value: manager,
+				})),
+			});
+			manager = await pm.getManager(selectedManager as string);
+		}
 
 		// Runtimes
 
