@@ -1,99 +1,154 @@
 ---
-title: Workflow Management
+title: Workflow
 ---
 
-## CLI: Workflow Management (`nanoctl create workflow`)
+**Workflows** are central to `nanoservice-ts`, defining the orchestration of **Nodes** to implement business logic. The `nanoctl` CLI helps in scaffolding new workflow definition files, primarily through the `create workflow` command.
 
-[Workflows](../introduction/workflows.mdx) are central to Nanoservice-TS, defining the orchestration of [Nodes](../introduction/nodes.mdx) to implement business logic. The `nanoctl` CLI helps in scaffolding new workflow definition files, primarily through the `create workflow` command.
-
-## `nanoctl create workflow <workflow-name>`
+## `create workflow`
 
 This command is used to generate a new workflow definition file within your Nanoservice-TS project.
 
-**Purpose**: To create a boilerplate JSON file for a new workflow, placing it in the `workflows/` directory of your project. This file will contain a basic structure that you can then customize to define your specific sequence of nodes and trigger configuration.
+> <sub>**Purpose**: To create a boilerplate JSON file for a new workflow, placing it in the `workflows/` directory of your project. This file will contain a basic structure that you can then customize to define your specific sequence of nodes and trigger configuration.</sub>
 
 **Usage**:
 
+To create a new workflow, run the following command:
 ```bash
-npx nanoctl@latest create workflow [workflow-name] [options]
-# or if nanoctl is installed globally or as a project dependency
-# nanoctl create workflow [workflow-name] [options]
+npx nanoctl@latest create workflow
 ```
 
-*   **`[workflow-name]`** (required or prompted): The desired name for your workflow. This name is often used to identify the workflow for execution (e.g., as part of an HTTP path if it's an HTTP-triggered workflow) and should be descriptive (e.g., `ProcessNewOrder`, `GenerateDailyReport`).
-
-**Interactive Prompts & Options**:
+### 1. Interactive Prompts & Options
 
 When you run `nanoctl create workflow`, you might be prompted for:
 
-1.  **Workflow Name**: If not provided as an argument.
-    ```
-    ? What is the name of your new workflow? (e.g., MyExampleWorkflow) UserRegistration
-    ```
+1.  **Workflow Name**: Provide a unique name for your workflow.
 
-2.  **Trigger Type**: The CLI might ask for the type of trigger that will initiate this workflow, which helps in generating a relevant trigger configuration block.
-    ```
-    ? Select a trigger type for your workflow: (Use arrow keys)
-    ❯ Http         - For workflows triggered by HTTP requests
-      Schedule     - For workflows triggered by a cron schedule
-      gRPC         - For workflows triggered by gRPC requests
-      MessageQueue - For workflows triggered by a message queue (conceptual)
-      None         - No specific trigger initially (you can add it manually)
-    ```
+### 2. Understand the Workflow Structure
 
-3.  **(Potentially) Trigger Configuration Details**: Based on the selected trigger type, it might ask for further details (e.g., HTTP path and method for an HTTP trigger, cron expression for a Schedule trigger).
+A workflow consists of **three** main sections:
 
-**What it Does**:
+1. **Trigger**: Defines how the workflow is executed.  
+2. **Steps**: Specifies the sequence of nodes executed in order.  
+3. **Nodes**: Configures each node used in the steps.  
 
-Upon completion, `nanoctl create workflow` will typically:
+### 3. Example Workflow (Fetching Data)
 
-1.  Generate a new JSON file in the `workflows/` directory of your project (e.g., `workflows/UserRegistration.json` or `workflows/user-registration.json`).
-2.  This JSON file will contain a boilerplate workflow structure, including:
-    *   A `name` field pre-filled with the workflow name.
-    *   A basic `trigger` block, potentially configured based on your interactive input (e.g., a simple HTTP GET trigger).
-    *   An empty or minimal `nodes` array, ready for you to add your node configurations.
+Below is an example of a workflow named **"fetch-cat-facts"** that makes an HTTP request to fetch cat facts. Save this file as `workflows/json/cats.json`:
 
-    ```json
-    // Example generated UserRegistration.json (for an HTTP trigger)
-    {
-      "name": "UserRegistration",
-      "trigger": {
-        "type": "Http",
-        "config": {
-          "path": "/users/register", // Example path
-          "method": "POST"
+```json
+{
+    "name": "fetch-cat-facts",
+    "description": "This workflow fetches random cat facts from a public API.",
+    "version": "1.0.0",
+    "trigger": {
+        "http": {
+            "method": "GET",
+            "path": "/",
+            "accept": "application/json"
         }
-      },
-      "nodes": [
+    },
+    "steps": [
         {
-          "id": "1",
-          "node": "Utils.Logger", // Example starting node
-          "input": {
-            "message": "UserRegistration workflow started for path: {{trigger.path}}"
-          },
-          "next_node_id": null // TODO: Define next node
+            "name": "fetch_api_data",
+            "node": "@nanoservice-ts/api-call",
+            "type": "module"
         }
-        // TODO: Add more nodes to define the workflow logic
-      ]
+    ],
+    "nodes": {
+        "fetch_api_data": {
+            "inputs": {
+                "url": "https://catfact.ninja/fact",
+                "method": "GET",
+                "headers": {}
+            }
+        }
     }
-    ```
-
-**Example Invocation**:
-
-To create a new workflow definition file named `ProcessPayment`:
-
-```bash
-npx nanoctl@latest create workflow ProcessPayment
+}
 ```
-The CLI will then likely prompt for the trigger type and other details, then generate `workflows/ProcessPayment.json`.
 
-## Best Practices for Workflow Definition
+### 4. Workflow Structure Breakdown
 
-*   **Clear Naming**: Give your workflow files and the `name` property within them clear, descriptive names.
-*   **Modular Design**: Break down complex processes into smaller, manageable workflows if possible, or ensure your workflow has a clear, logical flow of nodes.
-*   **Descriptive Node IDs**: Use meaningful `id` values for your nodes within the workflow JSON (e.g., `"log_start"`, `"validate_input"`, `"fetch_user_data"`) to make the workflow definition easier to read and debug.
-*   **Error Handling**: Plan for error paths in your workflow by using `on_error_node_id` or conditional logic to handle failures in nodes gracefully.
+## <sub>1. Trigger Section</sub>
 
-The `create workflow` command simplifies the initial setup of workflow definition files, allowing you to quickly start outlining the logic and orchestration of your Nanoservice-TS application.
+The `trigger` defines how the workflow is executed:
 
-Next, learn about [authentication-related CLI commands](./login.mdx).
+```json
+"trigger": {
+    "http": {
+        "method": "GET",
+        "path": "/",
+        "accept": "application/json"
+    }
+}
+```
+
+- **`method`**: Specifies the HTTP method (e.g., `GET`, `POST`, etc.). Use `"*"` to accept **any** method.
+- **`path`**: Defines the URL path. Supports **path parameters**:
+    - `"/:id"` → Required parameter (e.g., `/cats/123`).
+    - `"/:id?"` → Optional parameter (e.g., `/cats` or `/cats/123`).
+- **`accept`**: Defines the expected response format (`application/json` by default).
+
+## <sub>2. Steps Section</sub>
+
+The `steps` define the sequence of nodes executed in the workflow:
+
+```json
+"steps": [
+    {
+        "name": "fetch_api_data",
+        "node": "@nanoservice-ts/api-call",
+        "type": "module"
+    }
+]
+```
+
+- **`name`**: Unique name for the step.
+- **`node`**: The node to execute (e.g., `@nanoservice-ts/api-call`).
+- **`type`**: Specifies the type of node. The available options are:
+    - **`module`**: Used for nodes installed as dependencies (e.g., from npm) or nodes created using the `Class` type.
+    - **`local`**: Used for nodes created locally, typically intended for publishing to npm.
+
+## <sub>3. Nodes Section</sub>
+
+The `nodes` section configures each node used in the workflow:
+
+```json
+"nodes": {
+    "fetch_api_data": {
+        "inputs": {
+            "url": "https://catfact.ninja/fact",
+            "method": "GET",
+            "headers": {}
+        }
+    }
+}
+```
+
+- **`inputs`**: Configuration values for the node.
+    - **`url`**: API endpoint.
+    - **`method`**: HTTP method (`GET`, `POST`, etc.).
+    - **`headers`**: Optional request headers.
+
+### 5. Run & Test the Workflow
+
+1. **Start the nanoservice project**:
+
+     ```sh
+     npm run dev
+     ```
+
+2. **Test the workflow using `curl` or Postman**:
+
+     ```sh
+     curl http://localhost:4000/cats
+     ```
+
+     ✔ If everything is set up correctly, the response will contain a **random cat fact** fetched from the API. The `/cats` path corresponds to the workflow JSON file **`workflows/json/cats.json`**.
+
+
+## Summary
+
+- ✅ Workflows consist of **Triggers**, **Steps**, and **Nodes**.  
+- ✅ HTTP triggers support **method filtering (`GET`, `POST`, etc.)** and **dynamic paths (`/:id`)**.  
+- ✅ Nodes execute nanoservices and are configured in the **nodes section**.  
+- ✅ Workflows can be tested via `curl` or Postman.  
