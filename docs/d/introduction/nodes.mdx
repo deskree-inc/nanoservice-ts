@@ -2,9 +2,9 @@
 title: Nodes
 ---
 
-# Nodes in Nanoservice-ts
+## Concept
 
-Nodes are the fundamental building blocks in the Nanoservice-ts architecture. Each Node is a self-contained, reusable unit of code designed to perform a single, specific, and well-defined task. Think of them as highly specialized microservices or serverless functions, but even more granular – nanoservices.
+Nodes are the fundamental building blocks in the Nanoservice-TS architecture. Each Node is a self-contained, reusable unit of code designed to perform a single, specific, and well-defined task. Think of them as highly specialized microservices or serverless functions, but even more granular – nanoservices.
 
 ## What is a Node?
 
@@ -28,7 +28,7 @@ Nodes are designed with the Single Responsibility Principle (SRP) in mind. This 
 
 ## Node Structure
 
-A Nanoservice-ts Node typically consists of two main parts:
+A Nanoservice-TS Node typically consists of two main parts:
 
 1.  **Node Definition (`node.json`)**: A JSON file that describes the Node's metadata, including its name, version, description, and importantly, its input and output schemas.
     *   **`name`**: A unique identifier for the Node type (e.g., `Http.Request`, `Database.QueryMongo`).
@@ -36,7 +36,7 @@ A Nanoservice-ts Node typically consists of two main parts:
     *   **`inputSchema`**: A JSON schema defining the expected input data structure and types for the Node. This allows for validation and clear contracts.
     *   **`outputSchema`**: A JSON schema defining the structure and types of data the Node will output upon successful execution.
 
-2.  **Node Implementation (e.g., `index.ts`)**: A TypeScript file (or JavaScript) containing the actual logic that the Node executes. This file typically exports a class or function that conforms to the Nanoservice-ts Node interface.
+2.  **Node Implementation (e.g., `index.ts`)**: A TypeScript file (or JavaScript) containing the actual logic that the Node executes. This file typically exports a class or function that conforms to the Nanoservice-TS Node interface.
     The implementation will receive input data (conforming to `inputSchema`), perform its task, and then either return output data (conforming to `outputSchema`) or signal an error.
 
 ### Example: `node.json` for a Simple Logger Node
@@ -110,7 +110,7 @@ export class LoggerNode implements NanoserviceNode<LoggerInput, LoggerOutput> {
 // Or, for simpler nodes, it might be a function:
 // export async function execute(input: NodeInput<LoggerInput>, context: Context): Promise<NodeOutput<LoggerOutput>> { ... }
 ```
-*(Note: The exact SDK and class structure might vary. Refer to the official Nanoservice-ts SDK documentation for precise implementation details.)*
+*(Note: The exact SDK and class structure might vary. Refer to the official Nanoservice-TS SDK documentation for precise implementation details.)*
 
 ## Using Nodes in Workflows
 
@@ -135,7 +135,7 @@ In a Workflow definition, you instantiate Nodes by referencing their `name`. You
 
 ## Core Nodes vs. Custom Nodes
 
-Nanoservice-ts typically provides a set of **core Nodes** for common tasks (e.g., HTTP requests, basic utilities, conditional logic). However, the real power comes from your ability to create **custom Nodes** tailored to your application's specific needs.
+Nanoservice-TS typically provides a set of **core Nodes** for common tasks (e.g., HTTP requests, basic utilities, conditional logic). However, the real power comes from your ability to create **custom Nodes** tailored to your application's specific needs.
 
 ## Creating Custom Nodes
 
@@ -147,6 +147,6 @@ nanoctl create node <node-name>
 
 This command will scaffold the necessary files (`node.json` and `index.ts` or similar) in your project's `nodes/` directory, allowing you to define its schema and implement its logic.
 
-Nodes are the heart of Nanoservice-ts, enabling modularity, reusability, and clarity in your backend applications. By mastering Node creation and usage, you can build sophisticated and maintainable systems.
+Nodes are the heart of Nanoservice-TS, enabling modularity, reusability, and clarity in your backend applications. By mastering Node creation and usage, you can build sophisticated and maintainable systems.
 
 Next, understand how data is shared and managed within a workflow execution: [Context Object](./context.mdx).

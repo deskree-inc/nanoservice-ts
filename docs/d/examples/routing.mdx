@@ -1,10 +1,10 @@
 ---
-title: Routing Logic Example
+title: Routing Logic
 ---
 
-# Example: Implementing Routing Logic in a Workflow
+## Example: Implementing Routing Logic in a Workflow
 
-This example demonstrates how to implement conditional routing or branching logic within a Nanoservice-ts workflow. Based on certain input data or the result of a previous node, the workflow will take different paths.
+This example demonstrates how to implement conditional routing or branching logic within a Nanoservice-TS workflow. Based on certain input data or the result of a previous node, the workflow will take different paths.
 
 For this scenario, let's create a fun workflow: "Fact Cats vs. Country Info."
 If the input query contains "cat", it fetches a cat fact. If it contains "country", it fetches information about a specified country. Otherwise, it returns a default message.
@@ -17,7 +17,7 @@ If the input query contains "cat", it fetches a cat fact. If it contains "countr
 
 ## Prerequisites
 
-*   A Nanoservice-ts project.
+*   A Nanoservice-TS project.
 *   Internet access for external API calls.
 *   Nodes for:
     *   Making HTTP requests (e.g., `Http.Request`).
@@ -157,8 +157,8 @@ Let's assume the workflow is triggered by an HTTP GET request to `/info-router?t
 ## How to Run
 
 1.  Save the JSON as `routing-example.json` in your project `workflows/` directory.
-2.  Ensure your Nanoservice-ts project has the `Http.Request`, `Utils.Logger`, `Http.SetResponse`, and a conditional node like `Core.Condition` (or adapt to the available conditional node).
-3.  Start your Nanoservice-ts runner (`npm run dev`).
+2.  Ensure your Nanoservice-TS project has the `Http.Request`, `Utils.Logger`, `Http.SetResponse`, and a conditional node like `Core.Condition` (or adapt to the available conditional node).
+3.  Start your Nanoservice-TS runner (`npm run dev`).
 4.  Test the different routes:
     *   **Cat Fact**: `http://localhost:4000/info-router?topic=cat`
     *   **Country Info**: `http://localhost:4000/info-router?topic=country&value=france`

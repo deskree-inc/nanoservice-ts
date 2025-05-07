@@ -1,22 +1,22 @@
 ---
-title: Single Page UI Example
+title: Single Page UI
 ---
 
-# Example: Returning a Single Page UI from a Workflow
+## Example: Returning a Single Page UI from a Workflow
 
-This example demonstrates how a Nanoservice-ts workflow can return a simple HTML page or a basic user interface directly to the client. This can be useful for status pages, simple admin interfaces, or scenarios where a lightweight UI is needed without a full frontend framework.
+This example demonstrates how a Nanoservice-TS workflow can return a simple HTML page or a basic user interface directly to the client. This can be useful for status pages, simple admin interfaces, or scenarios where a lightweight UI is needed without a full frontend framework.
 
 We will achieve this using a specialized Node, let's call it `UI.RenderHtml`, which takes HTML content as input and sets the appropriate HTTP response headers (like `Content-Type: text/html`).
 
 ## Purpose
 
-*   Showcase the ability of Nanoservice-ts to serve simple web content.
+*   Showcase the ability of Nanoservice-TS to serve simple web content.
 *   Illustrate the use of a Node designed for rendering HTML or UI components.
 *   Demonstrate setting custom HTTP response headers.
 
 ## Prerequisites
 
-*   A Nanoservice-ts project.
+*   A Nanoservice-TS project.
 *   A Node capable of rendering HTML and setting HTTP response headers (e.g., `UI.RenderHtml` or `Http.SetResponse` with HTML content and header capabilities).
 
 ## Node(s) Used (Conceptual)
@@ -58,7 +58,7 @@ Let's define a workflow triggered by an HTTP GET request to `/simple-ui` that re
       "node": "UI.RenderHtml", // Assuming this node handles HTML rendering
       "input": {
         "statusCode": 200,
-        "htmlContent": "<!DOCTYPE html><html><head><title>Nanoservice UI</title><style>body { font-family: sans-serif; margin: 20px; background-color: #f0f0f0; } h1 { color: #333; } p { color: #555; }</style></head><body><h1>Hello from Nanoservice-ts!</h1><p>This page was rendered by a Nanoservice workflow.</p><p>Current time: " + new Date().toLocaleTimeString() + "</p><script>setTimeout(() => document.querySelector('p:last-child').textContent = 'Current time: ' + new Date().toLocaleTimeString() + ' (updated!)', 2000);</script></body></html>",
+        "htmlContent": "<!DOCTYPE html><html><head><title>Nanoservice UI</title><style>body { font-family: sans-serif; margin: 20px; background-color: #f0f0f0; } h1 { color: #333; } p { color: #555; }</style></head><body><h1>Hello from Nanoservice-TS!</h1><p>This page was rendered by a Nanoservice workflow.</p><p>Current time: " + new Date().toLocaleTimeString() + "</p><script>setTimeout(() => document.querySelector('p:last-child').textContent = 'Current time: ' + new Date().toLocaleTimeString() + ' (updated!)', 2000);</script></body></html>",
         "headers": {
           "Content-Type": "text/html; charset=utf-8"
         }
@@ -87,8 +87,8 @@ For simplicity, this example uses a static HTML string with a bit of client-side
 ## How to Run
 
 1.  Save the JSON above as `simple-ui-example.json` in your project's `workflows/` directory.
-2.  Ensure your Nanoservice-ts project has the `UI.RenderHtml` (or an equivalent `Http.SetResponse` capable of handling HTML) and `Utils.Logger` nodes.
-3.  Start your Nanoservice-ts runner:
+2.  Ensure your Nanoservice-TS project has the `UI.RenderHtml` (or an equivalent `Http.SetResponse` capable of handling HTML) and `Utils.Logger` nodes.
+3.  Start your Nanoservice-TS runner:
     ```bash
     npm run dev
     ```
@@ -96,7 +96,7 @@ For simplicity, this example uses a static HTML string with a bit of client-side
 
 ## Expected Outcome
 
-*   **Browser**: You should see a simple HTML page rendered in your browser with the title "Nanoservice UI", a heading "Hello from Nanoservice-ts!", and a paragraph. The time displayed should initially be the server render time and then update via client-side JavaScript after 2 seconds.
-*   **Console Log**: You should see the "Simple UI page workflow started." message in your Nanoservice-ts runner's console.
+*   **Browser**: You should see a simple HTML page rendered in your browser with the title "Nanoservice UI", a heading "Hello from Nanoservice-TS!", and a paragraph. The time displayed should initially be the server render time and then update via client-side JavaScript after 2 seconds.
+*   **Console Log**: You should see the "Simple UI page workflow started." message in your Nanoservice-TS runner's console.
 
-This example demonstrates that Nanoservice-ts isn't limited to just JSON APIs. It can also serve basic web content, which can be useful for a variety of simple UI needs directly from your backend workflows.
+This example demonstrates that Nanoservice-TS isn't limited to just JSON APIs. It can also serve basic web content, which can be useful for a variety of simple UI needs directly from your backend workflows.

@@ -1,10 +1,10 @@
 ---
-title: Architecture Comparison
+title: Architecture
 ---
 
-# Architecture Comparison: Nanoservice vs. Microservice vs. Monolith
+## Architecture Comparison: Nanoservice vs. Microservice vs. Monolith
 
-Understanding where the nanoservice architecture fits in the broader landscape of software design patterns is crucial. This page compares nanoservices (as implemented by Nanoservice-ts) with two other common architectural styles: monoliths and microservices.
+Understanding where the nanoservice architecture fits in the broader landscape of software design patterns is crucial. This page compares nanoservices (as implemented by Nanoservice-TS) with two other common architectural styles: monoliths and microservices.
 
 ## Monolithic Architecture
 
@@ -54,9 +54,9 @@ Understanding where the nanoservice architecture fits in the broader landscape o
 *   **Higher Upfront Cost**: Setting up the infrastructure for microservices can be more involved initially.
 *   **Data Consistency**: Maintaining data consistency across multiple services requires careful design.
 
-## Nanoservice Architecture (with Nanoservice-ts)
+## Nanoservice Architecture (with Nanoservice-TS)
 
-**Definition**: Nanoservice architecture, as facilitated by Nanoservice-ts, takes the granularity of microservices a step further. It structures an application as a collection of extremely small, single-responsibility services (Nodes) that are orchestrated by workflows.
+**Definition**: Nanoservice architecture, as facilitated by Nanoservice-TS, takes the granularity of microservices a step further. It structures an application as a collection of extremely small, single-responsibility services (Nodes) that are orchestrated by workflows.
 
 **Characteristics**:
 *   **Extreme Granularity**: Services (Nodes) perform a single, atomic task.
@@ -74,7 +74,7 @@ Understanding where the nanoservice architecture fits in the broader landscape o
 
 **Cons**:
 *   **Potential for Workflow Complexity**: Very complex business logic might lead to large and intricate workflow definitions if not managed carefully.
-*   **Overhead of Granularity**: If taken to an extreme without a good runtime, the overhead of managing and executing countless tiny services could be an issue. Nanoservice-ts aims to mitigate this with an efficient runtime.
+*   **Overhead of Granularity**: If taken to an extreme without a good runtime, the overhead of managing and executing countless tiny services could be an issue. Nanoservice-TS aims to mitigate this with an efficient runtime.
 *   **Debugging Distributed Workflows**: While individual Nodes are easy to test, debugging an entire workflow instance across many Nodes can still be challenging (though context logging helps).
 *   **Performance Considerations**: The performance of the workflow engine and inter-node communication (even if in-process via context) is critical.
 *   **Not a Silver Bullet**: Like any architecture, it’s best suited for certain types of problems, particularly those that can be naturally broken down into sequential or event-driven steps.
@@ -83,7 +83,7 @@ Understanding where the nanoservice architecture fits in the broader landscape o
 
 *   **Monolith**: Suitable for small projects, prototypes, or applications with simple, well-understood requirements where rapid initial development is key and scalability is not an immediate major concern.
 *   **Microservices**: A good choice for large, complex applications that require high scalability, maintainability, and allow for independent team development. Best when the organization is prepared for the operational complexity of a distributed system.
-*   **Nanoservices (with Nanoservice-ts)**: Ideal for applications where:
+*   **Nanoservices (with Nanoservice-TS)**: Ideal for applications where:
     *   Business logic can be clearly defined as a series of steps or a workflow.
     *   High reusability of small functional units is desired.
     *   Rapid development of new features by composing existing logic is a priority.
@@ -91,4 +91,4 @@ Understanding where the nanoservice architecture fits in the broader landscape o
     *   You want to enforce a very strong separation of concerns at a granular level.
     *   Examples include API gateways, ETL pipelines, backend-for-frontend (BFF) layers, task automation, and complex business process orchestration.
 
-Nanoservice-ts provides a structured way to build applications using this highly granular approach, aiming to maximize the benefits of modularity and reusability while providing tools to manage the orchestration complexity.
+Nanoservice-TS provides a structured way to build applications using this highly granular approach, aiming to maximize the benefits of modularity and reusability while providing tools to manage the orchestration complexity.
