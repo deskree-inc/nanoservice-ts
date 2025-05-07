@@ -2,39 +2,58 @@
 title: Overview
 ---
 
-## Welcome
+<img
+  className="block dark:hidden"
+  src="/assets/images/nanoservices-light.png"
+  alt="Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/assets/images/nanoservices-dark.png"
+  alt="Hero Dark"
+/>
 
-Welcome to Nanoservice-TS, an open-source framework designed to simplify backend development by enabling developers to implement the **nanoservices architecture** effortlessly. Built with **TypeScript**, this framework helps you create lightweight, modular, and scalable backend systems that adhere to the **Single Responsibility Principle (SRP)**.
+**nanoservice-ts** is an open-source framework empowering developers to build lightweight, modular, and scalable backend applications with nanoservices.
 
-## What is Nanoservice-TS?
+## What are nanoservices?
+Nanoservices are the smallest, independently executable units of backend functionality, designed to:
+* **Focus on a Single Responsibility**: Each nanoservice performs one well-defined task.
+* **Be Lightweight and Modular**: Minimal dependencies, optimized for reusability.
+* **Enable Independent Execution**: Containerized to ensure isolation and scalability.
 
-Nanoservice-TS empowers you to break down complex backend applications into small, independent, and reusable units called nanoservices. Each nanoservice focuses on a single, well-defined task. These nanoservices can then be orchestrated into powerful workflows to implement your business logic.
+## Why nanoservices?
+Traditional backend architectures, whether monolithic or microservices-based, often overcomplicate development and scaling. Nanoservices overcome these challenges by:
+* **Simplifying Development**: Write small, focused units of logic.
+* **Optimizing Resource Usage**: Scale individual services based on need.
+* **Enhancing Workflow Flexibility**: Combine nanoservices into dynamic workflows tailored to complex backend processes.
 
-By combining an intuitive API, programmatic workflow orchestration, and powerful tooling (including a dedicated CLI), Nanoservice-TS allows you to focus on writing business logic while abstracting the complexities of infrastructure, scaling, and resource management.
+## What nanoservices-ts is for?
+**nanoservice-ts** provides a developer-first framework for adopting the nanoservices architecture, offering:
 
-## Core Philosophy
+* **Ease of Use**: An intuitive TypeScript-powered API for defining workflows and nodes.
+* **Streamlined Setup**: Start quickly with pre-configured templates and an npx CLI tool.
+* **Modularity at Scale**: Build backend systems with reusable, independent components.
 
-Modern backend development often suffers from over-engineered solutions, resource inefficiencies, and complex architectures. Nanoservice-TS addresses these pain points by offering:
 
-*   **Extreme Modularity**: Divide backend logic into highly granular, reusable, single-responsibility units (Nodes) that are easy to manage, test, scale, and debug.
-*   **Developer-Friendly Experience**: Utilize TypeScript-powered APIs, project templates, and a comprehensive Command Line Interface (`nanoctl`) for rapid project setup, Node creation, and Workflow generation.
-*   **Efficiency and Scalability**: Built to support dynamic workflows with containerized execution (optional) and independent scalability for each nanoservice, optimizing resource usage.
-*   **Workflow-Centric Orchestration**: Define and manage the sequence and interaction of nanoservices through declarative Workflow definitions (JSON or programmatic).
-*   **Extensibility**: Easily create custom Nodes to encapsulate any specific functionality or integrate with third-party services.
-*   **Community-Driven**: Collaborate, share, and benefit from a growing library of community-created Nodes and Workflows.
+## Key Features?
 
-With Nanoservice-TS, backend development becomes more modular, predictable, and future-proof, making it ideal for a wide range of applications, from simple APIs to complex, event-driven systems and large-scale enterprise backends.
+🚀 **Modular Architecture**
+Break down backend logic into reusable, containerized nanoservices that simplify management and scaling.
 
-## Key Concepts
+🛠️ **Code-First Workflow Definition**
+Leverage TypeScript to programmatically define workflows and nodes, avoiding manual JSON creation.
 
-Before diving deeper, let's familiarize ourselves with some core concepts in Nanoservice-TS:
+⚙️ **Custom Nodes**
+Build, share, and reuse nodes tailored to specific tasks. Compose these into complex, maintainable workflows.
 
-*   **Nodes**: The smallest functional units, each designed to perform a specific, atomic task within a workflow (e.g., make an API call, query a database, transform data).
-*   **Workflows**: A sequence or graph of interconnected Nodes that collectively achieve a larger piece of business logic. Workflows define how data flows between Nodes and the order of execution.
-*   **Triggers**: Events or conditions that initiate the execution of a Workflow. Triggers can be HTTP requests, scheduled events (cron jobs), messages from a queue, gRPC calls, or custom events.
-*   **Context Object**: A shared object available to all Nodes within a Workflow instance, allowing them to pass data, share state, and access configuration or services.
-*   **`nanoctl` (CLI)**: The command-line tool for creating, managing, and running Nanoservice-TS projects, Nodes, and Workflows.
+🧩 **Pre-Built Templates**
+Kickstart your projects with templates for common backend needs, including HTTP APIs, scheduled tasks, and custom workflows.
 
-This documentation will guide you through installing Nanoservice-TS, understanding its fundamental components, learning various techniques, and exploring practical examples to help you build powerful applications.
+🔄 **Reusability by Design**
+Reuse nanoservices across workflows and projects to reduce redundancy and speed up development.
 
-Ready to get started? Head over to the [First Steps](./first-steps) guide!
+💻 **Developer-Centric CLI**
+A powerful CLI simplifies project creation, node management, and deployment. Start in seconds with npx nanoservice-cli.
+
+🤝 **Community-Powered Ecosystem**
+Access and contribute to a growing library of community-built nodes and workflows. Collaborate and share innovation.
