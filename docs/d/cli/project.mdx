@@ -1,30 +1,29 @@
 ---
-title: Project Management
+title: Project
 ---
 
-## CLI: Project Management (`nanoctl create project`)
+Managing **nanoservice-ts** projects effectively starts with the `nanoctl` CLI. This section focuses on commands related to project creation and overall project lifecycle management, primarily the `create project` command.
 
-Managing Nanoservice-TS projects effectively starts with the `nanoctl` CLI. This section focuses on commands related to project creation and overall project lifecycle management, primarily the `create project` command.
+## `create project`
 
-## `nanoctl create project <project-name>`
+This is typically the first `nanoctl` command you will use when starting a new **nanoservice-ts** application.
 
-This is typically the first `nanoctl` command you will use when starting a new Nanoservice-TS application.
-
-**Purpose**: To scaffold a new Nanoservice-TS project with a predefined directory structure, necessary configuration files, and optional templates.
+> <sub>**Purpose**: To scaffold a new **nanoservice-ts** project with a predefined directory structure, necessary configuration files, and optional templates.</sub>
 
 **Usage**:
 
 ```bash
-npx nanoctl@latest create project [project-name] [options]
-# or if nanoctl is installed globally or as a project dependency
-# nanoctl create project [project-name] [options]
+# This command creates a new project and automatically generates a new directory for it.
+npx nanoctl@latest create project
 ```
-
-*   **`[project-name]`** (optional): The desired name for your project. If not provided, the CLI will usually prompt you for it. The project will be created in a new directory with this name.
+```bash
+# Use this command to create a new project inside the current (empty) directory.
+npx nanoctl@latest create project .
+```
 
 **Interactive Prompts & Options**:
 
-When you run `nanoctl create project`, the CLI will typically guide you through a series of prompts:
+When you run `npx nanoctl@latest create project`, the CLI will typically guide you through a series of prompts:
 
 1.  **Project Name**: If not provided as an argument, it will ask:
     ```
