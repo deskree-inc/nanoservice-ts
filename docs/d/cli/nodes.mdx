@@ -1,134 +1,107 @@
 ---
-title: Node Management
+title: Node
 ---
 
-## Concept
+**Nodes** are the core building blocks of your **nanoservice-ts** applications, encapsulating specific pieces of logic. The `nanoctl` CLI provides commands to help you create and manage these Nodes efficiently, primarily through the `create node` command.
 
-[Nodes](../introduction/nodes.mdx) are the core building blocks of your Nanoservice-TS applications, encapsulating specific pieces of logic. The `nanoctl` CLI provides commands to help you create and manage these Nodes efficiently, primarily through the `create node` command.
+## `create node`
 
-## `nanoctl create node <node-name>`
+This command is used to scaffold a new Node within your **nanoservice-ts** project.
 
-This command is used to scaffold a new Node within your Nanoservice-TS project.
-
-**Purpose**: To generate the boilerplate files for a new Node, including its definition (`node.json`) and implementation file (e.g., `index.ts`), placing them in the appropriate directory within your project (usually `nodes/`).
+> <sub>**Purpose**: To generate the boilerplate files for a new Node, including its definition (`node.json`) and implementation file (e.g., `index.ts`), placing them in the appropriate directory within your project (usually `nodes/`).</sub>
 
 **Usage**:
 
 ```bash
-npx nanoctl@latest create node [node-name] [options]
-# or if nanoctl is installed globally or as a project dependency
-# nanoctl create node [node-name] [options]
+# This command creates a new node and automatically generates a new directory for it.
+npx nanoctl@latest create node
+```
+```bash
+# Use this command to create a new node inside the current (empty) directory.
+npx nanoctl@latest create node .
 ```
 
-*   **`[node-name]`** (required or prompted): The desired name for your Node. This name is often used to identify the Node type in workflow definitions. It should be descriptive and typically follow a convention like `Category.Action` (e.g., `Database.QueryUser`, `Utils.FormatString`). The CLI might enforce or suggest a naming convention.
+### 1. Interactive Prompts & Options
 
-**Interactive Prompts & Options**:
+You will be prompted to provide the following information:
 
-When you run `nanoctl create node`, you might be prompted for:
+1. **Node Name**  
+    Enter a unique name for the node (e.g., `fetch`).
 
-1.  **Node Name**: If not provided as an argument.
-    ```
-    ? What is the name of your new node? (e.g., MyCategory.MyActionNode) Stripe.CreatePayment
-    ```
+2. **Select Runtime**  
+    Choose between:
+    - **TypeScript (recommended)** *(Default)*
+    - **Python3** *(Alpha version, MacOS & Linux only)*  
+    *(For this guide, select **TypeScript**.)*
 
-2.  **Node Description**: A brief description of what the Node does. This often populates the `description` field in `node.json`.
-    ```
-    ? Enter a short description for your node: Creates a new payment intent using Stripe.
-    ```
+3. **Select Nanoservice Type**  
+    Choose between:
+    - **Module** *(For npm-published nodes – not needed for this guide)*
+    - **Class** *(Default, for local nodes)*
 
-3.  **(Potentially) Input/Output Schema Definition**: The CLI might offer a way to interactively define basic input and output properties for the Node, which would then be pre-filled in the `inputSchema` and `outputSchema` sections of `node.json`. This could be a simplified prompt or might direct you to edit the JSON file manually after creation.
+4. **Select Template**  
+    Choose between:
+    - **Class (recommended)** *(Default)*
+    - UI - EJS - REACTJS - TailwindCSS *(not required for this guide)*
 
-4.  **(Potentially) Node Category/Path**: It might ask for a category to organize the node, which could influence the subdirectory where the node files are placed (e.g., `nodes/stripe/create-payment/`).
+### 2. Navigate to the New Node Directory:
 
-**What it Does**:
-
-Upon completion, `nanoctl create node` will typically:
-
-1.  Create a new directory for the Node, often within the `nodes/` directory of your project (e.g., `nodes/my-category/my-action-node/` or `nodes/MyCategory.MyActionNode/`).
-2.  Generate a `node.json` file within this directory. This file will be pre-populated with the Node name, description, and boilerplate for `inputSchema` and `outputSchema`.
-    ```json
-    // Example generated node.json
-    {
-      "name": "Stripe.CreatePayment",
-      "version": "1.0.0",
-      "description": "Creates a new payment intent using Stripe.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "amount": { "type": "number", "description": "Payment amount" },
-          "currency": { "type": "string", "description": "Currency code" }
-        },
-        "required": ["amount", "currency"]
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "paymentIntentId": { "type": "string" },
-          "clientSecret": { "type": "string" }
-        }
-      }
-    }
-    ```
-3.  Generate an implementation file, commonly `index.ts` (for TypeScript projects). This file will contain a template for the Node class or function, ready for you to fill in the execution logic.
-    ```typescript
-    // Example generated index.ts (conceptual)
-    import { NanoserviceNode, NodeInput, NodeOutput, Context } from 'nanoservice-ts-sdk'; // SDK import
-
-    // Define interfaces based on your node.json schema for better type safety
-    interface StripeCreatePaymentInput {
-      amount: number;
-      currency: string;
-    }
-
-    interface StripeCreatePaymentOutput {
-      paymentIntentId: string;
-      clientSecret: string;
-    }
-
-    export class StripeCreatePaymentNode implements NanoserviceNode<StripeCreatePaymentInput, StripeCreatePaymentOutput> {
-      async execute(input: NodeInput<StripeCreatePaymentInput>, context: Context): Promise<NodeOutput<StripeCreatePaymentOutput>> {
-        const { amount, currency } = input.data;
-        // const stripeApiKey = context.get('secrets.stripeApiKey'); // Example of accessing config
-
-        // TODO: Implement Stripe API call logic here
-        console.log(`Creating Stripe payment for ${amount} ${currency}`);
-
-        // Placeholder response
-        const paymentIntentId = 'pi_' + Math.random().toString(36).substr(2, 9);
-        const clientSecret = 'cs_' + Math.random().toString(36).substr(2, 9);
-
-        if (amount <= 0) {
-          // Example of returning an error
-          // return { error: { message: 'Amount must be positive', code: 'INVALID_INPUT' } };
-          throw new Error('Amount must be positive'); // Or throw an error to be caught by the runtime
-        }
-
-        return {
-          data: {
-            paymentIntentId,
-            clientSecret
-          }
-        };
-      }
-    }
-    ```
-
-**Example Invocation**:
-
-To create a new Node named `User.GetProfile`:
+Once the node is created, navigate to its directory:
 
 ```bash
-npx nanoctl@latest create node User.GetProfile
+cd src/nodes/fetch
 ```
 
-The CLI will then likely prompt for a description and generate the files in `nodes/user/get-profile/` or a similar path.
+### 3. Update the Node Class Name
 
-## Best Practices for Node Naming and Structure
+Open the `index.ts` file inside the node directory and **update the class name** to match your node name (`Fetch` in this example):
 
-*   **Clear Naming**: Use a consistent naming convention that clearly indicates the Node's purpose and category (e.g., `Service.VerbNoun` like `Stripe.CreatePaymentIntent`, `AwsS3.UploadFile`).
-*   **Single Responsibility**: Ensure each Node adheres to the Single Responsibility Principle.
-*   **Well-Defined Schemas**: Spend time defining clear and accurate `inputSchema` and `outputSchema` in your `node.json`. This serves as the contract for your Node and enables validation.
+```typescript
+// Original class name
+export default class Node extends NanoService {
+     ...
+}
 
-The `create node` command significantly speeds up the initial setup for new Nodes, allowing you to focus more on implementing the core logic.
+// Updated class name
+export default class Fetch extends NanoService {
+     ...
+}
+```
 
-Next, learn about managing [Workflows with the CLI](./workflows.mdx).
+### 4. Register the Node in the `Nodes.ts` File
+
+To make your node available in workflows, **register it inside `src/Nodes.ts`**:
+
+```typescript
+import ApiCall from "@nanoservice-ts/api-call";
+import IfElse from "@nanoservice-ts/if-else";
+import type { NodeBase } from "@nanoservice-ts/shared";
+import Fetch from "./nodes/fetch";
+
+const nodes: {
+     [key: string]: NodeBase;
+} = {
+     "@nanoservice-ts/api-call": new ApiCall(),
+     "@nanoservice-ts/if-else": new IfElse(),
+     "fetch": new Fetch()
+};
+
+export default nodes;
+```
+
+### 5. Validate the Node
+
+To verify that your new node has been registered correctly, run the following command from the root of your project:
+```bash
+npm run dev
+```
+If everything works as expected, the node is ready to be used in a workflow. Simply create a workflow and add your node to it.
+
+## Summary
+
+- ✅ **Created a custom node** using the CLI.  
+- ✅ **Configured the node class name** correctly.  
+- ✅ **Registered the node** inside `Nodes.ts`.  
+- ✅ **Validated the project setup**.
+
+Your node is now ready to be used in workflows! 🎉
