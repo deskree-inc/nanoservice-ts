@@ -23,7 +23,10 @@ export async function publish(opts: OptionValues) {
 	const token = tokenManager.getToken();
 	const npmrcFile = `${opts.directory}/.npmrc`;
 	const logger = p.spinner();
-	let packageJsonOriginal: { name: string; [key: string]: string | boolean | Record<string, string> } | null = null;
+	let packageJsonOriginal: {
+		name: string;
+		[key: string]: string | boolean | Record<string, string> | string[];
+	} | null = null;
 	try {
 		if (!token) throw new Error("NANOSERVICES_TOKEN is required.");
 		if (!opts.directory) throw new Error("Directory is required.");
