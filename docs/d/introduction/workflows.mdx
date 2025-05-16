@@ -23,10 +23,8 @@ Nanoservice-TS primarily uses JSON to define workflows. This declarative approac
 *   **`name`**: A unique identifier for the workflow.
 *   **`trigger`**: Configuration for the event that starts the workflow (e.g., HTTP method and path).
 *   **`nodes`**: An array of Node instances that make up the workflow. Each node instance specifies:
-    *   `id`: A unique identifier for this node instance within the workflow.
-    *   `node`: The type or name of the Node to execute (e.g., `Http.Request`, `Utils.Logger`, or a custom node like `my-custom-node`).
-    *   `input`: How data is mapped to the input schema of the Node. This can be static values, data from the trigger, or output from previous nodes.
-    *   `next_node_id` (for sequential workflows): The `id` of the next node to execute upon successful completion.
+    *   `nodes`: The type or name of the Node to execute (e.g., `Http.Request`, `Utils.Logger`, or a custom node like `my-custom-node`).
+    *   `inputs`: How data is mapped to the input schema of the Node. This can be static values, data from the trigger, or output from previous nodes.
     *   `on_error_node_id` (optional): The `id` of a node to execute if this node encounters an error.
     *   Other node-specific configuration parameters.
 
@@ -34,34 +32,35 @@ Nanoservice-TS primarily uses JSON to define workflows. This declarative approac
 
 ```json
 {
-  "name": "greetUser",
-  "trigger": {
-    "type": "Http",
-    "config": {
-      "path": "/greet",
-      "method": "GET"
-    }
-  },
-  "nodes": [
-    {
-      "id": "1",
-      "node": "Utils.Logger",
-      "input": {
-        "message": "Greeting workflow started for path: {{trigger.path}}"
-      },
-      "next_node_id": "2"
-    },
-    {
-      "id": "2",
-      "node": "Http.SetResponse",
-      "input": {
-        "body": {
-          "message": "Hello, Nanoservice User!"
-        },
-        "statusCode": 200
-      }
-    }
-  ]
+	"name": "World Countries",
+	"description": "Workflow description",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "get-countries-api",
+			"node": "@nanoservice-ts/api-call",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"get-countries-api": {
+			"inputs": {
+				"url": "https://countriesnow.space/api/v0.1/countries/capital",
+				"method": "GET",
+				"headers": {
+					"Content-Type": "application/json"
+				},
+				"responseType": "application/json"
+			}
+		}
+	}
 }
 ```
 

@@ -27,92 +27,119 @@ Let's create a new Nanoservice-TS project. Open your terminal and run:
 npx nanoctl@latest create project
 ```
 
-The CLI will prompt you for a project name and potentially other configuration options. For this guide, you can accept the defaults.
+The CLI will guide you through the project creation process with an interactive interface:
 
 ```
-? What is your project name? (my-nanoservice-app) my-first-app
-? Select a template: (Use arrow keys)
-❯ blank - A blank project to start from scratch
-  hello-world - A simple project with a pre-built HTTP workflow
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
+ |N|A|N|O|S|E|R|V|I|C|E|-|T|S| |C|L|I|
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
+
+┌   Create a New Project 
+│
+◇  Please provide a name for the project
+│  nano-service
+│
+◇  Select the trigger to install
+│  HTTP
+│
+◇  Select the runtimes to install
+│  NodeJS
+│
+◇  Install the examples?
+│  NO
+│
+◇  Project "nano-service" created successfully
+
+Trigger: HTTP
+
+Change to the project directory: cd nano-service
+Run the command "npm run dev" to start the development server.
+You can test the project in your browser at http://localhost:4000/health-check
+For more documentation, visit https://nanoservice.xyz/
 ```
 
-Let's choose the `hello-world` template for a quick start. This will create a new directory named `my-first-app` (or whatever you named your project) with the basic Nanoservice-TS project structure and an example workflow.
-
-Navigate into your new project directory:
-
-```bash
-cd my-first-app
-```
+This will create a new directory with the name you provided, containing a fully configured Nanoservice-TS project.
 
 ## Project Structure
 
-Inside your project, you'll find a structure similar to this (for the `hello-world` template):
+After creating a new project, you'll have a directory structure like this:
 
 ```
-my-first-app/
-├── nodes/
-│   └── examples/
-│       └── hello-node/
-│           ├── index.ts
-│           └── node.json
+NANO-SERVICE
+├── node_modules/
+├── notes/
+│   ├── CLI_Commands/
+│   ├── Core_Concepts/
+│   ├── examples.md
+│   └── index.md
+├── public/
+│   └── favicon.ico
+├── src/
+│   ├── nodes/
+│   ├── types/
+│   ├── workflows/
+│   ├── HttpTrigger.ts
+│   ├── index.ts
+│   ├── MessageDecode.ts
+│   ├── Nodes.ts
+│   ├── opentelemetry_metrics.ts
+│   ├── opentelemetry_traces.ts
+│   ├── Util.ts
+│   └── Workflows.ts
 ├── workflows/
-│   └── examples/
-│       └── http-hello-world.json
+│   ├── json/
+│   ├── toml/
+│   └── yaml/
+├── .dockerignore
 ├── .env.example
+├── .env.local
 ├── .gitignore
+├── CHANGELOG.md
+├── Dockerfile
+├── nodemon.json
+├── package-lock.json
 ├── package.json
-├── README.md
+├── request.http
+├── supervisord.conf
 └── tsconfig.json
 ```
 
-*   `nodes/`: Contains the source code for your custom Nodes.
-*   `workflows/`: Contains JSON definitions for your Workflows.
-*   `package.json`: Standard Node.js project manifest.
-*   `tsconfig.json`: TypeScript configuration.
+## Running Your First Application
 
-We will explore these in more detail in the [Project Structure](../fundamentals/project-structure.mdx) section.
+The newly created project already includes a pre-configured example workflow called `countries-helper` that fetches country data from an API. To run it:
 
-## Running Your First Workflow
+1. Navigate to your project directory:
+   ```bash
+   cd nano-service
+   ```
 
-The `hello-world` template comes with a simple HTTP workflow. To run it locally:
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   Note that you don't need to run `npm install` as this is already handled during project creation.
 
-1.  **Install dependencies** (if you haven't already inside the project):
-    ```bash
-    npm install
-    # or
-    # yarn install
-    ```
+3. Open your browser and navigate to:
+   ```
+   http://localhost:4000/countries-helper
+   ```
 
-2.  **Start the Nanoservice-TS runner** in development mode:
-    ```bash
-    npm run dev
-    # or
-    # yarn dev
-    ```
-    This command typically starts a local server that listens for triggers to execute your workflows. You should see output indicating the server is running, often on `http://localhost:4000`.
+   Or use a tool like curl:
+   ```bash
+   curl http://localhost:4000/countries-helper
+   ```
 
-3.  **Trigger the workflow**:
-    The `http-hello-world.json` workflow is usually configured to respond to a GET request. Open your web browser or use a tool like `curl` or Postman to access the endpoint. If the workflow is named `http-hello-world`, the default URL will be:
-    `http://localhost:4000/http-hello-world`
-
-    You should receive a response like:
-    ```json
-    {
-      "message": "Hello from Nanoservice-TS!"
-    }
-    ```
-
-Congratulations! You've successfully created and run your first Nanoservice-TS application.
+You should receive a JSON response with country data. The name of the workflow file corresponds to the endpoint URL, so `countries-helper` is accessible at `/countries-helper`.
 
 ## Next Steps
 
 Now that you have a basic understanding of how to set up and run a Nanoservice-TS project, you can explore further:
 
-*   Learn more about [Nodes](./nodes.mdx) - the building blocks of your application.
-*   Understand [Workflows](./workflows.mdx) in more detail.
-*   Discover how [Triggers](./triggers.mdx) initiate your workflows.
-*   Dive into the [Context Object](./context.mdx) for data sharing.
-*   Explore the available [Examples](../examples/index.mdx) for more complex use cases.
-*   Deepen your knowledge with the [Fundamentals](../fundamentals/overview.mdx) section.
+*   Learn more about [Nodes](./nodes) - the building blocks of your application.
+*   Understand [Workflows](./workflows) in more detail.
+*   Discover how [Triggers](./triggers) initiate your workflows.
+*   Dive into the [Context Object](./context) for data sharing.
+*   Explore the available [Examples](../examples/index) for more complex use cases.
+*   Deepen your knowledge with the [Fundamentals](../fundamentals/overview) section.
 
 Happy building!
