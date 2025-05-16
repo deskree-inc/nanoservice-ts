@@ -18,88 +18,250 @@ Workflows are typically initiated by [Triggers](./triggers.mdx), such as an inco
 
 ## Defining Workflows
 
-Nanoservice-TS primarily uses JSON to define workflows. This declarative approach makes workflows easy to understand, visualize, and manage. A workflow definition typically includes:
+Nanoservice-TS offers multiple ways to define workflows, giving you flexibility based on your preferences and requirements:
+
+1. **JSON Format** (Default): The most common and straightforward approach
+2. **TypeScript Format**: For more dynamic or complex scenarios with type safety
+3. **TOML Format**: An alternative to JSON with a different syntax
+4. **YAML Format**: Another alternative with a more human-readable syntax
+
+Each format has its advantages, but they all achieve the same goal: defining the structure and behavior of your workflow.
+
+## Creating Workflows
+
+### Using the CLI
+
+The easiest way to create a new workflow is using the `nanoctl` CLI:
+
+```bash
+npx nanoctl@latest workflow
+```
+
+When you run this command, you'll see the following interactive prompts:
+
+```
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
+ |N|A|N|O|S|E|R|V|I|C|E|-|T|S| |C|L|I|
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
+
+┌   Creating a new Workflow 
+│
+◇  Please provide a name for the workflow
+│  test
+│
+◇  Node "test" created successfully
+
+Navigate to the workflow directory by running: cd workflows/json
+For more documentation, visit https://nanoservice.xyz/docs/d/introduction/workflows
+```
+
+This command generates a new workflow file in the `workflows/json/` directory by default. The generated workflow will have a basic structure that you can customize according to your needs.
+
+### JSON Workflow Definition
+
+JSON is the default format for defining workflows in Nanoservice-TS. A typical workflow JSON file includes:
 
 *   **`name`**: A unique identifier for the workflow.
+*   **`description`**: A brief explanation of what the workflow does.
+*   **`version`**: The version of the workflow (e.g., "1.0.0").
 *   **`trigger`**: Configuration for the event that starts the workflow (e.g., HTTP method and path).
-*   **`nodes`**: An array of Node instances that make up the workflow. Each node instance specifies:
-    *   `nodes`: The type or name of the Node to execute (e.g., `Http.Request`, `Utils.Logger`, or a custom node like `my-custom-node`).
-    *   `inputs`: How data is mapped to the input schema of the Node. This can be static values, data from the trigger, or output from previous nodes.
-    *   `on_error_node_id` (optional): The `id` of a node to execute if this node encounters an error.
-    *   Other node-specific configuration parameters.
+*   **`steps`**: An ordered list of steps to execute in the workflow.
+*   **`nodes`**: Configuration for each node used in the steps, including their inputs.
 
-### Example: Simple HTTP Workflow (JSON Definition)
+#### Example: Simple HTTP Workflow (JSON Definition)
 
 ```json
 {
-	"name": "World Countries",
-	"description": "Workflow description",
-	"version": "1.0.0",
-	"trigger": {
-		"http": {
-			"method": "GET",
-			"path": "/",
-			"accept": "application/json"
-		}
-	},
-	"steps": [
-		{
-			"name": "get-countries-api",
-			"node": "@nanoservice-ts/api-call",
-			"type": "module"
-		}
-	],
-	"nodes": {
-		"get-countries-api": {
-			"inputs": {
-				"url": "https://countriesnow.space/api/v0.1/countries/capital",
-				"method": "GET",
-				"headers": {
-					"Content-Type": "application/json"
-				},
-				"responseType": "application/json"
-			}
-		}
-	}
+  "name": "World Countries",
+  "description": "Workflow description",
+  "version": "1.0.0",
+  "trigger": {
+    "http": {
+      "method": "GET",
+      "path": "/",
+      "accept": "application/json"
+    }
+  },
+  "steps": [
+    {
+      "name": "get-countries-api",
+      "node": "@nanoservice-ts/api-call",
+      "type": "module"
+    }
+  ],
+  "nodes": {
+    "get-countries-api": {
+      "inputs": {
+        "url": "https://countriesnow.space/api/v0.1/countries/capital",
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "responseType": "application/json"
+      }
+    }
+  }
 }
 ```
 
 In this example:
-1.  The workflow `greetUser` is triggered by a GET request to `/greet`.
-2.  The first node (`id: "1"`) is a `Utils.Logger` that logs a message. It uses data from the trigger (`{{trigger.path}}`).
-3.  Upon successful completion of node "1", node "2" (`Http.SetResponse`) is executed, which sends a JSON response back to the client.
+1. The workflow is named "World Countries".
+2. It's triggered by a GET request to the root path ("/").
+3. It has one step that uses the built-in `@nanoservice-ts/api-call` node to fetch country data from an external API.
 
-While JSON is the primary method, Nanoservice-TS architecture also supports programmatic workflow definition in TypeScript for more dynamic or complex scenarios, though JSON is generally recommended for clarity and tooling support.
+### TypeScript Workflow Definition
+
+For more complex workflows or when you prefer type safety, Nanoservice-TS also supports defining workflows using TypeScript. To create a TypeScript workflow:
+
+1. Create a new `.ts` file in the `src/workflows/` directory (e.g., `src/workflows/my-workflow.ts`).
+2. Use the `@nanoservice-ts/helper` package to define your workflow structure.
+
+#### Example 1: Simple TypeScript Workflow
+
+```typescript
+// src/workflows/countries-helper.ts
+import { type Step, Workflow } from "@nanoservice-ts/helper";
+
+const step1Inputs = {
+  url: "https://countriesnow.space/api/v0.1/countries/capital",
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  responseType: "application/json",
+};
+
+const step: Step = Workflow({
+  name: "World Countries",
+  version: "1.0.0",
+  description: "Workflow description",
+})
+  .addTrigger("http", {
+    method: "GET",
+    path: "/",
+    accept: "application/json",
+  })
+  .addStep({
+    name: "get-countries-api",
+    node: "@nanoservice-ts/api-call",
+    type: "module",
+    inputs: step1Inputs,
+  });
+
+export default step;
+```
+
+This TypeScript workflow is functionally equivalent to the JSON example above but offers the benefits of TypeScript's type checking and IDE support.
+
+#### Example 2: Conditional Logic in TypeScript Workflow
+
+```typescript
+// src/workflows/empty.ts
+import { AddElse, AddIf, type Step, Workflow } from "@nanoservice-ts/helper";
+
+const step: Step = Workflow({
+  name: "Empty",
+  version: "1.0.0",
+  description: "Workflow for load testing",
+})
+  .addTrigger("http", {
+    method: "GET",
+    path: "/",
+    accept: "application/json",
+  })
+  .addCondition({
+    node: {
+      name: "filter-request",
+      node: "@nanoservice-ts/if-else",
+      type: "module",
+    },
+    conditions: () => {
+      return [new AddIf('ctx.request.query.countries === "true"').build(), new AddElse().build()];
+    },
+  });
+
+export default step;
+```
+
+This example demonstrates how to use conditional logic in a TypeScript workflow, using the `AddIf` and `AddElse` helpers to create branching paths based on request parameters.
+
+### TOML and YAML Formats
+
+In addition to JSON and TypeScript, Nanoservice-TS also supports TOML and YAML formats for workflow definitions. These formats can be placed in the corresponding directories:
+
+- TOML workflows: `workflows/toml/`
+- YAML workflows: `workflows/yaml/`
+
+These alternative formats offer different syntax styles that some developers may find more readable or maintainable, while providing the same functionality as JSON workflows.
+
+## Built-in Nodes
+
+Nanoservice-TS comes with several built-in nodes that provide common functionality. These nodes are referenced in the `src/Nodes.ts` file:
+
+```typescript
+// src/Nodes.ts
+import ApiCall from "@nanoservice-ts/api-call";
+import IfElse from "@nanoservice-ts/if-else";
+import type { NodeBase } from "@nanoservice-ts/shared";
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  "@nanoservice-ts/api-call": new ApiCall(),
+  "@nanoservice-ts/if-else": new IfElse(),
+};
+
+export default nodes;
+```
+
+The key built-in nodes include:
+
+1. **`@nanoservice-ts/api-call`**: Makes HTTP requests to external APIs and services.
+2. **`@nanoservice-ts/if-else`**: Provides conditional branching in workflows based on specified conditions.
+
+You can use these built-in nodes directly in your workflow definitions by referencing their names (e.g., `"@nanoservice-ts/api-call"`) in the `node` property of a step.
 
 ## Workflow Execution
 
 When a trigger event occurs:
 
-1.  The Nanoservice-TS runtime identifies the corresponding workflow.
-2.  A new instance of the workflow is created.
-3.  A [Context Object](./context.mdx) is initialized for this instance, containing trigger data and other relevant information.
-4.  The runtime begins executing the nodes as defined in the workflow, passing data between them via the Context Object or direct input/output mapping.
-5.  The workflow completes when it reaches a terminal node (a node with no `next_node_id`) or an explicit end state.
+1. The Nanoservice-TS runtime identifies the corresponding workflow.
+2. A new instance of the workflow is created.
+3. A [Context Object](./context.mdx) is initialized for this instance, containing trigger data and other relevant information.
+4. The runtime begins executing the nodes as defined in the workflow, passing data between them via the Context Object or direct input/output mapping.
+5. The workflow completes when it reaches a terminal node or an explicit end state.
+
+## Example Workflows
+
+When you create a new project with examples enabled (`Install the examples? YES`), Nanoservice-TS includes several example workflows in different formats (JSON, TOML, YAML) to help you get started. These examples demonstrate various features and patterns, including:
+
+- Basic API calls
+- Conditional logic
+- Data transformation
+- Error handling
+
+You can find these examples in the `workflows/json/`, `workflows/toml/`, and `workflows/yaml/` directories of your project.
+
+## Accessing Workflows
+
+The name of your workflow file corresponds to the endpoint URL. For example, if you have a workflow named `countries-helper`, you can access it at:
+
+```
+http://localhost:4000/countries-helper
+```
+
+This convention makes it easy to organize and access your workflows through HTTP endpoints.
 
 ## Key Features of Workflows
 
-*   **Declarative & Visualizable**: JSON definitions make it easier to understand the flow of logic.
+*   **Multiple Definition Formats**: Choose between JSON, TypeScript, TOML, or YAML based on your preferences.
+*   **Declarative & Visualizable**: JSON and other formats make it easier to understand the flow of logic.
 *   **Reusable Nodes**: Build complex behaviors by composing simple, reusable Nodes.
 *   **Data Flow Management**: Explicitly define how data is passed and transformed between Nodes.
 *   **Error Handling**: Define specific paths for error conditions within the workflow.
-*   **Conditional Logic & Branching**: More advanced workflows can include conditional execution paths (e.g., using a `Core.Condition` node or similar logic) to branch the flow based on data.
-*   **Parallel Execution**: Some Nanoservice-TS runtimes or specific node types might support parallel execution of independent branches within a workflow for improved performance (consult specific runtime documentation).
-
-## Creating Workflows
-
-You can create workflow JSON files manually or use the `nanoctl` CLI:
-
-```bash
-nanoctl create workflow <workflow-name>
-```
-
-This command will typically generate a boilerplate workflow JSON file in your project's `workflows/` directory, which you can then customize.
+*   **Conditional Logic & Branching**: Create advanced workflows with conditional execution paths.
+*   **Built-in Nodes**: Leverage pre-built functionality for common tasks.
 
 Understanding workflows is crucial for effectively using Nanoservice-TS. They are the primary means by which you will build and structure your application logic.
 
-Next, learn about the individual building blocks: [Nodes](./nodes.mdx).
+Next, learn about the individual building blocks: [Nodes](./nodes).
