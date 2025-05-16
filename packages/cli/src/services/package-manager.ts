@@ -9,6 +9,8 @@ type PackageManagerType = {
 	[key: string]: {
 		INSTALL: string;
 		BUILD: string;
+		PUBLISH: (opts: { registry: string; npmrcDir: string }) => string;
+		INSTALL_NODE: (opts: { node: string; registry: string; npmrcDir: string }) => string;
 	};
 };
 
@@ -16,14 +18,32 @@ const COMMANDS: PackageManagerType = {
 	pnpm: {
 		INSTALL: "pnpm install",
 		BUILD: "pnpm run build",
+		PUBLISH: () => {
+			return "pnpm publish --access public";
+		},
+		INSTALL_NODE: (opts) => {
+			return `pnpm install ${opts.node}`;
+		},
 	},
 	yarn: {
 		INSTALL: "yarn install",
 		BUILD: "yarn run build",
+		PUBLISH: () => {
+			return "yarn publish --access public";
+		},
+		INSTALL_NODE: (opts) => {
+			return `yarn add ${opts.node}`;
+		},
 	},
 	npm: {
 		INSTALL: "npm install",
 		BUILD: "npm run build",
+		PUBLISH: (opts) => {
+			return `npm publish --registry=${opts.registry} --userconfig ${opts.npmrcDir}`;
+		},
+		INSTALL_NODE: (opts) => {
+			return `npm install ${opts.node}`;
+		},
 	},
 };
 const PACKAGE_MANAGERS = Object.keys(COMMANDS);
@@ -45,7 +65,6 @@ class PackageManager {
 		const checkCmd = isWindows ? `where ${cmd}` : `which ${cmd}`;
 		try {
 			await executor(checkCmd);
-			console.log(`Using package manager: ${cmd}`);
 			return true;
 		} catch {
 			return false;
