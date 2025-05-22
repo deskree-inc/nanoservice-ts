@@ -8,12 +8,12 @@ WORKDIR /usr/src/app
 FROM base AS install
 RUN mkdir -p /temp/dev
 COPY package.json /temp/dev/
-RUN cd /temp/dev && bun install --lockfile-only && bun install --frozen-lockfile
+RUN cd /temp/dev && bun install --frozen-lockfile
 
 # install with --production (exclude devDependencies)
 RUN mkdir -p /temp/prod
 COPY package.json /temp/prod/
-RUN cd /temp/prod && bun install --lockfile-only && bun install --frozen-lockfile --production
+RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 # copy node_modules from temp directory
 # then copy all (non-ignored) project files into the image
@@ -24,22 +24,19 @@ COPY . .
 # [optional] tests & build
 ENV NODE_ENV=production
 # RUN bun add -d @types/ejs
-RUN bun build ./src/index.ts --outdir=./dist --target=node --format=cjs
-RUN bun build ./src/opentelemetry_traces.ts --outdir=./dist --target=node --format=cjs
-RUN bun build ./src/opentelemetry_metrics.ts --outdir=./dist --target=node --format=cjs
+RUN bun run build
 
 # copy production dependencies and source code into final image
-FROM node:24.0.0-slim AS release
+FROM node:23.11.1-slim AS release
 WORKDIR /usr/src/app
 
 COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/dist dist
-COPY --from=prerelease /usr/src/app/public public
 COPY --from=prerelease /usr/src/app/package.json .
 COPY --from=prerelease /usr/src/app/workflows workflows
+COPY --from=prerelease /usr/src/app/public public
 
 ENV WORKFLOWS_PATH=/usr/src/app/workflows
-ENV NODES_PATH=/usr/src/app/src/nodes
 ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
 ENV APP_NAME=nanoservice-http
@@ -49,6 +46,4 @@ USER node
 EXPOSE 4000/tcp
 EXPOSE 9091/tcp
 
-#ENTRYPOINT [ "node", "-r", "./dist/opentelemetry_traces.js", "-r", "./dist/opentelemetry_metrics.js", "dist/index.js" ]
 ENTRYPOINT [ "node", "-r", "./dist/opentelemetry_metrics.js", "dist/index.js" ]
-#ENTRYPOINT [ "node", "dist/index.js" ]

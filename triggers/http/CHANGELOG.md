@@ -1,5 +1,11 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.29
+
+### Patch Changes
+
+- fixed dockerfile
+
 ## 0.0.28
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.2
+
+### Patch Changes
+
+- fixed dockerfile
+
 ## 0.1.1
 
 ### Patch Changes
