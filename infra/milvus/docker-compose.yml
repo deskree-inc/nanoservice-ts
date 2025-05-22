@@ -17,6 +17,8 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+    networks:
+      - shared-network
 
   minio:
     container_name: milvus-minio
@@ -35,6 +37,8 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+    networks:
+      - shared-network
 
   standalone:
     container_name: milvus-standalone
@@ -59,7 +63,11 @@ services:
     depends_on:
       - "etcd"
       - "minio"
+    networks:
+      - shared-network
 
 networks:
-  default:
-    name: milvus
+  shared-network:
+    external: true
+
+# docker network create shared-network
