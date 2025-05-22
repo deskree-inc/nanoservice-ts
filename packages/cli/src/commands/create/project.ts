@@ -181,6 +181,12 @@ export async function createProject(opts: OptionValues, version: string, current
 			console.error(`Failed to change ownership of directory ${dirPath}:`, error);
 		}
 
+		// Infra
+
+		fsExtra.ensureDirSync(`${nodesDir}/infra`);
+		fsExtra.ensureDirSync(`${nodesDir}/infra/metrics`);
+		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/metrics`, `${nodesDir}/infra/metrics`);
+
 		// Examples
 
 		if (!examples) {

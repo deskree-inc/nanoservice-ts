@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Observability Dashboard - nanoservice-ts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 text-gray-900">
+    <nav class="bg-white text-black px-6 py-4 shadow sticky top-0 z-50">
+      <h1 class="text-2xl font-bold">
+        Observability Dashboard for nanoservice-ts
+      </h1>
+      <p class="text-sm text-black-600 mt-1">
+        Monitor real-time performance, usage, and error rates of all workflows
+        and nodes running on nanoservice-ts.
+      </p>
+    </nav>
+
+    <main class="pt-0 pb-6 px-6 py-6 space-y-6">
+      <script>
+        function toggleSection(id) {
+          document.getElementById(id).classList.toggle("hidden");
+        }
+      </script>
+
+      <!-- OVERVIEW -->
+      <section class="bg-white rounded shadow">
+        <div class="flex items-center justify-between p-4 border-b">
+          <div>
+            <h2 class="text-xl font-semibold">Overview</h2>
+            <p class="text-sm text-gray-600">
+              Aggregated metrics from all workflows and nodes — shows overall
+              load, latency and error count across the system.
+            </p>
+          </div>
+          <button
+            onclick="toggleSection('overview-body')"
+            class="text-indigo-600 hover:underline"
+          >
+            Toggle
+          </button>
+        </div>
+        <div
+          id="overview-body"
+          class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">
+              Total Requests (All Workflows)
+            </h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Sum of all workflow executions in the last hour.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_requests"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base text-red-600">
+              Error Count (All Workflows)
+            </h3>
+            <p class="text-sm text-red-500 mb-2">
+              Total number of errors across all workflows.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_errors"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">
+              Avg. Execution Time ms (All Workflows)
+            </h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average workflow run duration over the last hour.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_time"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">CPU Usage (All Workflows)</h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average CPU usage across all workflows.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_cpu"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">
+              Memory Usage (All Workflows)
+            </h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average Memory usage across all workflows.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_memory"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORKFLOWS -->
+      <section class="bg-white rounded shadow">
+        <div class="flex items-center justify-between p-4 border-b">
+          <div>
+            <h2 class="text-xl font-semibold">Workflows</h2>
+            <p class="text-sm text-gray-600">
+              Metrics grouped per workflow — track individual performance and
+              failures by logical unit.
+            </p>
+          </div>
+          <button
+            onclick="toggleSection('workflows-body')"
+            class="text-indigo-600 hover:underline"
+          >
+            Toggle
+          </button>
+        </div>
+        <div
+          id="workflows-body"
+          class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">Total Requests per Workflow</h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Execution counts by workflow name.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_requests"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base text-red-600">
+              Errors per Workflow
+            </h3>
+            <p class="text-sm text-red-500 mb-2">
+              Number of failures per workflow execution.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_errors"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">
+              Execution Time per Workflow (s)
+            </h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average duration of each workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_time"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">CPU Usage per Workflow (s)</h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average CPU usage per workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_cpu"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">
+              Memory Usage per Workflow (s)
+            </h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average Memory usage per workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_memory"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NODES -->
+      <section class="bg-white rounded shadow">
+        <div class="flex items-center justify-between p-4 border-b">
+          <div>
+            <h2 class="text-xl font-semibold">Nodes</h2>
+            <p class="text-sm text-gray-600">
+              Metrics grouped by node name — helps identify performance of
+              individual nanoservices.
+            </p>
+          </div>
+          <button
+            onclick="toggleSection('nodes-body')"
+            class="text-indigo-600 hover:underline"
+          >
+            Toggle
+          </button>
+        </div>
+        <div
+          id="nodes-body"
+          class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">Total Requests per Node</h3>
+            <p class="text-sm text-gray-500 mb-2">
+              How many times each node was executed.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_requests"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">Execution Time per Node (s)</h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average time each node takes to complete.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_time"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <table
+          id="workflow-metrics-table"
+          class="min-w-full divide-y divide-gray-300 text-sm text-left mt-4"
+        >
+          <thead class="bg-white text-gray-700">
+            <tr>
+              <th class="px-4 py-2">Workflow</th>
+              <th class="px-4 py-2">Requests</th>
+              <th class="px-4 py-2">Errors</th>
+              <th class="px-4 py-2">Exec Time (ms)</th>
+              <th class="px-4 py-2">CPU (%)</th>
+              <th class="px-4 py-2">Memory (MB)</th>
+            </tr>
+          </thead>
+          <tbody
+            id="workflow-metrics-body"
+            class="divide-y divide-gray-200 bg-white"
+          ></tbody>
+        </table>
+      </section>
+
+      <!-- LOKI LOGS SECTION -->
+      <section class="bg-white rounded shadow">
+        <div class="flex items-center justify-between p-4 border-b">
+          <div>
+            <h2 class="text-xl font-semibold">Logs (Loki)</h2>
+            <p class="text-sm text-gray-600">
+              Shows the last 50 logs captured from Loki.
+            </p>
+          </div>
+          <button
+            onclick="toggleSection('loki-body')"
+            class="text-indigo-600 hover:underline"
+          >
+            Toggle
+          </button>
+        </div>
+        <div
+          id="loki-body"
+          class="p-4 max-h-[400px] overflow-y-auto bg-black text-gray-300 text-xs font-mono rounded"
+        >
+          <ul id="lokiLogs" class="space-y-1"></ul>
+        </div>
+      </section>
+      <section class="bg-white rounded shadow">
+        <div class="flex items-center justify-between p-4 border-b">
+          <div>
+            <h2 class="text-xl font-semibold text-red-500">Errors</h2>
+            <p class="text-sm text-gray-600">
+              Shows the last 50 error-level logs captured.
+            </p>
+          </div>
+          <button
+            onclick="toggleSection('loki-error-body')"
+            class="text-indigo-600 hover:underline"
+          >
+            Toggle
+          </button>
+        </div>
+        <div
+          id="loki-error-body"
+          class="p-4 max-h-[400px] overflow-y-auto bg-black text-red-300 text-xs font-mono rounded"
+        >
+          <ul id="lokiErrorLogs" class="space-y-1"></ul>
+        </div>
+      </section>
+    </main>
+    <script>
+      const prometheusBase = "http://localhost:9090";
+
+      const queries = {
+        overview: {
+          requests: "increase(workflow_total[1m])",
+          time: "increase(workflow_time[1m])",
+          errors: "increase(workflow_errors_total[1m])",
+          cpu: "increase(workflow_cpu[1m])",
+          memory: "increase(workflow_memory[1m])",
+        },
+        workflows: {
+          requests: "sum(increase(workflow_total[1m])) by (workflow_runner_name)",
+          time: "sum(increase(workflow_time[1m])) by (workflow_name)",
+          errors: "sum(increase(workflow_errors_total[1m])) by (workflow_name)",
+          cpu: "sum(increase(workflow_cpu[1m])) by (workflow_name)",
+          memory: "sum(increase(workflow_memory[1m])) by (workflow_name)",
+        },
+        nodes: {
+          requests: "sum(increase(node_total[1m])) by (node_name)",
+          time: "sum(increase(node_time[1m])) by (node_name)",
+        },
+      };
+
+      const charts = {};
+
+      function createChart(ctx, label) {
+        return new Chart(ctx, {
+          type: "line",
+          data: { datasets: [] },
+          options: {
+            animation: false,
+            elements: {
+              point: {
+                radius: 0,
+                hoverRadius: 6,
+                hitRadius: 6,
+              },
+            },
+            interaction: {
+              mode: "nearest",
+              intersect: false,
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                type: "time",
+                time: { unit: "minute" },
+                title: { display: true, text: "Time" },
+              },
+              y: { beginAtZero: true },
+            },
+            plugins: {
+              legend: {
+                display: true,
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+          },
+        });
+      }
+
+      function parseSeries(result, groupLabel, color) {
+        const palette = [
+          "#3b82f6",
+          "#10b981",
+          "#f59e0b",
+          "#8b5cf6",
+          "#ec4899",
+          "#ef4444",
+        ];
+        let i = 0;
+
+        return result.map((serie) => {
+          const label = serie.metric[groupLabel] || "unknown";
+          const datasetColor = color || palette[i++ % palette.length];
+          return {
+            label,
+            data: serie.values.map(([ts, val]) => ({
+              x: new Date(ts * 1000),
+              y: parseFloat(val),
+            })),
+            borderColor: datasetColor,
+            backgroundColor: datasetColor + "33",
+            fill: true,
+          };
+        });
+      }
+
+      async function fetchMetric(query) {
+        const end = Math.floor(Date.now() / 1000);
+        const start = end - 3600;
+        const params = new URLSearchParams({ query, start, end, step: "30" });
+        const res = await fetch(
+          `${prometheusBase}/api/v1/query_range?${params}`
+        );
+        const json = await res.json();
+        return json.data?.result || [];
+      }
+
+      async function updateChart(
+        id,
+        query,
+        isGrouped = false,
+        groupLabel = "",
+        forceColor = null
+      ) {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+
+        if (!charts[id]) {
+          charts[id] = createChart(ctx, id);
+        }
+
+        const result = await fetchMetric(query);
+        const datasets = isGrouped
+          ? parseSeries(result, groupLabel, forceColor)
+          : [
+              {
+                label: id,
+                data:
+                  result[0]?.values.map(([ts, val]) => ({
+                    x: new Date(ts * 1000),
+                    y: parseFloat(val),
+                  })) || [],
+                borderColor: forceColor || "#2563eb",
+                backgroundColor: (forceColor || "#2563eb") + "33",
+                fill: true,
+              },
+            ];
+
+        charts[id].data.datasets = datasets;
+        charts[id].update();
+      }
+
+      async function updateAllCharts() {
+        // OVERVIEW
+        await updateChart("overview_requests", queries.overview.requests);
+        await updateChart("overview_time", queries.overview.time);
+        await updateChart(
+          "overview_errors",
+          queries.overview.errors,
+          false,
+          "",
+          "#dc2626"
+        );
+        await updateChart("overview_cpu", queries.overview.cpu);
+        await updateChart("overview_memory", queries.overview.memory);
+
+        // WORKFLOWS
+        await updateChart(
+          "workflow_requests",
+          queries.workflows.requests,
+          true,
+          "workflow_runner_name"
+        );
+        await updateChart(
+          "workflow_time",
+          queries.workflows.time,
+          true,
+          "workflow_name"
+        );
+        await updateChart(
+          "workflow_errors",
+          queries.workflows.errors,
+          true,
+          "workflow_name",
+          "#dc2626"
+        );
+        await updateChart(
+          "workflow_cpu",
+          queries.workflows.cpu,
+          true,
+          "workflow_name"
+        );
+        await updateChart(
+          "workflow_memory",
+          queries.workflows.memory,
+          true,
+          "workflow_name"
+        );
+
+        // NODES
+        await updateChart(
+          "node_requests",
+          queries.nodes.requests,
+          true,
+          "node_name"
+        );
+        await updateChart("node_time", queries.nodes.time, true, "node_name");
+      }
+
+      async function updateLokiLogs() {
+        try {
+          const end = BigInt(Date.now()) * 1000000n;
+          const start = end - 3600n * 1000000000n;
+
+          const params = new URLSearchParams({
+            query: '{service_name="nanoservice-http"} |= "level=\\"info\\""',
+            limit: "50",
+            start: start.toString(),
+            end: end.toString(),
+            direction: "backward",
+          });
+
+          const res = await fetch(
+            `http://localhost:3200/loki/api/v1/query_range?${params}`
+          );
+          const json = await res.json();
+
+          const container = document.getElementById("lokiLogs");
+          container.innerHTML = "";
+
+          const streams = json.data?.result || [];
+
+          for (let i = 0; i < streams.length; i++) {
+            const stream = streams[i];
+            for (let j = 0; j < stream.values.length; j++) {
+              const [ts, line] = stream.values[j];
+              const date = new Date(Number(ts) / 1000000);
+              const item = document.createElement("li");
+              item.textContent = `[${date.toLocaleTimeString()}] ${line}`;
+              container.appendChild(item);
+            }
+          }
+
+          document.getElementById("loki-body").scrollTop =
+            document.getElementById("loki-body").scrollHeight;
+        } catch (err) {
+          console.error("Failed to load Loki logs:", err);
+        }
+      }
+
+      async function updateLokiErrors() {
+        try {
+          const end = BigInt(Date.now()) * 1000000n;
+          const start = end - 3600n * 1000000000n;
+
+          const params = new URLSearchParams({
+            query: '{service_name="nanoservice-http"} |= "level=\\"error\\""',
+            limit: "50",
+            start: start.toString(),
+            end: end.toString(),
+            direction: "backward",
+          });
+
+          const res = await fetch(
+            `http://localhost:3200/loki/api/v1/query_range?${params}`
+          );
+          const json = await res.json();
+
+          const container = document.getElementById("lokiErrorLogs");
+          container.innerHTML = "";
+
+          const streams = json.data?.result || [];
+
+          for (let i = 0; i < streams.length; i++) {
+            const stream = streams[i];
+            for (let j = 0; j < stream.values.length; j++) {
+              const [ts, line] = stream.values[j];
+              const date = new Date(Number(ts) / 1000000);
+              const item = document.createElement("li");
+              item.textContent = `[${date.toLocaleTimeString()}] ${line}`;
+              container.appendChild(item);
+            }
+          }
+
+          document.getElementById("loki-error-body").scrollTop =
+            document.getElementById("loki-error-body").scrollHeight;
+        } catch (err) {
+          console.error("Failed to load Loki error logs:", err);
+        }
+      }
+
+      async function updateWorkflowTable() {
+        const queries = {
+          requests: "sum(increase(workflow_total[1m])) by (workflow_runner_name)",
+          errors: "sum(increase(workflow_errors_total[1m])) by (workflow_name)",
+          time: "sum(increase(workflow_time[1m])) by (workflow_name)",
+          cpu: "sum(increase(workflow_cpu[1m])) by (workflow_name)",
+          memory: "sum(increase(workflow_memory[1m])) by (workflow_name)",
+        };
+
+        const endpoint = "http://localhost:9090/api/v1/query";
+        const results = {};
+
+        await Promise.all(
+          Object.entries(queries).map(async ([key, query]) => {
+            const res = await fetch(
+              `${endpoint}?query=${encodeURIComponent(query)}`
+            );
+            const json = await res.json();
+            if (json.status === "success") {
+              for (const entry of json.data.result) {
+                const workflow = key === "requests" ? entry.metric.workflow_runner_name || "unknown" : entry.metric.workflow_name || "unknown";
+                console.log("Workflow Metrics", entry.metric);
+                const value = parseFloat(entry.value[1]);
+                if (!results[workflow]) results[workflow] = {};
+                results[workflow][key] = value;
+              }
+            }
+          })
+        );
+
+        const tbody = document.getElementById("workflow-metrics-body");
+        tbody.innerHTML = "";
+
+        Object.entries(results).forEach(([workflow, metrics]) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-4 py-2 font-medium text-gray-900">${workflow}</td>
+            <td class="px-4 py-2 text-gray-700">${Math.round(
+              metrics.requests || 0
+            ).toLocaleString()}</td>
+            <td class="px-4 py-2 text-gray-700">${Math.round(
+              metrics.errors || 0
+            ).toLocaleString()}</td>
+            <td class="px-4 py-2 text-gray-700">${(metrics.time || 0).toFixed(2)}</td>
+            <td class="px-4 py-2 text-gray-700">${((metrics.cpu || 0) * 100).toFixed(
+              1
+            )}</td>
+            <td class="px-4 py-2 text-gray-700">${(metrics.memory || 0).toFixed(1)}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      updateAllCharts();
+      updateLokiLogs();
+      updateLokiErrors();
+      updateWorkflowTable();
+
+      setInterval(() => {
+        updateAllCharts();
+        updateLokiLogs();
+        updateLokiErrors();
+        updateWorkflowTable();
+      }, 10000);
+    </script>
+  </body>
+</html>

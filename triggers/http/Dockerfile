@@ -1,46 +1,54 @@
-# Base image with both Python and Node.js
-FROM python:3.11-slim-bookworm
+# use the official Bun image
+# see all versions at https://hub.docker.com/r/oven/bun/tags
+FROM oven/bun:1 AS base
+WORKDIR /usr/src/app
 
-# Install Node.js (LTS version)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
+# install dependencies into temp directory
+# this will cache them and speed up future builds
+FROM base AS install
+RUN mkdir -p /temp/dev
+COPY package.json /temp/dev/
+RUN cd /temp/dev && bun install --lockfile-only && bun install --frozen-lockfile
 
-# Install Supervisor
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    supervisor \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+# install with --production (exclude devDependencies)
+RUN mkdir -p /temp/prod
+COPY package.json /temp/prod/
+RUN cd /temp/prod && bun install --lockfile-only && bun install --frozen-lockfile --production
 
-# Set up working directories
-WORKDIR /app
+# copy node_modules from temp directory
+# then copy all (non-ignored) project files into the image
+FROM base AS prerelease
+COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
 
+# [optional] tests & build
+ENV NODE_ENV=production
+# RUN bun add -d @types/ejs
+RUN bun build ./src/index.ts --outdir=./dist --target=node --format=cjs
+RUN bun build ./src/opentelemetry_traces.ts --outdir=./dist --target=node --format=cjs
+RUN bun build ./src/opentelemetry_metrics.ts --outdir=./dist --target=node --format=cjs
 
-# Install Python dependencies
-RUN if [ -f ./.nanoctl/runtimes/python3/requirements.txt ]; then \
-    pip install --no-cache-dir -r ./.nanoctl/runtimes/python3/requirements.txt; \
-    fi
+# copy production dependencies and source code into final image
+FROM node:24.0.0-slim AS release
+WORKDIR /usr/src/app
 
-# Install Node.js dependencies
-RUN npm install
-# Build the Node.js application
-RUN npm run build
+COPY --from=install /temp/prod/node_modules node_modules
+COPY --from=prerelease /usr/src/app/dist dist
+COPY --from=prerelease /usr/src/app/public public
+COPY --from=prerelease /usr/src/app/package.json .
+COPY --from=prerelease /usr/src/app/workflows workflows
 
-# Configure Supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Set environment variables
-ENV WORKFLOWS_PATH=/app/workflows
+ENV WORKFLOWS_PATH=/usr/src/app/workflows
+ENV NODES_PATH=/usr/src/app/src/nodes
 ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
 ENV APP_NAME=nanoservice-http
 
-# Expose ports (Node.js on 3000, Python on 8000)
+# run the app
+USER node
 EXPOSE 4000/tcp
 EXPOSE 9091/tcp
 
-# Start Supervisor
-ENTRYPOINT ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-e", "debug"]
+#ENTRYPOINT [ "node", "-r", "./dist/opentelemetry_traces.js", "-r", "./dist/opentelemetry_metrics.js", "dist/index.js" ]
+ENTRYPOINT [ "node", "-r", "./dist/opentelemetry_metrics.js", "dist/index.js" ]
+#ENTRYPOINT [ "node", "dist/index.js" ]
