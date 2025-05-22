@@ -183,9 +183,9 @@ export async function createProject(opts: OptionValues, version: string, current
 
 		// Infra
 
-		fsExtra.ensureDirSync(`${nodesDir}/infra`);
-		fsExtra.ensureDirSync(`${nodesDir}/infra/metrics`);
-		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/metrics`, `${nodesDir}/infra/metrics`);
+		fsExtra.ensureDirSync(`${dirPath}/infra`);
+		fsExtra.ensureDirSync(`${dirPath}/infra/metrics`);
+		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/metrics`, `${dirPath}/infra/metrics`);
 
 		// Examples
 
