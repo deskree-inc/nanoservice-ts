@@ -8,7 +8,7 @@ const nodes: {
 } = {
 	"@nanoservice-ts/api-call": new ApiCall(),
 	"@nanoservice-ts/if-else": new IfElse(),
-	"mapper": new MapperNode(),
+	mapper: new MapperNode(),
 };
 
 export default nodes;

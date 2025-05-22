@@ -181,7 +181,7 @@ export default class HttpTrigger extends TriggerBase {
 								workflow_runner_errors.add(1, {
 									env: process.env.NODE_ENV,
 									workflow_version: `${this.configuration?.version || "unknown"}`,
-									workflow_name: `${blueprintNameInPath}`
+									workflow_name: `${blueprintNameInPath}`,
 								});
 								span.setStatus({
 									code: SpanStatusCode.ERROR,
@@ -201,7 +201,7 @@ export default class HttpTrigger extends TriggerBase {
 									workflow_runner_errors.add(1, {
 										env: process.env.NODE_ENV,
 										workflow_version: `${this.configuration?.version || "unknown"}`,
-										workflow_name: `${blueprintNameInPath}`
+										workflow_name: `${blueprintNameInPath}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: JSON.stringify(error_context.context.json) });
 									this.logger.error(`${JSON.stringify(error_context.context.json)}`);
@@ -210,7 +210,7 @@ export default class HttpTrigger extends TriggerBase {
 									workflow_runner_errors.add(1, {
 										env: process.env.NODE_ENV,
 										workflow_version: `${this.configuration?.version || "unknown"}`,
-										workflow_name: `${blueprintNameInPath}`
+										workflow_name: `${blueprintNameInPath}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
 									this.logger.error(`${error_context.message}`, error_context.stack?.replace(/\n/g, " "));
@@ -221,7 +221,7 @@ export default class HttpTrigger extends TriggerBase {
 							workflow_runner_errors.add(1, {
 								env: process.env.NODE_ENV,
 								workflow_version: `${this.configuration?.version || "unknown"}`,
-								workflow_name: `${blueprintNameInPath}`
+								workflow_name: `${blueprintNameInPath}`,
 							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
 							this.logger.error(`${(e as Error).message}`, `${(e as Error).stack?.replace(/\n/g, " ")}`);
