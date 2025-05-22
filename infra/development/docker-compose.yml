@@ -12,9 +12,19 @@ services:
     volumes:
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql # DB dvdrental
       - ./:/var/lib/postgresql/bump
+    networks:
+      - shared-network
   adminer:
     image: adminer
     container_name: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - shared-network
+
+networks:
+  shared-network:
+    external: true
+
+# docker network create shared-network

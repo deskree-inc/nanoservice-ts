@@ -38,6 +38,8 @@ services:
     privileged: true
     devices:
       - "/dev/kmsg"
+    networks:
+      - shared-network
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
@@ -50,6 +52,8 @@ services:
     depends_on:
       - cadvisor
     restart: unless-stopped
+    networks:
+      - shared-network
 
   grafana:
     container_name: grafana
@@ -70,6 +74,8 @@ services:
       - prometheus
       - loki
     restart: unless-stopped
+    networks:
+      - shared-network
   loki:
     container_name: loki
     hostname: loki
@@ -81,6 +87,8 @@ services:
     command: 
       - -config.file=/mnt/config/loki-config.yaml
     restart: unless-stopped
+    networks:
+      - shared-network
 
   nginx:
     container_name: loki-proxy
@@ -92,12 +100,15 @@ services:
     depends_on:
       - loki
     restart: unless-stopped
+    networks:
+      - shared-network
 
   nanoservice-http:
     container_name: nanoservice-http
     hostname: nanoservice-http
     build:
-      context: ../../triggers/http
+      context: ../../
+      # content: ../../triggers/http
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
@@ -111,5 +122,12 @@ services:
     #     loki-batch-size: 400
     depends_on:
       - loki
+    networks:
+      - shared-network
 volumes:
   grafana-data:
+networks:
+  shared-network:
+    external: true
+
+# docker network create shared-network
