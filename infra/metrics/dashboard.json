@@ -18,7 +18,7 @@
 	"editable": true,
 	"fiscalYearStartMonth": 0,
 	"graphTooltip": 0,
-	"id": 3,
+	"id": 2,
 	"links": [],
 	"panels": [
 		{
@@ -73,8 +73,7 @@
 						"mode": "absolute",
 						"steps": [
 							{
-								"color": "green",
-								"value": null
+								"color": "green"
 							},
 							{
 								"color": "red",
@@ -132,11 +131,12 @@
 				},
 				"timezone": ["browser"],
 				"tooltip": {
+					"hideZeros": false,
 					"mode": "single",
 					"sort": "none"
 				}
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
@@ -145,11 +145,13 @@
 					},
 					"disableTextWrap": false,
 					"editorMode": "code",
-					"expr": "increase(workflow_total[1m])",
+					"exemplar": false,
+					"expr": "sum(increase(workflow_total[1m])) by (workflow_path)",
+					"format": "time_series",
 					"fullMetaSearch": false,
 					"includeNullMetadata": true,
 					"instant": false,
-					"legendFormat": "{{workflow_runner_name}}",
+					"legendFormat": "{{workflow_path}}",
 					"range": true,
 					"refId": "Requests Success",
 					"useBackend": false
@@ -210,8 +212,7 @@
 						"mode": "absolute",
 						"steps": [
 							{
-								"color": "green",
-								"value": null
+								"color": "green"
 							},
 							{
 								"color": "red",
@@ -238,11 +239,12 @@
 				},
 				"timezone": ["browser"],
 				"tooltip": {
+					"hideZeros": false,
 					"mode": "single",
 					"sort": "none"
 				}
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
@@ -255,7 +257,7 @@
 					"fullMetaSearch": false,
 					"includeNullMetadata": true,
 					"instant": false,
-					"legendFormat": "{{workflow_name}}",
+					"legendFormat": "{{workflow_path}}",
 					"range": true,
 					"refId": "A",
 					"useBackend": false
@@ -317,8 +319,7 @@
 						"mode": "absolute",
 						"steps": [
 							{
-								"color": "green",
-								"value": null
+								"color": "green"
 							},
 							{
 								"color": "red",
@@ -376,11 +377,12 @@
 				},
 				"timezone": ["browser"],
 				"tooltip": {
+					"hideZeros": false,
 					"mode": "single",
 					"sort": "none"
 				}
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
@@ -389,11 +391,11 @@
 					},
 					"disableTextWrap": false,
 					"editorMode": "code",
-					"expr": "increase(workflow_cpu[30s])",
+					"expr": "sum(increase(workflow_cpu[1m])) by (workflow_path)",
 					"fullMetaSearch": false,
 					"includeNullMetadata": true,
 					"instant": false,
-					"legendFormat": "{{workflow_name}}",
+					"legendFormat": "{{workflow_path}}",
 					"range": true,
 					"refId": "Requests Success",
 					"useBackend": false
@@ -454,8 +456,7 @@
 						"mode": "absolute",
 						"steps": [
 							{
-								"color": "green",
-								"value": null
+								"color": "green"
 							},
 							{
 								"color": "red",
@@ -513,11 +514,12 @@
 				},
 				"timezone": ["browser"],
 				"tooltip": {
+					"hideZeros": false,
 					"mode": "single",
 					"sort": "none"
 				}
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
@@ -526,11 +528,11 @@
 					},
 					"disableTextWrap": false,
 					"editorMode": "code",
-					"expr": "increase(workflow_memory[30s])",
+					"expr": "sum(increase(workflow_memory[1m])) by (workflow_path)",
 					"fullMetaSearch": false,
 					"includeNullMetadata": true,
 					"instant": false,
-					"legendFormat": "{{workflow_name}}",
+					"legendFormat": "{{workflow_path}}",
 					"range": true,
 					"refId": "Requests Success",
 					"useBackend": false
@@ -591,8 +593,7 @@
 						"mode": "absolute",
 						"steps": [
 							{
-								"color": "green",
-								"value": null
+								"color": "green"
 							},
 							{
 								"color": "red",
@@ -650,11 +651,12 @@
 				},
 				"timezone": ["browser"],
 				"tooltip": {
+					"hideZeros": false,
 					"mode": "single",
 					"sort": "none"
 				}
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
@@ -663,11 +665,11 @@
 					},
 					"disableTextWrap": false,
 					"editorMode": "code",
-					"expr": "increase(workflow_time[1m])",
+					"expr": "sum(increase(workflow_time[1m])) by (workflow_path)",
 					"fullMetaSearch": false,
 					"includeNullMetadata": true,
 					"instant": false,
-					"legendFormat": "{{workflow_name}}",
+					"legendFormat": "{{workflow_path}}",
 					"range": true,
 					"refId": "Requests Success",
 					"useBackend": false
@@ -728,8 +730,7 @@
 						"mode": "absolute",
 						"steps": [
 							{
-								"color": "green",
-								"value": null
+								"color": "green"
 							},
 							{
 								"color": "red",
@@ -832,11 +833,12 @@
 				},
 				"timezone": ["browser"],
 				"tooltip": {
+					"hideZeros": false,
 					"mode": "single",
 					"sort": "none"
 				}
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
@@ -845,11 +847,11 @@
 					},
 					"disableTextWrap": false,
 					"editorMode": "code",
-					"expr": "increase(node_total[1m])",
+					"expr": "sum(increase(node_total[1m])) by (node_name)",
 					"fullMetaSearch": false,
 					"includeNullMetadata": true,
 					"instant": false,
-					"legendFormat": "{{node}}:{{node_name}}",
+					"legendFormat": "{{node_name}}",
 					"range": true,
 					"refId": "Requests Success",
 					"useBackend": false
@@ -911,8 +913,7 @@
 						"mode": "absolute",
 						"steps": [
 							{
-								"color": "green",
-								"value": null
+								"color": "green"
 							},
 							{
 								"color": "red",
@@ -1015,11 +1016,12 @@
 				},
 				"timezone": ["browser"],
 				"tooltip": {
+					"hideZeros": false,
 					"mode": "single",
 					"sort": "none"
 				}
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
@@ -1028,11 +1030,11 @@
 					},
 					"disableTextWrap": false,
 					"editorMode": "code",
-					"expr": "increase(node_time[1m])",
+					"expr": "sum(increase(node_time[1m])) by (node_name)",
 					"fullMetaSearch": false,
 					"includeNullMetadata": true,
 					"instant": false,
-					"legendFormat": "{{node}}:{{node_name}}",
+					"legendFormat": "{{node_name}}",
 					"range": true,
 					"refId": "Requests Success",
 					"useBackend": false
@@ -1060,6 +1062,7 @@
 			"id": 8,
 			"options": {
 				"dedupStrategy": "none",
+				"enableInfiniteScrolling": false,
 				"enableLogDetails": true,
 				"prettifyLogMessage": false,
 				"showCommonLabels": false,
@@ -1068,15 +1071,16 @@
 				"sortOrder": "Descending",
 				"wrapLogMessage": false
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
 						"type": "loki",
 						"uid": "P8E80F9AEF21F6940"
 					},
-					"editorMode": "builder",
-					"expr": "{service_name=\"nanoservice-http\"} |= `level=\"info\"`",
+					"direction": "backward",
+					"editorMode": "code",
+					"expr": "{service_name=\"nanoservice-http\"} | json | level=\"info\"",
 					"queryType": "range",
 					"refId": "A"
 				}
@@ -1102,6 +1106,7 @@
 			"id": 9,
 			"options": {
 				"dedupStrategy": "none",
+				"enableInfiniteScrolling": false,
 				"enableLogDetails": true,
 				"prettifyLogMessage": false,
 				"showCommonLabels": false,
@@ -1110,15 +1115,16 @@
 				"sortOrder": "Descending",
 				"wrapLogMessage": false
 			},
-			"pluginVersion": "11.4.0",
+			"pluginVersion": "12.0.1",
 			"targets": [
 				{
 					"datasource": {
 						"type": "loki",
 						"uid": "P8E80F9AEF21F6940"
 					},
-					"editorMode": "builder",
-					"expr": "{service_name=\"nanoservice-http\"} |= `level=\"error\"`",
+					"direction": "backward",
+					"editorMode": "code",
+					"expr": "{service_name=\"nanoservice-http\"} | json | level=\"error\"",
 					"queryType": "range",
 					"refId": "A"
 				}
@@ -1129,7 +1135,7 @@
 	],
 	"preload": false,
 	"refresh": "",
-	"schemaVersion": 40,
+	"schemaVersion": 41,
 	"tags": [],
 	"templating": {
 		"list": []
@@ -1142,6 +1148,5 @@
 	"timezone": "browser",
 	"title": "Workflows Dashboard",
 	"uid": "ceawp9k6qslxcf",
-	"version": 32,
-	"weekStart": ""
+	"version": 1
 }

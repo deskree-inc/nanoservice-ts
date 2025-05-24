@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.25
+
+### Patch Changes
+
+- fixed issue collecting errors counter from node base class
+
 ## 0.1.24
 
 ### Patch Changes

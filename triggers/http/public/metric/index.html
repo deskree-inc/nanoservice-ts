@@ -248,6 +248,22 @@
               ></canvas>
             </div>
           </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base text-red-600">
+              Errors per Node
+            </h3>
+            <p class="text-sm text-red-500 mb-2">
+              Number of failures per node execution.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_errors"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
           <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
             <h3 class="font-semibold text-base">Execution Time per Node (s)</h3>
             <p class="text-sm text-gray-500 mb-2">
@@ -256,6 +272,34 @@
             <div class="flex-grow relative">
               <canvas
                 id="node_time"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">CPU Usage per Node (s)</h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average CPU usage per node.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_cpu"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded shadow h-[300px] flex flex-col">
+            <h3 class="font-semibold text-base">
+              Memory Usage per Node (s)
+            </h3>
+            <p class="text-sm text-gray-500 mb-2">
+              Average Memory usage per node.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_memory"
                 class="absolute inset-0 w-full h-full"
               ></canvas>
             </div>
@@ -352,6 +396,9 @@
         nodes: {
           requests: "sum(increase(node_total[1m])) by (node_name)",
           time: "sum(increase(node_time[1m])) by (node_name)",
+          errors: "sum(increase(node_errors_total[1m])) by (node_name)",
+          cpu: "sum(increase(node_cpu[1m])) by (node_name)",
+          memory: "sum(increase(node_memory[1m])) by (node_name)",
         },
       };
 
@@ -408,7 +455,6 @@
         let i = 0;
 
         return result.map((serie) => {
-          console.log(groupLabel, serie);
           const label = serie.metric[groupLabel] || "unknown";
           const datasetColor = color || palette[i++ % palette.length];
           return {
@@ -426,8 +472,8 @@
 
       async function fetchMetric(query) {
         const end = Math.floor(Date.now() / 1000);
-        const start = end - 3600;
-        const params = new URLSearchParams({ query, start, end, step: "30" });
+        const start = end - 600;
+        const params = new URLSearchParams({ query, start, end, step: "60" });
         const res = await fetch(
           `${prometheusBase}/api/v1/query_range?${params}`
         );
@@ -526,6 +572,9 @@
           "node_name"
         );
         await updateChart("node_time", queries.nodes.time, true, "node_name");
+        await updateChart("node_memory", queries.nodes.memory, true, "node_name");
+        await updateChart("node_cpu", queries.nodes.cpu, true, "node_name");
+        await updateChart("workflow_errors", queries.nodes.errors, true, "node_name");
       }
 
       async function updateLokiLogs() {

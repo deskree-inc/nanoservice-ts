@@ -1,5 +1,14 @@
 # @nanoservice-ts/trigger-grpc
 
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.25
+  - @nanoservice-ts/if-else@0.0.29
+  - @nanoservice-ts/api-call@0.1.28
+
 ## 0.0.12
 
 ### Patch Changes
