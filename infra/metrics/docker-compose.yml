@@ -55,31 +55,31 @@ services:
     networks:
       - shared-network
 
-  # grafana:
-  #   container_name: grafana
-  #   hostname: grafana
-  #   image: grafana/grafana:latest
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
-  #     - DS_PROMETHEUS=prometheus
-  #   volumes:
-  #     - "grafana-data:/var/lib/grafana"
-  #     - "./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
-  #     - "./dashboard.json:/var/lib/grafana/dashboards/dashboard.json"
-  #     - "./default.yaml:/etc/grafana/provisioning/dashboards/default.yaml"
-  #   privileged: true
-  #   depends_on:
-  #     - prometheus
-  #     - loki
-  #   restart: unless-stopped
-  #   networks:
-  #     - shared-network
+  grafana:
+    container_name: grafana
+    hostname: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - DS_PROMETHEUS=prometheus
+    volumes:
+      - "grafana-data:/var/lib/grafana"
+      - "./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+      - "./dashboard.json:/var/lib/grafana/dashboards/dashboard.json"
+      - "./default.yaml:/etc/grafana/provisioning/dashboards/default.yaml"
+    privileged: true
+    depends_on:
+      - prometheus
+      - loki
+    restart: unless-stopped
+    networks:
+      - shared-network
   loki:
     container_name: loki
     hostname: loki
-    image: grafana/loki:3.3.2
+    image: grafana/loki:3.5.0
     ports:
       - "3100:3100"
     volumes:

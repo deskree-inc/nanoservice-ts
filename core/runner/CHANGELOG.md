@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.24
+
+### Patch Changes
+
+- Removed request id from the metrics as label.
+
 ## 0.1.23
 
 ### Patch Changes

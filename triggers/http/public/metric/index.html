@@ -343,11 +343,11 @@
           memory: "increase(workflow_memory[1m])",
         },
         workflows: {
-          requests: "sum(increase(workflow_total[1m])) by (workflow_runner_name)",
-          time: "sum(increase(workflow_time[1m])) by (workflow_name)",
-          errors: "sum(increase(workflow_errors_total[1m])) by (workflow_name)",
-          cpu: "sum(increase(workflow_cpu[1m])) by (workflow_name)",
-          memory: "sum(increase(workflow_memory[1m])) by (workflow_name)",
+          requests: "sum(increase(workflow_total[1m])) by (workflow_path)",
+          time: "sum(increase(workflow_time[1m])) by (workflow_path)",
+          errors: "sum(increase(workflow_errors_total[1m])) by (workflow_path)",
+          cpu: "sum(increase(workflow_cpu[1m])) by (workflow_path)",
+          memory: "sum(increase(workflow_memory[1m])) by (workflow_path)",
         },
         nodes: {
           requests: "sum(increase(node_total[1m])) by (node_name)",
@@ -408,6 +408,7 @@
         let i = 0;
 
         return result.map((serie) => {
+          console.log(groupLabel, serie);
           const label = serie.metric[groupLabel] || "unknown";
           const datasetColor = color || palette[i++ % palette.length];
           return {
@@ -489,32 +490,32 @@
           "workflow_requests",
           queries.workflows.requests,
           true,
-          "workflow_runner_name"
+          "workflow_path"
         );
         await updateChart(
           "workflow_time",
           queries.workflows.time,
           true,
-          "workflow_name"
+          "workflow_path"
         );
         await updateChart(
           "workflow_errors",
           queries.workflows.errors,
           true,
-          "workflow_name",
+          "workflow_path",
           "#dc2626"
         );
         await updateChart(
           "workflow_cpu",
           queries.workflows.cpu,
           true,
-          "workflow_name"
+          "workflow_path"
         );
         await updateChart(
           "workflow_memory",
           queries.workflows.memory,
           true,
-          "workflow_name"
+          "workflow_path"
         );
 
         // NODES
@@ -533,7 +534,7 @@
           const start = end - 3600n * 1000000000n;
 
           const params = new URLSearchParams({
-            query: '{service_name="nanoservice-http"} |= "level=\\"info\\""',
+            query: '{service_name="nanoservice-http"} | json | level="info"',
             limit: "50",
             start: start.toString(),
             end: end.toString(),
@@ -556,7 +557,9 @@
               const [ts, line] = stream.values[j];
               const date = new Date(Number(ts) / 1000000);
               const item = document.createElement("li");
-              item.textContent = `[${date.toLocaleTimeString()}] ${line}`;
+              const log_model = JSON.parse(line);
+
+              item.textContent = `[${date.toLocaleTimeString()}] ${log_model.app}:${log_model.env}:${log_model.workflow_path} ${log_model.message}`;
               container.appendChild(item);
             }
           }
@@ -574,7 +577,7 @@
           const start = end - 3600n * 1000000000n;
 
           const params = new URLSearchParams({
-            query: '{service_name="nanoservice-http"} |= "level=\\"error\\""',
+            query: '{service_name="nanoservice-http"} | json | level="error"',
             limit: "50",
             start: start.toString(),
             end: end.toString(),
@@ -597,7 +600,9 @@
               const [ts, line] = stream.values[j];
               const date = new Date(Number(ts) / 1000000);
               const item = document.createElement("li");
-              item.textContent = `[${date.toLocaleTimeString()}] ${line}`;
+              const log_model = JSON.parse(line);
+
+              item.textContent = `[${date.toLocaleTimeString()}] ${log_model.app}:${log_model.env}:${log_model.workflow_path || log_model.workflow_name} ${log_model.message}: ${log_model.stack}`;
               container.appendChild(item);
             }
           }
@@ -611,11 +616,11 @@
 
       async function updateWorkflowTable() {
         const queries = {
-          requests: "sum(increase(workflow_total[1m])) by (workflow_runner_name)",
-          errors: "sum(increase(workflow_errors_total[1m])) by (workflow_name)",
-          time: "sum(increase(workflow_time[1m])) by (workflow_name)",
-          cpu: "sum(increase(workflow_cpu[1m])) by (workflow_name)",
-          memory: "sum(increase(workflow_memory[1m])) by (workflow_name)",
+          requests: "sum(increase(workflow_total[1m])) by (workflow_path)",
+          errors: "sum(increase(workflow_errors_total[1m])) by (workflow_path)",
+          time: "sum(increase(workflow_time[1m])) by (workflow_path)",
+          cpu: "sum(increase(workflow_cpu[1m])) by (workflow_path)",
+          memory: "sum(increase(workflow_memory[1m])) by (workflow_path)",
         };
 
         const endpoint = "http://localhost:9090/api/v1/query";
@@ -630,7 +635,6 @@
             if (json.status === "success") {
               for (const entry of json.data.result) {
                 const workflow = key === "requests" ? entry.metric.workflow_runner_name || "unknown" : entry.metric.workflow_name || "unknown";
-                console.log("Workflow Metrics", entry.metric);
                 const value = parseFloat(entry.value[1]);
                 if (!results[workflow]) results[workflow] = {};
                 results[workflow][key] = value;

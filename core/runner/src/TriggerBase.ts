@@ -62,7 +62,7 @@ export default abstract class TriggerBase extends Trigger {
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			request_id: `${ctx.id}`,
+			// request_id: `${ctx.id}`,
 		});
 
 		workflow_runner_time.record(end - start, {
@@ -70,7 +70,7 @@ export default abstract class TriggerBase extends Trigger {
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			request_id: `${ctx.id}`,
+			// request_id: `${ctx.id}`,
 		});
 
 		workflow_runner_mem.record(average.memory.max, {
@@ -78,7 +78,7 @@ export default abstract class TriggerBase extends Trigger {
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			request_id: `${ctx.id}`,
+			// request_id: `${ctx.id}`,
 		});
 
 		workflow_runner_cpu.record(average.cpu.usage, {
@@ -86,7 +86,7 @@ export default abstract class TriggerBase extends Trigger {
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			request_id: `${ctx.id}`,
+			// request_id: `${ctx.id}`,
 		});
 
 		return {

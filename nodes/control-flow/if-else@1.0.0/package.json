@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/if-else",
-	"version": "0.0.27",
+	"version": "0.0.28",
 	"description": "nanoservice if-else",
 	"engines": {
 		"node": ">=18.0.0"

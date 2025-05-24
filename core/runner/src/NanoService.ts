@@ -81,7 +81,7 @@ export default abstract class NanoService<T> extends NodeBase {
 				env: process.env.NODE_ENV,
 				workflow_path: `${ctx.workflow_path}`,
 				workflow_name: `${ctx.workflow_name}`,
-				request_id: `${ctx.id}`,
+				// request_id: `${ctx.id}`,
 				node_name: `${this.name}`,
 				node: (this as unknown as RunnerNode).node,
 			});
@@ -90,7 +90,7 @@ export default abstract class NanoService<T> extends NodeBase {
 				env: process.env.NODE_ENV,
 				workflow_path: `${ctx.workflow_path}`,
 				workflow_name: `${ctx.workflow_name}`,
-				request_id: `${ctx.id}`,
+				// request_id: `${ctx.id}`,
 				node_name: `${this.name}`,
 				node: (this as unknown as RunnerNode).node,
 			});
@@ -117,7 +117,7 @@ export default abstract class NanoService<T> extends NodeBase {
 				env: process.env.NODE_ENV,
 				workflow_path: `${ctx.workflow_path}`,
 				workflow_name: `${ctx.workflow_name}`,
-				request_id: `${ctx.id}`,
+				// request_id: `${ctx.id}`,
 				node_name: `${this.name}`,
 				node: (this as unknown as RunnerNode).node,
 			});
@@ -126,7 +126,7 @@ export default abstract class NanoService<T> extends NodeBase {
 				env: process.env.NODE_ENV,
 				workflow_path: `${ctx.workflow_path}`,
 				workflow_name: `${ctx.workflow_name}`,
-				request_id: `${ctx.id}`,
+				// request_id: `${ctx.id}`,
 				node_name: `${this.name}`,
 				node: (this as unknown as RunnerNode).node,
 			});
@@ -141,7 +141,7 @@ export default abstract class NanoService<T> extends NodeBase {
 				env: process.env.NODE_ENV,
 				workflow_path: `${ctx.workflow_path}`,
 				workflow_name: `${ctx.workflow_name}`,
-				request_id: `${ctx.id}`,
+				// request_id: `${ctx.id}`,
 				node_name: `${this.name}`,
 				node: (this as unknown as RunnerNode).node,
 			});
