@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.23
+
+### Patch Changes
+
+- Refactored logging output to structured JSON format for better compatibility with Loki and Grafana. Logs now support queryable fields like `request_id`, `workflow_name`, and `duration_ms`.
+
 ## 0.1.22
 
 ### Patch Changes
