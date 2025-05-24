@@ -1,4 +1,4 @@
-import { type ConfigContext, type Context, NodeBase, type ResponseContext } from "@nanoservice-ts/shared";
+import { type ConfigContext, type Context, Metrics, NodeBase, type ResponseContext } from "@nanoservice-ts/shared";
 import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
 import type VarsContext from "@nanoservice-ts/shared/dist/types/VarsContext";
 import { metrics } from "@opentelemetry/api";
@@ -34,66 +34,120 @@ export default abstract class NanoService<T> extends NodeBase {
 	}
 
 	public async run(ctx: Context): Promise<ResponseContext> {
-		const response: ResponseContext = { success: true, data: {}, error: null };
 		const defaultMeter = metrics.getMeter("default");
-		const start = performance.now();
-		ctx.logger.log(`Running node: ${this.name} [${JSON.stringify(this.originalConfig)}]`);
 
-		const node_execution = defaultMeter.createCounter("node", {
-			description: "Node requests",
-		});
+		try {
+			const globalMetrics = new Metrics();
+			globalMetrics.start();
+			const response: ResponseContext = { success: true, data: {}, error: null };
 
-		const node_time = defaultMeter.createGauge("node_time", {
-			description: "Node elapsed time",
-		});
+			const start = performance.now();
+			ctx.logger.log(`Running node: ${this.name} [${JSON.stringify(this.originalConfig)}]`);
 
-		const config = _.cloneDeep(ctx.config) as ConfigContext;
-		let opts: JsonLikeObject = (config as JsonLikeObject)[this.name] as unknown as JsonLikeObject;
-		const data = ctx.response?.data || ctx.request?.body;
-		const inputs = opts.inputs || opts.conditions;
+			const node_execution = defaultMeter.createCounter("node", {
+				description: "Node requests",
+			});
 
-		opts = this.blueprintMapper(
-			opts as unknown as ParamsDictionary,
-			ctx,
-			data as ParamsDictionary,
-		) as unknown as JsonLikeObject;
-		await this.validate(inputs as JsonLikeObject, this.inputSchema);
+			const node_time = defaultMeter.createGauge("node_time", {
+				description: "Node elapsed time",
+			});
 
-		// Process node custom logic
-		const result = await this.handle(ctx, inputs as JsonLikeObject);
-		this.v.validate(result, this.outputSchema);
-		const end = performance.now();
+			const node_mem = defaultMeter.createGauge("node_memory", {
+				description: "Node memory usage",
+			});
 
-		node_execution.add(1, {
-			env: process.env.NODE_ENV,
-			workflow_runner_path: `${ctx.workflow_path}`,
-			workflow_runner_name: `${ctx.workflow_name}`,
-			node_name: `${this.name}`,
-			node: (this as unknown as RunnerNode).node,
-		});
+			const node_cpu = defaultMeter.createGauge("node_cpu", {
+				description: "Node cpu usage",
+			});
 
-		node_time.record(end - start, {
-			env: process.env.NODE_ENV,
-			workflow_runner_path: `${ctx.workflow_path}`,
-			workflow_runner_name: `${ctx.workflow_name}`,
-			node_name: `${this.name}`,
-			node: (this as unknown as RunnerNode).node,
-		});
+			const config = _.cloneDeep(ctx.config) as ConfigContext;
+			let opts: JsonLikeObject = (config as JsonLikeObject)[this.name] as unknown as JsonLikeObject;
+			const data = ctx.response?.data || ctx.request?.body;
+			const inputs = opts.inputs || opts.conditions;
 
-		ctx.logger.log(`Executed node: ${this.name} in ${(end - start).toFixed(2)}ms`);
+			opts = this.blueprintMapper(
+				opts as unknown as ParamsDictionary,
+				ctx,
+				data as ParamsDictionary,
+			) as unknown as JsonLikeObject;
+			await this.validate(inputs as JsonLikeObject, this.inputSchema);
 
-		if (this.set_var) {
-			const vars = {
-				[this.name]: (result as unknown as JsonLikeObject).data,
-			};
-			this.setVar(ctx, vars as unknown as VarsContext);
-			response.data = ctx.response || {};
-		} else {
-			response.data = result;
-			(response.data as unknown as NanoService<T>).contentType = this.contentType;
+			// Process node custom logic
+			const result = await this.handle(ctx, inputs as JsonLikeObject);
+			this.v.validate(result, this.outputSchema);
+			const end = performance.now();
+
+			node_execution.add(1, {
+				env: process.env.NODE_ENV,
+				workflow_path: `${ctx.workflow_path}`,
+				workflow_name: `${ctx.workflow_name}`,
+				request_id: `${ctx.id}`,
+				node_name: `${this.name}`,
+				node: (this as unknown as RunnerNode).node,
+			});
+
+			node_time.record(end - start, {
+				env: process.env.NODE_ENV,
+				workflow_path: `${ctx.workflow_path}`,
+				workflow_name: `${ctx.workflow_name}`,
+				request_id: `${ctx.id}`,
+				node_name: `${this.name}`,
+				node: (this as unknown as RunnerNode).node,
+			});
+
+			ctx.logger.log(`Executed node: ${this.name} in ${(end - start).toFixed(2)}ms`);
+
+			if (this.set_var) {
+				const vars = {
+					[this.name]: (result as unknown as JsonLikeObject).data,
+				};
+				this.setVar(ctx, vars as unknown as VarsContext);
+				response.data = ctx.response || {};
+			} else {
+				response.data = result;
+				(response.data as unknown as NanoService<T>).contentType = this.contentType;
+			}
+
+			globalMetrics.retry();
+			globalMetrics.stop();
+			const average = await globalMetrics.getMetrics();
+			globalMetrics.clear();
+
+			node_mem.record(average.memory.max, {
+				env: process.env.NODE_ENV,
+				workflow_path: `${ctx.workflow_path}`,
+				workflow_name: `${ctx.workflow_name}`,
+				request_id: `${ctx.id}`,
+				node_name: `${this.name}`,
+				node: (this as unknown as RunnerNode).node,
+			});
+
+			node_cpu.record(average.cpu.usage, {
+				env: process.env.NODE_ENV,
+				workflow_path: `${ctx.workflow_path}`,
+				workflow_name: `${ctx.workflow_name}`,
+				request_id: `${ctx.id}`,
+				node_name: `${this.name}`,
+				node: (this as unknown as RunnerNode).node,
+			});
+
+			return response;
+		} catch (error: unknown) {
+			const node_errors = defaultMeter.createCounter("node_errors", {
+				description: "Node errors",
+			});
+
+			node_errors.add(1, {
+				env: process.env.NODE_ENV,
+				workflow_path: `${ctx.workflow_path}`,
+				workflow_name: `${ctx.workflow_name}`,
+				request_id: `${ctx.id}`,
+				node_name: `${this.name}`,
+				node: (this as unknown as RunnerNode).node,
+			});
+
+			throw error;
 		}
-
-		return response;
 	}
 
 	public abstract handle(

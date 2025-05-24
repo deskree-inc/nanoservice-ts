@@ -67,7 +67,7 @@ export default class HttpTrigger extends TriggerBase {
 			this.app.use(["/:workflow", "/"], async (req: Request, res: Response): Promise<void> => {
 				const id: string = (req.query?.requestId as string) || (uuid() as string);
 				req.query.requestId = undefined;
-				let blueprintNameInPath: string = req.params.workflow;
+				let workflowNameInPath: string = req.params.workflow;
 
 				let remoteNodeExecution = false;
 				let runtimeWorkflow: RuntimeWorkflow | undefined;
@@ -83,7 +83,7 @@ export default class HttpTrigger extends TriggerBase {
 					description: "Workflow runner errors",
 				});
 
-				await this.tracer.startActiveSpan(`${blueprintNameInPath}`, async (span: Span) => {
+				await this.tracer.startActiveSpan(`${workflowNameInPath}`, async (span: Span) => {
 					try {
 						const start = performance.now();
 						if (remoteNodeExecution && runtimeWorkflow !== undefined) {
@@ -106,7 +106,7 @@ export default class HttpTrigger extends TriggerBase {
 							const trigger_config =
 								((workflowModel.trigger as unknown as ParamsDictionary)[trigger] as unknown as TriggerOpts) || {};
 
-							let remoteNodeName = blueprintNameInPath + req.path;
+							let remoteNodeName = workflowNameInPath + req.path;
 							if (remoteNodeName.substring(remoteNodeName.length - 1) === "/") {
 								remoteNodeName = remoteNodeName.substring(0, remoteNodeName.length - 1);
 							}
@@ -126,12 +126,12 @@ export default class HttpTrigger extends TriggerBase {
 								});
 
 							this.nodeMap.workflows[id] = step;
-							blueprintNameInPath = id;
+							workflowNameInPath = id;
 							remoteNodeExecution = true;
 						}
 
-						await this.configuration.init(blueprintNameInPath, this.nodeMap);
-						let ctx: Context = this.createContext(undefined, blueprintNameInPath || req.params.blueprint, id);
+						await this.configuration.init(workflowNameInPath, this.nodeMap);
+						let ctx: Context = this.createContext(undefined, workflowNameInPath || req.params.workflow, id);
 						req.params = handleDynamicRoute(this.configuration.trigger.http.path, req);
 
 						ctx.logger.log(`Version: ${this.configuration.version}, Method: ${req.method}`);
@@ -181,7 +181,8 @@ export default class HttpTrigger extends TriggerBase {
 								workflow_runner_errors.add(1, {
 									env: process.env.NODE_ENV,
 									workflow_version: `${this.configuration?.version || "unknown"}`,
-									workflow_name: `${blueprintNameInPath}`,
+									workflow_name: `${this.configuration?.name || "unknown"}`,
+									workflow_path: `${workflowNameInPath}`,
 								});
 								span.setStatus({
 									code: SpanStatusCode.ERROR,
@@ -201,7 +202,8 @@ export default class HttpTrigger extends TriggerBase {
 									workflow_runner_errors.add(1, {
 										env: process.env.NODE_ENV,
 										workflow_version: `${this.configuration?.version || "unknown"}`,
-										workflow_name: `${blueprintNameInPath}`,
+										workflow_name: `${this.configuration?.name || "unknown"}`,
+										workflow_path: `${workflowNameInPath}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: JSON.stringify(error_context.context.json) });
 									this.logger.error(`${JSON.stringify(error_context.context.json)}`);
@@ -210,7 +212,8 @@ export default class HttpTrigger extends TriggerBase {
 									workflow_runner_errors.add(1, {
 										env: process.env.NODE_ENV,
 										workflow_version: `${this.configuration?.version || "unknown"}`,
-										workflow_name: `${blueprintNameInPath}`,
+										workflow_name: `${this.configuration?.name || "unknown"}`,
+										workflow_path: `${workflowNameInPath}`,
 									});
 									span.setStatus({ code: SpanStatusCode.ERROR, message: error_context.message });
 									this.logger.error(`${error_context.message}`, error_context.stack?.replace(/\n/g, " "));
@@ -221,7 +224,8 @@ export default class HttpTrigger extends TriggerBase {
 							workflow_runner_errors.add(1, {
 								env: process.env.NODE_ENV,
 								workflow_version: `${this.configuration?.version || "unknown"}`,
-								workflow_name: `${blueprintNameInPath}`,
+								workflow_name: `${this.configuration?.name || "unknown"}`,
+								workflow_path: `${workflowNameInPath}`,
 							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
 							this.logger.error(`${(e as Error).message}`, `${(e as Error).stack?.replace(/\n/g, " ")}`);

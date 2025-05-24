@@ -59,26 +59,34 @@ export default abstract class TriggerBase extends Trigger {
 		globalMetrics.clear();
 		workflow_execution.add(1, {
 			env: process.env.NODE_ENV,
-			workflow_runner_version: `${this.configuration.version}`,
-			workflow_runner_name: `${this.configuration.name}`,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+			request_id: `${ctx.id}`,
 		});
 
 		workflow_runner_time.record(end - start, {
 			env: process.env.NODE_ENV,
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+			request_id: `${ctx.id}`,
 		});
 
 		workflow_runner_mem.record(average.memory.max, {
 			env: process.env.NODE_ENV,
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+			request_id: `${ctx.id}`,
 		});
 
 		workflow_runner_cpu.record(average.cpu.usage, {
 			env: process.env.NODE_ENV,
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+			request_id: `${ctx.id}`,
 		});
 
 		return {

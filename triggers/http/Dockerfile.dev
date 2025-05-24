@@ -1,0 +1,27 @@
+# Stage 1: Use Bun to install dependencies
+FROM oven/bun:1.1.4-alpine AS deps
+WORKDIR /app
+
+COPY package.json *bun.lockb ./
+RUN bun install --production
+
+# Stage 2: Use Node.js to run the app
+FROM node:23-alpine AS runner
+WORKDIR /usr/src/app
+
+# Copy installed node_modules from previous stage
+COPY --from=deps /app/node_modules ./node_modules
+
+COPY *dist ./dist
+COPY workflows ./workflows
+COPY public ./public
+COPY .env.local .env.local
+COPY package.json package.json
+COPY .env.local .env.local
+COPY tsconfig.json tsconfig.json
+
+# Expose app ports
+EXPOSE 4000 9091
+
+# Wait for dist/index.js to be compiled before running
+CMD ["sh", "-c", "while [ ! -f dist/index.js ]; do echo -n '.'; sleep 1; done && echo && node --env-file=.env.local -r ./dist/opentelemetry_metrics.js dist/index.js"]

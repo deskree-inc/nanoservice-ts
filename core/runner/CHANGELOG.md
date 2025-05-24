@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.22
+
+### Patch Changes
+
+- sync metrics for workflows and nodes, including mem, cpu and errors to nodes.
+
 ## 0.1.21
 
 ### Patch Changes

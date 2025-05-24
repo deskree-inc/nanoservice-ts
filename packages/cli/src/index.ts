@@ -14,6 +14,7 @@ import "./commands/login/index.js";
 import "./commands/logout/index.js";
 import "./commands/build/index.js";
 import "./commands/deploy/index.js";
+import "./commands/monitor/index.js";
 
 const version = await getPackageVersion();
 
