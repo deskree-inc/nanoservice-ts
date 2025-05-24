@@ -380,11 +380,11 @@
 
       const queries = {
         overview: {
-          requests: "increase(workflow_total[1m])",
-          time: "increase(workflow_time[1m])",
-          errors: "increase(workflow_errors_total[1m])",
-          cpu: "increase(workflow_cpu[1m])",
-          memory: "increase(workflow_memory[1m])",
+          requests: "increase(workflow_total[1m]) > 0",
+          time: "increase(workflow_time[1m]) > 0",
+          errors: "sum(increase(workflow_errors_total[1m]))",
+          cpu: "increase(workflow_cpu[1m]) > 0",
+          memory: "increase(workflow_memory[1m]) > 0",
         },
         workflows: {
           requests: "sum(increase(workflow_total[1m])) by (workflow_path)",
@@ -574,7 +574,7 @@
         await updateChart("node_time", queries.nodes.time, true, "node_name");
         await updateChart("node_memory", queries.nodes.memory, true, "node_name");
         await updateChart("node_cpu", queries.nodes.cpu, true, "node_name");
-        await updateChart("workflow_errors", queries.nodes.errors, true, "node_name");
+        await updateChart("node_errors", queries.nodes.errors, true, "node_name");
       }
 
       async function updateLokiLogs() {
