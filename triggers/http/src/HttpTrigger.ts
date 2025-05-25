@@ -82,6 +82,9 @@ export default class HttpTrigger extends TriggerBase {
 				const workflow_runner_errors = defaultMeter.createCounter("workflow_errors", {
 					description: "Workflow runner errors",
 				});
+				const workflow_execution = defaultMeter.createCounter("workflow", {
+					description: "Workflow requests",
+				});
 
 				await this.tracer.startActiveSpan(`${workflowNameInPath}`, async (span: Span) => {
 					try {
@@ -174,6 +177,13 @@ export default class HttpTrigger extends TriggerBase {
 						span.setAttribute("workflow_request_id", `${id}`);
 						span.recordException(e as Error);
 
+						workflow_execution.add(0, {
+							env: process.env.NODE_ENV,
+							workflow_version: `${this.configuration?.version || "unknown"}`,
+							workflow_name: `${this.configuration?.name || "unknown"}`,
+							workflow_path: `${workflowNameInPath}`,
+						});
+
 						if (e instanceof GlobalError) {
 							const error_context = e as GlobalError;
 
@@ -228,7 +238,10 @@ export default class HttpTrigger extends TriggerBase {
 								workflow_path: `${workflowNameInPath}`,
 							});
 							span.setStatus({ code: SpanStatusCode.ERROR, message: (e as Error).message });
-							this.logger.error(`${(e as Error).message}`, `${(e as Error).stack?.replace(/\n/g, " ")}`);
+							this.logger.error(
+								`${workflowNameInPath}: ${(e as Error).message}`,
+								`${(e as Error).stack?.replace(/\n/g, " ")}`,
+							);
 							res.status(500).json({ error: (e as Error).message });
 						}
 					} finally {
