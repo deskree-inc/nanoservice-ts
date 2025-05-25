@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.26
+
+### Patch Changes
+
+- extended memory and cpu metrics
+
 ## 0.1.25
 
 ### Patch Changes

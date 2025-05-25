@@ -32,15 +32,39 @@ export default abstract class TriggerBase extends Trigger {
 		});
 
 		const workflow_runner_time = defaultMeter.createGauge("workflow_time", {
-			description: "Workflow runner elapsed time",
+			description: "Workflow elapsed time",
 		});
 
-		const workflow_runner_mem = defaultMeter.createGauge("workflow_memory", {
-			description: "Workflow runner memory usage",
+		const workflow_memory = defaultMeter.createGauge("workflow_memory", {
+			description: "Workflow memory usage",
 		});
 
-		const workflow_runner_cpu = defaultMeter.createGauge("workflow_cpu", {
-			description: "Workflow runner cpu usage",
+		const workflow_memory_average = defaultMeter.createGauge("workflow_memory_average", {
+			description: "Workflow memory average",
+		});
+
+		const workflow_memory_usage_min = defaultMeter.createGauge("workflow_memory_usage_min", {
+			description: "Workflow memory usage min",
+		});
+
+		const workflow_memory_total = defaultMeter.createGauge("workflow_memory_total", {
+			description: "Workflow memory total",
+		});
+
+		const workflow_memory_free = defaultMeter.createGauge("workflow_memory_free", {
+			description: "Workflow memory free",
+		});
+
+		const workflow_cpu = defaultMeter.createGauge("workflow_cpu", {
+			description: "Workflow cpu usage",
+		});
+
+		const workflow_cpu_average = defaultMeter.createGauge("workflow_cpu_average", {
+			description: "Workflow cpu average",
+		});
+
+		const workflow_cpu_total = defaultMeter.createGauge("workflow_cpu_total", {
+			description: "Workflow cpu total",
 		});
 
 		const globalMetrics = new Metrics();
@@ -56,13 +80,12 @@ export default abstract class TriggerBase extends Trigger {
 		ctx.logger.log(
 			`Memory average: ${average.memory.total.toFixed(2)}MB, min: ${average.memory.min.toFixed(2)}MB, max: ${average.memory.max.toFixed(2)}MB`,
 		);
-		globalMetrics.clear();
+
 		workflow_execution.add(1, {
 			env: process.env.NODE_ENV,
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			// request_id: `${ctx.id}`,
 		});
 
 		workflow_runner_time.record(end - start, {
@@ -70,24 +93,65 @@ export default abstract class TriggerBase extends Trigger {
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			// request_id: `${ctx.id}`,
 		});
 
-		workflow_runner_mem.record(average.memory.max, {
+		workflow_memory.record(average.memory.max, {
 			env: process.env.NODE_ENV,
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			// request_id: `${ctx.id}`,
 		});
 
-		workflow_runner_cpu.record(average.cpu.usage, {
+		workflow_memory_average.record(average.memory.total, {
 			env: process.env.NODE_ENV,
 			workflow_version: `${this.configuration.version}`,
 			workflow_name: `${this.configuration.name}`,
 			workflow_path: `${ctx.workflow_path}`,
-			// request_id: `${ctx.id}`,
 		});
+
+		workflow_memory_usage_min.record(average.memory.min, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+		});
+
+		workflow_memory_total.record(average.memory.global_memory, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+		});
+
+		workflow_memory_free.record(average.memory.global_free_memory, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+		});
+
+		workflow_cpu.record(average.cpu.usage, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+		});
+
+		workflow_cpu_average.record(average.cpu.average, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+		});
+
+		workflow_cpu_total.record(average.cpu.total, {
+			env: process.env.NODE_ENV,
+			workflow_version: `${this.configuration.version}`,
+			workflow_name: `${this.configuration.name}`,
+			workflow_path: `${ctx.workflow_path}`,
+		});
+
+		globalMetrics.clear();
 
 		return {
 			ctx: context,
