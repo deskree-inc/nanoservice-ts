@@ -197,12 +197,12 @@ export async function createProject(opts: OptionValues, version: string, current
 			fsExtra.ensureDirSync(`${workflowsDir}/yaml`);
 			fsExtra.ensureDirSync(`${workflowsDir}/toml`);
 		} else {
-			fsExtra.ensureDirSync(`${nodesDir}/examples/infra`);
-			fsExtra.ensureDirSync(`${nodesDir}/examples/infra/postgresql`);
-			fsExtra.ensureDirSync(`${nodesDir}/examples/infra/milvus`);
+			fsExtra.ensureDirSync(`${dirPath}/infra/postgresql`);
+			fsExtra.ensureDirSync(`${dirPath}/infra/milvus`);
 
-			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/development`, `${nodesDir}/examples/infra/postgresql`);
-			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/milvus`, `${nodesDir}/examples/infra/milvus`);
+			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/development`, `${dirPath}/infra/postgresql`);
+			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/milvus`, `${dirPath}/infra/milvus`);
+
 			fsExtra.writeFileSync(`${dirPath}/src/Nodes.ts`, node_file);
 			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/sdk`, `${dirPath}/public/sdk`);
 		}

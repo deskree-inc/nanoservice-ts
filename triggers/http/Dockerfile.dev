@@ -15,13 +15,20 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY *dist ./dist
 COPY workflows ./workflows
 COPY public ./public
-COPY .env.local .env.local
 COPY package.json package.json
-COPY .env.local .env.local
 COPY tsconfig.json tsconfig.json
+
+ENV NODE_ENV=production
+ENV PROJECT_NAME=trigger-http-server
+ENV PROJECT_VERSION=0.0.1
+ENV APP_NAME=nanoservice-http
+ENV PORT=4000
+ENV WORKFLOWS_PATH=/usr/src/app/workflows
+ENV NODES_PATH=/usr/src/app/src/nodes
+ENV DISABLE_TRIGGER_RUN=false
 
 # Expose app ports
 EXPOSE 4000 9091
 
 # Wait for dist/index.js to be compiled before running
-CMD ["sh", "-c", "while [ ! -f dist/index.js ]; do echo -n '.'; sleep 1; done && echo && node --env-file=.env.local -r ./dist/opentelemetry_metrics.js dist/index.js"]
+CMD ["sh", "-c", "while [ ! -f dist/index.js ]; do echo -n '.'; sleep 1; done && echo && node -r ./dist/opentelemetry_metrics.js dist/index.js"]
