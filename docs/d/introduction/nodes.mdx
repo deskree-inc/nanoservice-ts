@@ -2,261 +2,520 @@
 title: Nodes
 ---
 
-## Concept
+## Introduction
 
-Nodes are the fundamental building blocks in the Nanoservice-TS architecture. Each Node is a self-contained, reusable unit of code designed to perform a single, specific, and well-defined task. Think of them as highly specialized microservices or serverless functions, but even more granular – nanoservices.
+Nodes are the fundamental building blocks of the Nanoservice-ts framework. They encapsulate discrete pieces of business logic that can be composed together to create complex workflows. Each Node is designed to perform a specific task, making your code more modular, maintainable, and reusable.
 
-## What is a Node?
+Think of Nodes as specialized microservices that:
+- Have clearly defined inputs and outputs
+- Perform a single responsibility
+- Can be tested in isolation
+- Are composable through workflows
 
-A Node encapsulates a piece of logic that can be part of a larger [Workflow](./workflows.mdx). Examples of tasks a Node might perform include:
+This modular approach allows developers to build complex applications by connecting simple, focused components rather than writing monolithic code.
 
-*   Making an HTTP request to an external API.
-*   Querying a database.
-*   Transforming data from one format to another.
-*   Sending an email or a notification.
-*   Performing a calculation.
-*   Logging information.
-*   Interacting with a file system.
-*   Implementing custom business logic specific to your application.
+## Creating a Node
 
-Nodes are designed with the Single Responsibility Principle (SRP) in mind. This focus on a single task makes them:
+### Using the CLI
 
-*   **Easy to understand and maintain**: The scope of each Node is small.
-*   **Highly reusable**: A Node written for one workflow can often be used in many others.
-*   **Independently testable**: You can test the functionality of each Node in isolation.
-*   **Scalable**: If a particular task becomes a bottleneck, the underlying infrastructure (if designed for it) could potentially scale instances of that Node type.
-
-## Node Structure
-
-A Nanoservice-TS Node typically consists of two main parts:
-
-1.  **Node Definition (`node.json`)**: A JSON file that describes the Node's metadata, including its name, version, description, and importantly, its input and output schemas.
-    *   **`name`**: A unique identifier for the Node type (e.g., `Http.Request`, `Database.QueryMongo`).
-    *   **`description`**: A human-readable description of what the Node does.
-    *   **`inputSchema`**: A JSON schema defining the expected input data structure and types for the Node. This allows for validation and clear contracts.
-    *   **`outputSchema`**: A JSON schema defining the structure and types of data the Node will output upon successful execution.
-
-2.  **Node Implementation (e.g., `index.ts`)**: A TypeScript file (or JavaScript) containing the actual logic that the Node executes. This file typically exports a class or function that conforms to the Nanoservice-TS Node interface.
-    The implementation will receive input data (conforming to `inputSchema`), perform its task, and then either return output data (conforming to `outputSchema`) or signal an error.
-
-### Example: `node.json` for a Simple Logger Node
-
-```json
-{
-  "name": "Utils.Logger",
-  "version": "1.0.0",
-  "description": "Logs a message to the console.",
-  "inputSchema": {
-    "type": "object",
-    "properties": {
-      "message": {
-        "type": "string",
-        "description": "The message to log."
-      },
-      "level": {
-        "type": "string",
-        "enum": ["info", "warn", "error"],
-        "default": "info",
-        "description": "The log level."
-      }
-    },
-    "required": ["message"]
-  },
-  "outputSchema": {
-    "type": "object",
-    "properties": {
-      "status": {
-        "type": "string",
-        "enum": ["success"]
-      }
-    }
-  }
-}
-```
-
-### Example: `index.ts` for a Simple Logger Node (Conceptual)
-
-```typescript
-import { NanoserviceNode, NodeInput, NodeOutput, Context } from 'nanoservice-ts-sdk'; // Hypothetical SDK import
-
-interface LoggerInput {
-  message: string;
-  level?: 'info' | 'warn' | 'error';
-}
-
-interface LoggerOutput {
-  status: 'success';
-}
-
-export class LoggerNode implements NanoserviceNode<LoggerInput, LoggerOutput> {
-  async execute(input: NodeInput<LoggerInput>, context: Context): Promise<NodeOutput<LoggerOutput>> {
-    const { message, level = 'info' } = input.data;
-
-    // Access shared context data if needed
-    // const tenantId = context.get('tenantId');
-
-    console[level](`[${context.workflowInstanceId || 'N/A'}] ${message}`);
-
-    // Example of setting data back to context
-    // context.set('lastLogTime', new Date().toISOString());
-
-    return {
-      data: { status: 'success' },
-      // nextNodeId can also be determined dynamically here if the node supports it
-    };
-  }
-}
-
-// Or, for simpler nodes, it might be a function:
-// export async function execute(input: NodeInput<LoggerInput>, context: Context): Promise<NodeOutput<LoggerOutput>> { ... }
-```
-*(Note: The exact SDK and class structure might vary. Refer to the official Nanoservice-TS SDK documentation for precise implementation details.)*
-
-## Using Nodes in Workflows
-
-In a Workflow definition, you instantiate Nodes by referencing their `name`. You provide the necessary input data, often mapping it from the trigger, the [Context Object](./context.mdx), or the output of previous Nodes.
-
-```json
-// ... inside a workflow definition ...
-"nodes": [
-  {
-    "id": "log_start",
-    "node": "Utils.Logger", // Referencing the Node by its name
-    "input": {
-      "message": "Workflow processing started for item: {{trigger.body.itemId}}",
-      "level": "info"
-    },
-    "next_node_id": "process_item"
-  },
-  // ... other nodes ...
-]
-// ...
-```
-
-## Core Nodes vs. Custom Nodes
-
----
-title: Built-In Nodes
----
-
-`nanoservice-ts` comes with a series of built-on nodes to make workflow development easier.
-
-## Control Flow
-### if-else
-
-A node that allows you to define a sequence of steps to be executed based on a condition.
-
-#### Params
-<ResponseField name="conditions" type="array of steps conditions">
-  <Expandable title="properties">
-    <ResponseField name="type" type="if | else">
-      The type of condition to evaluate.
-    </ResponseField>
-    <ResponseField name="steps" type="Object">
-      An object containing futher nodes sequence
-    </ResponseField>
-    <ResponseField name="condition" type="string">
-      JS expression to evaluate. In case of `else`, no condition is needed.
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
-#### Example of Use
-
-<CodeGroup>
-```json Node Steps Example
-{
-    "name": "filter-request",
-    "node": "@nanoservice-ts/if-else",
-    "type": "module"
-}
-```
-```json Node Configuration Example
-"filter-request": {
-    "conditions": [
-        {
-            "type": "if",
-            "steps": [
-                {
-                    "name": "get-countries",
-                    "node": "@nanoservice-ts/api-call",
-                    "type": "module"
-                }
-            ],
-            "condition": "ctx.request.query.countries === \"true\""
-        },
-        {
-            "type": "else",
-            "steps": [
-                {
-                    "name": "get-facts",
-                    "node": "@nanoservice-ts/api-call",
-                    "type": "module"
-                }
-            ]
-        }
-    ]
-}
-```
-</CodeGroup>
-
-## Web
-### api-call
-
-A node that allows you to make an HTTP request to an API.
-
-#### Params
-<ResponseField name="inputs" type="object of inputs">
-  <Expandable title="properties">
-    <ResponseField name="url" type="string">
-      The URL to make the request to.
-    </ResponseField>
-    <ResponseField name="method" type="string">
-      The HTTP method to use.
-    </ResponseField>
-    <ResponseField name="headers" type="Object">
-      An object containing the headers to send.
-    </ResponseField>
-    <ResponseField name="responseType" type="string">
-      The type of response to expect.
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
-#### Example of Use
-
-<CodeGroup>
-```json Node Steps Example
-{
-  "name": "api",
-  "node": "api-call",
-  "type": "local"
-}
-```
-```json Node Configuration Example
-"api": {
-  "inputs": {
-    "url": "https://ll.thespacedevs.com/2.3.0/launches/?format=json&year=${ctx.request.query.dob ? new Date(ctx.request.query.dob).getYear() : new Date('2000-01-01').getYear()}",
-    "method": "GET",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "responseType": "json"
-  }
-}
-```
-</CodeGroup>
-
-## Creating Custom Nodes
-
-You can easily create your own Nodes using the `nanoctl` CLI:
+The easiest way to create a new Node is using the Nanoservice-ts CLI:
 
 ```bash
-nanoctl create node <node-name>
+npx nanoctl@latest node
 ```
 
-This command will scaffold the necessary files (`node.json` and `index.ts` or similar) in your project's `nodes/` directory, allowing you to define its schema and implement its logic.
+When you run this command, you'll see the following interactive prompts:
 
-Nodes are the heart of Nanoservice-TS, enabling modularity, reusability, and clarity in your backend applications. By mastering Node creation and usage, you can build sophisticated and maintainable systems.
+```
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
+ |N|A|N|O|S|E|R|V|I|C|E|-|T|S| |C|L|I|
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
 
-Next, understand how data is shared and managed within a workflow execution: [Context Object](./context.mdx).
+┌   Creating a new Node 
+│
+◇  Please provide a name for the node
+│  basic
+│
+◇  Select the nanoservice runtime
+│  Typescript
+│
+◇  Select the nanoservice type
+│  Module
+│
+◇  Select the template
+│  Class
+│
+◇  Node "basic" created successfully
+```
+
+This command generates a complete Node package in your project's `src/nodes/` directory with the name you provided.
+
+### Node Structure
+
+When you create a Node using the CLI, it generates the following folder structure:
+
+```
+src/
+└── nodes/
+    └── basic/
+        ├── dist/
+        ├── node_modules/
+        ├── test/
+        │   ├── helper.ts
+        │   └── index.test.ts
+        ├── .gitignore
+        ├── CHANGELOG.md
+        ├── config.json
+        ├── index.ts
+        ├── package-lock.json
+        ├── package.json
+        ├── README.md
+        └── tsconfig.json
+```
+
+Each Node is essentially a self-contained package with its own dependencies, configuration, and tests. This structure allows Nodes to be developed, tested, and versioned independently.
+
+## Node Implementation
+
+### The Node Class
+
+The core of a Node is its implementation class, which extends the `NanoService` base class from the `@nanoservice-ts/runner` package. Here's the template generated by the CLI:
+
+```typescript
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+
+type InputType = {
+  message?: string;
+};
+
+/**
+ * Represents a Node service that extends the NanoService class.
+ * This class is responsible for handling requests and providing responses
+ * with automated validation using JSON Schema.
+ */
+export default class Node extends NanoService<InputType> {
+  /**
+   * Initializes a new instance of the Node class.
+   * Sets up the input and output JSON Schema for automated validation.
+   */
+  constructor() {
+    super();
+    // Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+    this.inputSchema = {};
+    // Learn JSON Schema: https://json-schema.org/learn/getting-started-step-by-step
+    this.outputSchema = {};
+  }
+
+  /**
+   * Handles the incoming request and returns a response.
+   *
+   * @param ctx - The context of the request.
+   * @param inputs - The input data for the request.
+   * @returns A promise that resolves to an INanoServiceResponse object.
+   *
+   * The method tries to execute the main logic and sets a success message in the response.
+   * If an error occurs, it catches the error, creates a GlobalError object, sets the error details,
+   * and sets the error in the response.
+   */
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+
+    try {
+      // Your code here
+      response.setSuccess({ message: inputs.message || "Hello World from Node!" });
+    } catch (error: unknown) {
+      const nodeError: GlobalError = new GlobalError((error as Error).message);
+      nodeError.setCode(500);
+      nodeError.setStack((error as Error).stack);
+      nodeError.setName(this.name);
+      nodeError.setJson(undefined);
+
+      response.setError(nodeError);
+    }
+
+    return response;
+  }
+}
+```
+
+### Key Components of a Node Class
+
+1. **Type Definitions**:
+   - `InputType`: Defines the structure of data the Node expects to receive.
+   - You can also define an `OutputType` for better type safety of the response data.
+
+2. **Constructor**:
+   - Initializes the Node and sets up JSON Schema for input and output validation.
+   - You can also set metadata like name, version, description, and category here.
+
+3. **Handle Method**:
+   - The core method where your business logic resides.
+   - Takes a `Context` object and the typed inputs.
+   - Returns a `NanoServiceResponse` containing either success data or an error.
+   - Implements proper error handling with the `GlobalError` class.
+
+### Node Configuration
+
+Each Node has a `config.json` file that defines its metadata, input/output schemas, and examples:
+
+```json
+{
+  "name": "node-name",
+  "version": "1.0.0",
+  "description": "",
+  "group": "API",
+  "config": {
+    "type": "object",
+    "properties": {
+      "inputs": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    "required": ["inputs"],
+    "example": {
+      "inputs": {
+        "properties": {
+          "url": "https://countriesnow.space/api/v0.1/countries/capital",
+          "method": "POST",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "data": "Hello World"
+          }
+        }
+      }
+    }
+  },
+  "input": {
+    "anyOf": [
+      {
+        "type": "object"
+      },
+      {
+        "type": "array"
+      },
+      {
+        "type": "string"
+      }
+    ],
+    "description": "This node accepts an object as input from the previous node or request body"
+  },
+  "output": {
+    "type": "object",
+    "description": "The response from the API call"
+  },
+  "steps": {
+    "type": "boolean",
+    "default": false
+  },
+  "functions": {
+    "type": "array"
+  }
+}
+```
+
+This configuration file helps document the Node's capabilities and provides examples for users.
+
+### Package Configuration
+
+Each Node has its own `package.json` file with dependencies and scripts:
+
+```json
+{
+  "name": "basic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test:dev": "vitest",
+    "test": "vitest run",
+    "build": "rm -rf dist && tsc",
+    "build:dev": "tsc --watch"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.1.3",
+    "vitest": "^3.0.4"
+  },
+  "dependencies": {
+    "@nanoservice-ts/shared": "^0.0.9",
+    "@nanoservice-ts/runner": "^0.1.21",
+    "@nanoservice-ts/helper": "^0.1.4"
+  },
+  "private": true
+}
+```
+
+This allows each Node to have its own dependencies and build process.
+
+## Testing Nodes
+
+Nanoservice-ts generates test files for your Nodes automatically. The test setup includes:
+
+### Test Helper
+
+The `helper.ts` file provides a mock Context object for testing:
+
+```typescript
+import type { ParamsDictionary } from "@nanoservice-ts/runner";
+import type { Context } from "@nanoservice-ts/shared";
+
+export default function ctx(): Context {
+  const ctx: Context = {
+    response: {
+      data: null,
+      error: null,
+    },
+    request: {
+      body: {},
+    },
+    config: {},
+    id: "",
+    error: {
+      message: "",
+      code: undefined,
+      json: undefined,
+      stack: undefined,
+      name: undefined,
+    },
+    logger: {
+      log: (message: string): void => {
+        throw new Error("Function not implemented.");
+      },
+      getLogs: (): string[] => {
+        throw new Error("Function not implemented.");
+      },
+      getLogsAsText: (): string => {
+        throw new Error("Function not implemented.");
+      },
+      getLogsAsBase64: (): string => {
+        throw new Error("Function not implemented.");
+      },
+      logLevel: (level: string, message: string): void => {
+        throw new Error("Function not implemented.");
+      },
+      error: (message: string, stack: string): void => {
+        throw new Error("Function not implemented.");
+      },
+    },
+    eventLogger: undefined,
+    _PRIVATE_: undefined,
+  };
+
+  ctx.config = {
+    "api-call": {
+      inputs: {
+        url: "https://jsonplaceholder.typicode.com/todos/1",
+        method: "GET",
+      },
+    },
+  } as unknown as ParamsDictionary;
+
+  return ctx;
+}
+```
+
+### Test File
+
+The `index.test.ts` file contains basic tests for your Node:
+
+```typescript
+import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
+import { beforeAll, expect, test } from "vitest";
+import Node from "../index";
+import ctx from "./helper";
+
+let node: Node;
+
+beforeAll(() => {
+  node = new Node();
+  node.name = "api-call";
+});
+
+// Validate Hello World from Node
+test("Hello World from Node", async () => {
+  const response = await node.handle(ctx(), {});
+  const message: ParamsDictionary = { message: "Hello World from Node!" };
+
+  expect(message).toEqual(response.data);
+});
+```
+
+### Running Tests
+
+You can run tests using the scripts defined in `package.json`:
+
+```bash
+# Run tests in watch mode
+npm run test:dev
+
+# Run tests once
+npm run test
+```
+
+## The Context Object
+
+The Context (`ctx`) object is a crucial part of the Nanoservice-ts framework. It's passed to each Node's `handle` method and provides:
+
+1. **Request Data**: Information about the incoming request (for HTTP triggers).
+2. **Response Data**: Output from previous Nodes in the workflow.
+3. **Configuration**: Node-specific configuration.
+4. **Logging**: Methods for logging information, warnings, and errors.
+5. **Error Handling**: Standardized error reporting.
+
+The Context object facilitates data flow between Nodes in a workflow and provides essential services to each Node.
+
+## Input and Output Validation
+
+Nanoservice-ts uses JSON Schema for input and output validation. You can define schemas in your Node's constructor:
+
+```typescript
+constructor() {
+  super();
+  this.inputSchema = {
+    type: "object",
+    properties: {
+      message: { type: "string" }
+    },
+    required: []
+  };
+  this.outputSchema = {
+    type: "object",
+    properties: {
+      message: { type: "string" }
+    },
+    required: ["message"]
+  };
+}
+```
+
+These schemas ensure that:
+- Your Node receives correctly formatted inputs
+- Your Node produces correctly formatted outputs
+- Errors are caught early and reported clearly
+
+## Error Handling
+
+Proper error handling is essential in Nanoservice-ts. The framework provides the `GlobalError` class for standardized error reporting:
+
+```typescript
+try {
+  // Your code here
+  response.setSuccess({ message: "Success!" });
+} catch (error: unknown) {
+  const nodeError: GlobalError = new GlobalError((error as Error).message);
+  nodeError.setCode(500);
+  nodeError.setStack((error as Error).stack);
+  nodeError.setName(this.name);
+  nodeError.setJson(undefined);
+
+  response.setError(nodeError);
+}
+```
+
+This approach ensures that errors are properly captured, logged, and can be handled by the workflow.
+
+## Built-in Nodes
+
+Nanoservice-ts comes with several built-in Nodes that provide common functionality. These are registered in the `src/Nodes.ts` file:
+
+```typescript
+import ApiCall from "@nanoservice-ts/api-call";
+import IfElse from "@nanoservice-ts/if-else";
+import type { NodeBase } from "@nanoservice-ts/shared";
+
+const nodes: {
+  [key: string]: NodeBase;
+} = {
+  "@nanoservice-ts/api-call": new ApiCall(),
+  "@nanoservice-ts/if-else": new IfElse(),
+};
+
+export default nodes;
+```
+
+### Key Built-in Nodes
+
+1. **`@nanoservice-ts/api-call`**:
+   - Makes HTTP requests to external APIs
+   - Supports various HTTP methods (GET, POST, PUT, DELETE, etc.)
+   - Handles request headers, body, and response parsing
+
+2. **`@nanoservice-ts/if-else`**:
+   - Provides conditional branching in workflows
+   - Evaluates conditions and executes different steps based on the results
+   - Essential for creating dynamic workflows
+
+## Best Practices for Node Development
+
+### Single Responsibility Principle
+
+Each Node should do one thing and do it well. If a Node is becoming complex, consider breaking it into multiple Nodes.
+
+### Clear Input/Output Contracts
+
+Define precise input and output types and schemas. This makes your Nodes more predictable and easier to use.
+
+### Proper Error Handling
+
+Always catch and properly report errors. Use the `GlobalError` class for standardized error reporting.
+
+### Comprehensive Testing
+
+Write thorough tests for your Nodes. Test both success and error scenarios.
+
+### Descriptive Naming
+
+Use clear, descriptive names for your Nodes and their inputs/outputs. This makes workflows easier to understand.
+
+### Statelessness
+
+Design Nodes to be stateless. Any state should be passed through the Context object or stored externally.
+
+### Reusability
+
+Design Nodes to be reusable across different workflows. Avoid hardcoding workflow-specific logic.
+
+## Advanced Node Concepts
+
+### Custom Node Types
+
+While the basic Node template is sufficient for most use cases, you can create specialized Node types for specific purposes:
+
+- **Transformation Nodes**: Convert data from one format to another
+- **Integration Nodes**: Connect to external services or APIs
+- **Decision Nodes**: Implement complex business rules
+- **Aggregation Nodes**: Combine data from multiple sources
+
+### Node Composition
+
+Complex operations can be achieved by composing multiple Nodes in a workflow rather than creating complex Nodes. This approach:
+
+- Improves maintainability
+- Enhances reusability
+- Simplifies testing
+- Makes workflows more flexible
+
+### Node Versioning
+
+As your application evolves, you may need to update your Nodes. Consider versioning strategies:
+
+- Semantic versioning for Node packages
+- Backward compatibility considerations
+- Deprecation policies
+- Migration strategies
+
+## Conclusion
+
+Nodes are the foundation of the Nanoservice-ts framework. By understanding how to create, configure, and test Nodes, you can build modular, maintainable applications that are easy to extend and adapt to changing requirements.
+
+The Node-based architecture encourages good software design practices like separation of concerns, modularity, and testability, leading to more robust and maintainable applications.
+
+Next, learn about how to compose Nodes into [Workflows](./workflows.mdx) to create complete applications.
