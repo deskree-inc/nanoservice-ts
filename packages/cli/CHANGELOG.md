@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.3
+
+### Patch Changes
+
+- monitor command for terminal and web dashboard
+
 ## 0.1.2
 
 ### Patch Changes

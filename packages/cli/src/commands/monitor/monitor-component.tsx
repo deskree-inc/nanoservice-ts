@@ -7,6 +7,7 @@ type SortBy = "time" | "memory" | "cpu" | "errors" | "requests";
 
 type NodeMetrics = {
 	name: string;
+	requests: number;
 	timeMs: number;
 	memoryMb: number;
 	cpuPct: number;
@@ -27,11 +28,20 @@ type WorkflowNumberKeys = Exclude<keyof WorkflowMetrics, "workflow" | "nodes">;
 type NodeNumberKeys = Exclude<keyof NodeMetrics, "name">;
 
 type PrometheusMetricResult = {
-	metric: Record<string, string>; // e.g., { workflow: "sync-users", node: "fetch-db" }
-	value: [number, string]; // timestamp and stringified number
+	metric: Record<string, string>;
+	value: [number, string];
 };
 
 const PROM_URL = "http://localhost:9090/api/v1/query";
+
+const fmt = (val: number | undefined, decimals = 1) => {
+	let valNew = (val ?? 0).toFixed(decimals);
+	if (valNew.toString() === "NaN") {
+		valNew = "0";
+	}
+
+	return valNew;
+};
 
 const queryPrometheus = async (query: string) => {
 	const res = await fetch(`${PROM_URL}?query=${encodeURIComponent(query)}`);
@@ -40,21 +50,21 @@ const queryPrometheus = async (query: string) => {
 };
 
 const fetchPrometheusMetrics = async (): Promise<WorkflowMetrics[]> => {
-	const [wfTime, wfMem, wfCPU, wfErrors, wfReqs] = await Promise.all([
-		queryPrometheus("sum by (workflow_name) (rate(workflow_time[1m]))"),
-		queryPrometheus("max by (workflow_name) (workflow_memory)"),
-		queryPrometheus("avg by (workflow_name) (workflow_cpu)"),
-		queryPrometheus("increase(workflow_errors_total[5m])"),
-		queryPrometheus("increase(workflow_total[5m])"),
+	const [wfReqs, wfTime, wfErrors, wfCPU, wfMem] = await Promise.all([
+		queryPrometheus("(sum(increase(workflow_total[1m])) by (workflow_path)) > 0"), // requests
+		queryPrometheus("sum(avg_over_time(workflow_time[1m])) by (workflow_path)"), // time
+		queryPrometheus("(sum(increase(workflow_errors_total[1m])) by (workflow_path)) > 0"), // errors
+		queryPrometheus("sum(avg_over_time(workflow_cpu[1m])) by (workflow_path)"), // CPU
+		queryPrometheus("sum(avg_over_time(workflow_memory[1m])) by (workflow_path)"), // memory
 	]);
 
 	const wfMap: Record<string, WorkflowMetrics> = {};
 
 	const mapWorkflow = (list: PrometheusMetricResult[], key: WorkflowNumberKeys, convert: (val: string) => number) => {
 		for (const entry of list) {
-			const name = entry.metric.workflow;
+			const name = entry.metric.workflow_path;
 			if (!name) continue;
-			if (!wfMap[name])
+			if (!wfMap[name]) {
 				wfMap[name] = {
 					workflow: name,
 					totalTimeMs: 0,
@@ -64,41 +74,46 @@ const fetchPrometheusMetrics = async (): Promise<WorkflowMetrics[]> => {
 					requests: 0,
 					nodes: [],
 				};
-			wfMap[name][key] = convert(entry.value[1]);
+			}
+			wfMap[name][key] = convert(entry.value?.[1] ?? "0");
 		}
 	};
 
-	mapWorkflow(wfTime, "totalTimeMs", (v) => +v * 1000);
-	mapWorkflow(wfMem, "totalMemoryMb", (v) => +v / 1024 / 1024);
+	mapWorkflow(wfTime, "totalTimeMs", (v) => +v);
+	mapWorkflow(wfMem, "totalMemoryMb", (v) => +v);
 	mapWorkflow(wfCPU, "totalCpuPct", (v) => +v);
 	mapWorkflow(wfErrors, "errors", (v) => Math.round(+v));
 	mapWorkflow(wfReqs, "requests", (v) => Math.round(+v));
 
 	const nodeMetricsRaw = await Promise.all([
-		queryPrometheus("avg by (workflow, node) (rate(node_execution_duration_seconds_sum[1m]))"),
-		queryPrometheus("avg by (workflow, node) (node_memory_usage_bytes)"),
-		queryPrometheus("avg by (workflow, node) (node_cpu_usage_percent)"),
-		queryPrometheus("increase(node_errors_total[5m])"),
+		queryPrometheus("(sum(increase(node_total[1m])) by (node_name, workflow_path)) > 0"),
+		queryPrometheus("sum(increase(node_time[1m])) by (node_name, workflow_path)"),
+		queryPrometheus("(sum(increase(node_errors_total[1m])) by (node_name, workflow_path)) > 0"),
+		queryPrometheus("sum(increase(node_cpu[1m])) by (node_name, workflow_path)"),
+		queryPrometheus("sum(increase(node_memory[1m])) by (node_name, workflow_path)"),
 	]);
 
 	const nodeMap: Record<string, Record<string, Partial<NodeMetrics>>> = {};
 
 	const setNodeMetric = (list: PrometheusMetricResult[], key: NodeNumberKeys, convert: (val: string) => number) => {
 		for (const entry of list) {
-			const wf = entry.metric.workflow;
-			const node = entry.metric.node;
+			const wf = entry.metric.workflow_path;
+			const node = entry.metric.node_name;
 			if (!wf || !node) continue;
 
 			if (!nodeMap[wf]) nodeMap[wf] = {};
 			if (!nodeMap[wf][node]) nodeMap[wf][node] = { name: node };
-			nodeMap[wf][node][key] = convert(entry.value[1]);
+
+			const raw = Number.parseFloat(entry.value?.[1] ?? "0");
+			nodeMap[wf][node][key] = convert(raw.toString());
 		}
 	};
 
-	setNodeMetric(nodeMetricsRaw[0], "timeMs", (v) => +v * 1000);
-	setNodeMetric(nodeMetricsRaw[1], "memoryMb", (v) => +v / 1024 / 1024);
-	setNodeMetric(nodeMetricsRaw[2], "cpuPct", (v) => +v);
-	setNodeMetric(nodeMetricsRaw[3], "errors", (v) => Math.round(+v));
+	setNodeMetric(nodeMetricsRaw[0], "requests", (v) => +v);
+	setNodeMetric(nodeMetricsRaw[1], "timeMs", (v) => +v);
+	setNodeMetric(nodeMetricsRaw[4], "memoryMb", (v) => +v);
+	setNodeMetric(nodeMetricsRaw[3], "cpuPct", (v) => +v);
+	setNodeMetric(nodeMetricsRaw[2], "errors", (v) => Math.round(+v));
 
 	for (const wf of Object.keys(nodeMap)) {
 		const wfObj = wfMap[wf];
@@ -153,22 +168,53 @@ const Monitor: React.FC = () => {
 			</Text>
 			{sorted.map((wf) => (
 				<Box key={wf.workflow} flexDirection="column" marginTop={1}>
-					<Text bold>{`Workflow: ${wf.workflow} | Time: ${wf.totalTimeMs.toFixed(
-						0,
-					)}ms | RAM: ${wf.totalMemoryMb.toFixed(1)}MB | CPU: ${wf.totalCpuPct.toFixed(1)}% | Requests: ${
-						wf.requests
-					} | Errors: ${wf.errors}`}</Text>
-					<Text>{chalk.gray("  Node         │ Time   │ Mem(MB) │ CPU(%) │ Errors")}</Text>
-					<Text>{chalk.gray("  ─────────────┼────────┼─────────┼────────┼────────")}</Text>
-					{wf.nodes.map((node) => (
-						<Text key={node.name}>
-							{`  ${chalk.bold(node.name.padEnd(13))}│ 
-							${node.timeMs.toFixed(0).padEnd(7)}│ 
-							${node.memoryMb.toFixed(1).padEnd(8)}│ 
-							${node.cpuPct.toFixed(1).padEnd(7)}│ 
-							${node.errors > 0 ? chalk.red(`  ${node.errors}`) : chalk.green("   0")}`}
+					<Text bold>
+						{`Workflow: ${wf.workflow} | Time: ${fmt(
+							wf.totalTimeMs,
+							0,
+						)}ms | RAM: ${fmt(wf.totalMemoryMb)}MB | CPU: ${fmt(
+							wf.totalCpuPct,
+						)}% | Requests: ${fmt(wf.requests, 2)} | Errors: ${fmt(wf.errors, 2)}`}
+					</Text>
+					<Box flexDirection="column" paddingLeft={2}>
+						<Text>{chalk.bold(`📦 Workflow: ${wf.workflow}`)}</Text>
+						<Text dimColor>
+							{`  Requests: ${fmt(wf.requests, 2)}   Errors: ${fmt(
+								wf.errors,
+								2,
+							)}   Time: ${fmt(wf.totalTimeMs, 0)}ms   CPU: ${fmt(wf.totalCpuPct)}%   RAM: ${fmt(wf.totalMemoryMb)}MB`}
 						</Text>
-					))}
+						{wf.nodes.length > 0 ? (
+							<>
+								<Text>
+									{chalk.gray("  ┌──────────────────────┬───────────┬───────────┬──────────┬────────┬─────────┐")}
+								</Text>
+								<Text>
+									{chalk.gray("  │ Node                 │ Requests  │ Time(ms)  │ Mem(MB)  │ CPU(%) │ Errors  │")}
+								</Text>
+								<Text>
+									{chalk.gray("  ├──────────────────────┼───────────┼───────────┼──────────┼────────┼─────────┤")}
+								</Text>
+								{wf.nodes.map((node) => (
+									<Text key={node.name}>
+										{`  │ ${node.name.padEnd(20)} │ ${fmt(node.requests, 0).padStart(9)} | ${fmt(
+											node.timeMs,
+											0,
+										).padStart(9)} │ ${fmt(node.memoryMb).padStart(8)} │ ${fmt(node.cpuPct).padStart(6)} │ ${
+											(node.errors ?? 0) > 0
+												? chalk.red((node.errors ?? 0).toString().padStart(7))
+												: chalk.green("      0")
+										} │`}
+									</Text>
+								))}
+								<Text>
+									{chalk.gray("  └──────────────────────┴───────────┴───────────┴──────────┴────────┴─────────┘")}
+								</Text>
+							</>
+						) : (
+							<Text dimColor> (No nodes)</Text>
+						)}
+					</Box>
 				</Box>
 			))}
 		</Box>
