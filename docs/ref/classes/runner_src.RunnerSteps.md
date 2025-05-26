@@ -59,4 +59,4 @@ Throws a GlobalError if any step results in an error.
 
 #### Defined in
 
-[core/runner/src/RunnerSteps.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/RunnerSteps.ts#L15)
+[core/runner/src/RunnerSteps.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/RunnerSteps.ts#L15)

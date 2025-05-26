@@ -1,0 +1,255 @@
+---
+title: Countries API Example
+---
+
+This example demonstrates how to create a simple workflow that fetches data from an external API using the built-in `@nanoservice-ts/api-call` node. The workflow retrieves a list of countries and their capitals from a public API and returns the data as a JSON response.
+
+## Prerequisites
+
+Before running this example, ensure you have:
+
+- A Nanoservice-ts project set up with the HTTP trigger
+- Node.js (v14 or later) and npm installed
+
+If you haven't created a project yet, you can do so with:
+
+```bash
+npx nanoctl@latest create project
+```
+
+Follow the prompts:
+- Provide a name for your project
+- Select "HTTP" as the trigger
+- Select "NodeJS" as the runtime
+- Choose "YES" when asked to install examples
+
+## Workflow Structure
+
+The Countries workflow is defined in `workflows/json/countries.json`:
+
+```json
+{
+  "name": "World Countries",
+  "description": "Workflow description",
+  "version": "1.0.0",
+  "trigger": {
+    "http": {
+      "method": "GET",
+      "path": "/",
+      "accept": "application/json"
+    }
+  },
+  "steps": [
+    {
+      "name": "get-countries-api",
+      "node": "@nanoservice-ts/api-call",
+      "type": "module"
+    }
+  ],
+  "nodes": {
+    "get-countries-api": {
+      "inputs": {
+        "url": "https://countriesnow.space/api/v0.1/countries/capital",
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "responseType": "application/json"
+      }
+    }
+  }
+}
+```
+
+This workflow:
+1. Is triggered by an HTTP GET request to the root path (`/`)
+2. Uses the built-in `@nanoservice-ts/api-call` node to make a GET request to the countries API
+3. Returns the API response directly to the client
+
+## Running the Example
+
+1. **Start your Nanoservice-ts application**:
+
+   ```bash
+   npm run dev
+   ```
+
+2. **Access the Countries workflow**:
+
+   Open your browser and navigate to:
+   ```
+   http://localhost:4000/countries
+   ```
+
+   Or use curl:
+   ```bash
+   curl http://localhost:4000/countries
+   ```
+
+   You should receive a JSON response containing a list of countries and their capitals.
+
+## How It Works
+
+The Countries workflow demonstrates several key concepts in Nanoservice-ts:
+
+### HTTP Trigger
+
+The workflow is triggered by an HTTP GET request to the specified path. In the workflow definition, this is configured in the `trigger` section:
+
+```json
+"trigger": {
+  "http": {
+    "method": "GET",
+    "path": "/",
+    "accept": "application/json"
+  }
+}
+```
+
+### Built-in API Call Node
+
+The workflow uses the `@nanoservice-ts/api-call` node, which is a built-in node that handles HTTP requests to external APIs. This node is configured with inputs specifying the URL, method, headers, and expected response type:
+
+```json
+"nodes": {
+  "get-countries-api": {
+    "inputs": {
+      "url": "https://countriesnow.space/api/v0.1/countries/capital",
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "responseType": "application/json"
+    }
+  }
+}
+```
+
+### API Call Node Implementation
+
+The `@nanoservice-ts/api-call` node is implemented as follows:
+
+```typescript
+import {
+  type INanoServiceResponse,
+  type JsonLikeObject,
+  NanoService,
+  NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { inputSchema } from "./inputSchema";
+import { runApiCall } from "./util";
+
+export type InputType = {
+  method: string;
+  url: string;
+  headers: JsonLikeObject;
+  responseType: string;
+  body: JsonLikeObject;
+};
+
+export default class ApiCall extends NanoService<InputType> {
+  constructor() {
+    super();
+
+    this.inputSchema = inputSchema;
+    this.outputSchema = {};
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+
+    try {
+      const method = inputs.method;
+      const url = inputs.url;
+      const headers = inputs.headers;
+      const responseType = inputs.responseType;
+      const body = inputs.body || ctx.response.data;
+
+      const result = await runApiCall(url, method, headers, body as JsonLikeObject, responseType);
+      response.setSuccess(result);
+    } catch (error: unknown) {
+      const nodeError: GlobalError = new GlobalError((error as Error).message);
+      nodeError.setCode(500);
+      nodeError.setStack((error as Error).stack);
+      nodeError.setName(this.name);
+      response.setError(nodeError);
+    }
+
+    return response;
+  }
+}
+```
+
+This node:
+1. Takes inputs for the API call (method, URL, headers, response type, and optional body)
+2. Makes the API call using the `runApiCall` utility function
+3. Returns the result on success or an error on failure
+
+### Response Handling
+
+The response from the external API is automatically returned to the client. The Nanoservice-ts framework handles the serialization of the response to JSON and sets the appropriate content type headers.
+
+## Customizing the Example
+
+You can customize the Countries workflow in several ways:
+
+### Change the API Endpoint
+
+Modify the `url` in the node inputs to fetch data from a different API:
+
+```json
+"inputs": {
+  "url": "https://your-api-endpoint.com/data",
+  "method": "GET",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "responseType": "application/json"
+}
+```
+
+### Add Query Parameters
+
+Add query parameters to the URL to filter or customize the API response:
+
+```json
+"inputs": {
+  "url": "https://countriesnow.space/api/v0.1/countries/capital?filter=region&value=Europe",
+  "method": "GET",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "responseType": "application/json"
+}
+```
+
+### Add Authentication
+
+If the API requires authentication, add the necessary headers:
+
+```json
+"inputs": {
+  "url": "https://api.example.com/data",
+  "method": "GET",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer your-api-key"
+  },
+  "responseType": "application/json"
+}
+```
+
+### Add Data Transformation
+
+To transform the API response before returning it to the client, you can add a custom node to the workflow:
+
+1. Create a new node for data transformation
+2. Add it as a step after the API call
+3. Configure it to process the data from the API call
+
+## Conclusion
+
+The Countries workflow example demonstrates how to use Nanoservice-ts to create a simple API proxy. By leveraging the built-in `@nanoservice-ts/api-call` node, you can easily integrate external APIs into your applications without writing complex HTTP client code.
+
+This pattern can be extended to create more sophisticated workflows that combine data from multiple sources, transform data, and implement business logic.

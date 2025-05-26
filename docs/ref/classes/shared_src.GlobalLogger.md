@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L6)
+[core/shared/src/GlobalLogger.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L6)
 
 ## Properties
 
@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:4](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L4)
+[core/shared/src/GlobalLogger.ts:4](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L4)
 
 ## Methods
 
@@ -74,7 +74,7 @@ LoggerContext.error
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L12)
+[core/shared/src/GlobalLogger.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L12)
 
 ___
 
@@ -92,7 +92,7 @@ LoggerContext.getLogs
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L14)
+[core/shared/src/GlobalLogger.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L14)
 
 ___
 
@@ -110,7 +110,7 @@ LoggerContext.getLogsAsBase64
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L22)
+[core/shared/src/GlobalLogger.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L22)
 
 ___
 
@@ -128,7 +128,7 @@ LoggerContext.getLogsAsText
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:18](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L18)
+[core/shared/src/GlobalLogger.ts:18](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L18)
 
 ___
 
@@ -152,7 +152,7 @@ LoggerContext.log
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L10)
+[core/shared/src/GlobalLogger.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L10)
 
 ___
 
@@ -177,4 +177,4 @@ LoggerContext.logLevel
 
 #### Defined in
 
-[core/shared/src/GlobalLogger.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/GlobalLogger.ts#L11)
+[core/shared/src/GlobalLogger.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalLogger.ts#L11)

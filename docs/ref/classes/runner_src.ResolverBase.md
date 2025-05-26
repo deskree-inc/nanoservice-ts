@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/ResolverBase.ts#L9)
+[core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/ResolverBase.ts#L9)
 
 ___
 
@@ -70,4 +70,4 @@ ___
 
 #### Defined in
 
-[core/runner/src/ResolverBase.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/ResolverBase.ts#L7)
+[core/runner/src/ResolverBase.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/ResolverBase.ts#L7)

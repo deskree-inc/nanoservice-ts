@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L17)
+[core/shared/src/NodeBase.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L17)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:16](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L16)
+[core/shared/src/NodeBase.ts:16](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L16)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L14)
+[core/shared/src/NodeBase.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L14)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L15)
+[core/shared/src/NodeBase.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L15)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:19](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L19)
+[core/shared/src/NodeBase.ts:19](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L19)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:20](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L20)
+[core/shared/src/NodeBase.ts:20](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L20)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:18](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L18)
+[core/shared/src/NodeBase.ts:18](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L18)
 
 ## Methods
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:88](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L88)
+[core/shared/src/NodeBase.ts:88](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L88)
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:84](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L84)
+[core/shared/src/NodeBase.ts:84](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L84)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L22)
+[core/shared/src/NodeBase.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L22)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:41](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L41)
+[core/shared/src/NodeBase.ts:41](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L41)
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:62](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L62)
+[core/shared/src/NodeBase.ts:62](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L62)
 
 ___
 
@@ -238,7 +238,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:69](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L69)
+[core/shared/src/NodeBase.ts:69](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L69)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:64](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L64)
+[core/shared/src/NodeBase.ts:64](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L64)
 
 ___
 
@@ -279,7 +279,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:101](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L101)
+[core/shared/src/NodeBase.ts:101](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L101)
 
 ___
 
@@ -300,4 +300,4 @@ ___
 
 #### Defined in
 
-[core/shared/src/NodeBase.ts:79](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/NodeBase.ts#L79)
+[core/shared/src/NodeBase.ts:79](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/NodeBase.ts#L79)

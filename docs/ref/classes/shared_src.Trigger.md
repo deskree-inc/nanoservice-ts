@@ -44,4 +44,4 @@ TriggerType.listen
 
 #### Defined in
 
-[core/shared/src/Trigger.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Trigger.ts#L6)
+[core/shared/src/Trigger.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Trigger.ts#L6)
