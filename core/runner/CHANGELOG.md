@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.28
+
+### Patch Changes
+
+- changed condition for error validation
+
 ## 0.1.27
 
 ### Patch Changes

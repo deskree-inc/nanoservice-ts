@@ -34,7 +34,7 @@ export default abstract class RunnerSteps {
 					const model = await step.process(ctx, step as unknown as Step);
 					ctx.response = model.data as NanoServiceResponse;
 
-					if (ctx.response.success === false) {
+					if (ctx.response.error) {
 						const defaultMeter = metrics.getMeter("default");
 						const node_errors = defaultMeter.createCounter("node_errors", {
 							description: "Node errors",
