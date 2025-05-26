@@ -14,9 +14,8 @@
 		"start": "node dist/index.js",
 		"reload": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
 		"build": "rimraf ./dist && tsc && copyfiles -u 1 src/nodes/**/*.html src/nodes/**/*.md dist/",
-		"compose:dev": "docker compose --file ./infra/docker-compose.yml up --build --watch",
-		"compose:stop": "docker compose --file ./infra/docker-compose.yml down",
-		"compose:build": "tsc --watch -p tsconfig.json --diagnostics"
+		"infra:dev": "docker compose --file ./infra/docker-compose.yml up --build --watch",
+		"infra:build": "tsc --watch -p tsconfig.json --diagnostics"
 	},
 	"devDependencies": {
 		"@types/body-parser": "^1.19.5",
