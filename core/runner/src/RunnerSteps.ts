@@ -1,5 +1,7 @@
 import { type Context, GlobalError, type NodeBase, type Step } from "@nanoservice-ts/shared";
+import { metrics } from "@opentelemetry/api";
 import type NanoServiceResponse from "./NanoServiceResponse";
+import type RunnerNode from "./RunnerNode";
 
 export default abstract class RunnerSteps {
 	/**
@@ -31,6 +33,22 @@ export default abstract class RunnerSteps {
 				if (!step.flow) {
 					const model = await step.process(ctx, step as unknown as Step);
 					ctx.response = model.data as NanoServiceResponse;
+
+					if (ctx.response.success === false) {
+						const defaultMeter = metrics.getMeter("default");
+						const node_errors = defaultMeter.createCounter("node_errors", {
+							description: "Node errors",
+						});
+
+						node_errors.add(1, {
+							env: process.env.NODE_ENV,
+							workflow_path: `${ctx.workflow_path}`,
+							workflow_name: `${ctx.workflow_name}`,
+							node_name: `${step.name}`,
+							node: (this as unknown as RunnerNode).node,
+						});
+					}
+
 					if (ctx.response.error) throw ctx.response.error;
 				} else {
 					stepName = step.name;

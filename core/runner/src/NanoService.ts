@@ -199,20 +199,6 @@ export default abstract class NanoService<T> extends NodeBase {
 
 		globalMetrics.clear();
 
-		if (response.success === false) {
-			const node_errors = defaultMeter.createCounter("node_errors", {
-				description: "Node errors",
-			});
-
-			node_errors.add(1, {
-				env: process.env.NODE_ENV,
-				workflow_path: `${ctx.workflow_path}`,
-				workflow_name: `${ctx.workflow_name}`,
-				node_name: `${this.name}`,
-				node: (this as unknown as RunnerNode).node,
-			});
-		}
-
 		return response;
 	}
 

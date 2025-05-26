@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.27
+
+### Patch Changes
+
+- fixed nano service error metric
+
 ## 0.1.26
 
 ### Patch Changes
