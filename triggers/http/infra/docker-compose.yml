@@ -1,0 +1,38 @@
+services:
+  nanoservice-http:
+    container_name: nanoservice-http
+    hostname: nanoservice-http
+    build:
+      context: ../
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4000:4000"
+      - "9091:9091"
+    develop:
+      watch:
+        - action: sync
+          path: ../dist
+          target: /usr/src/app/dist
+        - action: sync
+          path: ../workflows
+          target: /usr/src/app/workflows
+        - action: sync
+          path: ../public
+          target: /usr/src/app/public
+        - action: rebuild
+          path: ../package.json
+        - action: rebuild
+          path: ../tsconfig.json
+        - action: rebuild
+          path: ../.env.local
+    networks:
+      - shared-network
+    logging: # Log to Loki. Enable this to see logs in Grafana.
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-retries: 5
+        loki-batch-size: 400
+networks:
+  shared-network:
+    external: true

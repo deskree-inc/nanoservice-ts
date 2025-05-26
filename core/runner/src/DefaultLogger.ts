@@ -88,14 +88,18 @@ export default class DefaultLogger extends GlobalLogger {
 	 * @returns The message with injected metadata.
 	 */
 	injectMetadata(message: string, level = "info", stack = ""): string {
-		let data = `level=\"${level}\" `;
-		data += `app=\"${this.appName}\" `;
-		data += `env=\"${this.env}\" `;
-		data += this.workflowName ? `workflow_name=\"${this.workflowName}\" ` : "";
-		data += this.workflowPath ? `workflow_path=\"${this.workflowPath}\" ` : "";
-		data += this.requestId ? `request_id=\"${this.requestId}\" ` : "";
-		data += `message=\"${message}\"`;
-		data += stack === "" ? "" : ` stack=\"${stack}\"`;
-		return data;
+		const logEntry: Record<string, unknown> = {
+			level,
+			app: this.appName,
+			env: this.env,
+			message,
+		};
+
+		if (this.workflowName) logEntry.workflow_name = this.workflowName;
+		if (this.workflowPath) logEntry.workflow_path = this.workflowPath;
+		if (this.requestId) logEntry.request_id = this.requestId;
+		if (stack !== "") logEntry.stack = stack;
+
+		return JSON.stringify(logEntry);
 	}
 }

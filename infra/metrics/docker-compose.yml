@@ -24,22 +24,22 @@ services:
   #     - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
   #   ports:
   #     - "9273:9273"
-  cadvisor:
-    container_name: cadvisor
-    hostname: cadvisor
-    image: gcr.io/cadvisor/cadvisor:latest
-    restart: unless-stopped
-    volumes:
-      - "/:/rootfs"
-      - "/var/run:/var/run"
-      - "/sys:/sys"
-      - "/var/lib/docker/:/var/lib/docker"
-      - "/dev/disk/:/dev/disk"
-    privileged: true
-    devices:
-      - "/dev/kmsg"
-    networks:
-      - shared-network
+  # cadvisor:
+  #   container_name: cadvisor
+  #   hostname: cadvisor
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   restart: unless-stopped
+  #   volumes:
+  #     - "/:/rootfs"
+  #     - "/var/run:/var/run"
+  #     - "/sys:/sys"
+  #     - "/var/lib/docker/:/var/lib/docker"
+  #     - "/dev/disk/:/dev/disk"
+  #   privileged: true
+  #   devices:
+  #     - "/dev/kmsg"
+  #   networks:
+  #     - shared-network
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
@@ -49,8 +49,8 @@ services:
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml"
     privileged: true
-    depends_on:
-      - cadvisor
+    # depends_on:
+    #   - cadvisor
     restart: unless-stopped
     networks:
       - shared-network
@@ -79,7 +79,7 @@ services:
   loki:
     container_name: loki
     hostname: loki
-    image: grafana/loki:3.3.2
+    image: grafana/loki:3.5.0
     ports:
       - "3100:3100"
     volumes:
@@ -103,27 +103,26 @@ services:
     networks:
       - shared-network
 
-  nanoservice-http:
-    container_name: nanoservice-http
-    hostname: nanoservice-http
-    build:
-      context: ../../
-      # content: ../../triggers/http
-      dockerfile: Dockerfile
-    ports:
-      - "4000:4000"
-      - "9091:9091"
-    restart: unless-stopped
-    # logging: # Log to Loki. Enable this to see logs in Grafana.
-    #   driver: loki
-    #   options:
-    #     loki-url: "http://localhost:3100/loki/api/v1/push"
-    #     loki-retries: 5
-    #     loki-batch-size: 400
-    depends_on:
-      - loki
-    networks:
-      - shared-network
+  # nanoservice-http:
+  #   container_name: nanoservice-http
+  #   hostname: nanoservice-http
+  #   build:
+  #     context: ../../triggers/http
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4000:4000"
+  #     - "9091:9091"
+  #   restart: unless-stopped
+  #   logging: # Log to Loki. Enable this to see logs in Grafana.
+  #     driver: loki
+  #     options:
+  #       loki-url: "http://localhost:3100/loki/api/v1/push"
+  #       loki-retries: 5
+  #       loki-batch-size: 400
+  #   depends_on:
+  #     - loki
+  #   networks:
+  #     - shared-network
 volumes:
   grafana-data:
 networks:

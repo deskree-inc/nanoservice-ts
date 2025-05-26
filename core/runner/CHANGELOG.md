@@ -1,5 +1,35 @@
 # @nanoservice/runner
 
+## 0.1.26
+
+### Patch Changes
+
+- extended memory and cpu metrics
+
+## 0.1.25
+
+### Patch Changes
+
+- fixed issue collecting errors counter from node base class
+
+## 0.1.24
+
+### Patch Changes
+
+- Removed request id from the metrics as label.
+
+## 0.1.23
+
+### Patch Changes
+
+- Refactored logging output to structured JSON format for better compatibility with Loki and Grafana. Logs now support queryable fields like `request_id`, `workflow_name`, and `duration_ms`.
+
+## 0.1.22
+
+### Patch Changes
+
+- sync metrics for workflows and nodes, including mem, cpu and errors to nodes.
+
 ## 0.1.21
 
 ### Patch Changes

@@ -27,5 +27,9 @@
 		"./src/*.json",
 		"./src/nodes/**/*.jsx"
 	],
-	"exclude": ["src/nodes/**/test/*.ts", "node_modules"]
+	"exclude": [
+		"src/nodes/**/test/*.ts",
+		"node_modules",
+		"src/nodes/examples/**/**"
+	]
 }
