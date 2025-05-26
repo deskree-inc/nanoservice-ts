@@ -1,5 +1,11 @@
 # @nanoservice/runner
 
+## 0.1.29
+
+### Patch Changes
+
+- extended error metrics for nodes
+
 ## 0.1.28
 
 ### Patch Changes

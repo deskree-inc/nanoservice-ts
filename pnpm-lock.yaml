@@ -445,17 +445,17 @@ importers:
         specifier: ^2.0.1
         version: 2.0.2(@bufbuild/protobuf@2.2.5)(@connectrpc/connect@2.0.2(@bufbuild/protobuf@2.2.5))
       '@nanoservice-ts/api-call':
-        specifier: ^0.1.30
-        version: 0.1.30
+        specifier: ^0.1.31
+        version: 0.1.31
       '@nanoservice-ts/helper':
         specifier: ^0.1.5
         version: 0.1.5
       '@nanoservice-ts/if-else':
-        specifier: ^0.0.31
-        version: 0.0.31
+        specifier: ^0.0.32
+        version: 0.0.32
       '@nanoservice-ts/runner':
-        specifier: ^0.1.27
-        version: 0.1.27
+        specifier: ^0.1.28
+        version: 0.1.28
       '@nanoservice-ts/shared':
         specifier: ^0.0.9
         version: 0.0.9
@@ -515,17 +515,17 @@ importers:
   triggers/http:
     dependencies:
       '@nanoservice-ts/api-call':
-        specifier: ^0.1.30
-        version: 0.1.30
+        specifier: ^0.1.31
+        version: 0.1.31
       '@nanoservice-ts/helper':
         specifier: ^0.1.5
         version: 0.1.5
       '@nanoservice-ts/if-else':
-        specifier: ^0.0.31
-        version: 0.0.31
+        specifier: ^0.0.32
+        version: 0.0.32
       '@nanoservice-ts/runner':
-        specifier: ^0.1.27
-        version: 0.1.27
+        specifier: ^0.1.28
+        version: 0.1.28
       '@nanoservice-ts/shared':
         specifier: ^0.0.9
         version: 0.0.9
@@ -1586,8 +1586,8 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@nanoservice-ts/api-call@0.1.30':
-    resolution: {integrity: sha512-j4Hobh92XmvqPpthVDdt26uLowMNgpXpPyfNjUBlVrn5DfLaVBq+hjLmhzEsWl2PUz3C6liclhrBJbUKijLt4g==}
+  '@nanoservice-ts/api-call@0.1.31':
+    resolution: {integrity: sha512-pPSx30bFwRhhGW8/RcrhWm/1sgCxCPuSULMHJ19IgdY+4fLiRcyhXlTLkrw0x72jnZPcra0YgW6AzLlhg7/g0A==}
     engines: {node: '>=18.0.0'}
 
   '@nanoservice-ts/helper@0.1.4':
@@ -1598,16 +1598,16 @@ packages:
     resolution: {integrity: sha512-tIyOPldkC7KeXTmeKn8MAOJ/kIqe9V4uBRPdc0fR5IuZ/D8xDAVRR6oF52YGcEel4Jp+77pNfYJZxi/Vnma0wQ==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/if-else@0.0.31':
-    resolution: {integrity: sha512-PpCIpH2rmgxgVgnH1RJMMp57d0iVzEH3on7R4r6xdcTK7gI+C5fpEaiEzz16FR/crT6I8nN2pxiL/GF5aYOoFQ==}
+  '@nanoservice-ts/if-else@0.0.32':
+    resolution: {integrity: sha512-PaYZkfXbkXOOzlj+KIXZ+wiYudPVm2X+TQbyYiIFFw0dTrZsfrvawxg3uy3J7XcdZRMaeKgGyKnMo70cMMykTg==}
     engines: {node: '>=18.0.0'}
 
   '@nanoservice-ts/runner@0.1.21':
     resolution: {integrity: sha512-OdeBaZcYK6AmA7ngNeWszZtSdCM+NTTcQC97JkB6CsN7HDz0jrFxANReRlXaXMIjYyXe7IwbeGi1XLGo/6MZZw==}
     engines: {node: '>=18.0.0'}
 
-  '@nanoservice-ts/runner@0.1.27':
-    resolution: {integrity: sha512-ySd+CsSBjLZW3f2jAV36RsV0ecN0gnfPQETsF2qXzDfozZJ325jrcWmr7IuhoJzpUMYTqxpk3Nt6KmSlJmEgHQ==}
+  '@nanoservice-ts/runner@0.1.28':
+    resolution: {integrity: sha512-+paY9lC7HFHPiHpsRoYuZbOE3GcWtdVj8Q+0KCGXNkkY88PmIOjlKsx4pWiVwsFn4QOHM7jTPHT4aRpF2IHA5Q==}
     engines: {node: '>=18.0.0'}
 
   '@nanoservice-ts/shared@0.0.9':
@@ -5633,9 +5633,9 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@nanoservice-ts/api-call@0.1.30':
+  '@nanoservice-ts/api-call@0.1.31':
     dependencies:
-      '@nanoservice-ts/runner': 0.1.27
+      '@nanoservice-ts/runner': 0.1.28
       '@nanoservice-ts/shared': 0.0.9
       lodash: 4.17.21
 
@@ -5647,10 +5647,10 @@ snapshots:
     dependencies:
       zod: 3.24.2
 
-  '@nanoservice-ts/if-else@0.0.31':
+  '@nanoservice-ts/if-else@0.0.32':
     dependencies:
       '@nanoservice-ts/helper': 0.1.5
-      '@nanoservice-ts/runner': 0.1.27
+      '@nanoservice-ts/runner': 0.1.28
       '@nanoservice-ts/shared': 0.0.9
       lodash: 4.17.21
 
@@ -5672,7 +5672,7 @@ snapshots:
       yaml: 2.7.0
       zod: 3.24.2
 
-  '@nanoservice-ts/runner@0.1.27':
+  '@nanoservice-ts/runner@0.1.28':
     dependencies:
       '@bufbuild/protobuf': 2.2.5
       '@connectrpc/connect': 2.0.2(@bufbuild/protobuf@2.2.5)

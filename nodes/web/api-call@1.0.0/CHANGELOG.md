@@ -1,5 +1,12 @@
 # @nanoservice-ts/api-call
 
+## 0.1.32
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.29
+
 ## 0.1.31
 
 ### Patch Changes
