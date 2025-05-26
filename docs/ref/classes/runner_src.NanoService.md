@@ -58,7 +58,7 @@ NodeBase.constructor
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L17)
+[core/runner/src/NanoService.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L17)
 
 ## Properties
 
@@ -68,7 +68,7 @@ NodeBase.constructor
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:13](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L13)
+[core/runner/src/NanoService.ts:13](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L13)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L14)
+[core/runner/src/NanoService.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L14)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L15)
+[core/runner/src/NanoService.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L15)
 
 ## Methods
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:29](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L29)
+[core/runner/src/NanoService.ts:29](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L29)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:99](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L99)
+[core/runner/src/NanoService.ts:99](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L99)
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:36](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L36)
+[core/runner/src/NanoService.ts:36](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L36)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:24](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L24)
+[core/runner/src/NanoService.ts:24](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L24)
 
 ___
 
@@ -190,4 +190,4 @@ ___
 
 #### Defined in
 
-[core/runner/src/NanoService.ts:104](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoService.ts#L104)
+[core/runner/src/NanoService.ts:104](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoService.ts#L104)

@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L10)
+[core/shared/src/Metrics.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L10)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L6)
+[core/shared/src/Metrics.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L6)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L7)
+[core/shared/src/Metrics.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L7)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L8)
+[core/shared/src/Metrics.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L8)
 
 ## Methods
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:32](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L32)
+[core/shared/src/Metrics.ts:32](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L32)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:36](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L36)
+[core/shared/src/Metrics.ts:36](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L36)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L22)
+[core/shared/src/Metrics.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L22)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:16](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L16)
+[core/shared/src/Metrics.ts:16](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L16)
 
 ___
 
@@ -136,4 +136,4 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:26](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/shared/src/Metrics.ts#L26)
+[core/shared/src/Metrics.ts:26](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L26)

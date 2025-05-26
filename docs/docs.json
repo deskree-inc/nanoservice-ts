@@ -53,15 +53,8 @@
             "group": "Examples",
             "pages": [
               "d/examples/index",
-              "d/examples/api-call",
-              "d/examples/routing",
-              "d/examples/single-page-ui",
-              "d/examples/db-manager",
-              "d/examples/workflow-docs",
-              "d/examples/dashboard-generator",
-              "d/examples/base64-pdf",
-              "d/examples/feedback-ui",
-              "d/examples/postgres-query"
+              "d/examples/countries",
+              "d/examples/db-manager"
             ]
           },
           {

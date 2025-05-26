@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[core/runner/src/ConfigurationResolver.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/ConfigurationResolver.ts#L9)
+[core/runner/src/ConfigurationResolver.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/ConfigurationResolver.ts#L9)
 
 ## Properties
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[core/runner/src/ConfigurationResolver.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/ConfigurationResolver.ts#L7)
+[core/runner/src/ConfigurationResolver.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/ConfigurationResolver.ts#L7)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/ConfigurationResolver.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/ConfigurationResolver.ts#L6)
+[core/runner/src/ConfigurationResolver.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/ConfigurationResolver.ts#L6)
 
 ## Methods
 
@@ -78,4 +78,4 @@ ___
 
 #### Defined in
 
-[core/runner/src/ConfigurationResolver.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/ConfigurationResolver.ts#L17)
+[core/runner/src/ConfigurationResolver.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/ConfigurationResolver.ts#L17)

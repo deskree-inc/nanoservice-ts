@@ -28,4 +28,4 @@
 
 #### Defined in
 
-[core/runner/src/NanoServiceResponse.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/7f88d40/core/runner/src/NanoServiceResponse.ts#L5)
+[core/runner/src/NanoServiceResponse.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoServiceResponse.ts#L5)
