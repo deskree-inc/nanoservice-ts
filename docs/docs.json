@@ -53,8 +53,7 @@
           {
             "group": "Deployment",
             "pages": [
-              "d/deployment/index",
-              "d/deployment/deskree-serverless"
+              "d/deployment/index"
             ]
           }
         ]
