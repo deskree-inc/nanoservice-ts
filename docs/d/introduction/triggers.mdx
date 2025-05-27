@@ -50,10 +50,10 @@ In this example:
 When a trigger fires and a workflow instance begins, the data associated with the trigger event is typically passed into the workflow via the [Context Object](./context.mdx). Nodes within the workflow can then access this data.
 
 For an HTTP trigger, this might include:
-*   Request headers (e.g., `context.trigger.headers.authorization`)
-*   Query parameters (e.g., `context.trigger.query.searchTerm`)
-*   Path parameters (e.g., `context.trigger.params.userId`)
-*   Request body (e.g., `context.trigger.body.payload`)
+*   Request headers (e.g., `ctx.request.headers`)
+*   Query parameters (e.g., `ctx.request.query.searchTerm`)
+*   Path parameters (e.g., `ctx.request.params.userId`)
+*   Request body (e.g., `ctx.request.body.payload`)
 
 For a message queue trigger, it would include the message payload and any associated metadata.
 
