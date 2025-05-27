@@ -34,7 +34,7 @@ Each format has its advantages, but they all achieve the same goal: defining the
 The easiest way to create a new workflow is using the `nanoctl` CLI:
 
 ```bash
-npx nanoctl@latest workflow
+npx nanoctl@latest create workflow
 ```
 
 When you run this command, you'll see the following interactive prompts:
@@ -108,82 +108,6 @@ In this example:
 1. The workflow is named "World Countries".
 2. It's triggered by a GET request to the root path ("/").
 3. It has one step that uses the built-in `@nanoservice-ts/api-call` node to fetch country data from an external API.
-
-### TypeScript Workflow Definition
-
-For more complex workflows or when you prefer type safety, Nanoservice-TS also supports defining workflows using TypeScript. To create a TypeScript workflow:
-
-1. Create a new `.ts` file in the `src/workflows/` directory (e.g., `src/workflows/my-workflow.ts`).
-2. Use the `@nanoservice-ts/helper` package to define your workflow structure.
-
-#### Example 1: Simple TypeScript Workflow
-
-```typescript
-// src/workflows/countries-helper.ts
-import { type Step, Workflow } from "@nanoservice-ts/helper";
-
-const step1Inputs = {
-  url: "https://countriesnow.space/api/v0.1/countries/capital",
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  responseType: "application/json",
-};
-
-const step: Step = Workflow({
-  name: "World Countries",
-  version: "1.0.0",
-  description: "Workflow description",
-})
-  .addTrigger("http", {
-    method: "GET",
-    path: "/",
-    accept: "application/json",
-  })
-  .addStep({
-    name: "get-countries-api",
-    node: "@nanoservice-ts/api-call",
-    type: "module",
-    inputs: step1Inputs,
-  });
-
-export default step;
-```
-
-This TypeScript workflow is functionally equivalent to the JSON example above but offers the benefits of TypeScript's type checking and IDE support.
-
-#### Example 2: Conditional Logic in TypeScript Workflow
-
-```typescript
-// src/workflows/empty.ts
-import { AddElse, AddIf, type Step, Workflow } from "@nanoservice-ts/helper";
-
-const step: Step = Workflow({
-  name: "Empty",
-  version: "1.0.0",
-  description: "Workflow for load testing",
-})
-  .addTrigger("http", {
-    method: "GET",
-    path: "/",
-    accept: "application/json",
-  })
-  .addCondition({
-    node: {
-      name: "filter-request",
-      node: "@nanoservice-ts/if-else",
-      type: "module",
-    },
-    conditions: () => {
-      return [new AddIf('ctx.request.query.countries === "true"').build(), new AddElse().build()];
-    },
-  });
-
-export default step;
-```
-
-This example demonstrates how to use conditional logic in a TypeScript workflow, using the `AddIf` and `AddElse` helpers to create branching paths based on request parameters.
 
 ### TOML and YAML Formats
 

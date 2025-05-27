@@ -18,8 +18,8 @@
             "pages": [
               "d/introduction/overview",
               "d/introduction/first-steps",
-              "d/introduction/workflows",
               "d/introduction/nodes",
+              "d/introduction/workflows",
               "d/introduction/context",
               "d/introduction/triggers"
             ]
