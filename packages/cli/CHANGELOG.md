@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.5
+
+### Patch Changes
+
+- allow deploy with public flag
+
 ## 0.1.4
 
 ### Patch Changes
