@@ -9,7 +9,7 @@ Deskree's Atomic platform provides a seamless way to deploy your Nanoservice-TS 
 Before you begin, make sure you have:
 
 - A Nanoservice-TS project ready for deployment
-- Node.js (v22 or later) and npm installed
+- Node.js (v18 or later) and npm installed
 - The Nanoservice-TS CLI installed (`npx nanoctl@latest`)
 
 ## Step 1: Sign Up for Deskree Atomic
@@ -30,7 +30,7 @@ Before you begin, make sure you have:
      - `edge` and `edge:deployment` - Allows this token to manage edge deployments
 
 5. Click **Generate token**.
-6. Copy the generated token.
+6. Copy the generated token immediately (you won't be able to see it again).
 
 ## Step 3: Authenticate with the CLI
 
@@ -56,7 +56,7 @@ The `--build` flag ensures that your project is built before deployment.
 
 ## Step 5: Test Your Deployment
 
-After successful deployment, you'll receive a URL where your service is hosted (typically `https://YOUR_PROJECT_NAME.deskree.com`).
+After successful deployment, the generated URL for your service will be displayed directly in the CLI. You can also find this URL on the Atomic platform by clicking on the serverless icon in the left sidebar.
 
 ### Testing with Postman
 
@@ -72,11 +72,7 @@ After successful deployment, you'll receive a URL where your service is hosted (
 
 Each workflow in your project is accessible via its own endpoint. The endpoint path corresponds to the name of the JSON file in your `workflows/json` directory.
 
-For example, if you have a workflow defined in `workflows/json/countries.json`, you can access it at:
-
-```
-https://YOUR_PROJECT_NAME.deskree.com/countries
-```
+For example, if you have a workflow defined in `workflows/json/countries.json`, you can access it at the endpoint `/countries` appended to your deployment URL.
 
 ## Deployment Commands Reference
 
@@ -92,6 +88,18 @@ npx nanoctl@latest login
 
 ```bash
 npx nanoctl@latest deploy --build --name YOUR_PROJECT_NAME
+```
+
+### List Deployments
+
+```bash
+npx nanoctl@latest list-deployments
+```
+
+### Delete a Deployment
+
+```bash
+npx nanoctl@latest delete-deployment --name YOUR_PROJECT_NAME
 ```
 
 ## Monitoring and Logs
