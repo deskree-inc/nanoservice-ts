@@ -2,9 +2,7 @@
 title: Context Object
 ---
 
-## Concept
-
-The Context Object is a crucial component in Nanoservice-TS that facilitates data sharing and state management across different [Nodes](./nodes.mdx) within a single [Workflow](./workflows.mdx) execution instance. It acts as a shared memory space, allowing Nodes to pass information to subsequent Nodes, access initial trigger data, and maintain state throughout the lifecycle of a workflow run.
+The Context Object (`ctx`) is a crucial component in Nanoservice-TS that facilitates data sharing and state management across different [Nodes](./nodes.mdx) within a single [Workflow](./workflows.mdx) execution instance. It acts as a shared memory space, allowing Nodes to pass information to subsequent Nodes, access initial trigger data, and maintain state throughout the lifecycle of a workflow run.
 
 ## What is the Context Object?
 
@@ -19,44 +17,88 @@ Key characteristics of the Context Object:
 
 ## Structure and Usage
 
-The exact structure and API of the Context Object might depend on the specific Nanoservice-TS runtime and SDK version. However, it generally provides methods to:
+In `nanoservice-ts`, the Context Object (`ctx`) has a specific structure that enables nodes to exchange data and maintain state throughout execution:
 
-*   **Get data**: Retrieve values stored in the context, often using a key-based or path-based accessor (e.g., `context.get('userId')`, `context.get('trigger.body.name')`).
-*   **Set data**: Store new values or update existing ones in the context (e.g., `context.set('processedData', result)`).
-*   **Access trigger data**: A dedicated section or namespace within the context usually holds the data that initiated the workflow (e.g., `context.trigger.headers`, `context.trigger.payload`).
-*   **Access workflow metadata**: Information like `workflowInstanceId`, `workflowName`, etc.
+```typescript
+const ctx: Context = {
+    vars: {}, // Stores dynamically generated variables
+    request: { 
+        body: {}, 
+        method: "GET", 
+        headers: {}, 
+        query: {}, 
+        params: {} 
+    }, // Incoming request details
+    response: { 
+        data: {} 
+    } // Stores processed results
+};
+```
+
+### Breakdown of the Context Object
+
+- **`ctx.request`**: Contains all HTTP request details:
+  - `body`: The request payload (e.g., for POST, PUT requests)
+  - `method`: HTTP method (e.g., GET, POST, etc.)
+  - `headers`: Request headers
+  - `query`: Query parameters (e.g., `?key=value`)
+  - `params`: Path parameters (e.g., `/:id`)
+
+- **`ctx.response`**: Holds workflow outputs:
+  - `data`: The latest processed data from nodes
+
+- **`ctx.vars`**: Temporary workflow variables:
+  - These are **not persisted** across requests.
+  - Nodes can store variables dynamically for later use.
 
 ### Conceptual Example of Context Usage in a Node
 
 ```typescript
-// Inside a Node's execute method (conceptual)
-import { NanoserviceNode, NodeInput, NodeOutput, Context } from 'nanoservice-ts-sdk'; // Hypothetical SDK import
+// Inside a Node's handle method
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
 
-interface MyNodeInput { /* ... */ }
-interface MyNodeOutput { /* ... */ }
+type InputType = {
+    message?: string;
+};
 
-export class MyCustomNode implements NanoserviceNode<MyNodeInput, MyNodeOutput> {
-  async execute(input: NodeInput<MyNodeInput>, context: Context): Promise<NodeOutput<MyNodeOutput>> {
-    // 1. Get data from the trigger via context
-    const customerId = context.get('trigger.query.customerId');
+export default class Node extends NanoService<InputType> {
+    constructor() {
+        super();
+        this.inputSchema = {};
+        this.outputSchema = {};
+    }
 
-    // 2. Get data set by a previous node
-    const previousStepResult = context.get('previousNodeOutput.someData');
+    async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+        const response: NanoServiceResponse = new NanoServiceResponse();
 
-    // Perform some logic using customerId and previousStepResult
-    const processedInfo = `Processed for ${customerId} with ${previousStepResult}`;
+        try {
+            // 1. Get data from the request via context
+            const userId = ctx.request.params.id;
+            
+            // 2. Get data set by a previous node
+            const previousData = ctx.vars['previous-node-name'];
+            
+            // 3. Process the data
+            const processedInfo = `Processed for ${userId} with ${previousData}`;
+            
+            // 4. Set data for subsequent nodes
+            ctx.vars['current-node'] = processedInfo;
+            
+            // 5. Set the response data
+            response.setSuccess({ message: inputs.message || processedInfo });
+        } catch (error: unknown) {
+            const nodeError: GlobalError = new GlobalError((error as Error).message);
+            nodeError.setCode(500);
+            nodeError.setStack((error as Error).stack);
+            nodeError.setName(this.name);
+            nodeError.setJson(undefined);
 
-    // 3. Set data for subsequent nodes
-    context.set('myCustomNode.processedInfo', processedInfo);
-    context.set('sharedCounter', (context.get('sharedCounter') || 0) + 1);
+            response.setError(nodeError);
+        }
 
-    // Log using workflow instance ID from context
-    console.log(`[${context.workflowInstanceId}] MyCustomNode processed: ${processedInfo}`);
-
-    return {
-      data: { /* output specific to this node */ }
-    };
-  }
+        return response;
+    }
 }
 ```
 
@@ -66,6 +108,106 @@ While the Context Object allows for shared mutable state, it's essential to be m
 
 Nodes typically read the data they need from the context (or directly from their `input` which is often populated from the context by the workflow engine), perform their operations, and then write their results back to the context if those results need to be accessed by subsequent nodes.
 
+## Context in Workflows
+
+Context is essential for **passing data between nodes** and making dynamic decisions in workflows.
+
+### Example: Using `ctx.request.params`
+
+In this workflow, we extract `id` from the request URL and fetch details from MongoDB:
+
+```json
+{
+    "name": "Get Movie Details",
+    "description": "Fetches a movie by ID",
+    "version": "1.0.0",
+    "trigger": {
+        "http": {
+            "method": "GET",
+            "path": "/movies/:id",
+            "accept": "application/json"
+        }
+    },
+    "steps": [
+        {
+            "name": "get-movie",
+            "node": "mongo-query",
+            "type": "local"
+        }
+    ],
+    "nodes": {
+        "get-movie": {
+            "inputs": {
+                "collection": "movies",
+                "id": "${ctx.request.params.id}"
+            }
+        }
+    }
+}
+```
+
+#### How it Works:
+- `path: "/movies/:id"` defines a **dynamic route**.
+- The MongoDB node retrieves the movie using:
+  ```json
+  "id": "${ctx.request.params.id}"
+  ```
+  This extracts `id` from the URL (e.g., `/movies/123` → `ctx.request.params.id = 123`).
+
+### Example: Using `ctx.vars`
+
+This workflow **stores an API response in a variable** and **uses it in a later step**:
+
+```json
+{
+    "name": "Fetch and Process Data",
+    "description": "Stores fetched data and processes it",
+    "version": "1.0.0",
+    "trigger": {
+        "http": {
+            "method": "GET",
+            "path": "/fetch-data",
+            "accept": "application/json"
+        }
+    },
+    "steps": [
+        {
+            "name": "fetch-data",
+            "node": "@nanoservice-ts/api-call",
+            "type": "module",
+            "set_var": true
+        },
+        {
+            "name": "process-data",
+            "node": "@nanoservice-ts/mapper",
+            "type": "module"
+        }
+    ],
+    "nodes": {
+        "fetch-data": {
+            "inputs": {
+                "url": "https://api.publicapis.org/entries",
+                "method": "GET",
+                "headers": {},
+                "var": "apiResponse"
+            }
+        },
+        "process-data": {
+            "inputs": {
+                "mapper": {
+                    "totalApis": "js/ctx.vars['fetch-data'].count",
+                    "categories": "js/ctx.vars['fetch-data'].categories"
+                }
+            }
+        }
+    }
+}
+```
+
+#### How it Works:
+- The **API call node (`fetch-data`)** fetches API data and stores it in `ctx.vars['fetch-data']`.
+- The **mapper node (`process-data`)** extracts and processes values from `ctx.vars['fetch-data']`.
+
 ## Best Practices for Using the Context Object
 
 *   **Clear Naming Conventions**: Use consistent and descriptive keys when setting data in the context to avoid collisions and improve readability (e.g., `nodeName.outputKey`, `shared.config.apiKey`).
@@ -74,34 +216,12 @@ Nodes typically read the data they need from the context (or directly from their
 *   **Error Handling Data**: The context can also be used to store error information if a Node fails, which can then be picked up by error handling Nodes or branches in the workflow.
 *   **Security Considerations**: Be cautious about storing sensitive information in the context, especially if logs or full context dumps are generated for debugging. Sanitize or avoid storing raw sensitive data if possible.
 
-## Context in Workflow Definitions
+## Key Takeaways
 
-In workflow JSON definitions, you often reference context data to populate Node inputs:
-
-```json
-// ... inside a workflow definition ...
-{
-  "id": "fetch_user_details",
-  "node": "Database.GetUserById",
-  "input": {
-    // Get 'userId' from the trigger's query parameters via the context
-    "userId": "{{trigger.query.userId}}"
-  },
-  "next_node_id": "process_user_data"
-},
-{
-  "id": "log_user_email",
-  "node": "Utils.Logger",
-  "input": {
-    // Get 'email' from the output of the 'fetch_user_details' node, 
-    // which would have been placed into the context (e.g., context.fetch_user_details.email)
-    // The exact path depends on how the previous node structures its output in the context.
-    "message": "User email: {{nodes.fetch_user_details.output.email}}" // Example path
-  }
-}
-// ...
-```
-*(The `{{...}}` syntax is a common templating mechanism for accessing context data in workflow definitions, but the exact syntax can vary.)*
+- ✅ **`ctx` allows passing request data to nodes.**  
+- ✅ **Nodes modify and store values in `ctx.vars`.**  
+- ✅ **Nodes can dynamically read/write to `ctx.response.data`.**  
+- ✅ **`ctx.request.params`, `ctx.request.body`, and `ctx.response` drive workflow execution.**
 
 The Context Object is a powerful mechanism that enables dynamic and flexible workflows in Nanoservice-TS. Understanding how to use it effectively is key to building robust and maintainable nanoservice applications.
 
