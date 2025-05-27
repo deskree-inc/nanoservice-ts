@@ -140,6 +140,7 @@ export async function deploy(opts: OptionValues) {
 			0,
 		);
 		p.log.success(`Service live at: ${color.greenBright(deploymentData?.data?.url)}`);
+		p.log.success(`Monitoring live at: ${color.greenBright(deploymentData?.data?.prometheusUrl)}`);
 		return true;
 	} catch (error) {
 		logger.stop(`Error: ${error}`, 1);

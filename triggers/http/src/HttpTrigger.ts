@@ -14,6 +14,7 @@ import MessageDecode from "./MessageDecode";
 import nodes from "./Nodes";
 import { handleDynamicRoute, validateRoute } from "./Util";
 import workflows from "./Workflows";
+import { metricsHandler } from "./opentelemetry_metrics";
 import NodeTypes from "./types/NodeTypes";
 import type RuntimeWorkflow from "./types/RuntimeWorkflow";
 
@@ -62,6 +63,15 @@ export default class HttpTrigger extends TriggerBase {
 
 			this.app.use("/health-check", (req: Request, res: Response) => {
 				res.status(200).send("Online and ready for action 💪");
+			});
+
+			this.app.get("/metrics", (req: Request, res: Response) => {
+				try {
+					metricsHandler(req, res);
+				} catch (error) {
+					console.error("Error serving metrics:", error);
+					res.status(500).send("Error serving metrics");
+				}
 			});
 
 			this.app.use(["/:workflow", "/"], async (req: Request, res: Response): Promise<void> => {
