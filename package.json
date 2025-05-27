@@ -6,7 +6,7 @@
 	"author": "Deskree Technologies Inc.",
 	"license": "Apache-2.0",
 	"scripts": {
-		"ci:publish": "pnpm publish -r --access public",
+		"ci:publish": "pnpm build && pnpm publish -r --access public",
 		"doc:dev": "cd docs && npx mintlify dev",
 		"doc:generate": "npx typedoc --skipErrorChecking && node ./docs/generateRefLinks.js",
 		"prepare": "husky",
