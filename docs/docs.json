@@ -25,6 +25,14 @@
             ]
           },
           {
+            "group": "Examples",
+            "pages": [
+              "d/examples/index",
+              "d/examples/countries",
+              "d/examples/db-manager"
+            ]
+          },
+          {
             "group": "Fundamentals",
             "pages": [
               "d/fundamentals/nanoservices-concept"
@@ -40,14 +48,6 @@
               "d/cli/login",
               "d/cli/build",
               "d/cli/deploy"
-            ]
-          },
-          {
-            "group": "Examples",
-            "pages": [
-              "d/examples/index",
-              "d/examples/countries",
-              "d/examples/db-manager"
             ]
           },
           {
