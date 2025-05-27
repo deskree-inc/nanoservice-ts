@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.6
+
+### Patch Changes
+
+- Added prometheus monitoring url
+
 ## 0.1.5
 
 ### Patch Changes
