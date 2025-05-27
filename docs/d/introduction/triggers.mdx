@@ -29,12 +29,12 @@ Each trigger type requires specific configuration. This configuration is typical
 {
   "name": "getUserProfile",
   "trigger": {
-    "type": "Http", // Specifies the trigger type
-    "config": {      // Configuration specific to the HTTP trigger
-      "path": "/users/{userId}", // The URL path, with a path parameter
-      "method": "GET"            // The HTTP method (GET, POST, PUT, etc.)
-    }
-  },
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
   "nodes": [
     // ... nodes for this workflow ...
   ]
@@ -44,47 +44,6 @@ In this example:
 *   `type: "Http"` declares it as an HTTP trigger.
 *   `config.path: "/users/{userId}"` defines the endpoint. The `{userId}` part indicates a path parameter that will be available in the [Context Object](./context.mdx).
 *   `config.method: "GET"` specifies that only GET requests to this path will trigger the workflow.
-
-### Example: Scheduled (Cron) Trigger Configuration
-
-```json
-{
-  "name": "dailyReportWorkflow",
-  "trigger": {
-    "type": "Schedule",
-    "config": {
-      "cron": "0 2 * * *" // Cron expression for 2:00 AM every day
-    }
-  },
-  "nodes": [
-    // ... nodes for generating the daily report ...
-  ]
-}
-```
-*   `type: "Schedule"` declares it as a scheduled trigger.
-*   `config.cron: "0 2 * * *"` uses a standard cron expression.
-
-### Example: gRPC Trigger Configuration (Conceptual)
-
-```json
-{
-  "name": "processPaymentGrpc",
-  "trigger": {
-    "type": "gRPC",
-    "config": {
-      "service": "PaymentService",
-      "method": "ProcessPayment",
-      "protoPath": "protos/payment.proto" // Path to the .proto definition file
-    }
-  },
-  "nodes": [
-    // ... nodes for processing the payment ...
-  ]
-}
-```
-*   `type: "gRPC"` declares it as a gRPC trigger.
-*   `config.service` and `config.method` specify the gRPC service and method to listen for.
-*   `config.protoPath` points to the Protocol Buffer definition file that defines the service and message types.
 
 ## Trigger Data in the Context Object
 
