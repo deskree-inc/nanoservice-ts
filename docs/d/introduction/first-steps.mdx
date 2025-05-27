@@ -1,0 +1,145 @@
+---
+title: First Steps
+---
+
+## Starting
+
+This guide will walk you through setting up your Nanoservice-TS development environment and creating your first nanoservice-based application. We aim to get you up and running as quickly as possible.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+*   **Node.js**: Nanoservice-TS is built on Node.js. We recommend using the latest LTS version. You can download it from [nodejs.org](https://nodejs.org/).
+*   **npm** (or **yarn**): npm is included with Node.js. If you prefer yarn, ensure it is installed.
+
+## Installation
+
+The primary way to interact with Nanoservice-TS and manage your projects is through our Command Line Interface (CLI), `nanoctl`.
+
+You don't need to install `nanoctl` globally to start. You can use `npx` to run the latest version directly:
+
+## Creating Your First Project
+
+Let's create a new Nanoservice-TS project. Open your terminal and run:
+
+```bash
+npx nanoctl@latest create project
+```
+
+The CLI will guide you through the project creation process with an interactive interface:
+
+```
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
+ |N|A|N|O|S|E|R|V|I|C|E|-|T|S| |C|L|I|
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+ +-+-+-+
+
+┌   Create a New Project 
+│
+◇  Please provide a name for the project
+│  nano-service
+│
+◇  Select the trigger to install
+│  HTTP
+│
+◇  Select the runtimes to install
+│  NodeJS
+│
+◇  Install the examples?
+│  NO
+│
+◇  Project "nano-service" created successfully
+
+Trigger: HTTP
+
+Change to the project directory: cd nano-service
+Run the command "npm run dev" to start the development server.
+You can test the project in your browser at http://localhost:4000/health-check
+For more documentation, visit https://nanoservice.xyz/
+```
+
+This will create a new directory with the name you provided, containing a fully configured Nanoservice-TS project.
+
+## Project Structure
+
+After creating a new project, you'll have a directory structure like this:
+
+```
+NANO-SERVICE
+├── node_modules/
+├── notes/
+│   ├── CLI_Commands/
+│   ├── Core_Concepts/
+│   ├── examples.md
+│   └── index.md
+├── public/
+│   └── favicon.ico
+├── src/
+│   ├── nodes/
+│   ├── types/
+│   ├── workflows/
+│   ├── HttpTrigger.ts
+│   ├── index.ts
+│   ├── MessageDecode.ts
+│   ├── Nodes.ts
+│   ├── opentelemetry_metrics.ts
+│   ├── opentelemetry_traces.ts
+│   ├── Util.ts
+│   └── Workflows.ts
+├── workflows/
+│   ├── json/
+│   ├── toml/
+│   └── yaml/
+├── .dockerignore
+├── .env.example
+├── .env.local
+├── .gitignore
+├── CHANGELOG.md
+├── Dockerfile
+├── nodemon.json
+├── package-lock.json
+├── package.json
+├── request.http
+├── supervisord.conf
+└── tsconfig.json
+```
+
+## Running Your First Application
+
+The newly created project already includes a pre-configured example workflow called `countries` that fetches country data from an API. To run it:
+
+1. Navigate to your project directory:
+   ```bash
+   cd nano-service
+   ```
+
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   Note that you don't need to run `npm install` as this is already handled during project creation.
+
+3. Open your browser and navigate to:
+   ```
+   http://localhost:4000/countries
+   ```
+
+   Or use a tool like curl:
+   ```bash
+   curl http://localhost:4000/countries
+   ```
+
+You should receive a JSON response with country data. The name of the workflow file corresponds to the endpoint URL, so `countries` is accessible at `/countries`.
+
+## Next Steps
+
+Now that you have a basic understanding of how to set up and run a Nanoservice-TS project, you can explore further:
+
+*   Learn more about [Nodes](./nodes) - the building blocks of your application.
+*   Understand [Workflows](./workflows) in more detail.
+*   Discover how [Triggers](./triggers) initiate your workflows.
+*   Dive into the [Context Object](./context) for data sharing.
+*   Explore the available [Examples](../examples/index) for more complex use cases.
+*   Deepen your knowledge with the [Fundamentals](../fundamentals/overview) section.
+
+Happy building!

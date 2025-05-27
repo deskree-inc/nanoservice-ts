@@ -1,0 +1,107 @@
+---
+title: Node
+---
+
+**Nodes** are the core building blocks of your **nanoservice-ts** applications, encapsulating specific pieces of logic. The `nanoctl` CLI provides commands to help you create and manage these Nodes efficiently, primarily through the `create node` command.
+
+## `create node`
+
+This command is used to scaffold a new Node within your **nanoservice-ts** project.
+
+> <sub>**Purpose**: To generate the boilerplate files for a new Node, including its definition (`node.json`) and implementation file (e.g., `index.ts`), placing them in the appropriate directory within your project (usually `nodes/`).</sub>
+
+**Usage**:
+
+```bash
+# This command creates a new node and automatically generates a new directory for it.
+npx nanoctl@latest create node
+```
+```bash
+# Use this command to create a new node inside the current (empty) directory.
+npx nanoctl@latest create node .
+```
+
+### 1. Interactive Prompts & Options
+
+You will be prompted to provide the following information:
+
+1. **Node Name**  
+    Enter a unique name for the node (e.g., `fetch`).
+
+2. **Select Runtime**  
+    Choose between:
+    - **TypeScript (recommended)** *(Default)*
+    - **Python3** *(Alpha version, MacOS & Linux only)*  
+    *(For this guide, select **TypeScript**.)*
+
+3. **Select Nanoservice Type**  
+    Choose between:
+    - **Module** *(For npm-published nodes – not needed for this guide)*
+    - **Class** *(Default, for local nodes)*
+
+4. **Select Template**  
+    Choose between:
+    - **Class (recommended)** *(Default)*
+    - UI - EJS - REACTJS - TailwindCSS *(not required for this guide)*
+
+### 2. Navigate to the New Node Directory:
+
+Once the node is created, navigate to its directory:
+
+```bash
+cd src/nodes/fetch
+```
+
+### 3. Update the Node Class Name
+
+Open the `index.ts` file inside the node directory and **update the class name** to match your node name (`Fetch` in this example):
+
+```typescript
+// Original class name
+export default class Node extends NanoService {
+     ...
+}
+
+// Updated class name
+export default class Fetch extends NanoService {
+     ...
+}
+```
+
+### 4. Register the Node in the `Nodes.ts` File
+
+To make your node available in workflows, **register it inside `src/Nodes.ts`**:
+
+```typescript
+import ApiCall from "@nanoservice-ts/api-call";
+import IfElse from "@nanoservice-ts/if-else";
+import type { NodeBase } from "@nanoservice-ts/shared";
+import Fetch from "./nodes/fetch";
+
+const nodes: {
+     [key: string]: NodeBase;
+} = {
+     "@nanoservice-ts/api-call": new ApiCall(),
+     "@nanoservice-ts/if-else": new IfElse(),
+     "fetch": new Fetch()
+};
+
+export default nodes;
+```
+
+### 5. Validate the Node
+
+To verify that your new node has been registered correctly, run the following command from the root of your project:
+```bash
+npm run dev
+```
+If everything works as expected, the node is ready to be used in a workflow. Simply create a workflow and add your node to it.
+
+## Summary
+
+- ✅ **Created a custom node** using the CLI.  
+- ✅ **Configured the node class name** correctly.  
+- ✅ **Registered the node** inside `Nodes.ts`.  
+- ✅ **Validated the project setup**.
+
+Your node is now ready to be used in workflows! 🎉

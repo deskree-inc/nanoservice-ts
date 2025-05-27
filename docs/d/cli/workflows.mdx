@@ -1,0 +1,154 @@
+---
+title: Workflow
+---
+
+**Workflows** are central to `nanoservice-ts`, defining the orchestration of **Nodes** to implement business logic. The `nanoctl` CLI helps in scaffolding new workflow definition files, primarily through the `create workflow` command.
+
+## `create workflow`
+
+This command is used to generate a new workflow definition file within your Nanoservice-TS project.
+
+> <sub>**Purpose**: To create a boilerplate JSON file for a new workflow, placing it in the `workflows/` directory of your project. This file will contain a basic structure that you can then customize to define your specific sequence of nodes and trigger configuration.</sub>
+
+**Usage**:
+
+To create a new workflow, run the following command:
+```bash
+npx nanoctl@latest create workflow
+```
+
+### 1. Interactive Prompts & Options
+
+When you run `nanoctl create workflow`, you might be prompted for:
+
+1.  **Workflow Name**: Provide a unique name for your workflow.
+
+### 2. Understand the Workflow Structure
+
+A workflow consists of **three** main sections:
+
+1. **Trigger**: Defines how the workflow is executed.  
+2. **Steps**: Specifies the sequence of nodes executed in order.  
+3. **Nodes**: Configures each node used in the steps.  
+
+### 3. Example Workflow (Fetching Data)
+
+Below is an example of a workflow named **"fetch-cat-facts"** that makes an HTTP request to fetch cat facts. Save this file as `workflows/json/cats.json`:
+
+```json
+{
+    "name": "fetch-cat-facts",
+    "description": "This workflow fetches random cat facts from a public API.",
+    "version": "1.0.0",
+    "trigger": {
+        "http": {
+            "method": "GET",
+            "path": "/",
+            "accept": "application/json"
+        }
+    },
+    "steps": [
+        {
+            "name": "fetch_api_data",
+            "node": "@nanoservice-ts/api-call",
+            "type": "module"
+        }
+    ],
+    "nodes": {
+        "fetch_api_data": {
+            "inputs": {
+                "url": "https://catfact.ninja/fact",
+                "method": "GET",
+                "headers": {}
+            }
+        }
+    }
+}
+```
+
+### 4. Workflow Structure Breakdown
+
+## <sub>1. Trigger Section</sub>
+
+The `trigger` defines how the workflow is executed:
+
+```json
+"trigger": {
+    "http": {
+        "method": "GET",
+        "path": "/",
+        "accept": "application/json"
+    }
+}
+```
+
+- **`method`**: Specifies the HTTP method (e.g., `GET`, `POST`, etc.). Use `"*"` to accept **any** method.
+- **`path`**: Defines the URL path. Supports **path parameters**:
+    - `"/:id"` → Required parameter (e.g., `/cats/123`).
+    - `"/:id?"` → Optional parameter (e.g., `/cats` or `/cats/123`).
+- **`accept`**: Defines the expected response format (`application/json` by default).
+
+## <sub>2. Steps Section</sub>
+
+The `steps` define the sequence of nodes executed in the workflow:
+
+```json
+"steps": [
+    {
+        "name": "fetch_api_data",
+        "node": "@nanoservice-ts/api-call",
+        "type": "module"
+    }
+]
+```
+
+- **`name`**: Unique name for the step.
+- **`node`**: The node to execute (e.g., `@nanoservice-ts/api-call`).
+- **`type`**: Specifies the type of node. The available options are:
+    - **`module`**: Used for nodes installed as dependencies (e.g., from npm) or nodes created using the `Class` type.
+    - **`local`**: Used for nodes created locally, typically intended for publishing to npm.
+
+## <sub>3. Nodes Section</sub>
+
+The `nodes` section configures each node used in the workflow:
+
+```json
+"nodes": {
+    "fetch_api_data": {
+        "inputs": {
+            "url": "https://catfact.ninja/fact",
+            "method": "GET",
+            "headers": {}
+        }
+    }
+}
+```
+
+- **`inputs`**: Configuration values for the node.
+    - **`url`**: API endpoint.
+    - **`method`**: HTTP method (`GET`, `POST`, etc.).
+    - **`headers`**: Optional request headers.
+
+### 5. Run & Test the Workflow
+
+1. **Start the nanoservice project**:
+
+     ```sh
+     npm run dev
+     ```
+
+2. **Test the workflow using `curl` or Postman**:
+
+     ```sh
+     curl http://localhost:4000/cats
+     ```
+
+     ✔ If everything is set up correctly, the response will contain a **random cat fact** fetched from the API. The `/cats` path corresponds to the workflow JSON file **`workflows/json/cats.json`**.
+
+
+## Summary
+
+- ✅ Workflows consist of **Triggers**, **Steps**, and **Nodes**.  
+- ✅ HTTP triggers support **method filtering (`GET`, `POST`, etc.)** and **dynamic paths (`/:id`)**.  
+- ✅ Nodes execute nanoservices and are configured in the **nodes section**.  
+- ✅ Workflows can be tested via `curl` or Postman.  

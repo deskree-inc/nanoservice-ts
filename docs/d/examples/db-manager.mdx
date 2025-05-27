@@ -1,0 +1,691 @@
+---
+title: Database Smart Query (DB Manager)
+---
+
+The Database Smart Query (DB Manager) example demonstrates how to create an AI-powered database query interface using Nanoservice-ts. This advanced example showcases how to build a workflow that allows users to query a PostgreSQL database using natural language prompts, which are then converted to SQL queries using AI.
+
+<img
+  className="block"
+  src="/assets/images/ai-database-query.jpeg"
+  alt="db-manager screenshot example"
+/>
+
+## Features
+
+- Interactive UI for database exploration
+- Natural language to SQL conversion using AI
+- Dynamic database schema introspection
+- Real-time query execution
+- Results visualization
+
+## Prerequisites
+
+Before running this example, ensure you have:
+
+- A Nanoservice-ts project set up with the HTTP trigger
+- Node.js (v22 or later) and npm installed
+- Docker and Docker Compose installed
+- An OpenAI API key for the AI query generation
+
+## Environment Setup
+
+### 1. Set Up Your Nanoservice-ts Project
+
+If you haven't created a project yet, you can do so with:
+
+```bash
+npx nanoctl@latest create project
+```
+
+Follow the prompts:
+- Provide a name for your project
+- Select "HTTP" as the trigger
+- Select "NodeJS" as the runtime
+- Choose "YES" when asked to install examples
+
+### 2. Configure Environment Variables
+
+Create a `.env.local` file in your project root with your OpenAI API key:
+
+```
+OPENAI_API_KEY=your_openai_api_key
+```
+
+Replace `your_openai_api_key` with your actual OpenAI API key.
+
+### 3. Set Up the Required Infrastructure
+
+The DB Manager example requires two infrastructure components that are already included in your project:
+
+#### PostgreSQL Database
+
+Navigate to the PostgreSQL infrastructure directory and start the containers:
+
+```bash
+# First, create the shared network if it doesn't exist
+docker network create shared-network
+
+# Navigate to the PostgreSQL directory
+cd infra/postgresql
+
+# Start the PostgreSQL containers
+docker-compose up -d
+```
+
+This will start:
+- A PostgreSQL database with the sample `dvdrental` database
+- Adminer, a database management tool accessible at http://localhost:8080
+
+#### Metrics Infrastructure (Optional but Recommended)
+
+For monitoring your application, you can also start the metrics infrastructure:
+
+```bash
+# Navigate to the metrics directory
+cd infra/metrics
+
+# Start the metrics containers
+docker-compose up -d
+```
+
+This will start:
+- Prometheus for metrics collection
+- Grafana for metrics visualization (accessible at http://localhost:3000)
+- Loki for log aggregation
+
+### 4. Verify the Setup
+
+To verify that everything is set up correctly:
+
+1. Check that the PostgreSQL database is running:
+   ```bash
+   docker ps | grep postgres
+   ```
+
+2. Access Adminer at http://localhost:8080 and log in with:
+   - System: PostgreSQL
+   - Server: postgres
+   - Username: postgres
+   - Password: example
+   - Database: dvdrental
+
+   You should see the `dvdrental` database with tables like `actor`, `film`, `customer`, etc.
+
+## Workflow Structure
+
+The DB Manager workflow is defined in `workflows/json/db-manager.json`:
+
+```json
+{
+  "name": "Database Manager",
+  "description": "This workflow is used to query a database using an AI Prompt UI",
+  "version": "1.0.0",
+  "trigger": {
+    "http": {
+      "method": "*",
+      "path": "/:function?",
+      "accept": "application/json"
+    }
+  },
+  "steps": [
+    {
+      "name": "filter-request",
+      "node": "@nanoservice-ts/if-else",
+      "type": "module"
+    }
+  ],
+  "nodes": {
+    "filter-request": {
+      "conditions": [
+        {
+          "type": "if",
+          "steps": [
+            {
+              "name": "database-ui",
+              "node": "database-ui",
+              "type": "module"
+            }
+          ],
+          "condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === undefined"
+        },
+        {
+          "type": "if",
+          "steps": [
+            {
+              "name": "get-tables",
+              "node": "postgres-query",
+              "type": "module"
+            }
+          ],
+          "condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === \"tables\""
+        },
+        {
+          "type": "if",
+          "steps": [
+            {
+              "name": "get-table-columns",
+              "node": "postgres-query",
+              "type": "module"
+            },
+            {
+              "name": "query-generator",
+              "node": "query-generator",
+              "type": "module"
+            },
+            {
+              "name": "execute-query",
+              "node": "postgres-query",
+              "type": "module"
+            },
+            {
+              "name": "create-response",
+              "node": "mapper",
+              "type": "module"
+            }
+          ],
+          "condition": "ctx.request.method.toLowerCase() === \"post\" && ctx.request.params.function === \"execute-prompt\""
+        },
+        {
+          "type": "else",
+          "steps": [
+            {
+              "name": "method-not-allowed",
+              "node": "error",
+              "type": "module"
+            }
+          ]
+        }
+      ]
+    },
+    "database-ui": {
+      "inputs": {}
+    },
+    "get-tables": {
+      "inputs": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "dvdrental",
+        "user": "postgres",
+        "password": "example",
+        "query": "select table_name from information_schema.tables where table_schema = 'public'"
+      }
+    },
+    "get-table-columns": {
+      "inputs": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "dvdrental",
+        "user": "postgres",
+        "password": "example",
+        "query": "SELECT t1.column_name, COALESCE(t2.attname, '_') as primary_key, udt_name as data_type FROM information_schema.columns as t1 LEFT JOIN (SELECT a.attname FROM pg_index i JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey) WHERE  i.indrelid = '${ctx.request.body.table_name}'::regclass AND i.indisprimary) as t2 ON t1.column_name = t2.attname WHERE table_schema = 'public' AND table_name = '${ctx.request.body.table_name}';"
+      }
+    },
+    "query-generator": {
+      "inputs": {
+        "table_name": "${ctx.request.body.table_name}",
+        "columns": "js/ctx.response.data.data",
+        "prompt": "${ctx.request.body.prompt}"
+      }
+    },
+    "execute-query": {
+      "inputs": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "dvdrental",
+        "user": "postgres",
+        "password": "example",
+        "query": "${ctx.response.data.query}"
+      }
+    },
+    "create-response": {
+      "inputs": {
+        "model": {
+          "total": "${ctx.response.data.total}",
+          "results": "js/ctx.response.data.data",
+          "query": "${ctx.vars?.query}"
+        }
+      }
+    }
+  }
+}
+```
+
+## UI Rendering with If-Else Node
+
+One of the most powerful features of Nanoservice-ts is the ability to serve different content based on request conditions. The DB Manager example demonstrates this by using the `@nanoservice-ts/if-else` node to render the UI and handle API requests within a single workflow.
+
+### How UI Rendering Works in Nanoservice-ts
+
+In traditional web applications, you might have separate routes for serving HTML and handling API requests. In Nanoservice-ts, you can use conditional logic to handle both in a unified workflow:
+
+1. **Request Routing**: The `if-else` node evaluates conditions based on the request method, path, and parameters.
+2. **Content Type Detection**: The workflow determines whether to serve HTML (UI) or JSON (API response).
+3. **Node Selection**: Based on the conditions, the appropriate node is executed.
+4. **Response Generation**: The selected node generates the appropriate response (HTML or JSON).
+
+### The If-Else Node Structure
+
+The `if-else` node in the DB Manager workflow is configured with multiple conditions:
+
+```json
+"filter-request": {
+  "conditions": [
+    {
+      "type": "if",
+      "steps": [
+        {
+          "name": "database-ui",
+          "node": "database-ui",
+          "type": "module"
+        }
+      ],
+      "condition": "ctx.request.method.toLowerCase() === \"get\" && ctx.request.params.function === undefined"
+    },
+    // Other conditions...
+  ]
+}
+```
+
+Each condition:
+1. Has a `type` ("if" or "else")
+2. Contains a JavaScript expression in the `condition` field
+3. Defines `steps` to execute when the condition is true
+
+### The Database-UI Node
+
+The `database-ui` node is responsible for serving the HTML, CSS, and JavaScript for the UI. When a GET request is made to the root path (`/db-manager`), the `if-else` node routes the request to this node.
+
+The node is implemented as a custom node that returns HTML content. The HTML includes:
+
+1. **HTML Structure**: The basic structure of the page
+2. **CSS Styling**: Styles for the UI components
+3. **React Components**: JavaScript code for the interactive UI
+4. **API Integration**: Code to communicate with the workflow's API endpoints
+
+Here's a simplified example of how the `database-ui` node might be implemented:
+
+```typescript
+import {
+  type INanoServiceResponse,
+  NanoService,
+  NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import fs from 'fs';
+import path from 'path';
+
+type InputType = {};
+
+export default class DatabaseUI extends NanoService<InputType> {
+  constructor() {
+    super();
+    this.inputSchema = {};
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+
+    try {
+      // Read the HTML file
+      const htmlPath = path.resolve(__dirname, './ui/index.html');
+      const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+      
+      // Set the content type to HTML
+      response.headers = {
+        'Content-Type': 'text/html',
+      };
+      
+      // Return the HTML content
+      response.setSuccess(htmlContent);
+    } catch (error: unknown) {
+      const nodeError = new GlobalError((error as Error).message);
+      nodeError.setCode(500);
+      nodeError.setStack((error as Error).stack);
+      nodeError.setName(this.name);
+      response.setError(nodeError);
+    }
+
+    return response;
+  }
+}
+```
+
+### The Complete UI Rendering Flow
+
+When a user accesses the DB Manager at `http://localhost:4000/db-manager`, the following happens:
+
+1. The HTTP trigger receives the GET request
+2. The `if-else` node evaluates the conditions:
+   ```javascript
+   ctx.request.method.toLowerCase() === "get" && ctx.request.params.function === undefined
+   ```
+3. Since this condition is true (it's a GET request to the root path), the `database-ui` node is executed
+4. The `database-ui` node returns HTML content with the appropriate Content-Type header
+5. The browser renders the HTML, which includes the React application
+6. The React application makes API requests to the other endpoints defined in the workflow
+
+### API Endpoints in the Same Workflow
+
+The same workflow also handles API requests through different conditions:
+
+1. **GET /db-manager/tables**: Lists available database tables
+   ```javascript
+   ctx.request.method.toLowerCase() === "get" && ctx.request.params.function === "tables"
+   ```
+
+2. **POST /db-manager/execute-prompt**: Generates and executes an SQL query
+   ```javascript
+   ctx.request.method.toLowerCase() === "post" && ctx.request.params.function === "execute-prompt"
+   ```
+
+### Benefits of This Approach
+
+Using the `if-else` node for UI rendering in Nanoservice-ts offers several advantages:
+
+1. **Unified Workflow**: Both UI and API logic are contained in a single workflow
+2. **Simplified Deployment**: No need for separate frontend and backend deployments
+3. **Shared Context**: UI and API can share the same context and configuration
+4. **Conditional Logic**: Complex routing can be implemented with JavaScript expressions
+5. **Content Negotiation**: Different content types can be served based on request parameters
+
+### Implementing Your Own UI Rendering
+
+To implement UI rendering in your own Nanoservice-ts workflows:
+
+1. **Create a UI Node**: Implement a node that returns HTML content
+2. **Use the If-Else Node**: Configure conditions based on request properties
+3. **Set Content-Type Headers**: Ensure the correct Content-Type is set for HTML responses
+4. **Include Client-Side Code**: Add JavaScript for client-side interactivity
+5. **Define API Endpoints**: Add conditions for API endpoints in the same workflow
+
+## The Postgres-Query Node
+
+The DB Manager example uses the `postgres-query` node to interact with the PostgreSQL database. This node is a custom implementation that allows executing SQL queries against the database.
+
+Here's a simplified version of the `postgres-query` node:
+
+```typescript
+import {
+  type INanoServiceResponse,
+  type JsonLikeObject,
+  NanoService,
+  NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import pg from "pg";
+
+type PostgresQueryInputs = {
+  user: string;
+  password: string;
+  host: string;
+  query: string;
+  set_var?: boolean;
+};
+
+export default class PostgresQuery extends NanoService<PostgresQueryInputs> {
+  constructor() {
+    super();
+    this.inputSchema = {
+      $schema: "http://json-schema.org/draft-04/schema#",
+      type: "object",
+      properties: {
+        user: { type: "string" },
+        password: { type: "string" },
+        host: { type: "string" },
+        query: { type: "string" },
+        set_var: { type: "boolean" },
+      },
+      required: ["user", "password", "host", "query"],
+    };
+    this.outputSchema = {};
+  }
+
+  async handle(ctx: Context, inputs: PostgresQueryInputs): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+
+    try {
+      const { Client } = pg;
+      const client = new Client({
+        user: inputs.user,
+        password: inputs.password,
+        host: inputs.host,
+        port: 5432,
+        database: "dvdrental",
+      });
+
+      await client.connect();
+      const result = await client.query(inputs.query);
+      await client.end();
+
+      response.setSuccess({
+        total: result.rowCount,
+        data: result.rows,
+      });
+    } catch (error: unknown) {
+      const nodeError = new GlobalError((error as Error).message);
+      nodeError.setCode(500);
+      nodeError.setStack((error as Error).stack);
+      nodeError.setName(this.name);
+      response.setError(nodeError);
+    }
+
+    return response;
+  }
+}
+```
+
+The `postgres-query` node is used in three places in the workflow:
+
+1. **get-tables**: To fetch the list of available tables from the database
+2. **get-table-columns**: To fetch the columns of a specific table
+3. **execute-query**: To execute the SQL query generated by the AI
+
+## Custom Node Implementations
+
+The DB Manager example uses several custom nodes:
+
+### 1. QueryGeneratorNode
+
+This node uses OpenAI to generate an SQL query based on a natural language prompt and table schema:
+
+```typescript
+import { createOpenAI } from "@ai-sdk/openai";
+import {
+  type INanoServiceResponse,
+  NanoService,
+  NanoServiceResponse,
+  type ParamsDictionary,
+} from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { generateText } from "ai";
+
+type InputType = {
+  table_name: string;
+  columns: Column[];
+  prompt: string;
+};
+
+type Column = {
+  column_name: string;
+  data_type: string;
+  primary_key: string;
+};
+
+export default class QueryGeneratorNode extends NanoService<InputType> {
+  constructor() {
+    super();
+    this.inputSchema = {
+      $schema: "http://json-schema.org/draft-04/schema#",
+      type: "object",
+      properties: {
+        table_name: { type: "string" },
+        columns: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              column_name: { type: "string" },
+              data_type: { type: "string" },
+              primary_key: { type: "string" },
+            },
+          },
+        },
+        prompt: { type: "string" },
+      },
+      required: ["table_name", "columns"],
+    };
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+    const { table_name: tableName, columns, prompt } = inputs;
+
+    try {
+      // Format column information
+      const tableSchema = columns
+        .map(
+          (col) => `${col.column_name} (${col.data_type}${col.column_name === col.primary_key ? ", PRIMARY KEY" : ""})`,
+        )
+        .join(", ");
+
+      // Generate SQL query using AI
+      const openai = createOpenAI({
+        compatibility: "strict",
+        apiKey: process.env.OPENAI_API_KEY,
+      });
+
+      const ai_prompt = `Table: ${tableName}
+            Schema: ${tableSchema}
+            
+            Generate a SQL query for the following request: ${prompt}
+            
+            Return ONLY the SQL query with no explanations, additional text or markdown code group.
+            
+            Double check the query to not include markdown code blocks or any other text that is not a valid SQL query.`;
+
+      const { text: sqlQuery } = await generateText({
+        model: openai("gpt-4o"),
+        system: `You are a SQL expert. Generate only valid SQL queries without any explanations or markdown. 
+            The query should be executable directly against a PostgreSQL database.`,
+        prompt: ai_prompt,
+      });
+
+      if (ctx.vars === undefined) ctx.vars = {};
+      ctx.vars.query = sqlQuery as unknown as ParamsDictionary;
+
+      response.setSuccess({
+        query: sqlQuery,
+      });
+    } catch (error: unknown) {
+      const nodeError = new GlobalError((error as Error).message);
+      nodeError.setCode(500);
+      response.setError(nodeError);
+    }
+
+    return response;
+  }
+}
+```
+
+### 2. MapperNode
+
+This node maps data from one format to another:
+
+```typescript
+import {
+  type INanoServiceResponse,
+  type JsonLikeObject,
+  NanoService,
+  NanoServiceResponse,
+} from "@nanoservice-ts/runner";
+import { type Context, GlobalError } from "@nanoservice-ts/shared";
+
+type InputType = {
+  model: object;
+};
+
+export default class MapperNode extends NanoService<InputType> {
+  constructor() {
+    super();
+    this.inputSchema = {
+      $schema: "http://json-schema.org/draft-04/schema#",
+      type: "object",
+      properties: {
+        model: { type: "object" },
+      },
+      required: ["model"],
+    };
+  }
+
+  async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+    const response: NanoServiceResponse = new NanoServiceResponse();
+
+    try {
+      response.setSuccess(inputs.model as JsonLikeObject);
+    } catch (error: unknown) {
+      const nodeError = new GlobalError((error as Error).message);
+      nodeError.setCode(500);
+      nodeError.setStack((error as Error).stack);
+      nodeError.setName(this.name);
+      response.setError(nodeError);
+    }
+
+    return response;
+  }
+}
+```
+
+## Running the Example
+
+To run the DB Manager example:
+
+1. Start your Nanoservice-ts project:
+   ```bash
+   npm run dev
+   ```
+
+2. Open your browser and navigate to:
+   ```
+   http://localhost:4000/db-manager
+   ```
+
+3. You should see the DB Manager UI with a dropdown to select a table and a text area to enter your natural language query.
+
+4. Select a table (e.g., "film") and enter a query like "Show me all films with a rating of PG-13".
+
+5. Click "Execute" to generate and run the SQL query.
+
+6. The results will be displayed in a table below.
+
+## Troubleshooting
+
+If you encounter issues:
+
+1. **Database Connection Issues**:
+   - Ensure the PostgreSQL container is running: `docker ps | grep postgres`
+   - Check the connection parameters in the workflow JSON
+   - Verify that the `dvdrental` database is properly initialized
+
+2. **AI Query Generation Issues**:
+   - Verify your OpenAI API key in the `.env.local` file
+   - Check the OpenAI API usage limits and quotas
+   - Examine the error messages in the console
+
+3. **UI Rendering Issues**:
+   - Check the browser console for JavaScript errors
+   - Verify that the `database-ui` node is correctly returning HTML content
+   - Ensure the Content-Type header is set to `text/html`
+
+## Conclusion
+
+The DB Manager example demonstrates the power and flexibility of Nanoservice-ts for building complex applications. By combining UI rendering, API endpoints, database access, and AI integration in a single workflow, you can create sophisticated applications with minimal code and configuration.
+
+Key takeaways:
+
+1. **Unified Workflow**: Both UI and API logic are contained in a single workflow
+2. **Conditional Logic**: The `if-else` node enables complex routing and content negotiation
+3. **Custom Nodes**: Specialized nodes like `postgres-query` and `query-generator` encapsulate specific functionality
+4. **AI Integration**: Natural language processing enhances the user experience
+5. **Database Access**: Direct database interaction without additional middleware
+
+This example serves as a template for building your own database-driven applications with Nanoservice-ts.

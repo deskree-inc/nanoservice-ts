@@ -16,56 +16,41 @@
 					{
 						"group": "Introduction",
 						"pages": [
-							"d/introduction/welcome",
-							"d/introduction/nanoservices-concept",
-							"d/introduction/nanoservices-microservices-monoliths",
-							"d/introduction/atomic-computing-and-nanoservices"
+							"d/introduction/overview",
+							"d/introduction/first-steps",
+							"d/introduction/nodes",
+							"d/introduction/workflows",
+							"d/introduction/context",
+							"d/introduction/triggers"
 						]
 					},
 					{
-						"group": "Quickstart",
-						"pages": ["d/quickstart"]
-					},
-					{
-						"group": "Getting Started",
+						"group": "Examples",
 						"pages": [
-							{
-								"group": "Initialization",
-								"pages": [
-									"d/getting-started/nanoctl",
-									"d/getting-started/templates"
-								]
-							}
+							"d/examples/index",
+							"d/examples/countries",
+							"d/examples/db-manager"
 						]
 					},
 					{
-						"group": "Core Concepts",
+						"group": "Fundamentals",
+						"pages": ["d/fundamentals/nanoservices-concept"]
+					},
+					{
+						"group": "CLI",
 						"pages": [
-							"d/core-concepts/overview",
-							{
-								"group": "Nodes",
-								"pages": [
-									"d/core-concepts/nodes",
-									"d/core-concepts/nodes-built-in"
-								]
-							},
-							{
-								"group": "Workflows",
-								"pages": [
-									"d/core-concepts/workflows",
-									"d/core-concepts/executing-workflows"
-								]
-							},
-							"d/core-concepts/trigger",
-							"d/core-concepts/nanoctl"
+							"d/cli/overview",
+							"d/cli/project",
+							"d/cli/nodes",
+							"d/cli/workflows",
+							"d/cli/login",
+							"d/cli/build",
+							"d/cli/deploy"
 						]
 					},
 					{
-						"group": "Advanced",
-						"pages": [
-							"d/advanced/deployment",
-							"d/advanced/monitoring-observability"
-						]
+						"group": "Deployment",
+						"pages": ["d/deployment/index"]
 					}
 				]
 			},
@@ -87,6 +72,14 @@
 							"c/extensions/triggers",
 							"c/extensions/cli"
 						]
+					},
+					{
+						"group": "DevTools",
+						"pages": ["c/devtools/index"]
+					},
+					{
+						"group": "Migration Guides",
+						"pages": ["c/migration-guides/index"]
 					}
 				]
 			},
@@ -95,65 +88,7 @@
 				"groups": [
 					{
 						"group": "References",
-						"pages": [
-							"/ref/README",
-							{
-								"group": "Runner",
-								"pages": [
-									"/ref/runner/src/README",
-									"/ref/runner/src/classes/Configuration",
-									"/ref/runner/src/classes/ConfigurationResolver",
-									"/ref/runner/src/classes/DefaultLogger",
-									"/ref/runner/src/classes/LocalStorage",
-									"/ref/runner/src/classes/NanoService",
-									"/ref/runner/src/classes/NanoServiceResponse",
-									"/ref/runner/src/classes/NodeMap",
-									"/ref/runner/src/classes/ResolverBase",
-									"/ref/runner/src/classes/Runner",
-									"/ref/runner/src/classes/RunnerSteps",
-									"/ref/runner/src/classes/TriggerBase",
-									"/ref/runner/src/interfaces/INanoServiceResponse",
-									"/ref/runner/src/interfaces/JsonLikeObject",
-									"/ref/runner/src/interfaces/ParamsDictionary",
-									"/ref/runner/src/type-aliases/Average",
-									"/ref/runner/src/type-aliases/Condition",
-									"/ref/runner/src/type-aliases/Conditions",
-									"/ref/runner/src/type-aliases/Config",
-									"/ref/runner/src/type-aliases/Flow",
-									"/ref/runner/src/type-aliases/GlobalOptions",
-									"/ref/runner/src/type-aliases/Inputs",
-									"/ref/runner/src/type-aliases/Node",
-									"/ref/runner/src/type-aliases/Properties",
-									"/ref/runner/src/type-aliases/Targets",
-									"/ref/runner/src/type-aliases/Trigger",
-									"/ref/runner/src/type-aliases/TriggerHttp",
-									"/ref/runner/src/type-aliases/TriggerResponse",
-									"/ref/runner/src/type-aliases/Triggers"
-								]
-							},
-							{
-								"group": "Shared",
-								"pages": [
-									"/ref/shared/src/README",
-									"/ref/shared/src/classes/GlobalError",
-									"/ref/shared/src/classes/GlobalLogger",
-									"/ref/shared/src/classes/MemoryUsage",
-									"/ref/shared/src/classes/Metrics",
-									"/ref/shared/src/classes/NodeBase",
-									"/ref/shared/src/classes/Trigger",
-									"/ref/shared/src/type-aliases/ConfigContext",
-									"/ref/shared/src/type-aliases/Context",
-									"/ref/shared/src/type-aliases/ErrorContext",
-									"/ref/shared/src/type-aliases/FunctionContext",
-									"/ref/shared/src/type-aliases/LoggerContext",
-									"/ref/shared/src/type-aliases/MetricsType",
-									"/ref/shared/src/type-aliases/NodeConfigContext",
-									"/ref/shared/src/type-aliases/RequestContext",
-									"/ref/shared/src/type-aliases/ResponseContext",
-									"/ref/shared/src/type-aliases/Step"
-								]
-							}
-						]
+						"pages": []
 					}
 				]
 			},
@@ -171,6 +106,10 @@
 					{
 						"group": "Resources",
 						"pages": ["o/resources"]
+					},
+					{
+						"group": "Support Us",
+						"pages": ["o/support/index"]
 					}
 				]
 			}

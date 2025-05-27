@@ -1,0 +1,58 @@
+---
+title: Overview
+---
+
+The **nanoservice-ts** Command Line Interface (CLI), `nanoctl`, is an essential tool for developing, managing, and deploying your **nanoservice-ts** applications. It provides a set of commands to streamline common tasks, from project scaffolding to Node and Workflow creation.
+
+## What is `nanoctl`?
+
+`nanoctl` is designed to enhance developer productivity by automating repetitive tasks and providing a consistent interface for interacting with the **nanoservice-ts** framework.
+
+Key functionalities typically include:
+
+*   **Project Initialization**: Creating new **nanoservice-ts** projects with a standard directory structure and boilerplate code.
+*   **Code Generation (Scaffolding)**: Generating new Nodes, Workflows, and potentially other components with basic templates.
+*   **Development Server**: Running a local development server to test your workflows.
+*   **Building & Packaging**: Preparing your application for deployment.
+*   **Deployment Commands**: Assisting with deploying your **nanoservice-ts** applications to various environments (though this might also involve other platform-specific tools).
+*   **Authentication/Login**: Commands to authenticate with **nanoservice-ts** services or platforms (e.g., Deskree).
+
+## Installation / Usage
+
+As mentioned in the [First Steps](../introduction/first-steps.mdx) guide, you can often use `nanoctl` directly via `npx` without a global installation, ensuring you always use the latest version:
+
+```bash
+npx nanoctl@latest <command>
+```
+
+Refer to the official **nanoservice-ts** installation instructions for the recommended approach.
+
+## Common Command Categories
+
+This section of the documentation will cover the main commands provided by `nanoctl`, grouped by their purpose:
+
+*   **[Project Management](./project.mdx)**: Commands related to creating and managing **nanoservice-ts** projects.
+    *   `npx nanoctl@latest create project`
+*   **[Node Management](./nodes.mdx)**: Commands for scaffolding and managing Nodes.
+    *   `npx nanoctl@latest create node`
+*   **[Workflow Management](./workflows.mdx)**: Commands for scaffolding and managing Workflows.
+    *   `npx nanoctl@latest create workflow`
+*   **[Authentication](./login.mdx)**: Commands for logging into **nanoservice-ts** platforms or services.
+    *   `npx nanoctl@latest login` or `npx nanoctl@latest logout`
+*   **[Build Process](./build.mdx)**: Commands related to building your application for production.
+    *   `npx nanoctl@latest build`
+*   **[Deployment](./deploy.mdx)**: Commands to assist with deploying your application.
+    *   `npx nanoctl@latest deploy`
+
+## Getting Help
+
+Most CLI tools provide a way to get help directly from the command line. You can usually try:
+
+```bash
+nanoctl --help
+nanoctl <command> --help
+```
+
+This will display a list of available commands or specific options for a given command.
+
+Explore the sub-sections for detailed explanations and examples of each `nanoctl` command group.
