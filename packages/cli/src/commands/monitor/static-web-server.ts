@@ -73,7 +73,13 @@ function handleRequest(
 			query_path = "query";
 		}
 
-		const proxiedUrl = `${host}/api/v1/${query_path}${parsedUrl.search}`;
+		let proxiedUrl = `${host}/api/v1/${query_path}${parsedUrl.search}`;
+
+		if (req.headers["x-label"]) {
+			const label = req.headers["x-label"];
+			proxiedUrl = `${host}/api/v1/label/${label}/values`;
+		}
+
 		const isSecure = host.startsWith("https://");
 		const httpModule = isSecure ? https : http;
 

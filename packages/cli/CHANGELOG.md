@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.9
+
+### Patch Changes
+
+- fixed monitor issue loading labels
+
 ## 0.1.8
 
 ### Patch Changes
