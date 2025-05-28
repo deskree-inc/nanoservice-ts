@@ -23,7 +23,8 @@
 		"clean": "rm -rf dist && rm -rf node_modules",
 		"install:local": "npm link",
 		"uninstall:local": "npm rm --global nanoctl",
-		"dev": "npm run uninstall:local && npm run install:local && npm run build:dev && nanoctl --help"
+		"dev": "npm run uninstall:local && npm run install:local && npm run build:dev && nanoctl --help",
+		"postbuild": "cp -r ./src/commands/monitor/static ./dist/commands/monitor/"
 	},
 	"keywords": ["nanoctl", "cli", "nanoservice", "nanoservice-ts"],
 	"dependencies": {
@@ -40,7 +41,8 @@
 		"type-fest": "^4.34.1",
 		"yocto-spinner": "^0.1.1",
 		"zod": "^3.24.0",
-		"open": "^10.1.2"
+		"open": "^10.1.2",
+		"serve-handler": "^6.1.6"
 	},
 	"devDependencies": {
 		"@types/figlet": "^1.7.0",

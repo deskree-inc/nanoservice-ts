@@ -43,19 +43,28 @@ const fmt = (val: number | undefined, decimals = 1) => {
 	return valNew;
 };
 
-const queryPrometheus = async (query: string) => {
-	const res = await fetch(`${PROM_URL}?query=${encodeURIComponent(query)}`);
+const queryPrometheus = async (query: string, host?: string, token?: string) => {
+	const REMOTE_PROM_URL = host ? `${host}/api/v1/query` : undefined;
+	const res = token
+		? await fetch(`${REMOTE_PROM_URL || PROM_URL}?query=${encodeURIComponent(query)}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					Accept: "application/json",
+					"Accept-Encoding": "identity",
+				},
+			})
+		: await fetch(`${REMOTE_PROM_URL || PROM_URL}?query=${encodeURIComponent(query)}`);
 	const data = await res.json();
 	return data.data.result || [];
 };
 
-const fetchPrometheusMetrics = async (): Promise<WorkflowMetrics[]> => {
+const fetchPrometheusMetrics = async (host?: string, token?: string): Promise<WorkflowMetrics[]> => {
 	const [wfReqs, wfTime, wfErrors, wfCPU, wfMem] = await Promise.all([
-		queryPrometheus("(sum(increase(workflow_total[1m])) by (workflow_path)) > 0"), // requests
-		queryPrometheus("sum(avg_over_time(workflow_time[1m])) by (workflow_path)"), // time
-		queryPrometheus("(sum(increase(workflow_errors_total[1m])) by (workflow_path)) > 0"), // errors
-		queryPrometheus("sum(avg_over_time(workflow_cpu[1m])) by (workflow_path)"), // CPU
-		queryPrometheus("sum(avg_over_time(workflow_memory[1m])) by (workflow_path)"), // memory
+		queryPrometheus("(sum(increase(workflow_total[1m])) by (workflow_path)) > 0", host, token), // requests
+		queryPrometheus("sum(increase(workflow_time[1m])) by (workflow_path)", host, token), // time
+		queryPrometheus("(sum(increase(workflow_errors_total[1m])) by (workflow_path)) > 0", host, token), // errors
+		queryPrometheus("sum(increase(workflow_cpu[1m])) by (workflow_path)", host, token), // CPU
+		queryPrometheus("sum(increase(workflow_memory[1m])) by (workflow_path)", host, token), // memory
 	]);
 
 	const wfMap: Record<string, WorkflowMetrics> = {};
@@ -86,11 +95,11 @@ const fetchPrometheusMetrics = async (): Promise<WorkflowMetrics[]> => {
 	mapWorkflow(wfReqs, "requests", (v) => Math.round(+v));
 
 	const nodeMetricsRaw = await Promise.all([
-		queryPrometheus("(sum(increase(node_total[1m])) by (node_name, workflow_path)) > 0"),
-		queryPrometheus("sum(increase(node_time[1m])) by (node_name, workflow_path)"),
-		queryPrometheus("(sum(increase(node_errors_total[1m])) by (node_name, workflow_path)) > 0"),
-		queryPrometheus("sum(increase(node_cpu[1m])) by (node_name, workflow_path)"),
-		queryPrometheus("sum(increase(node_memory[1m])) by (node_name, workflow_path)"),
+		queryPrometheus("(sum(increase(node_total[1m])) by (node_name, workflow_path)) > 0", host, token),
+		queryPrometheus("sum(increase(node_time[1m])) by (node_name, workflow_path)", host, token),
+		queryPrometheus("(sum(increase(node_errors_total[1m])) by (node_name, workflow_path)) > 0", host, token),
+		queryPrometheus("sum(increase(node_cpu[1m])) by (node_name, workflow_path)", host, token),
+		queryPrometheus("sum(increase(node_memory[1m])) by (node_name, workflow_path)", host, token),
 	]);
 
 	const nodeMap: Record<string, Record<string, Partial<NodeMetrics>>> = {};
@@ -125,14 +134,14 @@ const fetchPrometheusMetrics = async (): Promise<WorkflowMetrics[]> => {
 	return Object.values(wfMap);
 };
 
-const Monitor: React.FC = () => {
+const Monitor: React.FC<{ host?: string; token?: string }> = ({ host, token }) => {
 	const [workflows, setWorkflows] = useState<WorkflowMetrics[]>([]);
 	const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 	const [sortBy, setSortBy] = useState<SortBy>("time");
 
 	useEffect(() => {
 		const fetch = async () => {
-			const result = await fetchPrometheusMetrics();
+			const result = await fetchPrometheusMetrics(host, token);
 			setWorkflows(result);
 			setLastUpdate(new Date());
 		};
@@ -140,7 +149,7 @@ const Monitor: React.FC = () => {
 		fetch();
 		const interval = setInterval(fetch, 3000);
 		return () => clearInterval(interval);
-	}, []);
+	}, [host, token]);
 
 	useInput((input) => {
 		if (input === "w") setSortBy("time");
@@ -221,6 +230,6 @@ const Monitor: React.FC = () => {
 	);
 };
 
-export const runMonitor = () => {
-	render(<Monitor />);
+export const runMonitor = (host?: string, token?: string) => {
+	render(<Monitor host={host} token={token} />);
 };

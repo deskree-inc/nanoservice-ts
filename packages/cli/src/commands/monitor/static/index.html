@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard - nanoservice-ts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      html {
+        font-family: "Inter", sans-serif !important;
+        image-rendering: optimizeQuality;
+        image-resolution: inherit;
+      }
+
+      .metric-value,
+      .log-line,
+      .canvas-label {
+        font-family: "Roboto Mono", monospace !important;
+      }
+
+      canvas:fullscreen {
+        width: 100vw !important;
+        height: 100vh !important;
+        background-color: #ffffff !important;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900 dark:bg-[#1d2536] dark:text-white">
+    <nav
+      class="bg-white dark:bg-gray-900 shadow-sm px-6 py-3 sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 dark:border-gray-700"
+    >
+      <div class="flex flex-col">
+        <h1
+          class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white"
+        >
+          Observability
+        </h1>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+          Realtime usage, latency, and error insights for all workflows and
+          nodes.
+        </p>
+      </div>
+      <div class="flex items-center justify-center gap-1">
+        <!-- Filters container -->
+        <div class="flex items-center gap-4 ml-8 relative z-40">
+          <!-- Workflows filter dropdown -->
+          <div class="relative flex items-center gap-2">
+            <label
+              for="workflow-filter"
+              class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold"
+              >Workflows</label
+            >
+            <div class="relative">
+              <div
+                id="workflow-filter-trigger"
+                class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none"
+              >
+                <span id="workflow-filter-placeholder">All</span>
+                <svg
+                  id="workflow-filter-chevron"
+                  class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div
+                id="workflow-filter-dropdown"
+                class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-56 max-h-60 overflow-y-auto hidden"
+              >
+                <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">
+                  Selected (0)
+                </div>
+                <div id="workflow-filter-options" class="flex flex-col"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nodes filter dropdown -->
+          <div class="relative flex items-center gap-2">
+            <label
+              for="node-filter"
+              class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold"
+              >Nodes</label
+            >
+            <div class="relative">
+              <div
+                id="node-filter-trigger"
+                class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none"
+              >
+                <span id="node-filter-placeholder">All</span>
+                <svg
+                  id="node-filter-chevron"
+                  class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div
+                id="node-filter-dropdown"
+                class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-56 max-h-60 overflow-y-auto hidden"
+              >
+                <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">
+                  Selected (0)
+                </div>
+                <div id="node-filter-options" class="flex flex-col"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <button
+          onclick="toggleDarkMode()"
+          aria-label="Toggle Dark Mode"
+          class="flex items-center justify-center w-9 h-9 ml-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          <span
+            id="darkModeIcon"
+            class="w-5 h-5 text-gray-700 dark:text-gray-200"
+          ></span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="pt-0 pb-6 px-6 py-6 space-y-6">
+      <script>
+        function toggleSection(id) {
+          const section = document.getElementById(id);
+          const isHidden = section.classList.toggle("hidden");
+
+          localStorage.setItem(`section:${id}`, isHidden);
+        }
+
+        function restoreToggles() {
+          document.querySelectorAll("[id$='-body']").forEach((section) => {
+            const saved = localStorage.getItem(`section:${section.id}`);
+            if (saved === "true") {
+              section.classList.add("hidden");
+            }
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", restoreToggles);
+
+        window.addEventListener("scroll", () => {
+          localStorage.setItem("scrollPosition", window.scrollY);
+        });
+
+        window.addEventListener("load", () => {
+          const savedScroll = localStorage.getItem("scrollPosition");
+          if (savedScroll !== null) {
+            setTimeout(() => {
+              requestAnimationFrame(() => {});
+            }, 200);
+          }
+        });
+      </script>
+
+      <!-- OVERVIEW -->
+      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+        <div
+          class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              System Overview
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Aggregated metrics across all workflows and nodes in real time.
+            </p>
+          </div>
+
+          <button
+            onclick="toggleSection('overview-body', this)"
+            aria-label="Toggle Overview"
+            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition"
+          >
+            <i data-feather="chevron-down" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div
+          id="overview-body"
+          class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-draggable-section="overview-body"
+        >
+          <!-- Total Requests -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_requests"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Total Requests
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              All workflow executions (last 1m).
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_requests"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Errors -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_errors"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-red-600 dark:text-red-400">
+              Error Count
+            </h3>
+            <p class="text-xs text-red-500 dark:text-red-300 mb-2">
+              Failures detected across workflows.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_errors"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_request_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Execution Error Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Failures as % of total requests.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_request_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Time -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_time"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Avg. Execution Time (ms)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Mean duration per workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_time"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- CPU -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_cpu"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              CPU Usage
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Average CPU used (1m).
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_cpu"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- CPU Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_cpu_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              CPU Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Used vs allocatable CPU cores.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_cpu_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Memory -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_memory"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Memory Usage
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Avg memory used across workflows.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_memory"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Memory Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="overview_memory_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Memory Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Used vs memory quota per node.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="overview_memory_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORKFLOWS -->
+      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+        <div
+          class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              Workflow Metrics
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Insights per workflow — track usage, performance, and fault rates.
+            </p>
+          </div>
+          <button
+            onclick="toggleSection('workflows-body', this)"
+            aria-label="Toggle Workflows"
+            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition"
+          >
+            <i data-feather="chevron-down" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div
+          id="workflows-body"
+          class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-draggable-section="workflows-body"
+        >
+          <!-- Total Requests -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_requests"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Requests per Workflow
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Number of executions per workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_requests"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Errors -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_errors"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-red-600 dark:text-red-400">
+              Errors per Workflow
+            </h3>
+            <p class="text-xs text-red-500 dark:text-red-300 mb-2">
+              Failures by workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_errors"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Error Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_request_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Execution Error Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Failures as % of total attempts per workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_request_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Execution Time -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_time"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Execution Time (s)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Avg. duration per workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_time"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- CPU Usage -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_cpu"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              CPU Usage (s)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Avg. CPU consumption by workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_cpu"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- CPU Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_cpu_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              CPU Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              % of allocated CPU cores used.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_cpu_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Memory Usage -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_memory"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Memory Usage (MB)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Avg. memory per workflow.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_memory"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Memory Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="workflow_memory_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Memory Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              % of memory quota utilized.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="workflow_memory_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NODES -->
+      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+        <div
+          class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              Node Metrics
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Monitor nanoservice performance and health by individual node.
+            </p>
+          </div>
+          <button
+            onclick="toggleSection('nodes-body', this)"
+            aria-label="Toggle Nodes"
+            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition"
+          >
+            <i data-feather="chevron-down" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div
+          id="nodes-body"
+          class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-draggable-section="nodes-body"
+        >
+          <!-- Requests -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_requests"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Requests per Node
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              How often each node executes.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_requests"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Errors -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_errors"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-red-600 dark:text-red-400">
+              Errors per Node
+            </h3>
+            <p class="text-xs text-red-500 dark:text-red-300 mb-2">
+              Failures encountered per node.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_errors"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Execution Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_request_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Execution Error Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Failed executions as percentage of total.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_request_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Execution Time -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_time"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Execution Time (s)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Average duration of node execution.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_time"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- CPU Usage -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_cpu"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              CPU Usage (s)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Avg. CPU load per node.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_cpu"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- CPU Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_cpu_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              CPU Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              CPU usage as % of allocated cores.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_cpu_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Memory Usage -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_memory"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Memory Usage (MB)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Avg. RAM usage per node.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_memory"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Memory Risk -->
+          <div
+            class="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col h-[300px]"
+            data-id="node_memory_risk"
+            draggable="true"
+          >
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Memory Risk (%)
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+              Memory used as % of available memory per node.
+            </p>
+            <div class="flex-grow relative">
+              <canvas
+                id="node_memory_risk"
+                class="absolute inset-0 w-full h-full"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto"
+      >
+        <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Workflow Metrics
+          </h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Real-time snapshot of key performance indicators across all
+            workflows.
+          </p>
+        </div>
+
+        <table
+          id="workflow-metrics-table"
+          class="min-w-full text-sm text-left divide-y divide-gray-200 dark:divide-gray-800"
+        >
+          <thead
+            class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs uppercase tracking-wider"
+          >
+            <tr>
+              <th scope="col" class="px-4 py-3 font-medium">Workflow</th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Requests
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Errors
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Exec Time (ms)
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                CPU (%)
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Memory (MB)
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            id="workflow-metrics-body"
+            class="divide-y divide-gray-100 dark:divide-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100"
+          >
+            <!-- JavaScript dynamically fills this -->
+          </tbody>
+        </table>
+      </section>
+
+      <section
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto"
+      >
+        <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Nodes Metrics
+          </h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Real-time snapshot of key performance indicators across all nodes.
+          </p>
+        </div>
+
+        <table
+          id="node-metrics-table"
+          class="min-w-full text-sm text-left divide-y divide-gray-200 dark:divide-gray-800"
+        >
+          <thead
+            class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs uppercase tracking-wider"
+          >
+            <tr>
+              <th scope="col" class="px-4 py-3 font-medium">Workflow</th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Requests
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Errors
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Exec Time (ms)
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                CPU (%)
+              </th>
+              <th scope="col" class="px-4 py-3 font-medium text-right">
+                Memory (MB)
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            id="nodes-metrics-body"
+            class="divide-y divide-gray-100 dark:divide-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100"
+          >
+            <!-- JavaScript dynamically fills this -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- System Logs -->
+      <section class="bg-white dark:bg-gray-900 rounded shadow">
+        <div
+          class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <div class="flex items-center gap-2">
+            <!-- Info icon -->
+            <svg
+              class="w-5 h-5 text-blue-500 dark:text-blue-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 7h2v6H9V7zm0 7h2v2H9v-2z"
+              />
+            </svg>
+            <div>
+              <h2 class="text-base font-semibold text-gray-900 dark:text-white">
+                System Logs
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Most recent 50 log entries from Loki (info level).
+              </p>
+            </div>
+          </div>
+          <button
+            onclick="toggleSection('loki-body')"
+            aria-label="Toggle Overview"
+            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition"
+          >
+            <i data-feather="chevron-down" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div
+          id="loki-body"
+          class="p-4 max-h-[400px] overflow-y-auto bg-black text-gray-300 text-xs font-mono rounded"
+        >
+          <ul id="lokiLogs" class="space-y-1"></ul>
+        </div>
+      </section>
+
+      <!-- Error Logs -->
+      <section class="bg-white dark:bg-gray-900 rounded shadow mt-6">
+        <div
+          class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700"
+        >
+          <div class="flex items-center gap-2">
+            <!-- Error icon -->
+            <svg
+              class="w-5 h-5 text-red-500 dark:text-red-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 7h2v4H9V7zm0 5h2v2H9v-2z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <div>
+              <h2
+                class="text-base font-semibold text-red-600 dark:text-red-400"
+              >
+                Error Logs
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Last 50 error-level entries logged to Loki.
+              </p>
+            </div>
+          </div>
+          <button
+            onclick="toggleSection('loki-error-body')"
+            aria-label="Toggle Overview"
+            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition"
+          >
+            <i data-feather="chevron-down" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div
+          id="loki-error-body"
+          class="p-4 max-h-[400px] overflow-y-auto bg-black text-red-300 text-xs font-mono rounded"
+        >
+          <ul id="lokiErrorLogs" class="space-y-1"></ul>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const prometheusBase = "http://localhost:4040";
+      const prometheusBaseToken = undefined;
+
+      const queries = {
+        overview: {
+          requests: "sum(increase(workflow_total[1m]))",
+          time: `sum(avg_over_time(workflow_time[1m]))`,
+          errors: "sum(increase(workflow_errors_total[1m]))",
+          cpu: "sum(avg_over_time(workflow_cpu[1m]))",
+          memory: "sum(avg_over_time(workflow_memory[1m]))",
+          risk_cpu:
+            "sum(avg_over_time(workflow_cpu[1m])) / sum(avg_over_time(workflow_cpu_total[1m])) * 100",
+          risk_memory:
+            "sum(avg_over_time(workflow_memory[1m])) / sum(avg_over_time(workflow_memory_total[1m])) * 100",
+          request_risk:
+            "sum(increase(workflow_errors_total[1m])) / (sum(increase(workflow_total[1m])) + sum(increase(workflow_errors_total[1m]))) * 100",
+        },
+        workflows: {
+          requests:
+            "(sum(increase(workflow_total[1m])) by (workflow_path)) > 0",
+          time: "sum(avg_over_time(workflow_time[1m])) by (workflow_path)",
+          errors:
+            "(sum(increase(workflow_errors_total[1m])) by (workflow_path)) > 0",
+          cpu: "sum(avg_over_time(workflow_cpu[1m])) by (workflow_path)",
+          memory: "sum(avg_over_time(workflow_memory[1m])) by (workflow_path)",
+          risk_cpu:
+            "sum by (workflow_path)(avg_over_time(workflow_cpu[1m])) / sum by (workflow_path)(avg_over_time(workflow_cpu_total[1m])) * 100",
+          risk_memory:
+            "sum by (workflow_path)(avg_over_time(workflow_memory[1m])) / sum by (workflow_path)(avg_over_time(workflow_memory_total[1m])) * 100",
+          request_risk:
+            "(sum(increase(workflow_errors_total[1m])) by (workflow_path) / (sum(increase(workflow_total[1m])) by (workflow_path) + sum(increase(workflow_errors_total[1m])) by (workflow_path)) * 100) > 0",
+        },
+        nodes: {
+          requests: "(sum(increase(node_total[1m])) by (node_name)) > 0",
+          time: "sum(increase(node_time[1m])) by (node_name)",
+          errors: "(sum(increase(node_errors_total[1m])) by (node_name)) > 0",
+          cpu: "avg_over_time(node_cpu[1m])",
+          memory: "sum(increase(node_memory[1m])) by (node_name)",
+          risk_cpu:
+            "sum by (node_name, workflow_path)(avg_over_time(node_cpu[1m])) / sum by (node_name, workflow_path)(avg_over_time(node_cpu_total[1m])) * 100",
+          risk_memory:
+            "sum by (node_name, workflow_path)(avg_over_time(node_memory[1m])) / sum by (node_name, workflow_path)(avg_over_time(node_memory_total[1m])) * 100",
+          request_risk:
+            "(sum(increase(node_errors_total[1m])) by (node_name) / (sum(increase(node_total[1m])) by (node_name) + sum(increase(node_errors_total[1m])) by (node_name)) * 100) > 0",
+        },
+      };
+
+      const charts = {};
+
+      function createChart(ctx, label, useThreshold = false) {
+        let opts1 = {
+          type: "line",
+          data: { datasets: [] },
+          options: {
+            animation: false,
+            elements: {
+              point: {
+                radius: 0,
+                hoverRadius: 6,
+                hitRadius: 6,
+              },
+            },
+            interaction: {
+              mode: "nearest",
+              intersect: false,
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                type: "time",
+                time: { unit: "minute" },
+                title: { display: true, text: "Time" },
+              },
+              y: { beginAtZero: true },
+            },
+            plugins: {
+              legend: {
+                display: true,
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+          },
+        };
+
+        let opts2 = {
+          type: "line",
+          data: { datasets: [] },
+          options: {
+            animation: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                type: "time",
+                time: { unit: "minute" },
+                title: { display: true, text: "Time" },
+              },
+              y: {
+                beginAtZero: true,
+                max: 100,
+                title: { display: true, text: "Risk (%)" },
+              },
+            },
+            plugins: {
+              legend: { display: true },
+              tooltip: { enabled: true },
+            },
+          },
+          plugins: useThreshold ? [thresholdBackgroundPlugin] : [],
+        };
+
+        let opts3 = {
+          type: "line",
+          data: { datasets: [] },
+          options: {
+            animation: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                type: "time",
+                time: { unit: "minute" },
+                title: { display: true, text: "Time" },
+              },
+              y: {
+                beginAtZero: true,
+                max: 100,
+                title: { display: true, text: "Risk (%)" },
+              },
+            },
+            plugins: {
+              legend: { display: true },
+              tooltip: { enabled: true },
+            },
+          },
+          plugins: useThreshold ? [thresholdErrorsBackgroundPlugin] : [],
+        };
+
+        if (
+          label.includes("overview_request_risk") ||
+          label.includes("workflow_request_risk") ||
+          label.includes("node_request_risk")
+        ) {
+          opts2 = opts3;
+        }
+
+        return new Chart(ctx, useThreshold ? opts2 : opts1);
+      }
+
+      function parseSeries(result, groupLabel, color) {
+        const palette = [
+          "#3b82f6",
+          "#10b981",
+          "#f59e0b",
+          "#8b5cf6",
+          "#ec4899",
+          "#ef4444",
+        ];
+        let i = 0;
+
+        return result.map((serie) => {
+          const label = serie.metric[groupLabel] || "unknown";
+          const datasetColor = color || palette[i++ % palette.length];
+          return {
+            label,
+            data: serie.values.map(([ts, val]) => ({
+              x: new Date(ts * 1000),
+              y: parseFloat(val),
+            })),
+            borderColor: datasetColor,
+            backgroundColor: datasetColor + "33",
+            fill: true,
+          };
+        });
+      }
+
+      async function fetchMetric(query) {
+        const end = Math.floor(Date.now() / 1000);
+        const start = end - 600;
+        const params = new URLSearchParams({ query, start, end, step: "60" });
+        const res = prometheusBaseToken
+          ? await fetch(
+              `${prometheusBase}/api/metrics?${params}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${prometheusBaseToken}`,
+                  Accept: "application/json",
+                  "Accept-Encoding": "identity",
+                },
+              }
+            )
+          : await fetch(
+              `${prometheusBase}/api/metrics?${params}`
+            );
+        const json = await res.json();
+        return json.data?.result || [];
+      }
+
+      function buildMatcher(label, valuesSet) {
+        if (!valuesSet || !(valuesSet instanceof Set)) return ""; // ⚠️ Previene el error
+
+        const values = Array.from(valuesSet);
+        if (values.includes("__all__")) return "";
+        if (values.length === 0) return `${label}=~"^$"`;
+
+        const regex = values
+          .map((v) =>
+            v.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&").replace(/\\/g, "\\\\")
+          )
+          .join("|");
+
+        return `${label}=~"${regex}"`;
+      }
+
+      async function updateChart(
+        id,
+        query,
+        isGrouped = false,
+        groupLabel = "",
+        forceColor = null
+      ) {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+
+        if (!charts[id]) {
+          let thresholdPluginActive = id.includes("risk");
+          charts[id] = createChart(ctx, id, thresholdPluginActive);
+        }
+
+        let finalQuery = query;
+
+        if (id.startsWith("workflow_")) {
+          const matcher = buildMatcher(
+            "workflow_path",
+            window.selectedFilters?.workflow
+          );
+
+          if (matcher) {
+            finalQuery = query.replace(
+              /workflow_(total|errors_total|time|cpu_total|cpu|memory_total|memory)\b/g,
+              (metric) => `${metric}{${matcher}}`
+            );
+          }
+        }
+
+        if (id.startsWith("overview_")) {
+          const matcher = buildMatcher(
+            "workflow_path",
+            window.selectedFilters?.workflow
+          );
+
+          if (matcher) {
+            finalQuery = query.replace(
+              /workflow_(total|errors_total|time|cpu_total|cpu|memory_total|memory)\b/g,
+              (metric) => `${metric}{${matcher}}`
+            );
+          }
+        }
+
+        if (id.startsWith("node_")) {
+          const matcher = buildMatcher(
+            "node_name",
+            window.selectedFilters?.node
+          );
+
+          if (matcher) {
+            finalQuery = query.replace(
+              /node_(total|errors_total|time|cpu_total|cpu|memory_total|memory)\b/g,
+              (metric) => `${metric}{${matcher}}`
+            );
+          }
+        }
+
+        const result = await fetchMetric(finalQuery);
+        const datasets = isGrouped
+          ? parseSeries(result, groupLabel, forceColor)
+          : [
+              {
+                label: id,
+                data:
+                  result[0]?.values.map(([ts, val]) => ({
+                    x: new Date(ts * 1000),
+                    y: parseFloat(val),
+                  })) || [],
+                borderColor: forceColor || "#2563eb",
+                backgroundColor: (forceColor || "#2563eb") + "33",
+                fill: true,
+              },
+            ];
+
+        charts[id].data.datasets = datasets;
+        charts[id].update();
+      }
+
+      async function updateAllCharts() {
+        // OVERVIEW
+        await updateChart("overview_requests", queries.overview.requests);
+        await updateChart("overview_time", queries.overview.time);
+        await updateChart(
+          "overview_errors",
+          queries.overview.errors,
+          false,
+          "",
+          "#dc2626"
+        );
+        await updateChart("overview_cpu", queries.overview.cpu);
+        await updateChart("overview_memory", queries.overview.memory);
+
+        // WORKFLOWS
+        await updateChart(
+          "workflow_requests",
+          queries.workflows.requests,
+          true,
+          "workflow_path"
+        );
+        await updateChart(
+          "workflow_time",
+          queries.workflows.time,
+          true,
+          "workflow_path"
+        );
+        await updateChart(
+          "workflow_errors",
+          queries.workflows.errors,
+          true,
+          "workflow_path",
+          "#dc2626"
+        );
+        await updateChart(
+          "workflow_cpu",
+          queries.workflows.cpu,
+          true,
+          "workflow_path"
+        );
+        await updateChart(
+          "workflow_memory",
+          queries.workflows.memory,
+          true,
+          "workflow_path"
+        );
+
+        // NODES
+        await updateChart(
+          "node_requests",
+          queries.nodes.requests,
+          true,
+          "node_name"
+        );
+        await updateChart("node_time", queries.nodes.time, true, "node_name");
+        await updateChart(
+          "node_memory",
+          queries.nodes.memory,
+          true,
+          "node_name"
+        );
+        await updateChart("node_cpu", queries.nodes.cpu, true, "node_name");
+        await updateChart(
+          "node_errors",
+          queries.nodes.errors,
+          true,
+          "node_name"
+        );
+
+        // RISK
+        await updateChart(
+          "node_cpu_risk",
+          queries.nodes.risk_cpu,
+          true,
+          "node_name"
+        );
+        await updateChart(
+          "node_memory_risk",
+          queries.nodes.risk_memory,
+          true,
+          "node_name"
+        );
+        await updateChart(
+          "node_request_risk",
+          queries.nodes.request_risk,
+          true,
+          "node_name"
+        );
+
+        await updateChart(
+          "workflow_cpu_risk",
+          queries.workflows.risk_cpu,
+          true,
+          "workflow_path"
+        );
+        await updateChart(
+          "workflow_memory_risk",
+          queries.workflows.risk_memory,
+          true,
+          "workflow_path"
+        );
+        await updateChart(
+          "workflow_request_risk",
+          queries.workflows.request_risk,
+          true,
+          "workflow_path"
+        );
+
+        await updateChart("overview_cpu_risk", queries.overview.risk_cpu);
+        await updateChart("overview_memory_risk", queries.overview.risk_memory);
+        await updateChart(
+          "overview_request_risk",
+          queries.overview.request_risk
+        );
+      }
+
+      async function updateLokiLogs() {
+        try {
+          const end = BigInt(Date.now()) * 1000000n;
+          const start = end - 3600n * 1000000000n;
+
+          const params = new URLSearchParams({
+            query: '{service_name="nanoservice-http"} | json | level="info"',
+            limit: "50",
+            start: start.toString(),
+            end: end.toString(),
+            direction: "backward",
+          });
+
+          const res = await fetch(
+            `http://localhost:3200/loki/api/v1/query_range?${params}`
+          );
+          const json = await res.json();
+
+          const container = document.getElementById("lokiLogs");
+          container.innerHTML = "";
+
+          const streams = json.data?.result || [];
+
+          for (let i = 0; i < streams.length; i++) {
+            const stream = streams[i];
+            for (let j = 0; j < stream.values.length; j++) {
+              const [ts, line] = stream.values[j];
+              const date = new Date(Number(ts) / 1000000);
+              const item = document.createElement("li");
+              const log_model = JSON.parse(line);
+
+              item.textContent = `[${date.toLocaleTimeString()}] ${
+                log_model.app
+              }:${log_model.env}:${log_model.workflow_path} ${
+                log_model.message
+              }`;
+              container.appendChild(item);
+            }
+          }
+
+          document.getElementById("loki-body").scrollTop =
+            document.getElementById("loki-body").scrollHeight;
+        } catch (err) {
+          console.error("Failed to load Loki logs:", err);
+        }
+      }
+
+      async function updateLokiErrors() {
+        try {
+          const end = BigInt(Date.now()) * 1000000n;
+          const start = end - 3600n * 1000000000n;
+
+          const params = new URLSearchParams({
+            query: '{service_name="nanoservice-http"} | json | level="error"',
+            limit: "50",
+            start: start.toString(),
+            end: end.toString(),
+            direction: "backward",
+          });
+
+          const res = await fetch(
+            `http://localhost:3200/loki/api/v1/query_range?${params}`
+          );
+          const json = await res.json();
+
+          const container = document.getElementById("lokiErrorLogs");
+          container.innerHTML = "";
+
+          const streams = json.data?.result || [];
+
+          for (let i = 0; i < streams.length; i++) {
+            const stream = streams[i];
+            for (let j = 0; j < stream.values.length; j++) {
+              const [ts, line] = stream.values[j];
+              const date = new Date(Number(ts) / 1000000);
+              const item = document.createElement("li");
+              const log_model = JSON.parse(line);
+
+              item.textContent = `[${date.toLocaleTimeString()}] ${
+                log_model.app
+              }:${log_model.env}:${
+                log_model.workflow_path || log_model.workflow_name
+              } ${log_model.message}: ${log_model.stack}`;
+              container.appendChild(item);
+            }
+          }
+
+          document.getElementById("loki-error-body").scrollTop =
+            document.getElementById("loki-error-body").scrollHeight;
+        } catch (err) {
+          console.error("Failed to load Loki error logs:", err);
+        }
+      }
+
+      async function updateWorkflowTable() {
+        const queries = {
+          requests: "sum(increase(workflow_total[1m])) by (workflow_path)",
+          errors: "sum(increase(workflow_errors_total[1m])) by (workflow_path)",
+          time: "sum(increase(workflow_time[1m])) by (workflow_path)",
+          cpu: "(sum(increase(workflow_cpu[1m])) by (workflow_path) / sum(increase(workflow_total[1m])) by (workflow_path)) * 100",
+          memory: "sum(increase(workflow_memory[1m])) by (workflow_path)",
+        };
+
+        const endpoint = `${prometheusBase}/api/metrics`;
+        const selectedWorkflows =
+          window.selectedFilters?.workflow || new Set(["__all__"]);
+        const filterMatcher = buildMatcher("workflow_path", selectedWorkflows);
+
+        const results = {};
+
+        await Promise.all(
+          Object.entries(queries).map(async ([key, query]) => {
+            const effectiveQuery = filterMatcher
+              ? query.replace(
+                  /workflow_(total|errors_total|time|cpu|memory)/g,
+                  (match) => `${match}{${filterMatcher}}`
+                )
+              : query;
+
+            const res = await fetch(
+              `${endpoint}?query=${encodeURIComponent(effectiveQuery)}`,
+              {
+                headers: {
+                  "x-table": "true",
+                },
+              }
+            );
+            const json = await res.json();
+            if (json.status === "success") {
+              for (const entry of json.data.result) {
+                const workflow =
+                  key === "requests"
+                    ? entry.metric.workflow_path || "unknown"
+                    : entry.metric.workflow_path || "unknown";
+                const value = parseFloat(entry.value[1]);
+                if (!results[workflow]) results[workflow] = {};
+                results[workflow][key] = value;
+              }
+            }
+          })
+        );
+
+        const tbody = document.getElementById("workflow-metrics-body");
+        tbody.innerHTML = "";
+
+        Object.entries(results)
+          .sort(([, a], [, b]) => (b.requests || 0) - (a.requests || 0))
+          .forEach(([workflow, metrics]) => {
+            const row = document.createElement("tr");
+            row.className =
+              "hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200";
+
+            row.innerHTML = `
+      <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+        ${workflow}
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${Math.round(metrics.requests || 0).toLocaleString()}
+      </td>
+      <td class="px-4 py-3 text-right ${
+        metrics.errors > 0
+          ? "text-red-600 dark:text-red-400"
+          : "text-gray-700 dark:text-gray-300"
+      }">
+        ${Math.round(metrics.errors || 0).toLocaleString()}
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${(metrics.time || 0).toFixed(2)} ms
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${(metrics.cpu || 0).toFixed(1)} %
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${(metrics.memory || 0).toFixed(1)}
+      </td>
+    `;
+
+            tbody.appendChild(row);
+          });
+      }
+
+      async function updateNodeTable() {
+        const queries = {
+          requests: "sum(increase(node_total[1m])) by (node_name)",
+          errors: "sum(increase(node_errors_total[1m])) by (node_name)",
+          time: "sum(increase(node_time[1m])) by (node_name)",
+          cpu: "(sum(increase(node_cpu[1m])) by (node_name) / sum(increase(node_total[1m])) by (node_name)) * 100",
+          memory: "sum(increase(node_memory[1m])) by (node_name)",
+        };
+
+        const endpoint = `${prometheusBase}/api/metrics`;
+        const selectedNodes =
+          window.selectedFilters?.node || new Set(["__all__"]);
+        const filterMatcher = buildMatcher("node_name", selectedNodes);
+
+        const results = {};
+
+        await Promise.all(
+          Object.entries(queries).map(async ([key, query]) => {
+            const effectiveQuery = filterMatcher
+              ? query.replace(
+                  /node_(total|errors_total|time|cpu|memory)/g,
+                  (match) => `${match}{${filterMatcher}}`
+                )
+              : query;
+            const res = await fetch(
+              `${endpoint}?query=${encodeURIComponent(effectiveQuery)}`,
+              {
+                headers: {
+                  "x-table": "true",
+                },
+              }
+            );
+            const json = await res.json();
+            if (json.status === "success") {
+              for (const entry of json.data.result) {
+                const workflow =
+                  key === "requests"
+                    ? entry.metric.node_name || "unknown"
+                    : entry.metric.node_name || "unknown";
+                const value = parseFloat(entry.value[1]);
+                if (!results[workflow]) results[workflow] = {};
+                results[workflow][key] = value;
+              }
+            }
+          })
+        );
+
+        const tbody = document.getElementById("nodes-metrics-body");
+        tbody.innerHTML = "";
+
+        Object.entries(results)
+          .sort(([, a], [, b]) => (b.requests || 0) - (a.requests || 0))
+          .forEach(([workflow, metrics]) => {
+            const row = document.createElement("tr");
+            row.className =
+              "hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200";
+
+            row.innerHTML = `
+      <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+        ${workflow}
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${Math.round(metrics.requests || 0).toLocaleString()}
+      </td>
+      <td class="px-4 py-3 text-right ${
+        metrics.errors > 0
+          ? "text-red-600 dark:text-red-400"
+          : "text-gray-700 dark:text-gray-300"
+      }">
+        ${Math.round(metrics.errors || 0).toLocaleString()}
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${(metrics.time || 0).toFixed(2)} ms
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${(metrics.cpu || 0).toFixed(1)} %
+      </td>
+      <td class="px-4 py-3 text-right text-gray-700 dark:text-gray-300">
+        ${(metrics.memory || 0).toFixed(1)}
+      </td>
+    `;
+
+            tbody.appendChild(row);
+          });
+      }
+
+      const thresholdBackgroundPlugin = {
+        id: "thresholdBackground",
+        beforeDraw: (chart) => {
+          const { ctx, chartArea: area, scales } = chart;
+          if (!area || !scales?.y) return;
+
+          const y100 = scales.y.getPixelForValue(100);
+          const y90 = scales.y.getPixelForValue(90);
+          const y70 = scales.y.getPixelForValue(70);
+          const y0 = scales.y.getPixelForValue(0);
+
+          // Red: 90–100%
+          ctx.fillStyle = "#fee2e2";
+          ctx.fillRect(area.left, y100, area.width, y90 - y100);
+
+          // Yellow: 70–90%
+          ctx.fillStyle = "#fef9c3";
+          ctx.fillRect(area.left, y90, area.width, y70 - y90);
+
+          // Green: 0–70%
+          ctx.fillStyle = "#dcfce7";
+          ctx.fillRect(area.left, y70, area.width, y0 - y70);
+        },
+      };
+
+      const thresholdErrorsBackgroundPlugin = {
+        id: "thresholdBackground",
+        beforeDraw: (chart) => {
+          const { ctx, chartArea: area, scales } = chart;
+          if (!area || !scales?.y) return;
+
+          const y100 = scales.y.getPixelForValue(100);
+          const y90 = scales.y.getPixelForValue(10);
+          const y70 = scales.y.getPixelForValue(5);
+          const y0 = scales.y.getPixelForValue(0);
+
+          // Red: 90–100%
+          ctx.fillStyle = "#fee2e2";
+          ctx.fillRect(area.left, y100, area.width, y90 - y100);
+
+          // Yellow: 70–90%
+          ctx.fillStyle = "#fef9c3";
+          ctx.fillRect(area.left, y90, area.width, y70 - y90);
+
+          // Green: 0–70%
+          ctx.fillStyle = "#dcfce7";
+          ctx.fillRect(area.left, y70, area.width, y0 - y70);
+        },
+      };
+
+      function refreshDashboard() {
+        updateAllCharts();
+        updateWorkflowTable();
+        updateNodeTable();
+      }
+
+      function setTheme(theme) {
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        localStorage.setItem("theme", theme);
+        updateDarkIcon(theme);
+      }
+
+      function toggleDarkMode() {
+        const currentTheme = document.documentElement.classList.contains("dark")
+          ? "dark"
+          : "light";
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        setTheme(newTheme);
+      }
+
+      function updateDarkIcon(theme) {
+        const iconEl = document.getElementById("darkModeIcon");
+        iconEl.innerHTML = "";
+        const icon = document.createElement("i");
+        icon.setAttribute("data-feather", theme === "dark" ? "sun" : "moon");
+        iconEl.appendChild(icon);
+        feather.replace();
+      }
+
+      // 💡 INIT: Always respect localStorage on first load
+      (function () {
+        const storedTheme = localStorage.getItem("theme");
+
+        if (storedTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else if (storedTheme === "light") {
+          document.documentElement.classList.remove("dark");
+        } else {
+          // First visit: use system preference
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+          ).matches;
+          const systemTheme = prefersDark ? "dark" : "light";
+          setTheme(systemTheme);
+          return;
+        }
+
+        updateDarkIcon(storedTheme || "light");
+      })();
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("canvas").forEach((canvas) => {
+          canvas.ondblclick = async () => {
+            goFullScreen(canvas);
+          };
+        });
+      });
+      function goFullScreen(canvas) {
+        if (canvas.requestFullScreen) canvas.requestFullScreen();
+        else if (canvas.webkitRequestFullScreen)
+          canvas.webkitRequestFullScreen();
+        else if (canvas.mozRequestFullScreen) canvas.mozRequestFullScreen();
+
+        // Get the DPR and size of the canvas
+        const dpr = window.devicePixelRatio;
+        const rect = canvas.getBoundingClientRect();
+
+        // Set the "actual" size of the canvas
+        canvas.width = rect.width * 2 * dpr;
+        canvas.height = rect.height * 2 * dpr;
+
+        // Scale the context to ensure correct drawing operations
+        ctx.scale(dpr, dpr);
+
+        // Set the "drawn" size of the canvas
+        canvas.style.width = `${canvas.width}px`;
+        canvas.style.height = `${canvas.height}px`;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const containers = document.querySelectorAll(
+          "[data-draggable-section]"
+        );
+
+        containers.forEach((container) => {
+          const sectionId = container.getAttribute("data-draggable-section");
+          let draggedItem = null;
+
+          // Restaurar orden
+          const savedOrder = JSON.parse(
+            localStorage.getItem(`dashboard-order-${sectionId}`)
+          );
+          if (savedOrder) {
+            savedOrder.forEach((id) => {
+              const item = container.querySelector(`[data-id="${id}"]`);
+              if (item) container.appendChild(item);
+            });
+          }
+
+          // Guardar orden
+          const saveOrder = () => {
+            const order = Array.from(container.children).map((item) =>
+              item.getAttribute("data-id")
+            );
+            localStorage.setItem(
+              `dashboard-order-${sectionId}`,
+              JSON.stringify(order)
+            );
+          };
+
+          // Eventos drag and drop
+          container.addEventListener("dragstart", (e) => {
+            if (e.target.matches("[draggable]")) {
+              draggedItem = e.target;
+              e.dataTransfer.effectAllowed = "move";
+            }
+          });
+
+          container.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            const target = e.target.closest("[draggable]");
+            if (target && target !== draggedItem) {
+              const rect = target.getBoundingClientRect();
+              const next = e.clientY - rect.top > rect.height / 2;
+              container.insertBefore(
+                draggedItem,
+                next ? target.nextSibling : target
+              );
+            }
+          });
+
+          container.addEventListener("drop", (e) => {
+            e.preventDefault();
+            saveOrder();
+          });
+        });
+      });
+
+      function persistSelectedFilters() {
+        const filtersToSave = {};
+        for (const key in window.selectedFilters) {
+          filtersToSave[key] = Array.from(window.selectedFilters[key]);
+        }
+        localStorage.setItem(
+          "dashboard:selectedFilters",
+          JSON.stringify(filtersToSave)
+        );
+      }
+
+      async function loadFilterOptionsV2() {
+        const filters = [
+          {
+            id: "workflow",
+            url: "http://localhost:9090/api/v1/label/workflow_path/values",
+          },
+          {
+            id: "node",
+            url: "http://localhost:9090/api/v1/label/node_name/values",
+          },
+        ];
+
+        window.selectedFilters = {
+          workflow: new Set(["__all__"]),
+          node: new Set(["__all__"]),
+        };
+
+        const savedFilters = JSON.parse(
+          localStorage.getItem("dashboard:selectedFilters") || "{}"
+        );
+
+        for (const filter of filters) {
+          const response = await fetch(filter.url);
+          const data = await response.json();
+
+          const optionsContainer = document.getElementById(
+            `${filter.id}-filter-options`
+          );
+          const placeholder = document.getElementById(
+            `${filter.id}-filter-placeholder`
+          );
+          const dropdown = document.getElementById(
+            `${filter.id}-filter-dropdown`
+          );
+          const trigger = document.getElementById(
+            `${filter.id}-filter-trigger`
+          );
+          const selectedLabel = dropdown.querySelector("div.text-xs");
+
+          const saved = savedFilters[filter.id];
+          window.selectedFilters[filter.id] = saved
+            ? new Set(saved)
+            : new Set(["__all__"]);
+
+          trigger.addEventListener("click", () => {
+            dropdown.classList.toggle("hidden");
+            const chevron = document.getElementById(
+              `${filter.id}-filter-chevron`
+            );
+            chevron.classList.toggle("rotate-180");
+          });
+
+          const allOption = document.createElement("label");
+          allOption.className =
+            "flex items-center px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 cursor-pointer";
+          allOption.innerHTML = `
+            <input type="checkbox" id="${filter.id}-opt-all" value="__all__" class="mr-2 text-blue-500 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
+            All
+          `;
+          const allInput = allOption.querySelector("input");
+          // Event handler for "All" checkbox item
+          allInput.addEventListener("change", () => {
+            const checkboxes = optionsContainer.querySelectorAll(
+              "input[type='checkbox']"
+            );
+            window.selectedFilters[filter.id] = new Set();
+
+            checkboxes.forEach((cb) => {
+              cb.checked = allInput.checked;
+              if (allInput.checked && cb.value !== "__all__") {
+                window.selectedFilters[filter.id].add(cb.value);
+              }
+            });
+
+            if (allInput.checked) {
+              window.selectedFilters[filter.id] = new Set(["__all__"]);
+              placeholder.textContent = "All";
+              selectedLabel.textContent = `Selected (All)`;
+            } else {
+              placeholder.textContent = "Enter variable value";
+              selectedLabel.textContent = `Selected (0)`;
+            }
+
+            persistSelectedFilters();
+            refreshDashboard();
+          });
+
+          optionsContainer.appendChild(allOption);
+
+          const validItems = data.data.filter(
+            (item) => typeof item === "string" && item.trim() !== ""
+          );
+          validItems.forEach((item) => {
+            const id = `${filter.id}-opt-${item}`;
+            const option = document.createElement("label");
+            option.className =
+              "flex items-center px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 cursor-pointer";
+
+            option.innerHTML = `
+              <input type="checkbox" id="${id}" value="${item}" class="mr-2 text-blue-500 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
+              ${item}
+            `;
+
+            const input = option.querySelector("input");
+            input.addEventListener("change", () => {
+              requestAnimationFrame(() => {
+                const checkboxes = optionsContainer.querySelectorAll(
+                  "input[type='checkbox']:not([value='__all__'])"
+                );
+                const checkedBoxes = optionsContainer.querySelectorAll(
+                  "input[type='checkbox']:not([value='__all__']):checked"
+                );
+
+                // Limpiar y reconstruir el Set según el estado actual
+                window.selectedFilters[filter.id] = new Set();
+                checkedBoxes.forEach((cb) =>
+                  window.selectedFilters[filter.id].add(cb.value)
+                );
+
+                if (checkedBoxes.length === checkboxes.length) {
+                  allInput.checked = true;
+                  window.selectedFilters[filter.id] = new Set(["__all__"]);
+                  placeholder.textContent = "All";
+                  selectedLabel.textContent = `Selected (All)`;
+                } else {
+                  allInput.checked = false;
+                  const count = checkedBoxes.length;
+                  placeholder.textContent =
+                    count > 0 ? `${count} selected` : "Enter variable value";
+                  selectedLabel.textContent = `Selected (${count})`;
+                }
+
+                persistSelectedFilters();
+                refreshDashboard();
+              });
+            });
+
+            optionsContainer.appendChild(option);
+          });
+
+          // Preseleccionar todos al cargar
+          requestAnimationFrame(() => {
+            const allSelected =
+              window.selectedFilters[filter.id].has("__all__");
+            const checkboxes = optionsContainer.querySelectorAll(
+              "input[type='checkbox']:not([value='__all__'])"
+            );
+
+            let selectedCount = 0;
+            checkboxes.forEach((cb) => {
+              cb.checked =
+                allSelected || window.selectedFilters[filter.id].has(cb.value);
+              if (cb.checked) selectedCount++;
+            });
+
+            allInput.checked = allSelected;
+            placeholder.textContent = allSelected
+              ? "All"
+              : selectedCount > 0
+              ? `${selectedCount} selected`
+              : "Enter variable value";
+            selectedLabel.textContent = allSelected
+              ? `Selected (All)`
+              : `Selected (${selectedCount})`;
+
+            refreshDashboard();
+          });
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await loadFilterOptionsV2(); // Espera a que los filtros estén cargados
+
+        setInterval(() => {
+          updateAllCharts();
+          updateLokiLogs();
+          updateLokiErrors();
+          updateWorkflowTable();
+          updateNodeTable();
+        }, 5000);
+
+        // Cerrar dropdowns al hacer clic fuera
+        document.addEventListener("click", (event) => {
+          const dropdowns = ["workflow", "node"];
+          dropdowns.forEach((id) => {
+            const trigger = document.getElementById(`${id}-filter-trigger`);
+            const dropdown = document.getElementById(`${id}-filter-dropdown`);
+            const chevron = document.getElementById(`${id}-filter-chevron`);
+
+            const clickedOutside =
+              !trigger.contains(event.target) &&
+              !dropdown.contains(event.target);
+
+            if (clickedOutside) {
+              dropdown.classList.add("hidden");
+              chevron.classList.remove("rotate-180");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
