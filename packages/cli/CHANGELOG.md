@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.8
+
+### Patch Changes
+
+- monitor integrated with remote prometheus
+
 ## 0.1.7
 
 ### Patch Changes
