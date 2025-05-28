@@ -10,11 +10,12 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 import { v4 as uuid } from "uuid";
+import apps from "../AppRoutes";
+import nodes from "../Nodes";
+import workflows from "../Workflows";
 import MessageDecode from "./MessageDecode";
-import nodes from "./Nodes";
 import { handleDynamicRoute, validateRoute } from "./Util";
-import workflows from "./Workflows";
-import { metricsHandler } from "./opentelemetry_metrics";
+import { metricsHandler } from "./metrics/opentelemetry_metrics";
 import NodeTypes from "./types/NodeTypes";
 import type RuntimeWorkflow from "./types/RuntimeWorkflow";
 
@@ -69,10 +70,15 @@ export default class HttpTrigger extends TriggerBase {
 				try {
 					metricsHandler(req, res);
 				} catch (error) {
-					console.error("Error serving metrics:", error);
 					res.status(500).send("Error serving metrics");
 				}
 			});
+
+			/*
+			 * You can add your own middleware or routes with custom ExpressJS logic
+			 * to extend this project.
+			 */
+			this.app.use("/", apps);
 
 			this.app.use(["/:workflow", "/"], async (req: Request, res: Response): Promise<void> => {
 				const id: string = (req.query?.requestId as string) || (uuid() as string);

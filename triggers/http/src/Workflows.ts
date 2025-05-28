@@ -1,4 +1,4 @@
-import type Workflows from "./types/Workflows";
+import type Workflows from "./runner/types/Workflows";
 import countriesFactsHelper from "./workflows/countries-cats-helper";
 import countriesHelper from "./workflows/countries-helper";
 import empty from "./workflows/empty";

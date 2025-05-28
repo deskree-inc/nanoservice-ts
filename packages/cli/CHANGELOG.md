@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.7
+
+### Patch Changes
+
+- added --public deploy feature
+
 ## 0.1.6
 
 ### Patch Changes
