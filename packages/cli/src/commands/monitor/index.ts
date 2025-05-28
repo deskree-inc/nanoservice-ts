@@ -1,23 +1,23 @@
-import open from "open";
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
 import { runMonitor } from "./monitor-component.js";
+import startWebMonitorUI from "./static-web-server.js";
 
 // Logout command
 program
 	.command("monitor")
 	.description("Monitor the performance of your workflows")
 	.option("--web", "Open the metrics dashboard in your browser")
+	.option("--host <host>", "Remote prometheus host")
+	.option("--token <token>", "Remote prometheus token")
 	.action(async (options: OptionValues) => {
 		await trackCommandExecution({
 			command: "monitor",
 			args: options,
 			execution: async () => {
 				if (options.web) {
-					const url = "http://localhost:4000/metric/index.html";
-					console.log(`Opening: ${url}`);
-					await open(url);
+					await startWebMonitorUI(options.host || "http://localhost:9090", options.token);
 				} else {
-					runMonitor();
+					runMonitor(options.host, options.token);
 				}
 			},
 		});
