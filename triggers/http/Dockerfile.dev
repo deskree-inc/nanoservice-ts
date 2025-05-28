@@ -31,4 +31,4 @@ ENV DISABLE_TRIGGER_RUN=false
 EXPOSE 4000 9091
 
 # Wait for dist/index.js to be compiled before running
-CMD ["sh", "-c", "while [ ! -f dist/index.js ]; do echo -n '.'; sleep 1; done && echo && node -r ./dist/opentelemetry_metrics.js dist/index.js"]
+CMD ["sh", "-c", "while [ ! -f dist/index.js ]; do echo -n '.'; sleep 1; done && echo && node -r ./dist/runner/metrics/opentelemetry_metrics.js dist/index.js"]

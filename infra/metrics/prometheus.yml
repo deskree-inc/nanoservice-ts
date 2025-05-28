@@ -13,7 +13,7 @@ scrape_configs:
 
   - job_name: "nanoservice-http"
     static_configs:
-      - targets: ["nanoservice-http:9091"]
+      - targets: ["nanoservice-http:4000"]
 
   # - job_name: 'nanoservice-http'
   #   static_configs:
