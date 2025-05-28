@@ -40,6 +40,7 @@
         height: 100vh !important;
         background-color: #ffffff !important;
       }
+      
     </style>
   </head>
   <body class="bg-gray-100 text-gray-900 dark:bg-[#1d2536] dark:text-white">
@@ -59,7 +60,23 @@
       </div>
       <div class="flex items-center justify-center gap-1">
     <!-- Filters container -->
-    <div class="flex items-center gap-4 ml-8 relative z-40">
+    <div class="flex items-start items-end gap-4 ml-4 md:ml-8 mt-4 md:mt-0 relative z-40 w-full flex-col xl:flex-row ">
+      <!-- Sections filter dropdown -->
+      <div class="relative flex items-center gap-2">
+        <label for="section-filter" class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold">Sections</label>
+        <div class="relative">
+          <div id="section-filter-trigger" class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none">
+            <span id="section-filter-placeholder">All</span>
+            <svg id="section-filter-chevron" class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          <div id="section-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden">
+            <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">Selected (All)</div>
+            <div id="section-filter-options" class="flex flex-col"></div>
+          </div>
+        </div>
+      </div>
       <!-- Workflows filter dropdown -->
       <div class="relative flex items-center gap-2">
         <label for="workflow-filter" class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold">Workflows</label>
@@ -70,7 +87,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
-          <div id="workflow-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-56 max-h-60 overflow-y-auto hidden">
+          <div id="workflow-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden">
             <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">Selected (0)</div>
             <div id="workflow-filter-options" class="flex flex-col"></div>
           </div>
@@ -87,7 +104,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
-          <div id="node-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-56 max-h-60 overflow-y-auto hidden">
+          <div id="node-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden">
             <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">Selected (0)</div>
             <div id="node-filter-options" class="flex flex-col"></div>
           </div>
@@ -99,11 +116,11 @@
         <button
           onclick="toggleDarkMode()"
           aria-label="Toggle Dark Mode"
-          class="flex items-center justify-center w-9 h-9 ml-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          class="flex items-center justify-center w-9 h-9 hover:bg-gray-100 dark:hover:bg-gray-800 transition hidden xl:block"
         >
           <span
             id="darkModeIcon"
-            class="w-5 h-5 text-gray-700 dark:text-gray-200"
+            class="flex items-center justify-center h-9 text-gray-700 dark:text-gray-200"
           ></span>
         </button>
       </div>
@@ -145,7 +162,7 @@
       </script>
 
       <!-- OVERVIEW -->
-      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm" data-section-id="System Overview">
         <div
           class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -335,7 +352,7 @@
       </section>
 
       <!-- WORKFLOWS -->
-      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm" data-section-id="Workflow Metrics">
         <div
           class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -524,7 +541,7 @@
       </section>
 
       <!-- NODES -->
-      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm">
+      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm" data-section-id="Node Metrics">
         <div
           class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -713,7 +730,7 @@
       </section>
 
       <section
-        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto"
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto" data-section-id="Workflow Table"
       >
         <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -761,7 +778,7 @@
       </section>
 
       <section
-        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto"
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto" data-section-id="Node Table"
       >
         <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -809,7 +826,7 @@
       </section>
 
       <!-- System Logs -->
-      <section class="bg-white dark:bg-gray-900 rounded shadow">
+      <section class="bg-white dark:bg-gray-900 rounded shadow" data-section-id="System Logs">
         <div
           class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -851,7 +868,7 @@
       </section>
 
       <!-- Error Logs -->
-      <section class="bg-white dark:bg-gray-900 rounded shadow mt-6">
+      <section class="bg-white dark:bg-gray-900 rounded shadow mt-6" data-section-id="Error Logs">
         <div
           class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -1595,6 +1612,19 @@
         },
       };
 
+      function applySectionFilterVisibility() {
+        const selected = window.selectedFilters?.section;
+        if (!selected) return;
+
+        const allVisible = selected.has("__all__");
+
+        document.querySelectorAll("section[data-section-id]").forEach((section) => {
+          const sectionName = section.getAttribute("data-section-id");
+          const shouldShow = allVisible || selected.has(sectionName);
+          section.style.display = shouldShow ? "" : "none";
+        });
+      }
+
       function refreshDashboard() {
         updateAllCharts();
         updateWorkflowTable();
@@ -1750,7 +1780,21 @@
             id: "node",
             url: "http://localhost:9090/api/v1/label/node_name/values",
           },
+          {
+            id: "section",
+            static: true,
+            values: [
+              "System Overview",
+              "Workflow Metrics",
+              "Node Metrics",
+              "Workflow Table",
+              "Node Table",
+              "System Logs",
+              "Error Logs",
+            ],
+          },
         ];
+
 
         window.selectedFilters = {
           workflow: new Set(["__all__"]),
@@ -1760,8 +1804,13 @@
         const savedFilters = JSON.parse(localStorage.getItem("dashboard:selectedFilters") || "{}");
 
         for (const filter of filters) {
-          const response = await fetch(filter.url);
-          const data = await response.json();
+          let data;
+          if (filter.static) {
+            data = { data: filter.values };
+          } else {
+            const response = await fetch(filter.url);
+            data = await response.json();
+          }
 
           const optionsContainer = document.getElementById(`${filter.id}-filter-options`);
           const placeholder = document.getElementById(`${filter.id}-filter-placeholder`);
@@ -1810,6 +1859,7 @@
 
             persistSelectedFilters();
             refreshDashboard();
+            applySectionFilterVisibility();
           });
 
 
@@ -1847,9 +1897,11 @@
                   placeholder.textContent = count > 0 ? `${count} selected` : "Enter variable value";
                   selectedLabel.textContent = `Selected (${count})`;
                 }
+
                 
                 persistSelectedFilters();
                 refreshDashboard();
+                applySectionFilterVisibility();
               });
             });
 
@@ -1872,6 +1924,7 @@
             selectedLabel.textContent = allSelected ? `Selected (All)` : `Selected (${selectedCount})`;
 
             refreshDashboard();
+            applySectionFilterVisibility();
           });
 
 
@@ -1880,6 +1933,7 @@
 
       document.addEventListener("DOMContentLoaded", async () => {
         await loadFilterOptionsV2(); // Espera a que los filtros estén cargados
+        applySectionFilterVisibility();
 
         setInterval(() => {
           updateAllCharts();
@@ -1891,11 +1945,13 @@
 
         // Cerrar dropdowns al hacer clic fuera
         document.addEventListener("click", (event) => {
-          const dropdowns = ["workflow", "node"];
+          const dropdowns = ["workflow", "node", "section"];
           dropdowns.forEach((id) => {
             const trigger = document.getElementById(`${id}-filter-trigger`);
             const dropdown = document.getElementById(`${id}-filter-dropdown`);
             const chevron = document.getElementById(`${id}-filter-chevron`);
+
+            if (!trigger || !dropdown || !chevron) return;
 
             const clickedOutside = !trigger.contains(event.target) && !dropdown.contains(event.target);
 
@@ -1905,7 +1961,6 @@
             }
           });
         });
-
       });
     
     </script>
