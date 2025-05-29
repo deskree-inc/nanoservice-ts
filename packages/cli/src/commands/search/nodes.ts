@@ -3,7 +3,7 @@ import { Command, type OptionValues, trackCommandExecution } from "../../service
 import { NANOSERVICE_URL } from "../../services/constants.js";
 import { tokenManager } from "../../services/local-token-manager.js";
 
-import { install } from "./install.js";
+import { install } from "../install/node.js";
 
 interface Package {
 	package: string;
@@ -73,9 +73,8 @@ export async function search(opts: OptionValues) {
 	}
 }
 
-// Login command
 export default new Command()
-	.command("search")
+	.command("node")
 	.description("Publish a node to the nanoservices registry")
 	.option("-f, --format <value>", "Package format", "npm")
 	.argument("<node>", "Node name")

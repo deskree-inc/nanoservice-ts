@@ -6,7 +6,10 @@ import * as p from "@clack/prompts";
 import { Command, type OptionValues, trackCommandExecution } from "../../services/commander.js";
 import { tokenManager } from "../../services/local-token-manager.js";
 import { manager as pm } from "../../services/package-manager.js";
+import { VersionUpdateType } from "../../services/package-manager.js";
 import { registryManager } from "../../services/registry-manager.js";
+
+const exec = util.promisify(child_process.exec);
 
 const packagePublisherRuntimes = [
 	{
@@ -18,6 +21,8 @@ const packagePublisherRuntimes = [
 	//     value: "pip"
 	// }
 ];
+
+const packagePublishVerion = [VersionUpdateType.PATCH, VersionUpdateType.MINOR, VersionUpdateType.MAJOR];
 
 export async function publish(opts: OptionValues) {
 	const token = tokenManager.getToken();
@@ -39,6 +44,32 @@ export async function publish(opts: OptionValues) {
 
 		const manager = await pm.getManager(runtimesToPublish as string);
 
+		const versionType = await p.select({
+			message: "Select the version bump type",
+			options: packagePublishVerion.map((v) => ({ label: v, value: v })),
+			initialValue: "patch",
+		});
+
+		if (opts.build) {
+			logger.start("Running build before publishing...");
+			const { stderr: buildError } = await exec(manager.BUILD, { cwd: opts.directory });
+			if (buildError) {
+				logger.stop(buildError);
+				throw new Error(`Error running build: ${buildError}`);
+			}
+			logger.stop("Build completed successfully.");
+		}
+
+		// Update the version in package.json
+		logger.message(`Updating package version to ${String(versionType)}...`);
+		const { stderr: versionError } = await exec(manager.UPDATE_VERSION({ type: versionType as VersionUpdateType }), {
+			cwd: opts.directory,
+		});
+		if (versionError) {
+			logger.stop(versionError);
+			throw new Error(`Error updating package version: ${versionError}`);
+		}
+
 		logger.start("Publishing node to the nanoservices registry...");
 
 		// Get the registry token
@@ -47,7 +78,7 @@ export async function publish(opts: OptionValues) {
 
 		// Create .npmrc file temporarily
 		const REGISTRY_URL = `https://${registry.url}`;
-		const npmrcContent = `registry=${REGISTRY_URL}\n//${registry.url}:always-auth=true\n//${registry.url}:_authToken=${registry.token}`;
+		const npmrcContent = `registry=${REGISTRY_URL}\n//${registry.url}:_authToken=${registry.token}`;
 		fs.writeFileSync(npmrcFile, npmrcContent);
 		p.log.info("Created .npmrc file for authentication.");
 
@@ -77,16 +108,19 @@ export async function publish(opts: OptionValues) {
 		fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
 		// publish the node
-		const exec = util.promisify(child_process.exec);
-		const { stderr } = await exec(manager.PUBLISH({ registry: REGISTRY_URL, npmrcDir: npmrcFile }), {
+		const { stdout } = await exec(manager.PUBLISH({ registry: REGISTRY_URL, npmrcDir: npmrcFile }), {
 			cwd: opts.directory,
 		});
-		if (stderr) {
-			logger.stop(stderr);
-			throw new Error(`Error publishing node: ${stderr}`);
+
+		const publishResult = JSON.parse(stdout);
+		if (publishResult.error) {
+			logger.stop(publishResult.error);
+			throw new Error(`Error publishing node: ${publishResult.error}`);
 		}
 
-		logger.stop("Publishing node to the nanoservices registry...");
+		logger.stop(
+			`Node published successfully \n Node: ${publishResult.id} \n Version: ${publishResult.version} \n Packed Size: ${publishResult.size} bytes / Unpacked Size: ${publishResult.unpackedSize} bytes \n Amount of files: ${publishResult.entryCount}`,
+		);
 	} catch (error) {
 		if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
 		logger.stop((error as Error).message, 1);
@@ -101,9 +135,10 @@ export async function publish(opts: OptionValues) {
 
 // Login command
 export default new Command()
-	.command("publish")
+	.command("node")
 	.description("Publish a node to the nanoservices registry")
 	.option("-d, --directory <value>", "Directory to publish")
+	.option("-b, --build", "Run build before publishing")
 	.action(async (options: OptionValues) => {
 		await trackCommandExecution({
 			command: "publish",

@@ -5,12 +5,19 @@ const executor = promisify(_exec);
 
 const isWindows = process.platform === "win32";
 
+export enum VersionUpdateType {
+	PATCH = "patch",
+	MINOR = "minor",
+	MAJOR = "major",
+}
+
 type PackageManagerType = {
 	[key: string]: {
 		INSTALL: string;
 		BUILD: string;
 		PUBLISH: (opts: { registry: string; npmrcDir: string }) => string;
 		INSTALL_NODE: (opts: { node: string; registry: string; npmrcDir: string }) => string;
+		UPDATE_VERSION: (opts: { type: VersionUpdateType }) => string;
 	};
 };
 
@@ -24,6 +31,9 @@ const COMMANDS: PackageManagerType = {
 		INSTALL_NODE: (opts) => {
 			return `bun add ${opts.node}`;
 		},
+		UPDATE_VERSION: (opts) => {
+			return `bun version ${opts.type}`;
+		},
 	},
 	pnpm: {
 		INSTALL: "pnpm install",
@@ -33,6 +43,9 @@ const COMMANDS: PackageManagerType = {
 		},
 		INSTALL_NODE: (opts) => {
 			return `pnpm install ${opts.node}`;
+		},
+		UPDATE_VERSION: (opts) => {
+			return `pnpm version ${opts.type}`;
 		},
 	},
 	yarn: {
@@ -44,15 +57,21 @@ const COMMANDS: PackageManagerType = {
 		INSTALL_NODE: (opts) => {
 			return `yarn add ${opts.node}`;
 		},
+		UPDATE_VERSION: (opts) => {
+			return `yarn version --${opts.type}`;
+		},
 	},
 	npm: {
 		INSTALL: "npm install",
 		BUILD: "npm run build",
 		PUBLISH: (opts) => {
-			return `npm publish --registry=${opts.registry} --userconfig ${opts.npmrcDir}`;
+			return `npm publish --registry=${opts.registry} --userconfig ${opts.npmrcDir} --json`;
 		},
 		INSTALL_NODE: (opts) => {
 			return `npm install ${opts.node}`;
+		},
+		UPDATE_VERSION: (opts) => {
+			return `npm version ${opts.type}`;
 		},
 	},
 };
