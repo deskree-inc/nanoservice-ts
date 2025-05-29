@@ -1825,11 +1825,13 @@
         const filters = [
           {
             id: "workflow",
-            url: "http://localhost:9090/api/v1/label/workflow_path/values",
+            url: "http://localhost:4040/api/metrics",
+            label: "workflow_path"
           },
           {
             id: "node",
-            url: "http://localhost:9090/api/v1/label/node_name/values",
+            url: "http://localhost:4040/api/metrics",
+            label: "node_name"
           },
         ];
 
@@ -1843,7 +1845,11 @@
         );
 
         for (const filter of filters) {
-          const response = await fetch(filter.url);
+          const response = await fetch(filter.url, {
+            headers: {
+              "x-label": filter.label
+            },
+          });
           const data = await response.json();
 
           const optionsContainer = document.getElementById(
