@@ -251,9 +251,7 @@ export async function createProject(opts: OptionValues, version: string, current
 		packageJsonContent.author = "";
 
 		// Get the package manager
-		if (availableManagers.length > 1) {
-			manager = await pm.getManager(selectedManager as string);
-		}
+		manager = await pm.getManager(selectedManager as string);
 
 		// Runtimes
 

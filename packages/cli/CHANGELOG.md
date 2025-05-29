@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.10
+
+### Patch Changes
+
+- implemented multi package manager support
+
 ## 0.1.9
 
 ### Patch Changes
