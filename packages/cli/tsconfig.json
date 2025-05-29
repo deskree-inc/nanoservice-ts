@@ -14,7 +14,10 @@
 		"strict": true,
 		"noUnusedLocals": true,
 		"noImplicitReturns": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "react",
+		"types": ["node"]
 	},
-	"include": ["./src/**/*.ts", "./package.json"]
+	"include": ["./src/**/*.ts", "./src/**/*.tsx", "./package.json"]
 }

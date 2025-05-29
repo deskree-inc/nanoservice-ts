@@ -1,5 +1,40 @@
 # @nanoservice-ts/react
 
+## 0.0.17
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.26
+
+## 0.0.16
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.25
+
+## 0.0.15
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.24
+
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.23
+
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.22
+
 ## 0.0.12
 
 ### Patch Changes

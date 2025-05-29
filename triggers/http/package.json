@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/trigger-http",
-	"version": "0.0.28",
+	"version": "0.0.34",
 	"description": "Trigger for HTTP requests",
 	"engines": {
 		"node": ">=18.0.0"
@@ -13,7 +13,9 @@
 		"dev": "nodemon",
 		"start": "node dist/index.js",
 		"reload": "node -r ts-node/register --env-file=.env.local ./src/index.ts",
-		"build": "rimraf ./dist && tsc && copyfiles -u 1 src/nodes/**/*.html src/nodes/**/*.md dist/"
+		"build": "rimraf ./dist && tsc && copyfiles -u 1 src/nodes/**/*.html src/nodes/**/*.md dist/",
+		"infra:dev": "rimraf ./dist && tsc && copyfiles -u 1 src/nodes/**/*.html src/nodes/**/*.md dist/ && docker compose --file ./infra/docker-compose.yml up --build --watch",
+		"infra:build": "tsc --watch -p tsconfig.json --diagnostics"
 	},
 	"devDependencies": {
 		"@types/body-parser": "^1.19.5",
@@ -27,10 +29,10 @@
 		"typescript": "^5.8.2"
 	},
 	"dependencies": {
-		"@nanoservice-ts/api-call": "^0.1.24",
+		"@nanoservice-ts/api-call": "^0.1.29",
 		"@nanoservice-ts/helper": "^0.1.5",
-		"@nanoservice-ts/if-else": "^0.0.25",
-		"@nanoservice-ts/runner": "^0.1.21",
+		"@nanoservice-ts/if-else": "^0.0.30",
+		"@nanoservice-ts/runner": "^0.1.26",
 		"@nanoservice-ts/shared": "^0.0.9",
 		"@opentelemetry/api": "^1.9.0",
 		"@opentelemetry/exporter-prometheus": "^0.57.2",

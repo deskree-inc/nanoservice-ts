@@ -1,0 +1,59 @@
+---
+title: Project
+---
+
+Managing **nanoservice-ts** projects effectively starts with the `nanoctl` CLI. This section focuses on commands related to project creation and overall project lifecycle management, primarily the `create project` command.
+
+## `create project`
+
+This is typically the first `nanoctl` command you will use when starting a new **nanoservice-ts** application.
+
+> <sub>**Purpose**: To scaffold a new **nanoservice-ts** project with a predefined directory structure, necessary configuration files, and optional templates.</sub>
+
+**Usage**:
+
+```bash
+# This command creates a new project and automatically generates a new directory for it.
+npx nanoctl@latest create project
+```
+```bash
+# Use this command to create a new project inside the current (empty) directory.
+npx nanoctl@latest create project .
+```
+
+**Interactive Prompts & Options**:
+
+When you run `npx nanoctl@latest create project`, the CLI will typically guide you through a series of prompts:
+
+1. Assign a project name.
+2. Select **HTTP trigger** (default).
+3. Choose **NodeJS** as the runtime (Python3 is in alpha).
+4. **Select Example Installation: YES** (recommended for discovery and learning).
+
+**What it Does**:
+
+Upon completion, the `npx nanoctl@latest create project` command will:
+
+1.  Create a new directory with your desired project name, or use the current directory instead.
+2.  Populate this directory with the standard **nanoservice-ts** project structure based on the chosen template. This typically includes:
+    *   `src/` directory containing the project's source code. 
+    *   `src/nodes/` directory for your custom Nodes.
+    *   `src/nodes.ts` class used to register your custom nodes or modules.
+    *   `workflows/` directory for your workflow JSON definitions.
+    *   `package.json` for managing Node.js dependencies.
+    *   `tsconfig.json` for TypeScript configuration.
+    *   `.gitignore`, `README.md`, and other common project files.
+    *   Environment variable example file (e.g., `.env.local`).
+3.  If the examples code are chosen, it will include sample Node implementations and workflow definitions.
+4.  It may also install necessary base dependencies.
+
+**Initialize**:
+
+Navigate to your project and start the server.
+
+```sh
+cd your-project-name
+pnpm run dev
+```
+Your server will be running at:  
+`http://localhost:4000/health-check`

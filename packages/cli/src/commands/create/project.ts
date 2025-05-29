@@ -33,6 +33,12 @@ const options: Partial<SimpleGitOptions> = {
 	trimmed: false,
 };
 
+type SpinnerHandler = {
+	start: (msg?: string) => void;
+	stop: (msg?: string, code?: number) => void;
+	message: (msg?: string) => void;
+};
+
 const git: SimpleGit = simpleGit(options);
 
 export async function createProject(opts: OptionValues, version: string, currentPath = false) {
@@ -43,6 +49,7 @@ export async function createProject(opts: OptionValues, version: string, current
 	let trigger = "http";
 	let examples = false;
 	let runtimes = ["node"];
+	let selectedManager = "npm";
 
 	if (!isDefault) {
 		console.log(
@@ -71,6 +78,19 @@ export async function createProject(opts: OptionValues, version: string, current
 			})) as string;
 		};
 
+		const resolveSelectedManager = async (): Promise<string> => {
+			if (availableManagers.length === 1) {
+				return availableManagers[0];
+			}
+			return (await p.select({
+				message: "Select the package manager",
+				options: availableManagers.map((manager) => ({
+					label: manager,
+					value: manager,
+				})),
+			})) as string;
+		};
+
 		const nanoctlProject = await p.group(
 			{
 				projectName: () => resolveProjectName(),
@@ -91,6 +111,7 @@ export async function createProject(opts: OptionValues, version: string, current
 						],
 						initialValues: ["node"],
 					}),
+				selectedManager: () => resolveSelectedManager(),
 			},
 			{
 				onCancel: () => {
@@ -103,10 +124,12 @@ export async function createProject(opts: OptionValues, version: string, current
 		projectName = nanoctlProject.projectName;
 		trigger = nanoctlProject.trigger;
 		runtimes = nanoctlProject.runtimes;
+		selectedManager = nanoctlProject.selectedManager;
 
 		// Python3 Alpha Warning
 		if (runtimes.includes("python3")) {
 			// Show a warning message
+			console.log("");
 			console.log(color.yellow("⚠️  Python3 Runtime (Alpha Version) ⚠️."));
 			console.log(color.yellow("-----------------------------------------------------"));
 
@@ -184,6 +207,13 @@ export async function createProject(opts: OptionValues, version: string, current
 			console.error(`Failed to change ownership of directory ${dirPath}:`, error);
 		}
 
+		// Infra
+
+		fsExtra.ensureDirSync(`${dirPath}/infra`);
+		fsExtra.ensureDirSync(`${dirPath}/infra/metrics`);
+		fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/metrics`, `${dirPath}/infra/metrics`);
+		fsExtra.removeSync(`${dirPath}/public/metric`);
+
 		// Examples
 
 		if (!examples) {
@@ -194,12 +224,12 @@ export async function createProject(opts: OptionValues, version: string, current
 			fsExtra.ensureDirSync(`${workflowsDir}/yaml`);
 			fsExtra.ensureDirSync(`${workflowsDir}/toml`);
 		} else {
-			fsExtra.ensureDirSync(`${nodesDir}/examples/infra`);
-			fsExtra.ensureDirSync(`${nodesDir}/examples/infra/postgresql`);
-			fsExtra.ensureDirSync(`${nodesDir}/examples/infra/milvus`);
+			fsExtra.ensureDirSync(`${dirPath}/infra/postgresql`);
+			fsExtra.ensureDirSync(`${dirPath}/infra/milvus`);
 
-			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/development`, `${nodesDir}/examples/infra/postgresql`);
-			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/milvus`, `${nodesDir}/examples/infra/milvus`);
+			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/development`, `${dirPath}/infra/postgresql`);
+			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/infra/milvus`, `${dirPath}/infra/milvus`);
+
 			fsExtra.writeFileSync(`${dirPath}/src/Nodes.ts`, node_file);
 			fsExtra.copySync(`${GITHUB_REPO_LOCAL}/sdk`, `${dirPath}/public/sdk`);
 		}
@@ -222,14 +252,6 @@ export async function createProject(opts: OptionValues, version: string, current
 
 		// Get the package manager
 		if (availableManagers.length > 1) {
-			s.message("Multiple package managers detected. Please select one.");
-			const selectedManager = await p.select({
-				message: "Select the package manager",
-				options: availableManagers.map((manager) => ({
-					label: manager,
-					value: manager,
-				})),
-			});
 			manager = await pm.getManager(selectedManager as string);
 		}
 
@@ -254,14 +276,21 @@ export async function createProject(opts: OptionValues, version: string, current
 			fsExtra.symlinkSync(`${pythonDir}/core`, `${pythonProjectDir}/core`, "junction");
 			fsExtra.symlinkSync(`${pythonDir}/requirement.txt`, `${pythonProjectDir}/requirement.txt`, "file");
 
+			// Create a virtual environment
+			s.message("Creating Python3 virtual environment...");
+			await createPythonVenv(pythonDir, s);
+			s.message("Python3 virtual environment created successfully!");
+
 			// Install Python3 Packages
-			s.message("Installing python3 packages...");
 			await exec(manager.INSTALL, { cwd: pythonDir });
-			await createPythonVenv(pythonDir);
-			await exec(
+
+			s.message("Installing python3 packages...");
+			const cmd_install_pythonpk_response = await exec(
 				`bash -c "source ${pythonDir}/python3_runtime/bin/activate && pip3 install -r ${pythonDir}/requirements.txt"`,
 				{ cwd: pythonDir },
 			);
+			s.message("Python3 packages installed successfully!");
+			console.log("\n", cmd_install_pythonpk_response.stdout);
 
 			fsExtra.symlinkSync(`${pythonDir}/python3_runtime`, `${pythonProjectDir}/python3_runtime`, "junction");
 
@@ -299,7 +328,13 @@ export async function createProject(opts: OptionValues, version: string, current
 
 		// Install Packages
 		s.message("Installing packages...");
-		await exec(manager.INSTALL, { cwd: dirPath });
+		const cmd_install_ts_response = await exec(manager.INSTALL, { cwd: dirPath });
+		s.message("Packages installed successfully!");
+		console.log("\n", cmd_install_ts_response.stdout);
+
+		if (!fsExtra.existsSync(`${dirPath}/node_modules`)) {
+			throw new Error("Failed to install packages. Please check your internet connection and try again.");
+		}
 
 		// Create a new project
 		if (!isDefault) s.stop(`Project "${projectName}" created successfully.`);
@@ -318,7 +353,7 @@ export async function createProject(opts: OptionValues, version: string, current
 	}
 }
 
-function createPythonVenv(pythonProjectDir: string): Promise<void> {
+function createPythonVenv(pythonProjectDir: string, s: SpinnerHandler): Promise<void> {
 	return new Promise((resolve, reject) => {
 		const process = spawn("python3", ["-m", "venv", "python3_runtime"], {
 			cwd: pythonProjectDir,
@@ -328,7 +363,7 @@ function createPythonVenv(pythonProjectDir: string): Promise<void> {
 
 		process.on("close", (code) => {
 			if (code === 0) {
-				console.log("\n✅ Python3 virtual environment created successfully!");
+				s.message("Python3 virtual environment created successfully!");
 				resolve();
 			} else {
 				reject(new Error(`❌ Failed to create virtual environment. Exit code: ${code}`));

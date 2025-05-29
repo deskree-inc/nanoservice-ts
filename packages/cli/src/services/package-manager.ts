@@ -15,6 +15,10 @@ type PackageManagerType = {
 };
 
 const COMMANDS: PackageManagerType = {
+	bun: {
+		INSTALL: "bun install",
+		BUILD: "bun run build",
+	},
 	pnpm: {
 		INSTALL: "pnpm install",
 		BUILD: "pnpm run build",

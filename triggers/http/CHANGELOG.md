@@ -1,5 +1,56 @@
 # @nanoservice-ts/trigger-http
 
+## 0.0.34
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.26
+  - @nanoservice-ts/if-else@0.0.30
+  - @nanoservice-ts/api-call@0.1.29
+
+## 0.0.33
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.25
+  - @nanoservice-ts/if-else@0.0.29
+  - @nanoservice-ts/api-call@0.1.28
+
+## 0.0.32
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.24
+  - @nanoservice-ts/if-else@0.0.28
+  - @nanoservice-ts/api-call@0.1.27
+
+## 0.0.31
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.23
+  - @nanoservice-ts/if-else@0.0.27
+  - @nanoservice-ts/api-call@0.1.26
+
+## 0.0.30
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.22
+  - @nanoservice-ts/if-else@0.0.26
+  - @nanoservice-ts/api-call@0.1.25
+
+## 0.0.29
+
+### Patch Changes
+
+- fixed dockerfile
+
 ## 0.0.28
 
 ### Patch Changes
