@@ -87,10 +87,10 @@ export async function install(opts: OptionValues) {
 
 		logger.stop("Node installed successfully.");
 	} catch (error) {
-		// if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
+		if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
 		logger.stop((error as Error).message, 1);
 	} finally {
-		// if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
+		if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
 	}
 }
 
