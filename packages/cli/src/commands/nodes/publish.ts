@@ -28,7 +28,7 @@ export async function publish(opts: OptionValues) {
 		[key: string]: string | boolean | Record<string, string> | string[];
 	} | null = null;
 	try {
-		if (!token) throw new Error("NANOSERVICES_TOKEN is required.");
+		if (!token) throw new Error("Authentication token not found. Please run 'nanoctl login' before publishing.");
 		if (!opts.directory) throw new Error("Directory is required.");
 
 		const runtimesToPublish = await p.select({

@@ -18,6 +18,12 @@ const COMMANDS: PackageManagerType = {
 	bun: {
 		INSTALL: "bun install",
 		BUILD: "bun run build",
+		PUBLISH: () => {
+			return "bun publish --access public";
+		},
+		INSTALL_NODE: (opts) => {
+			return `bun add ${opts.node}`;
+		},
 	},
 	pnpm: {
 		INSTALL: "pnpm install",
