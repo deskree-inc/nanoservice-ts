@@ -13,6 +13,10 @@ type PackageManagerType = {
 };
 
 const COMMANDS: PackageManagerType = {
+	bun: {
+		INSTALL: "bun install",
+		BUILD: "bun run build",
+	},
 	pnpm: {
 		INSTALL: "pnpm install",
 		BUILD: "pnpm run build",
@@ -45,7 +49,6 @@ class PackageManager {
 		const checkCmd = isWindows ? `where ${cmd}` : `which ${cmd}`;
 		try {
 			await executor(checkCmd);
-			console.log(`Using package manager: ${cmd}`);
 			return true;
 		} catch {
 			return false;
