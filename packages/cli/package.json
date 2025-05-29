@@ -1,6 +1,6 @@
 {
 	"name": "nanoctl",
-	"version": "0.1.11",
+	"version": "0.1.12",
 	"author": "Deskree Technologies Inc.",
 	"license": "Apache-2.0",
 	"description": "cli for nanoservice-ts",
@@ -42,7 +42,9 @@
 		"yocto-spinner": "^0.1.1",
 		"zod": "^3.24.0",
 		"open": "^10.1.2",
-		"serve-handler": "^6.1.6"
+		"serve-handler": "^6.1.6",
+		"ai": "^4.3.16",
+		"@ai-sdk/openai": "^1.3.22"
 	},
 	"devDependencies": {
 		"@types/figlet": "^1.7.0",

@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.12
+
+### Patch Changes
+
+- added generate ai-node command
+
 ## 0.1.11
 
 ### Patch Changes
