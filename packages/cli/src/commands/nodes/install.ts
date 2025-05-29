@@ -61,7 +61,7 @@ export async function install(opts: OptionValues) {
 
 		// Create .npmrc file temporarily
 		const REGISTRY_URL = `https://${registry.url}`;
-		const npmrcContent = `@${registry.namespace}:registry=${REGISTRY_URL}\n//${registry.url}:always-auth=true\n//${registry.url}:_authToken=${registry.token}`;
+		const npmrcContent = `@${registry.namespace}:registry=${REGISTRY_URL}\n//${registry.url}:_authToken=${registry.token}`;
 		fs.writeFileSync(npmrcFile, npmrcContent);
 		logger.message("Created .npmrc file for authentication.");
 
@@ -87,10 +87,10 @@ export async function install(opts: OptionValues) {
 
 		logger.stop("Node installed successfully.");
 	} catch (error) {
-		if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
+		// if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
 		logger.stop((error as Error).message, 1);
 	} finally {
-		if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
+		// if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
 	}
 }
 
