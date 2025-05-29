@@ -1,0 +1,28 @@
+{
+	"name": "Load test workflow",
+	"description": "This workflow is used to test the load on the runner.",
+	"version": "1.0.0",
+	"trigger": {
+		"http": {
+			"method": "GET",
+			"path": "/",
+			"accept": "application/json"
+		}
+	},
+	"steps": [
+		{
+			"name": "mapper",
+			"node": "mapper",
+			"type": "module"
+		}
+	],
+	"nodes": {
+		"mapper": {
+			"inputs": {
+				"model": {
+					"success": true
+				}
+			}
+		}
+	}
+}

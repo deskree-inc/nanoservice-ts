@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.11
+
+### Patch Changes
+
+- improved the web monitor
+
 ## 0.1.10
 
 ### Patch Changes
