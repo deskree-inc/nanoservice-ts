@@ -5,15 +5,14 @@ import { tokenManager } from "../../services/local-token-manager.js";
 
 import { install } from "./install.js";
 
-interface PackageOption {
-	label: string;
-	value: string;
-}
-
 interface Package {
 	package: string;
 	format: string;
 	namespace: string;
+}
+interface PackageOption extends Package {
+	label: string;
+	value: string;
 }
 
 async function searchPkg(opts: OptionValues) {
@@ -46,7 +45,7 @@ export async function search(opts: OptionValues) {
 			throw new Error("No packages found.");
 		}
 
-		const selectedPkg: PackageOption | symbol = await p.select<PackageOption>({
+		const selectedPkg: PackageOption | Package | symbol = await p.select<PackageOption>({
 			message: "Select a package to install",
 			options: pkgList.map((pkg: Package) => ({
 				label: pkg.package,
@@ -55,11 +54,11 @@ export async function search(opts: OptionValues) {
 		});
 
 		if (!selectedPkg || typeof selectedPkg === "symbol") throw new Error("No package selected.");
-
 		// Find the full package info from pkgList
-		const pkgInfo = pkgList.find((pkg: Package) => pkg.package === (selectedPkg as PackageOption).label);
+		const pkgInfo = pkgList.find((pkg: Package) => pkg.package === (selectedPkg as Package).package);
 		if (!pkgInfo) throw new Error("Selected package not found.");
 
+		logger.stop(`Starting installation of ${pkgInfo.package}...`);
 		await trackCommandExecution({
 			command: "install",
 			args: opts,

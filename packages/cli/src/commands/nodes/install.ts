@@ -122,7 +122,7 @@ function updateNodeFile(filePath: string, newModule: NodeModule) {
 	const newEntry = `\t"${entryKey}": new ${importName}()`;
 
 	if (objectBody.includes(`"${entryKey}"`)) {
-		console.log(`Entry for "${entryKey}" already exists. Skipping.`);
+		p.log.warn(`Node "${entryKey}" is already installed. Skipping...`);
 		return;
 	}
 
