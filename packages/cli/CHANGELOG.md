@@ -1,5 +1,23 @@
 # nanoctl
 
+## 0.1.12
+
+### Patch Changes
+
+- added generate ai-node command
+
+## 0.1.11
+
+### Patch Changes
+
+- improved the web monitor
+
+## 0.1.10
+
+### Patch Changes
+
+- implemented multi package manager support
+
 ## 0.1.9
 
 ### Patch Changes
