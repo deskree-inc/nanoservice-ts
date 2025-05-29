@@ -1,6 +1,6 @@
 import { DefaultLogger } from "@nanoservice-ts/runner";
 import { type Span, metrics, trace } from "@opentelemetry/api";
-import HttpTrigger from "./HttpTrigger";
+import HttpTrigger from "./runner/HttpTrigger";
 
 export default class App {
 	private httpTrigger: HttpTrigger = <HttpTrigger>{};

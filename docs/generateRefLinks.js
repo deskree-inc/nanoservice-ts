@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const MINT_JSON_PATH = path.join(__dirname, "../docs.json");
+const MINT_JSON_PATH = path.join(__dirname, "./docs.json");
 const DOCS_REF_PATH = path.join(__dirname, "../docs/ref");
 
 function getMdxFiles(dir) {

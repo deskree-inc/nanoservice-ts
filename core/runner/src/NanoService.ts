@@ -1,4 +1,4 @@
-import { type ConfigContext, type Context, NodeBase, type ResponseContext } from "@nanoservice-ts/shared";
+import { type ConfigContext, type Context, Metrics, NodeBase, type ResponseContext } from "@nanoservice-ts/shared";
 import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
 import type VarsContext from "@nanoservice-ts/shared/dist/types/VarsContext";
 import { metrics } from "@opentelemetry/api";
@@ -34,8 +34,12 @@ export default abstract class NanoService<T> extends NodeBase {
 	}
 
 	public async run(ctx: Context): Promise<ResponseContext> {
-		const response: ResponseContext = { success: true, data: {}, error: null };
 		const defaultMeter = metrics.getMeter("default");
+
+		const globalMetrics = new Metrics();
+		globalMetrics.start();
+		const response: ResponseContext = { success: true, data: {}, error: null };
+
 		const start = performance.now();
 		ctx.logger.log(`Running node: ${this.name} [${JSON.stringify(this.originalConfig)}]`);
 
@@ -45,6 +49,38 @@ export default abstract class NanoService<T> extends NodeBase {
 
 		const node_time = defaultMeter.createGauge("node_time", {
 			description: "Node elapsed time",
+		});
+
+		const node_mem = defaultMeter.createGauge("node_memory", {
+			description: "Node memory usage",
+		});
+
+		const node_mem_average = defaultMeter.createGauge("node_memory_average", {
+			description: "Node memory average",
+		});
+
+		const node_memory_usage_min = defaultMeter.createGauge("node_memory_usage_min", {
+			description: "Node memory usage min",
+		});
+
+		const node_memory_total = defaultMeter.createGauge("node_memory_total", {
+			description: "Node memory total",
+		});
+
+		const node_memory_free = defaultMeter.createGauge("node_memory_free", {
+			description: "Node memory free",
+		});
+
+		const node_cpu = defaultMeter.createGauge("node_cpu", {
+			description: "Node cpu usage",
+		});
+
+		const node_cpu_average = defaultMeter.createGauge("node_cpu_average", {
+			description: "Node cpu average",
+		});
+
+		const node_cpu_total = defaultMeter.createGauge("node_cpu_total", {
+			description: "Node cpu total",
 		});
 
 		const config = _.cloneDeep(ctx.config) as ConfigContext;
@@ -66,16 +102,16 @@ export default abstract class NanoService<T> extends NodeBase {
 
 		node_execution.add(1, {
 			env: process.env.NODE_ENV,
-			workflow_runner_path: `${ctx.workflow_path}`,
-			workflow_runner_name: `${ctx.workflow_name}`,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
 			node_name: `${this.name}`,
 			node: (this as unknown as RunnerNode).node,
 		});
 
 		node_time.record(end - start, {
 			env: process.env.NODE_ENV,
-			workflow_runner_path: `${ctx.workflow_path}`,
-			workflow_runner_name: `${ctx.workflow_name}`,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
 			node_name: `${this.name}`,
 			node: (this as unknown as RunnerNode).node,
 		});
@@ -87,9 +123,94 @@ export default abstract class NanoService<T> extends NodeBase {
 				[this.name]: (result as unknown as JsonLikeObject).data,
 			};
 			this.setVar(ctx, vars as unknown as VarsContext);
+			response.data = ctx.response || {};
 		} else {
 			response.data = result;
 			(response.data as unknown as NanoService<T>).contentType = this.contentType;
+		}
+
+		globalMetrics.retry();
+		globalMetrics.stop();
+		const average = await globalMetrics.getMetrics();
+
+		node_mem.record(average.memory.max, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		node_mem_average.record(average.memory.total, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		node_memory_usage_min.record(average.memory.min, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		node_memory_total.record(average.memory.global_memory, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		node_memory_free.record(average.memory.global_free_memory, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		node_cpu.record(average.cpu.usage, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		node_cpu_average.record(average.cpu.average, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		node_cpu_total.record(average.cpu.total, {
+			env: process.env.NODE_ENV,
+			workflow_path: `${ctx.workflow_path}`,
+			workflow_name: `${ctx.workflow_name}`,
+			node_name: `${this.name}`,
+			node: (this as unknown as RunnerNode).node,
+		});
+
+		globalMetrics.clear();
+
+		if (response.success === false) {
+			const node_errors = defaultMeter.createCounter("node_errors", {
+				description: "Node errors",
+			});
+
+			node_errors.add(1, {
+				env: process.env.NODE_ENV,
+				workflow_path: `${ctx.workflow_path}`,
+				workflow_name: `${ctx.workflow_name}`,
+				node_name: `${this.name}`,
+				node: (this as unknown as RunnerNode).node,
+			});
 		}
 
 		return response;

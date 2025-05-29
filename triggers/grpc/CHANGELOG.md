@@ -1,5 +1,59 @@
 # @nanoservice-ts/trigger-grpc
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.26
+  - @nanoservice-ts/if-else@0.0.30
+  - @nanoservice-ts/api-call@0.1.29
+
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.25
+  - @nanoservice-ts/if-else@0.0.29
+  - @nanoservice-ts/api-call@0.1.28
+
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.24
+  - @nanoservice-ts/if-else@0.0.28
+  - @nanoservice-ts/api-call@0.1.27
+
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.23
+  - @nanoservice-ts/if-else@0.0.27
+  - @nanoservice-ts/api-call@0.1.26
+
+## 0.0.10
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.22
+  - @nanoservice-ts/if-else@0.0.26
+  - @nanoservice-ts/api-call@0.1.25
+
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies
+  - @nanoservice-ts/runner@0.1.21
+  - @nanoservice-ts/if-else@0.0.25
+  - @nanoservice-ts/api-call@0.1.24
+
 ## 0.0.8
 
 ### Patch Changes

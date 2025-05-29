@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install Supervisor
 RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up working directories

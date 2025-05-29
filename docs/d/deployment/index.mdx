@@ -1,0 +1,129 @@
+---
+title: Overview
+---
+
+Deskree's Atomic platform provides a seamless way to deploy your Nanoservice-TS applications to the cloud without worrying about infrastructure management. This guide will walk you through the process of deploying your Nanoservice-TS project to Deskree Serverless.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- A Nanoservice-TS project ready for deployment
+- Node.js (v18 or later) and npm installed
+- The Nanoservice-TS CLI installed (`npx nanoctl@latest`)
+
+## Step 1: Sign Up for Deskree Atomic
+
+1. Visit [https://atomic.deskree.com](https://atomic.deskree.com) and create an account.
+2. After signing up, you'll need to create an access token for CLI authentication.
+
+## Step 2: Create an Access Token
+
+1. From the Atomic dashboard, click on the **Account Settings** icon in the bottom-left corner.
+2. Click on **Access Token**.
+3. Click on **Create new token**.
+4. Fill in the token details:
+   - **Token name**: Enter a descriptive name (e.g., "Deployment Token")
+   - **Expiration**: Select an appropriate expiration period (e.g., 7 days)
+   - **Select scopes**: Make sure to toggle both scopes:
+     - `workflow` and `workflow:execute` - Allows this token to execute a private workflow
+     - `edge` and `edge:deployment` - Allows this token to manage edge deployments
+
+5. Click **Generate token**.
+6. Copy the generated token immediately (you won't be able to see it again).
+
+## Step 3: Authenticate with the CLI
+
+Use the Nanoservice-TS CLI to log in with your token:
+
+```bash
+npx nanoctl@latest login
+```
+
+When prompted, paste your access token. You should see a confirmation message that you've successfully logged in.
+
+## Step 4: Deploy Your Project
+
+Once authenticated, you can deploy your Nanoservice-TS project with a single command:
+
+```bash
+npx nanoctl@latest deploy --build --name YOUR_PROJECT_NAME
+```
+
+Replace `YOUR_PROJECT_NAME` with a unique name for your project. This name will be used in the URL for accessing your deployed service.
+
+The `--build` flag ensures that your project is built before deployment.
+
+## Step 5: Test Your Deployment
+
+After successful deployment, the generated URL for your service will be displayed directly in the CLI. You can also find this URL on the Atomic platform by clicking on the serverless icon in the left sidebar.
+
+### Testing with Postman
+
+1. Generate a bearer token from the Atomic platform for making authorized requests.
+2. Open Postman and set up a request to your endpoint.
+3. Add the Authorization header:
+   ```
+   Authorization: Bearer <your_token>
+   ```
+4. Send the request to test your deployed service.
+
+### Accessing Specific Workflows
+
+Each workflow in your project is accessible via its own endpoint. The endpoint path corresponds to the name of the JSON file in your `workflows/json` directory.
+
+For example, if you have a workflow defined in `workflows/json/countries.json`, you can access it at the endpoint `/countries` appended to your deployment URL.
+
+## Deployment Commands Reference
+
+Here's a quick reference of all the CLI commands used for deployment:
+
+### Login to Deskree
+
+```bash
+npx nanoctl@latest login
+```
+
+### Deploy a Project
+
+```bash
+npx nanoctl@latest deploy --build --name YOUR_PROJECT_NAME
+```
+
+### List Deployments
+
+```bash
+npx nanoctl@latest list-deployments
+```
+
+### Delete a Deployment
+
+```bash
+npx nanoctl@latest delete-deployment --name YOUR_PROJECT_NAME
+```
+
+## Monitoring and Logs
+
+Deskree's Atomic platform provides built-in monitoring and logging for your deployed services. You can access these features from the Atomic dashboard:
+
+1. Log in to [https://atomic.deskree.com](https://atomic.deskree.com)
+2. Navigate to your project
+3. Click on the "Logs" tab to view execution logs
+4. Click on the "Metrics" tab to view performance metrics
+
+## Additional Resources
+
+- [How to Deploy Nanoservices Seamlessly with Deskree](https://medium.com/nanoservice/how-to-deploy-nanoservices-seamlessly-with-deskree-8c4b15ff8acc) - Detailed blog post about deployment
+- [Deployment Video Tutorial](https://www.youtube.com/watch?v=V46GpIUE-9E) - Step-by-step video guide for deploying to Deskree
+- [Nanoservice-TS Documentation](https://nanoservice.xyz) - Official documentation
+- [Deskree Atomic Platform](https://atomic.deskree.com) - Deskree's serverless platform
+
+<iframe 
+  width="100%" 
+  height="400" 
+  src="https://www.youtube.com/embed/V46GpIUE-9E" 
+  title="How to Deploy your Nanoservice-TS project on Deskree" 
+  frameborder="0" 
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+  allowfullscreen>
+</iframe>

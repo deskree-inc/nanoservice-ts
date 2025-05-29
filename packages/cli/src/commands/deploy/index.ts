@@ -54,7 +54,7 @@ export async function deploy(opts: OptionValues) {
 		const json = fs.readJSONSync(nanoserviceFile);
 
 		// Validate name with regex, should allow letters and dashes only without numbers
-		const nameRegex = /^[a-zA-Z](?:[a-zA-Z-]*[a-zA-Z])?$/;
+		const nameRegex = /^[a-z](?:[a-z-]*[a-z])?$/;
 		if (!nameRegex.test(opts.name))
 			throw new Error(`Invalid name ${opts.name}. Name should only contain letters and dashes.`);
 
@@ -98,6 +98,7 @@ export async function deploy(opts: OptionValues) {
 			},
 			body: JSON.stringify({
 				serviceName: opts.name,
+				access: opts.public ? "public" : "private",
 			}),
 		});
 		if (!deployment.ok) throw new Error(deployment.statusText);
@@ -139,6 +140,7 @@ export async function deploy(opts: OptionValues) {
 			0,
 		);
 		p.log.success(`Service live at: ${color.greenBright(deploymentData?.data?.url)}`);
+		p.log.success(`Monitoring live at: ${color.greenBright(deploymentData?.data?.prometheusUrl)}`);
 		return true;
 	} catch (error) {
 		logger.stop(`Error: ${error}`, 1);
@@ -151,6 +153,7 @@ const deployCmd = program
 	.description("Deploy nanoservice")
 	.requiredOption("-n, --name <name>", "Name of the nanoservice")
 	.option("--build", "Build before deploying", () => true)
+	.option("--public", "Make the nanoservice public (default: false)", false)
 	.option("-d, --directory [value]", "Directory of the nanoservice (defaults to current directory)", process.cwd())
 	.action(async (options: OptionValues) => {
 		if (options.build) {

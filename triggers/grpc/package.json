@@ -1,6 +1,6 @@
 {
 	"name": "@nanoservice-ts/trigger-grpc",
-	"version": "0.0.8",
+	"version": "0.0.14",
 	"description": "",
 	"engines": {
 		"node": ">=18.0.0"
@@ -33,10 +33,10 @@
 		"@connectrpc/connect": "^2.0.1",
 		"@connectrpc/connect-fastify": "^2.0.1",
 		"@connectrpc/connect-node": "^2.0.1",
-		"@nanoservice-ts/api-call": "^0.1.23",
+		"@nanoservice-ts/api-call": "^0.1.29",
 		"@nanoservice-ts/helper": "^0.1.5",
-		"@nanoservice-ts/if-else": "^0.0.24",
-		"@nanoservice-ts/runner": "^0.1.20",
+		"@nanoservice-ts/if-else": "^0.0.30",
+		"@nanoservice-ts/runner": "^0.1.26",
 		"@nanoservice-ts/shared": "^0.0.9",
 		"@opentelemetry/api": "^1.9.0",
 		"@opentelemetry/exporter-prometheus": "^0.57.2",
@@ -44,7 +44,7 @@
 		"@opentelemetry/sdk-metrics": "^1.30.1",
 		"@opentelemetry/semantic-conventions": "^1.30.0",
 		"fast-xml-parser": "^5.0.8",
-		"fastify": "^5.2.1",
+		"fastify": "^5.3.2",
 		"uuid": "^11.0.3"
 	},
 	"peerDependencies": {

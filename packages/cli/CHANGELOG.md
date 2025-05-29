@@ -1,5 +1,77 @@
 # nanoctl
 
+## 0.1.9
+
+### Patch Changes
+
+- fixed monitor issue loading labels
+
+## 0.1.8
+
+### Patch Changes
+
+- monitor integrated with remote prometheus
+
+## 0.1.7
+
+### Patch Changes
+
+- added --public deploy feature
+
+## 0.1.6
+
+### Patch Changes
+
+- Added prometheus monitoring url
+
+## 0.1.5
+
+### Patch Changes
+
+- allow deploy with public flag
+
+## 0.1.4
+
+### Patch Changes
+
+- centralized docker-compose files.
+
+## 0.1.3
+
+### Patch Changes
+
+- monitor command for terminal and web dashboard
+
+## 0.1.2
+
+### Patch Changes
+
+- fixed dockerfile
+
+## 0.1.1
+
+### Patch Changes
+
+- Added milvus docker-compose file to infra dir in examples
+
+## 0.1.0
+
+### Minor Changes
+
+- login, build and deploy with deskree serverless
+
+## 0.0.20
+
+### Patch Changes
+
+- Implemented build and deploy command
+
+## 0.0.19
+
+### Patch Changes
+
+- set_var bug fixed and CLI deployment support
+
 ## 0.0.18
 
 ### Patch Changes

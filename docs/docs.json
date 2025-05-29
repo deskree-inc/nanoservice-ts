@@ -1,0 +1,187 @@
+{
+	"$schema": "https://mintlify.com/docs.json",
+	"theme": "mint",
+	"name": "Nanoservice-ts Docs",
+	"colors": {
+		"primary": "#39C068",
+		"light": "#39C068",
+		"dark": "#73D997"
+	},
+	"favicon": "/assets/favicon.svg",
+	"navigation": {
+		"tabs": [
+			{
+				"tab": "For Users",
+				"groups": [
+					{
+						"group": "Introduction",
+						"pages": [
+							"d/introduction/overview",
+							"d/introduction/first-steps",
+							"d/introduction/nodes",
+							"d/introduction/workflows",
+							"d/introduction/context",
+							"d/introduction/triggers"
+						]
+					},
+					{
+						"group": "Examples",
+						"pages": [
+							"d/examples/index",
+							"d/examples/countries",
+							"d/examples/db-manager"
+						]
+					},
+					{
+						"group": "Fundamentals",
+						"pages": ["d/fundamentals/nanoservices-concept"]
+					},
+					{
+						"group": "CLI",
+						"pages": [
+							"d/cli/overview",
+							"d/cli/project",
+							"d/cli/nodes",
+							"d/cli/workflows",
+							"d/cli/login",
+							"d/cli/build",
+							"d/cli/deploy"
+						]
+					},
+					{
+						"group": "Deployment",
+						"pages": ["d/deployment/index"]
+					}
+				]
+			},
+			{
+				"tab": "For Contributors",
+				"groups": [
+					{
+						"group": "Overview",
+						"pages": ["c/overview/architecture", "c/overview/how-to-contribute"]
+					},
+					{
+						"group": "Core",
+						"pages": ["c/core/runner", "c/core/shared"]
+					},
+					{
+						"group": "Extensions",
+						"pages": [
+							"c/extensions/nodes",
+							"c/extensions/triggers",
+							"c/extensions/cli"
+						]
+					},
+					{
+						"group": "DevTools",
+						"pages": ["c/devtools/index"]
+					},
+					{
+						"group": "Migration Guides",
+						"pages": ["c/migration-guides/index"]
+					}
+				]
+			},
+			{
+				"tab": "References",
+				"groups": [
+					{
+						"group": "References",
+						"pages": []
+					}
+				]
+			},
+			{
+				"tab": "Changelog",
+				"href": "https://github.com/deskree-inc/nanoservice-ts/releases"
+			},
+			{
+				"tab": "Roadmap",
+				"href": "https://github.com/orgs/deskree-inc/projects/4/views/2"
+			},
+			{
+				"tab": "Other Resources",
+				"groups": [
+					{
+						"group": "Resources",
+						"pages": ["o/resources"]
+					},
+					{
+						"group": "Support Us",
+						"pages": ["o/support/index"]
+					}
+				]
+			}
+		],
+		"global": {
+			"anchors": [
+				{
+					"anchor": "Blog",
+					"href": "https://blog.nanoservice.xyz/",
+					"icon": "Medium"
+				},
+				{
+					"anchor": "Discord",
+					"href": "https://discord.gg/uFs9bYwfM9",
+					"icon": "discord"
+				},
+				{
+					"anchor": "X",
+					"href": "https://x.com/nanoservice_ts",
+					"icon": "x"
+				}
+			]
+		}
+	},
+	"logo": {
+		"light": "/assets/logo/light.svg",
+		"dark": "/assets/logo/dark.svg"
+	},
+	"navbar": {
+		"links": [
+			{
+				"label": "Deskree Docs",
+				"href": "https://docs.deskree.com"
+			}
+		],
+		"primary": {
+			"type": "github",
+			"href": "https://github.com/deskree-inc/nanoservice-ts"
+		}
+	},
+	"footer": {
+		"socials": {
+			"x": "https://x.com/nanoservice_ts",
+			"github": "https://github.com/deskree-inc",
+			"linkedin": "https://linkedin.com/company/deskree",
+			"reddit": "https://www.reddit.com/r/nanoservice/",
+			"medium": "https://blog.nanoservice.xyz/",
+			"discord": "https://discord.gg/etgJcHSrR5"
+		},
+		"links": [
+			{
+				"header": "With ❤️ by ",
+				"items": [
+					{
+						"label": "With ❤️ by Deskree",
+						"href": "https://deskree.com"
+					}
+				]
+			}
+		]
+	},
+	"integrations": {
+		"ga4": {
+			"measurementId": "G-X860TC8VML"
+		}
+	},
+	"fonts": {
+		"heading": {
+			"family": "Space Grotesk"
+		},
+		"body": {
+			"family": "Space Grotesk"
+		}
+	}
+}
