@@ -70,14 +70,13 @@ export async function install(opts: OptionValues) {
 
 		logger.message(`Installing node: ${opts.node}...`);
 		const exec = util.promisify(child_process.exec);
-		const { stderr } = await exec(
+		const { stdout, stderr } = await exec(
 			manager.INSTALL_NODE({ node: nodeName, registry: REGISTRY_URL, npmrcDir: npmrcFile }),
 			{ cwd: opts.directory },
 		);
-		if (stderr) {
-			logger.stop(stderr);
-			throw new Error(stderr);
-		}
+
+		if (stdout) p.log.info(stdout);
+		else if (stderr) throw new Error(stderr);
 
 		// Update Node.ts file
 		updateNodeFile(nodeFilePath, {
@@ -147,7 +146,7 @@ function updateNodeFile(filePath: string, newModule: NodeModule) {
 }
 // Login command
 export default new Command()
-	.command("install")
+	.command("node")
 	.description("Install a node from the nanoservices registry")
 	.option("-d, --directory <value>", "Directory to publish")
 	.argument("<node>", "Node name")
