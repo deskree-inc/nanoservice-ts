@@ -45,7 +45,9 @@
 							"d/cli/workflows",
 							"d/cli/login",
 							"d/cli/build",
-							"d/cli/deploy"
+							"d/cli/deploy",
+							"d/cli/monitor",
+							"d/cli/generate-ai-node"
 						]
 					},
 					{

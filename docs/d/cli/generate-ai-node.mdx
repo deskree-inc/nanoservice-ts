@@ -1,0 +1,74 @@
+---
+title: Generate AI Node
+---
+
+The `nanoctl generate ai-node` command leverages OpenAI to automatically generate Nanoservice-TS Nodes based on natural language prompts. This powerful tool helps developers quickly scaffold production-ready nanoservices that follow the framework's structural conventions.
+
+By combining AI code generation with automatic registration in your project, this command significantly accelerates the Node development process while ensuring adherence to Nanoservice-TS standards.
+
+## Generate AI Node
+
+### Syntax
+```bash
+npx nanoctl@latest generate ai-node [options]
+```
+
+Creates a new Node using OpenAI's API based on a natural language prompt.
+
+### Options
+| Option       | Type    | Description                                      | Default       |
+|--------------|---------|--------------------------------------------------|---------------|
+| `--name`     | string  | Name for the new Node (required)                 | None          |
+| `--prompt`   | string  | Description of the Node's functionality (required)| None         |
+| `--api-key`  | string  | OpenAI API key (falls back to env variable)      | `OPENAI_API_KEY` |
+| `--type`     | string  | Type of output file                              | `class`       |
+| `--language` | string  | Programming language to generate                 | `typescript`  |
+| `--help`     | boolean | Show help                                        | `false`       |
+
+### Examples
+
+#### Generate a Basic Node
+```bash
+npx nanoctl@latest generate ai-node \
+  --name "hello-world" \
+  --prompt "Create a nanoservice that returns hello world"
+```
+
+#### Generate a Node with Specific API Key
+```bash
+npx nanoctl@latest generate ai-node \
+  --name "file-reader" \
+  --prompt "Create a nanoservice that reads a file from disk" \
+  --api-key "your-openai-api-key"
+```
+
+#### Generate a Node with Custom Type
+```bash
+npx nanoctl@latest generate ai-node \
+  --name "data-processor" \
+  --prompt "Create a nanoservice that processes JSON data" \
+  --type "function"
+```
+
+## What Happens When You Run This Command
+
+When you execute the `generate ai-node` command:
+
+1. The CLI sends your prompt to OpenAI to generate a complete Node implementation.
+2. The generated code is cleaned up and formatted properly.
+3. A new directory is created under `./nodes/` with your specified name.
+4. The Node is automatically registered in your project's `Nodes.ts` registry file.
+5. The newly created Node and updated registry files are opened in VS Code.
+
+## Requirements
+
+- Valid OpenAI API key (provided via `--api-key` flag or `OPENAI_API_KEY` environment variable)
+- Existing Nanoservice-TS project structure
+- Internet connection to access OpenAI API
+
+## Best Practices
+
+- Provide clear, specific prompts for better results
+- Review and test generated Nodes before using in production
+- Use descriptive names that reflect the Node's purpose
+- Consider adding your OpenAI API key to your environment variables to avoid passing it in commands
