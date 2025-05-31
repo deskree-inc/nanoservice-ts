@@ -21,17 +21,17 @@ Creates a new Node using OpenAI's API based on a natural language prompt.
 | `--name`     | string  | Name for the new Node (required)                 | None          |
 | `--prompt`   | string  | Description of the Node's functionality (required)| None         |
 | `--api-key`  | string  | OpenAI API key (falls back to env variable)      | `OPENAI_API_KEY` |
-| `--type`     | string  | Type of output file                              | `class`       |
-| `--language` | string  | Programming language to generate                 | `typescript`  |
+| `--type`     | string  | Type of template: class or module                | `class`       |
 | `--help`     | boolean | Show help                                        | `false`       |
 
 ### Examples
 
 #### Generate a Basic Node
 ```bash
+# Execution of this command requires the OPENAI_API_KEY environment variable.
 npx nanoctl@latest generate ai-node \
-  --name "hello-world" \
-  --prompt "Create a nanoservice that returns hello world"
+  --name "mapper" \
+  --prompt "Generate a mapper function that transforms an array of objects from one type to another"
 ```
 
 #### Generate a Node with Specific API Key
@@ -44,10 +44,11 @@ npx nanoctl@latest generate ai-node \
 
 #### Generate a Node with Custom Type
 ```bash
+# Execution of this command requires the OPENAI_API_KEY environment variable.
 npx nanoctl@latest generate ai-node \
   --name "data-processor" \
-  --prompt "Create a nanoservice that processes JSON data" \
-  --type "function"
+  --prompt "Generate a nanoservice that receives a JSON array, filters out invalid entries based on a validation schema, and returns a cleaned version of the array." \
+  --type "module"
 ```
 
 ## What Happens When You Run This Command
@@ -66,9 +67,19 @@ When you execute the `generate ai-node` command:
 - Existing Nanoservice-TS project structure
 - Internet connection to access OpenAI API
 
-## Best Practices
+### Best Practices
 
-- Provide clear, specific prompts for better results
-- Review and test generated Nodes before using in production
-- Use descriptive names that reflect the Node's purpose
-- Consider adding your OpenAI API key to your environment variables to avoid passing it in commands
+* **Provide Clear, Specific Prompts:**
+  Craft prompts that are focused and descriptive. The more context you give, the better the AI can generate relevant and functional code. Avoid vague instructions and instead describe what the node should do, what inputs it expects, and any key logic it should contain.
+
+* **Review and Test Generated Nodes Thoroughly:**
+  AI-generated code is meant to serve as a **starting point**, not a finished product. Always inspect and test the output carefully before using it in production environments. Validate logic, handle edge cases, and ensure it aligns with your system’s standards and expectations.
+
+* **Use Descriptive, Purpose-Driven Names:**
+  Name your nodes clearly and consistently to reflect their function. This improves readability, maintainability, and collaboration—especially when multiple nodes are used in workflows or shared across teams.
+
+* **Avoid Hardcoding Secrets:**
+  To keep your setup secure and flexible, **add your `OPENAI_API_KEY` to your environment variables** rather than passing it directly in the command line. This prevents accidental exposure and makes it easier to manage configurations across environments.
+
+* **Understand the Role of `generate ai-node`:**
+  The `generate ai-node` command is a **convenience tool**—not a compiler or validator. It helps bootstrap a new node using AI assistance, but the resulting code is a **code snippet**, not a production-ready solution. Treat it as a draft you will refine, test, and adapt as needed.

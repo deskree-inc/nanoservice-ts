@@ -56,12 +56,16 @@ To use the monitor command with a local project:
 
 2. Start the local observability stack:
    ```bash
-   docker-compose -f infra/metrics/docker-compose.yml up
+   docker-compose -f infra/metrics/docker-compose.yml up -d
    ```
 
-3. Run your nanoservice application:
+3. Run your nanoservice application with docker:
    ```bash
-   npm run dev
+   # Open a terminal and run
+   npm run infra:dev
+
+   # Open a second terminal and run
+   npm run infra:build
    ```
 
 4. Launch the monitor:
