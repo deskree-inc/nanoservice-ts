@@ -18,6 +18,7 @@ const registerNodeSystemPrompt = {
  6. Keep the format, indentation, spacing, and structure exactly like the input.
  7. If the registry key already exists in the object, do not add it again.
  8. Your response must be a single full TypeScript file containing the updated code. No explanations or markdown formatting.
+ 9. If the node is already registered, simply update the import statement if necessary, but do not add a duplicate entry.
  
  Here is the current content of the TypeScript file:
  `,

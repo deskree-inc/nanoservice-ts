@@ -1,4 +1,5 @@
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
+import { tokenManager } from "../../services/local-token-manager.js";
 import { runMonitor } from "./monitor-component.js";
 import startWebMonitorUI from "./static-web-server.js";
 
@@ -14,10 +15,15 @@ program
 			command: "monitor",
 			args: options,
 			execution: async () => {
+				let token: string | null | undefined = tokenManager.getToken();
+				if (!token) {
+					token = options.token as string | undefined;
+				}
+
 				if (options.web) {
-					await startWebMonitorUI(options.host || "http://localhost:9090", options.token);
+					await startWebMonitorUI(options.host || "http://localhost:9090", token);
 				} else {
-					runMonitor(options.host, options.token);
+					runMonitor(options.host, token);
 				}
 			},
 		});

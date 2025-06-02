@@ -1,11 +1,13 @@
+import readline from "node:readline";
 import * as p from "@clack/prompts";
 import { Command } from "commander";
 import figlet from "figlet";
 import open from "open";
 import color from "picocolors";
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
+import { getPreferredEditor } from "../../services/utils.js";
 import NodeFileWriter from "./NodeFileWriter.js";
-import NodeGenerator from "./NodeGenerator.js";
+import NodeGenerator, { type NodeInformation } from "./NodeGenerator.js";
 import RegisterNode from "./RegisterNode.js";
 
 // Generate command for AI vibe coding
@@ -18,7 +20,7 @@ create
 	.option("-n, --name <value>", "Name of the Node code snippet")
 	.option("-p, --prompt <value>", "Prompt for AI code generation")
 	.option("-t, --type <value>", "Type of code snippet (default: 'class')")
-	.option("-l, --language <value>", "Programming language for the code snippet (default: 'typescript')")
+	.option("-u, --update", "Update existing Node code snippet")
 	.option(
 		"-k, --api-key <value>",
 		"OpenAI API key (optional, uses environment variable OPENAI_API_KEY if not provided)",
@@ -39,8 +41,12 @@ create
 				);
 				console.log("");
 
-				if (!options.name || !options.prompt) {
-					console.error("Both --name and --prompt options are required.");
+				if (!options.name) {
+					if (!options.update && !options.prompt) {
+						console.error("Both --name and --prompt options are required.");
+					} else {
+						console.error("The --name option is required.");
+					}
 					process.exit(1);
 				}
 
@@ -53,16 +59,82 @@ create
 
 				p.intro(color.inverse(" Create a New Node Code Snippet "));
 				const s = p.spinner();
-				s.start("Generating Node code snippet...");
 
-				const generator = new NodeGenerator();
-				const node = await generator.generateNode(
-					options.name.toLowerCase().replace(/\s+/g, "-"),
-					options.prompt,
-					options.apiKey || process.env.OPENAI_API_KEY,
-				);
-				const cleaned = node.code.replace(/^```typescript\s*([\s\S]*?)\s*```$/gm, "$1");
-				const nodeType = options.type || "class";
+				let node: NodeInformation = <NodeInformation>{};
+				let cleaned = "";
+				let nodeType = "class";
+
+				if (!options.update) {
+					s.start("Generating Node code snippet...");
+					// Generate the Node code snippet using AI
+					const generator = new NodeGenerator();
+					node = await generator.generateNode(
+						options.name.toLowerCase().replace(/\s+/g, "-"),
+						options.prompt,
+						options.apiKey || process.env.OPENAI_API_KEY,
+					);
+					cleaned = node.code.replace(/^```typescript\s*([\s\S]*?)\s*```$/gm, "$1");
+					nodeType = options.type || "class";
+				} else {
+					const nodeName = options.name.toLowerCase().replace(/\s+/g, "-");
+					p.intro(color.inverse(`🛠️  Update Existing Node: ${nodeName}`));
+
+					const rl = readline.createInterface({
+						input: process.stdin,
+						output: process.stdout,
+						terminal: true,
+					});
+
+					const lines: string[] = [];
+					console.log("\n   Enter your code below:");
+					console.log("   - Type 'quit' on a new line to finish");
+					console.log("   - Press Ctrl+C to cancel");
+					console.log("   ----------------------------------------\n");
+
+					const multilineInput = await new Promise<string>((resolve) => {
+						rl.on("line", (input: string) => {
+							if (input.trim().toLocaleLowerCase() === "quit") {
+								rl.close();
+								resolve(lines.join("\n"));
+							} else {
+								lines.push(input);
+								rl.prompt();
+							}
+						});
+
+						// Handle Ctrl+C to cancel
+						rl.on("SIGINT", () => {
+							console.log("\nInput cancelled");
+							rl.close();
+							resolve("");
+						});
+
+						// Handle Ctrl+D (EOF)
+						rl.on("close", () => {
+							if (lines.length > 0) {
+								resolve(lines.join("\n"));
+							} else {
+								resolve("");
+							}
+						});
+
+						rl.prompt();
+					});
+
+					s.start("Updating Node code...");
+					// Generate the Node code snippet using AI
+					const generator = new NodeGenerator();
+					node = await generator.generateNode(
+						options.name.toLowerCase().replace(/\s+/g, "-"),
+						multilineInput,
+						options.apiKey || process.env.OPENAI_API_KEY,
+						true,
+					);
+					cleaned = node.code.replace(/^```typescript\s*([\s\S]*?)\s*```$/gm, "$1");
+					nodeType = options.type || "class";
+				}
+
+				// Create the file with the generated code snippet
 				const filePath = await new NodeFileWriter().generateFile(
 					node.nodeName,
 					nodeType,
@@ -81,8 +153,13 @@ create
 				);
 
 				// Open file in the default editor
-				await open(filePath, { app: { name: "Visual Studio Code" }, wait: false });
-				await open(nodesFilePath, { app: { name: "Visual Studio Code" }, wait: false });
+				const editor = getPreferredEditor();
+
+				await open(filePath, { app: { name: editor }, wait: false });
+
+				if (!options.update) {
+					await open(nodesFilePath, { app: { name: editor }, wait: false });
+				}
 
 				s.stop(`Node code snippet "${node.nodeName}" generated and registered successfully!`);
 			},
