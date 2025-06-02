@@ -1,0 +1,85 @@
+---
+title: Generate AI Node
+---
+
+The `nanoctl generate ai-node` command leverages OpenAI to automatically generate Nanoservice-TS Nodes based on natural language prompts. This powerful tool helps developers quickly scaffold production-ready nanoservices that follow the framework's structural conventions.
+
+By combining AI code generation with automatic registration in your project, this command significantly accelerates the Node development process while ensuring adherence to Nanoservice-TS standards.
+
+## Generate AI Node
+
+### Syntax
+```bash
+npx nanoctl@latest generate ai-node [options]
+```
+
+Creates a new Node using OpenAI's API based on a natural language prompt.
+
+### Options
+| Option       | Type    | Description                                      | Default       |
+|--------------|---------|--------------------------------------------------|---------------|
+| `--name`     | string  | Name for the new Node (required)                 | None          |
+| `--prompt`   | string  | Description of the Node's functionality (required)| None         |
+| `--api-key`  | string  | OpenAI API key (falls back to env variable)      | `OPENAI_API_KEY` |
+| `--type`     | string  | Type of template: class or module                | `class`       |
+| `--help`     | boolean | Show help                                        | `false`       |
+
+### Examples
+
+#### Generate a Basic Node
+```bash
+# Execution of this command requires the OPENAI_API_KEY environment variable.
+npx nanoctl@latest generate ai-node \
+  --name "mapper" \
+  --prompt "Generate a mapper function that transforms an array of objects from one type to another"
+```
+
+#### Generate a Node with Specific API Key
+```bash
+npx nanoctl@latest generate ai-node \
+  --name "file-reader" \
+  --prompt "Create a nanoservice that reads a file from disk" \
+  --api-key "your-openai-api-key"
+```
+
+#### Generate a Node with Custom Type
+```bash
+# Execution of this command requires the OPENAI_API_KEY environment variable.
+npx nanoctl@latest generate ai-node \
+  --name "data-processor" \
+  --prompt "Generate a nanoservice that receives a JSON array, filters out invalid entries based on a validation schema, and returns a cleaned version of the array." \
+  --type "module"
+```
+
+## What Happens When You Run This Command
+
+When you execute the `generate ai-node` command:
+
+1. The CLI sends your prompt to OpenAI to generate a complete Node implementation.
+2. The generated code is cleaned up and formatted properly.
+3. A new directory is created under `./nodes/` with your specified name.
+4. The Node is automatically registered in your project's `Nodes.ts` registry file.
+5. The newly created Node and updated registry files are opened in VS Code.
+
+## Requirements
+
+- Valid OpenAI API key (provided via `--api-key` flag or `OPENAI_API_KEY` environment variable)
+- Existing Nanoservice-TS project structure
+- Internet connection to access OpenAI API
+
+### Best Practices
+
+* **Provide Clear, Specific Prompts:**
+  Craft prompts that are focused and descriptive. The more context you give, the better the AI can generate relevant and functional code. Avoid vague instructions and instead describe what the node should do, what inputs it expects, and any key logic it should contain.
+
+* **Review and Test Generated Nodes Thoroughly:**
+  AI-generated code is meant to serve as a **starting point**, not a finished product. Always inspect and test the output carefully before using it in production environments. Validate logic, handle edge cases, and ensure it aligns with your system’s standards and expectations.
+
+* **Use Descriptive, Purpose-Driven Names:**
+  Name your nodes clearly and consistently to reflect their function. This improves readability, maintainability, and collaboration—especially when multiple nodes are used in workflows or shared across teams.
+
+* **Avoid Hardcoding Secrets:**
+  To keep your setup secure and flexible, **add your `OPENAI_API_KEY` to your environment variables** rather than passing it directly in the command line. This prevents accidental exposure and makes it easier to manage configurations across environments.
+
+* **Understand the Role of `generate ai-node`:**
+  The `generate ai-node` command is a **convenience tool**—not a compiler or validator. It helps bootstrap a new node using AI assistance, but the resulting code is a **code snippet**, not a production-ready solution. Treat it as a draft you will refine, test, and adapt as needed.
