@@ -17,7 +17,7 @@ export default class RegisterNode {
 
 		// Check if the node is already registered
 		if (fileContent.includes(`"${nodeName}"`)) {
-			console.log(`Node "${nodeName}" is already registered in Nodes.ts.`);
+			console.log(`\nNode "${nodeName}" is already registered in Nodes.ts.`);
 		}
 
 		// Generate the import statement for the new node using openai

@@ -54,6 +54,12 @@ const queryPrometheus = async (query: string, host?: string, token?: string) => 
 				},
 			})
 		: await fetch(`${REMOTE_PROM_URL || PROM_URL}?query=${encodeURIComponent(query)}`);
+
+	if (!res.ok) {
+		console.log("Failed to fetch metrics:", res.statusText, res.status);
+		return [];
+	}
+
 	const data = await res.json();
 	return data.data.result || [];
 };
@@ -171,7 +177,7 @@ const Monitor: React.FC<{ host?: string; token?: string }> = ({ host, token }) =
 
 	return (
 		<Box flexDirection="column" padding={1}>
-			<Text bold>{chalk.cyan(`nanoservice monitor — Last update: ${lastUpdate.toLocaleTimeString()}`)}</Text>
+			<Text bold>{chalk.cyan(`Monitor — Last update: ${lastUpdate.toLocaleTimeString()}`)}</Text>
 			<Text dimColor>
 				{`[w] Time  [m] Memory  [c] CPU  [r] Requests  [e] Errors  [q] Quit | Sorting by: ${sortBy}`}
 			</Text>

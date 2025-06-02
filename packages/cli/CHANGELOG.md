@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.13
+
+### Patch Changes
+
+- Extended the command: generate ai-node --update. To modify an existing node using ai.
+
 ## 0.1.12
 
 ### Patch Changes
