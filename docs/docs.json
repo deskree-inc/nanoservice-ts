@@ -1,7 +1,7 @@
 {
 	"$schema": "https://mintlify.com/docs.json",
 	"theme": "mint",
-	"name": "Nanoservice-ts Docs",
+	"name": "Blok Docs",
 	"colors": {
 		"primary": "#39C068",
 		"light": "#39C068",
@@ -34,7 +34,7 @@
 					},
 					{
 						"group": "Fundamentals",
-						"pages": ["d/fundamentals/nanoservices-concept"]
+						"pages": ["d/fundamentals/blok-concept"]
 					},
 					{
 						"group": "CLI",

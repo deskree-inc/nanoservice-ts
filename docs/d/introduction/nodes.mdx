@@ -257,7 +257,7 @@ This allows each Node to have its own dependencies and build process.
 
 ## Testing Nodes
 
-Nanoservice-ts generates test files for your Nodes automatically. The test setup includes:
+Blok generates test files for your Nodes automatically. The test setup includes:
 
 ### Test Helper
 
@@ -374,7 +374,7 @@ The Context object facilitates data flow between Nodes in a workflow and provide
 
 ## Input and Output Validation
 
-Nanoservice-ts uses JSON Schema for input and output validation. You can define schemas in your Node's constructor:
+Blok uses JSON Schema for input and output validation. You can define schemas in your Node's constructor:
 
 ```typescript
 constructor() {
@@ -424,7 +424,7 @@ This approach ensures that errors are properly captured, logged, and can be hand
 
 ## Built-in Nodes
 
-Nanoservice-ts comes with several built-in Nodes that provide common functionality. These are registered in the `src/Nodes.ts` file:
+Blok comes with several built-in Nodes that provide common functionality. These are registered in the `src/Nodes.ts` file:
 
 ```typescript
 import ApiCall from "@nanoservice-ts/api-call";
