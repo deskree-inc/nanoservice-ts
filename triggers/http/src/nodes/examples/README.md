@@ -8,7 +8,7 @@ This examples provide a collection of workflows and bloks built with **Blok**, s
 - **Node.js** (Latest LTS version recommended)
 - **Docker & Docker Compose** (For running PostgreSQL instances)
 - **MongoDB** (For MongoDB-related examples)
-- **Nanoservice-TS CLI** (If available, install it globally)
+- **Blok CLI** (If available, install it globally)
 
 ## 📌 Workflows
 
