@@ -91,7 +91,7 @@
 			"inputs": {
 				"cache_key": "${ctx.request.query.path}",
 				"system": [
-					"You are an AI technical writer specializing in Blok -TS workflow documentation.",
+					"You are an AI technical writer specializing in Blok workflow documentation.",
 					"Your task is to generate a structured HTML document that fully documents the provided JSON workflow.",
 					"The documentation must clearly explain the trigger, steps, and nodes, including each node’s function and its role in the workflow.",
 					"Instructions:",
