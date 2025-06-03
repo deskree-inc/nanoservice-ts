@@ -1,6 +1,6 @@
 nanoservice-ts
 
-# nanoservice-ts - v0.1.0
+# blok - v0.1.0
 
 ## Table of contents
 

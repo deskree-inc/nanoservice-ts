@@ -4,7 +4,7 @@ title: Workflows
 
 ## Concept
 
-A Workflow in Nanoservice-TS is a fundamental concept representing a sequence or graph of interconnected [Nodes](./nodes.mdx) that collectively achieve a specific piece of business logic. Workflows define how data flows between Nodes and the precise order of their execution. They are the backbone of your application, orchestrating individual nanoservices (Nodes) to perform complex tasks.
+A Workflow in Blok is a fundamental concept representing a sequence or graph of interconnected [Nodes](./nodes.mdx) that collectively achieve a specific piece of business logic. Workflows define how data flows between Nodes and the precise order of their execution. They are the backbone of your application, orchestrating individual bloks (Nodes) to perform complex tasks.
 
 ## What is a Workflow?
 
@@ -52,14 +52,14 @@ When you run this command, you'll see the following interactive prompts:
 ◇  Node "test" created successfully
 
 Navigate to the workflow directory by running: cd workflows/json
-For more documentation, visit https://nanoservice.xyz/docs/d/introduction/workflows
+For more documentation, visit https://blok.build/docs/d/introduction/workflows
 ```
 
 This command generates a new workflow file in the `workflows/json/` directory by default. The generated workflow will have a basic structure that you can customize according to your needs.
 
 ### JSON Workflow Definition
 
-JSON is the default format for defining workflows in Nanoservice-TS. A typical workflow JSON file includes:
+JSON is the default format for defining workflows in Blok . A typical workflow JSON file includes:
 
 *   **`name`**: A unique identifier for the workflow.
 *   **`description`**: A brief explanation of what the workflow does.
@@ -111,7 +111,7 @@ In this example:
 
 ### TOML and YAML Formats
 
-In addition to JSON and TypeScript, Nanoservice-TS also supports TOML and YAML formats for workflow definitions. These formats can be placed in the corresponding directories:
+In addition to JSON and TypeScript, Blok also supports TOML and YAML formats for workflow definitions. These formats can be placed in the corresponding directories:
 
 - TOML workflows: `workflows/toml/`
 - YAML workflows: `workflows/yaml/`
@@ -149,7 +149,7 @@ You can use these built-in nodes directly in your workflow definitions by refere
 
 When a trigger event occurs:
 
-1. The Nanoservice-TS runtime identifies the corresponding workflow.
+1. The Blok runtime identifies the corresponding workflow.
 2. A new instance of the workflow is created.
 3. A [Context Object](./context.mdx) is initialized for this instance, containing trigger data and other relevant information.
 4. The runtime begins executing the nodes as defined in the workflow, passing data between them via the Context Object or direct input/output mapping.
@@ -157,7 +157,7 @@ When a trigger event occurs:
 
 ## Example Workflows
 
-When you create a new project with examples enabled (`Install the examples? YES`), Nanoservice-TS includes several example workflows in different formats (JSON, TOML, YAML) to help you get started. These examples demonstrate various features and patterns, including:
+When you create a new project with examples enabled (`Install the examples? YES`), Blok includes several example workflows in different formats (JSON, TOML, YAML) to help you get started. These examples demonstrate various features and patterns, including:
 
 - Basic API calls
 - Conditional logic
@@ -186,6 +186,6 @@ This convention makes it easy to organize and access your workflows through HTTP
 *   **Conditional Logic & Branching**: Create advanced workflows with conditional execution paths.
 *   **Built-in Nodes**: Leverage pre-built functionality for common tasks.
 
-Understanding workflows is crucial for effectively using Nanoservice-TS. They are the primary means by which you will build and structure your application logic.
+Understanding workflows is crucial for effectively using Blok . They are the primary means by which you will build and structure your application logic.
 
 Next, learn about the individual building blocks: [Nodes](./nodes).

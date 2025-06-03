@@ -23,7 +23,7 @@ Do **not** include TypeScript code or syntax — write as clear documentation.
 
 ---
 
-## 2. How to use it in a nanoservice-ts workflow
+## 2. How to use it in a blok workflow
 
 Explain how this nanoservice fits into a workflow in general terms.
 
@@ -73,7 +73,7 @@ Output two **separate JSON code blocks** with markdown headers:
 ---
 
 Guidelines:
-- Ensure the format matches the nanoservice-ts spec exactly.
+- Ensure the format matches the blok spec exactly.
 - The \`steps\` array must include \`name\`, \`node\`, \`type\`, and \`active\`.
 - The \`nodes\` object must define the step name as the key and include an \`inputs\` object based on the class's \`inputSchema\`.
 - Only generate these two blocks — do NOT use other formats like "id", "type", or arrays of services.

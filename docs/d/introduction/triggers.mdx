@@ -4,7 +4,7 @@ title: Triggers
 
 # Concept
 
-Triggers are the entry points to your Nanoservice-TS [Workflows](./workflows.mdx). They are specific events or conditions that, when they occur, initiate the execution of an associated workflow. Without a trigger, a workflow is just a definition; triggers bring them to life by starting the process.
+Triggers are the entry points to your Blok [Workflows](./workflows.mdx). They are specific events or conditions that, when they occur, initiate the execution of an associated workflow. Without a trigger, a workflow is just a definition; triggers bring them to life by starting the process.
 
 ## What is a Trigger?
 
@@ -16,7 +16,7 @@ Nanoservice-TS supports various types of triggers to cater to different use case
 *   **Scheduled (Cron)**: Executes a workflow at predefined times or intervals (e.g., run a report every night at 2 AM, perform a cleanup task every hour).
 *   **Message Queue**: Starts a workflow when a new message arrives in a specific queue (e.g., RabbitMQ, Kafka, AWS SQS). This is useful for asynchronous processing and event-driven architectures.
 *   **gRPC**: Initiates a workflow based on an incoming gRPC request. This is suitable for high-performance, contract-based inter-service communication.
-*   **Database Events**: (Potentially) Triggers a workflow in response to changes in a database (e.g., a new record inserted into a table). Support for this depends on the Nanoservice-TS runtime and integrations.
+*   **Database Events**: (Potentially) Triggers a workflow in response to changes in a database (e.g., a new record inserted into a table). Support for this depends on the Blok runtime and integrations.
 *   **Custom Triggers**: The framework might allow for the development of custom triggers to integrate with proprietary systems or unique event sources.
 
 ## Configuring Triggers
@@ -59,7 +59,7 @@ For a message queue trigger, it would include the message payload and any associ
 
 ## Multiple Triggers
 
-While a single workflow definition usually has one primary trigger, advanced scenarios or specific Nanoservice-TS runtime features might allow a workflow to be triggered by multiple different event types or configurations, though this is less common and can add complexity.
+While a single workflow definition usually has one primary trigger, advanced scenarios or specific Blok runtime features might allow a workflow to be triggered by multiple different event types or configurations, though this is less common and can add complexity.
 
 ## Choosing the Right Trigger
 
@@ -69,6 +69,6 @@ The choice of trigger depends entirely on how you want your workflow to be initi
 *   For background tasks that run on a schedule, use a **Scheduled (Cron)** trigger.
 *   For decoupling services and processing events asynchronously, **Message Queue** triggers are ideal.
 
-Triggers are the essential starting points for all operations in Nanoservice-TS. By understanding and correctly configuring them, you can effectively control when and how your application logic is executed.
+Triggers are the essential starting points for all operations in Blok . By understanding and correctly configuring them, you can effectively control when and how your application logic is executed.
 
 This concludes the core concepts in the Introduction. You can now explore [Practical Examples](../examples/index.mdx) or dive deeper into [Fundamentals](../fundamentals/overview.mdx).

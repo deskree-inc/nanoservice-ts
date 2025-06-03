@@ -24,7 +24,7 @@ const client = new NanoSDK().createHttpClient("https://your-atomic-app.com", "yo
 
 ## 🚀 Example Usage
 
-### Execute a Python Nanoservice
+### Execute a Python Blok 
 
 ```html
 <script>
@@ -48,7 +48,7 @@ const client = new NanoSDK().createHttpClient("https://your-atomic-app.com", "yo
 
 ---
 
-### Execute a Node.js Nanoservice (as module)
+### Execute a Node.js Blok (as module)
 
 ```js
 await client.nodejs("@nanoservice-ts/api-call", {
@@ -77,7 +77,7 @@ client.nodejs(nodeName, inputs)
 ## 🧠 Features
 
 - Zero setup — works in any browser with `<script>` tag
-- Executes nanoservices remotely using **HTTP 1.1**
+- Executes bloks remotely using **HTTP 1.1**
 - Supports runtime types like `python3`, `nodejs`
 - Includes simple **debug logging** mode
 - Unified response structure with `success`, `data`, `errors`

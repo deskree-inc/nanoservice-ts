@@ -138,7 +138,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		const mainDirExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (!mainDirExists)
 			throw new Error(
-				"The nanoservice-ts repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
+				"The blok repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
 			);
 
 		if (node_runtime === "typescript") {
@@ -256,7 +256,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		console.log(
 			`${currentPath ? "\n" : ""}Run the command "npm run build" or "npm run build:dev" to build the project.`,
 		);
-		console.log("For more documentation, visit https://nanoservice.xyz/docs/d/core-concepts/nodes");
+		console.log("For more documentation, visit https://blok.build/docs/d/core-concepts/nodes");
 	} catch (error) {
 		if (!isDefault) s.stop("An error occurred");
 

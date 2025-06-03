@@ -1,11 +1,11 @@
 # NanoService CLI Commands: Build
 
 ## Table of Contents
-- [Build Nanoservice](#build-nanoservice)
+- [Build Blok ](#build-blok)
   - [Syntax](#build-syntax)
   - [Options](#build-options)
   - [Examples](#build-examples)
-- [Deploy Nanoservice](#deploy-nanoservice)
+- [Deploy Blok ](#deploy-blok)
   - [Syntax](#deploy-syntax)
   - [Options](#deploy-options)
   - [Examples](#deploy-examples)
@@ -14,13 +14,13 @@
 
 ---
 
-## Build Nanoservice
+## Build Blok 
 
 ### Syntax
 ```bash
 npx nanoctl build [options]
 ```
-  Compiles and packages a nanoservice from source code into a deployable artifact.
+  Compiles and packages a blok from source code into a deployable artifact.
  
   ### Options
   | Option       | Alias | Type    | Description                | Default            |

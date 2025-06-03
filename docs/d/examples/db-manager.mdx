@@ -2,7 +2,7 @@
 title: Database Smart Query (DB Manager)
 ---
 
-The Database Smart Query (DB Manager) example demonstrates how to create an AI-powered database query interface using Nanoservice-ts. This advanced example showcases how to build a workflow that allows users to query a PostgreSQL database using natural language prompts, which are then converted to SQL queries using AI.
+The Database Smart Query (DB Manager) example demonstrates how to create an AI-powered database query interface using Blok . This advanced example showcases how to build a workflow that allows users to query a PostgreSQL database using natural language prompts, which are then converted to SQL queries using AI.
 
 <img
   className="block"
@@ -22,14 +22,14 @@ The Database Smart Query (DB Manager) example demonstrates how to create an AI-p
 
 Before running this example, ensure you have:
 
-- A Nanoservice-ts project set up with the HTTP trigger
+- A Blok  project set up with the HTTP trigger
 - Node.js (v22 or later) and npm installed
 - Docker and Docker Compose installed
 - An OpenAI API key for the AI query generation
 
 ## Environment Setup
 
-### 1. Set Up Your Nanoservice-ts Project
+### 1. Set Up Your Blok  Project
 
 If you haven't created a project yet, you can do so with:
 
@@ -252,11 +252,11 @@ The DB Manager workflow is defined in `workflows/json/db-manager.json`:
 
 ## UI Rendering with If-Else Node
 
-One of the most powerful features of Nanoservice-ts is the ability to serve different content based on request conditions. The DB Manager example demonstrates this by using the `@nanoservice-ts/if-else` node to render the UI and handle API requests within a single workflow.
+One of the most powerful features of Blok  is the ability to serve different content based on request conditions. The DB Manager example demonstrates this by using the `@nanoservice-ts/if-else` node to render the UI and handle API requests within a single workflow.
 
-### How UI Rendering Works in Nanoservice-ts
+### How UI Rendering Works in Blok 
 
-In traditional web applications, you might have separate routes for serving HTML and handling API requests. In Nanoservice-ts, you can use conditional logic to handle both in a unified workflow:
+In traditional web applications, you might have separate routes for serving HTML and handling API requests. In Blok , you can use conditional logic to handle both in a unified workflow:
 
 1. **Request Routing**: The `if-else` node evaluates conditions based on the request method, path, and parameters.
 2. **Content Type Detection**: The workflow determines whether to serve HTML (UI) or JSON (API response).
@@ -380,7 +380,7 @@ The same workflow also handles API requests through different conditions:
 
 ### Benefits of This Approach
 
-Using the `if-else` node for UI rendering in Nanoservice-ts offers several advantages:
+Using the `if-else` node for UI rendering in Blok  offers several advantages:
 
 1. **Unified Workflow**: Both UI and API logic are contained in a single workflow
 2. **Simplified Deployment**: No need for separate frontend and backend deployments
@@ -390,7 +390,7 @@ Using the `if-else` node for UI rendering in Nanoservice-ts offers several advan
 
 ### Implementing Your Own UI Rendering
 
-To implement UI rendering in your own Nanoservice-ts workflows:
+To implement UI rendering in your own Blok  workflows:
 
 1. **Create a UI Node**: Implement a node that returns HTML content
 2. **Use the If-Else Node**: Configure conditions based on request properties
@@ -639,7 +639,7 @@ export default class MapperNode extends NanoService<InputType> {
 
 To run the DB Manager example:
 
-1. Start your Nanoservice-ts project:
+1. Start your Blok  project:
    ```bash
    npm run dev
    ```
@@ -678,7 +678,7 @@ If you encounter issues:
 
 ## Conclusion
 
-The DB Manager example demonstrates the power and flexibility of Nanoservice-ts for building complex applications. By combining UI rendering, API endpoints, database access, and AI integration in a single workflow, you can create sophisticated applications with minimal code and configuration.
+The DB Manager example demonstrates the power and flexibility of Blok  for building complex applications. By combining UI rendering, API endpoints, database access, and AI integration in a single workflow, you can create sophisticated applications with minimal code and configuration.
 
 Key takeaways:
 
@@ -688,4 +688,4 @@ Key takeaways:
 4. **AI Integration**: Natural language processing enhances the user experience
 5. **Database Access**: Direct database interaction without additional middleware
 
-This example serves as a template for building your own database-driven applications with Nanoservice-ts.
+This example serves as a template for building your own database-driven applications with Blok .
