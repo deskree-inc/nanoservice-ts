@@ -27,7 +27,7 @@ You will be prompted to provide the following information:
     - **Python3** *(Alpha version, MacOS & Linux only)*  
     *(For this guide, select **TypeScript**.)*
 
-3. **Select Nanoservice Type**  
+3. **Select Blok Type**  
     Choose between:
     - **Module** *(For npm-published nodes – ❌ not needed for this guide)*
     - **Class** ✅ *(Default, for local nodes)*

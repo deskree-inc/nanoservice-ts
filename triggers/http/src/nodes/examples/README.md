@@ -1,6 +1,6 @@
-# Nanoservice-TS Examples
+# Blok Examples
 
-This examples provide a collection of workflows and nanoservices built with **Nanoservice-TS**, showcasing real-world use cases for building scalable, reusable, and modular backend services.
+This examples provide a collection of workflows and bloks built with **Blok**, showcasing real-world use cases for building scalable, reusable, and modular backend services.
 
 ## 🚀 Getting Started
 
@@ -29,9 +29,9 @@ The repository contains the following workflows:
 
 ## 🛠 Nanoservices
 
-These nanoservices are used within the workflows to handle specific tasks:
+These bloks are used within the workflows to handle specific tasks:
 
-| Nanoservice | Description |
+| Blok | Description |
 |------------|-------------|
 | **mongodb-query.ts** | Executes queries on MongoDB |
 | **DirectoryManager.ts** | Retrieves the list of files in a directory |

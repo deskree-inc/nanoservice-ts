@@ -340,7 +340,7 @@ export async function createProject(opts: OptionValues, version: string, current
 		if (!currentPath) console.log(`Change to the project directory: cd ${projectName}`);
 		console.log(`Run the command "npm run dev" to start the development server.`);
 		console.log("You can test the project in your browser at http://localhost:4000/health-check");
-		console.log("For more documentation, visit https://nanoservice.xyz/");
+		console.log("For more documentation, visit https://blok.build/");
 
 		if (examples) {
 			console.log(examples_url);

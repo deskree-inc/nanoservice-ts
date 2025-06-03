@@ -3,7 +3,7 @@
 A **workflow** in `nanoservice-ts` is a structured JSON file that defines:
 
 - **A trigger** that starts the workflow execution.
-- **A sequence of steps** that execute nanoservices (nodes).
+- **A sequence of steps** that execute bloks (nodes).
 - **Node configurations** that define how each step operates.
 
 ---
@@ -161,7 +161,7 @@ The `nodes` section configures each node used in the workflow:
 
 - ✅ Workflows consist of **Triggers**, **Steps**, and **Nodes**.  
 - ✅ HTTP triggers support **method filtering (`GET`, `POST`, etc.)** and **dynamic paths (`/:id`)**.  
-- ✅ Nodes execute nanoservices and are configured in the **nodes section**.  
+- ✅ Nodes execute bloks and are configured in the **nodes section**.  
 - ✅ Workflows can be tested via `curl` or Postman.  
 
 ---

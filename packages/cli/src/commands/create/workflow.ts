@@ -62,7 +62,7 @@ export async function createWorkflow(opts: OptionValues, currentPath = false) {
 		const mainDirExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (!mainDirExists)
 			throw new Error(
-				"The nanoservice-ts repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
+				"The blok repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
 			);
 
 		let dirPath = process.cwd();
@@ -101,7 +101,7 @@ export async function createWorkflow(opts: OptionValues, currentPath = false) {
 		if (!isDefault) s.stop(`Node "${workflowName}" created successfully.`);
 		if (!currentPath) console.log("\nNavigate to the workflow directory by running: cd workflows/json");
 
-		console.log("For more documentation, visit https://nanoservice.xyz/docs/d/core-concepts/workflows");
+		console.log("For more documentation, visit https://blok.build/docs/d/core-concepts/workflows");
 	} catch (error) {
 		if (!isDefault) s.stop("An error occurred");
 

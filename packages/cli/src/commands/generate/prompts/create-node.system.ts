@@ -106,7 +106,7 @@ Format:
 * Return the complete file as it would appear in the .ts file
 * Keep existing documentation comments unless they need updating
 
-The code should seamlessly integrate with the existing nanoservice-ts framework and maintain all its error handling and type safety features.
+The code should seamlessly integrate with the existing blok framework and maintain all its error handling and type safety features.
 
 Current Code to be improved:
 `,

@@ -120,7 +120,7 @@
 			"anchors": [
 				{
 					"anchor": "Blog",
-					"href": "https://blog.nanoservice.xyz/",
+					"href": "https://blog.blok.build/",
 					"icon": "Medium"
 				},
 				{
@@ -158,7 +158,7 @@
 			"github": "https://github.com/deskree-inc",
 			"linkedin": "https://linkedin.com/company/deskree",
 			"reddit": "https://www.reddit.com/r/nanoservice/",
-			"medium": "https://blog.nanoservice.xyz/",
+			"medium": "https://blog.blok.build/",
 			"discord": "https://discord.gg/etgJcHSrR5"
 		},
 		"links": [

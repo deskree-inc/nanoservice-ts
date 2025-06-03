@@ -1,11 +1,11 @@
 # NanoService CLI Commands: Build
 
 ## Table of Contents
-- [Build Nanoservice](#build-nanoservice)
+- [Build Blok ](#build-nanoservice)
   - [Syntax](#build-syntax)
   - [Options](#build-options)
   - [Examples](#build-examples)
-- [Deploy Nanoservice](#deploy-nanoservice)
+- [Deploy Blok ](#deploy-nanoservice)
   - [Syntax](#deploy-syntax)
   - [Options](#deploy-options)
   - [Examples](#deploy-examples)
@@ -14,7 +14,7 @@
 
 ---
 
-## Build Nanoservice
+## Build Blok 
 
 ### Syntax
 ```bash
