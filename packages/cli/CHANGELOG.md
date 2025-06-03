@@ -1,5 +1,11 @@
 # nanoctl
 
+## 0.1.14
+
+### Patch Changes
+
+- Implemented the command search.
+
 ## 0.1.13
 
 ### Patch Changes

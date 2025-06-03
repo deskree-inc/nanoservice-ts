@@ -17,6 +17,7 @@ import "./commands/deploy/index.js";
 import "./commands/monitor/index.js";
 import "./commands/generate/index.js";
 import "./commands/config/index.js";
+import "./commands/search/index.js";
 import { Command } from "commander";
 
 const version = await getPackageVersion();
