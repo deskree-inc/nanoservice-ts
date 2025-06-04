@@ -15,9 +15,11 @@ import "./commands/logout/index.js";
 import "./commands/build/index.js";
 import "./commands/deploy/index.js";
 import "./commands/monitor/index.js";
+import "./commands/publish/index.js";
+import "./commands/install/index.js";
+import "./commands/search/index.js";
 import "./commands/generate/index.js";
 import "./commands/config/index.js";
-import "./commands/search/index.js";
 import { Command } from "commander";
 
 const version = await getPackageVersion();

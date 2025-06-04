@@ -28,4 +28,4 @@ const trackCommandExecution = async ({ command, args, execution }: TrackCommandE
 	});
 };
 
-export { program, trackCommandExecution, type OptionValues, type TrackCommandExecutionParams };
+export { program, trackCommandExecution, Command, type OptionValues, type TrackCommandExecutionParams };

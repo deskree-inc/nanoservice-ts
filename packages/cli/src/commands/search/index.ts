@@ -1,17 +1,7 @@
-import { type OptionValues, program } from "../../services/commander.js";
-import { SearchService } from "./search.js";
+import { program } from "../../services/commander.js";
 
-program
-	.command("search")
-	.description("This command allows you to search for information in the documentation.")
-	.option("-q, --question <value>", "Question to search for")
-	.option("--no-cache", "Force rebuild of search index")
-	.action(async (options: OptionValues) => {
-		const question = options.question;
-		if (!question) {
-			console.error("Question is required");
-			process.exit(1);
-		}
-		const searchService = new SearchService();
-		await searchService.ask(question, { noCache: !options.cache });
-	});
+import docs from "./docs.js";
+import node from "./nodes.js";
+import workflow from "./workflow.js";
+// Nodes commands
+program.command("search").description("Search commands").addCommand(node).addCommand(workflow).addCommand(docs);
