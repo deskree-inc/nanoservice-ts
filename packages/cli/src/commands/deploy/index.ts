@@ -136,7 +136,7 @@ export async function deploy(opts: OptionValues) {
 
 		logger.message("Deployment completed");
 		logger.stop(
-			`Nanoservice deployed successfully! ${color.gray(`Version: ${deploymentStatus?.latestReadyRevisionName}`)}`,
+			`Blok deployed successfully! ${color.gray(`Version: ${deploymentStatus?.latestReadyRevisionName}`)}`,
 			0,
 		);
 		p.log.success(`Service live at: ${color.greenBright(deploymentData?.data?.url)}`);

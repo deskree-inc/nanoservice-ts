@@ -2,7 +2,7 @@
 
 ## 1. Setting Up Your Environment
 
-Get started with `nanoservice-ts` by following these steps:
+Get started with `Blok` by following these steps:
 
 ### Prerequisites
 Ensure the following are installed:
@@ -40,7 +40,7 @@ Explore the provided example workflows to get started. Access them via:
 
 ## 🔍 Next Steps
 
-Now that you understand the basics, dive deeper into `nanoservice-ts` with the following resources:
+Now that you understand the basics, dive deeper into `Blok` with the following resources:
 
 - [Context](./Core_Concepts/Context.md)
 - [Creating Workflows](./CLI_Commands/Create_Workflow.md)  

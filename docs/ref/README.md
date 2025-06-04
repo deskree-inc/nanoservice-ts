@@ -1,4 +1,4 @@
-nanoservice-ts
+Blok
 
 # blok - v0.1.0
 
