@@ -97,6 +97,7 @@ async function publishWorkflow(token: string, workflow: Record<string, unknown>,
 	const response = await fetch(`${NANOSERVICE_URL}/publish-workflow`, {
 		method: "POST",
 		headers: {
+			"Content-Type": "application/json",
 			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify({
