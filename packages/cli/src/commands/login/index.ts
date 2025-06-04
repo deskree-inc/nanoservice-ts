@@ -11,8 +11,8 @@ async function verifyToken(token: string) {
 			Authorization: `Bearer ${token}`,
 		},
 	});
-	if (!response.ok) throw new Error(response.statusText);
 
+	if (!response.ok) throw new Error(response.statusText);
 	const responseJson = await response.json();
 
 	return responseJson;
@@ -50,10 +50,11 @@ export async function login(opts: OptionValues) {
 		}
 
 		if (!token) throw new Error("Token is required.");
-		p.log.success("Login successful.");
 
 		const isTokenValid = await verifyToken(token);
 		if (!isTokenValid.active) throw new Error("Token is inactive.");
+
+		p.log.success("Login successful.");
 
 		const isStored = tokenManager.storeToken(token);
 		if (!isStored) throw new Error("Failed to store the token.");
