@@ -119,11 +119,6 @@
 		"global": {
 			"anchors": [
 				{
-					"anchor": "Blog",
-					"href": "https://blog.blok.build/",
-					"icon": "Medium"
-				},
-				{
 					"anchor": "Discord",
 					"href": "https://discord.gg/uFs9bYwfM9",
 					"icon": "discord"
@@ -158,7 +153,6 @@
 			"github": "https://github.com/deskree-inc",
 			"linkedin": "https://linkedin.com/company/deskree",
 			"reddit": "https://www.reddit.com/r/nanoservice/",
-			"medium": "https://blog.blok.build/",
 			"discord": "https://discord.gg/etgJcHSrR5"
 		},
 		"links": [
