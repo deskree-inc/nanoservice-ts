@@ -33,7 +33,7 @@ export async function search(opts: OptionValues) {
 	const token = tokenManager.getToken();
 	const logger = p.spinner();
 	try {
-		if (!token) throw new Error("NANOSERVICES_TOKEN is required.");
+		if (!token) throw new Error("Token is required.");
 		if (!opts.node) throw new Error("Node name is required.");
 		opts.token = token;
 
