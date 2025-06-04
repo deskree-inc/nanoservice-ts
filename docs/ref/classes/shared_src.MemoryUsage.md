@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [shared/src](../modules/shared_src.md) / MemoryUsage
+[blok - v0.1.0](../README.md) / [shared/src](../modules/shared_src.md) / MemoryUsage
 
 # Class: MemoryUsage
 
@@ -52,7 +52,7 @@ MetricsBase.constructor
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L9)
+[core/shared/src/utils/MemoryUsage.ts:9](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L9)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L7)
+[core/shared/src/utils/MemoryUsage.ts:7](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L7)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L6)
+[core/shared/src/utils/MemoryUsage.ts:6](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L6)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L8)
+[core/shared/src/utils/MemoryUsage.ts:8](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L8)
 
 ## Methods
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:36](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L36)
+[core/shared/src/utils/MemoryUsage.ts:36](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L36)
 
 ___
 
@@ -122,7 +122,7 @@ MetricsBase.getMetrics
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:26](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L26)
+[core/shared/src/utils/MemoryUsage.ts:26](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L26)
 
 ___
 
@@ -140,7 +140,7 @@ MetricsBase.start
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L11)
+[core/shared/src/utils/MemoryUsage.ts:11](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L11)
 
 ___
 
@@ -158,4 +158,4 @@ MetricsBase.stop
 
 #### Defined in
 
-[core/shared/src/utils/MemoryUsage.ts:24](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L24)
+[core/shared/src/utils/MemoryUsage.ts:24](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/utils/MemoryUsage.ts#L24)

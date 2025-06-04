@@ -96,7 +96,7 @@
 			},
 			{
 				"tab": "Changelog",
-				"href": "https://github.com/deskree-inc/nanoservice-ts/releases"
+				"href": "https://github.com/deskree-inc/blok/releases"
 			},
 			{
 				"tab": "Roadmap",
@@ -144,7 +144,7 @@
 		],
 		"primary": {
 			"type": "github",
-			"href": "https://github.com/deskree-inc/nanoservice-ts"
+			"href": "https://github.com/deskree-inc/blok"
 		}
 	},
 	"footer": {

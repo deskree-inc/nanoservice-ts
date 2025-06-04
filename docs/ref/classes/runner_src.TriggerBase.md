@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / TriggerBase
+[blok - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / TriggerBase
 
 # Class: TriggerBase
 
@@ -46,7 +46,7 @@ Trigger.constructor
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L12)
+[core/runner/src/TriggerBase.ts:12](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L12)
 
 ## Properties
 
@@ -56,7 +56,7 @@ Trigger.constructor
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:10](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L10)
+[core/runner/src/TriggerBase.ts:10](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L10)
 
 ## Methods
 
@@ -78,7 +78,7 @@ Trigger.constructor
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:90](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L90)
+[core/runner/src/TriggerBase.ts:90](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L90)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:122](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L122)
+[core/runner/src/TriggerBase.ts:122](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L122)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:19](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L19)
+[core/runner/src/TriggerBase.ts:19](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L19)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:23](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L23)
+[core/runner/src/TriggerBase.ts:23](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L23)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L17)
+[core/runner/src/TriggerBase.ts:17](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L17)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:27](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L27)
+[core/runner/src/TriggerBase.ts:27](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L27)
 
 ___
 
@@ -174,4 +174,4 @@ ___
 
 #### Defined in
 
-[core/runner/src/TriggerBase.ts:118](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/TriggerBase.ts#L118)
+[core/runner/src/TriggerBase.ts:118](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/TriggerBase.ts#L118)

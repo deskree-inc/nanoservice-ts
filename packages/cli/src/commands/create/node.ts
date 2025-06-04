@@ -13,7 +13,7 @@ import { python3_file } from "./utils/Examples.js";
 const exec = util.promisify(child_process.exec);
 
 const HOME_DIR = `${os.homedir()}/.nanoctl`;
-const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
+const GITHUB_REPO_LOCAL = `${HOME_DIR}/blok`;
 
 export async function createNode(opts: OptionValues, currentPath = false) {
 	const availableManagers = await pm.getAvailableManagers();
@@ -27,7 +27,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 
 	if (!isDefault) {
 		console.log(
-			figlet.textSync("nanoservice-ts CLI".toUpperCase(), {
+			figlet.textSync("Blok CLI".toUpperCase(), {
 				font: "Digital",
 				horizontalLayout: "default",
 				verticalLayout: "default",

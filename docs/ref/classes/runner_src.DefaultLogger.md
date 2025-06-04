@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / DefaultLogger
+[blok - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / DefaultLogger
 
 # Class: DefaultLogger
 
@@ -61,7 +61,7 @@ GlobalLogger.constructor
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:41](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L41)
+[core/runner/src/DefaultLogger.ts:41](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L41)
 
 ## Properties
 
@@ -73,7 +73,7 @@ The name of the application.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:32](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L32)
+[core/runner/src/DefaultLogger.ts:32](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L32)
 
 ___
 
@@ -85,7 +85,7 @@ The environment in which the application is running.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:27](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L27)
+[core/runner/src/DefaultLogger.ts:27](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L27)
 
 ___
 
@@ -97,7 +97,7 @@ The ID of the request.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L22)
+[core/runner/src/DefaultLogger.ts:22](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L22)
 
 ___
 
@@ -109,7 +109,7 @@ The name of the workflow.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:12](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L12)
+[core/runner/src/DefaultLogger.ts:12](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L12)
 
 ___
 
@@ -121,7 +121,7 @@ The path of the workflow.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L17)
+[core/runner/src/DefaultLogger.ts:17](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L17)
 
 ## Methods
 
@@ -144,7 +144,7 @@ Logs an error message to the console with metadata.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:77](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L77)
+[core/runner/src/DefaultLogger.ts:77](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L77)
 
 ___
 
@@ -170,7 +170,7 @@ The message with injected metadata.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:90](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L90)
+[core/runner/src/DefaultLogger.ts:90](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L90)
 
 ___
 
@@ -192,7 +192,7 @@ Logs a message to the console with metadata.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:55](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L55)
+[core/runner/src/DefaultLogger.ts:55](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L55)
 
 ___
 
@@ -215,4 +215,4 @@ Logs a message to the console with a specified log level and metadata.
 
 #### Defined in
 
-[core/runner/src/DefaultLogger.ts:66](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/DefaultLogger.ts#L66)
+[core/runner/src/DefaultLogger.ts:66](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/DefaultLogger.ts#L66)

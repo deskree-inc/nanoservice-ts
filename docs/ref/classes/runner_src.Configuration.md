@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / Configuration
+[blok - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / Configuration
 
 # Class: Configuration
 
@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:27](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L27)
+[core/runner/src/Configuration.ts:27](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L27)
 
 ## Properties
 
@@ -59,7 +59,7 @@
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:25](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L25)
+[core/runner/src/Configuration.ts:25](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L25)
 
 ___
 
@@ -73,7 +73,7 @@ Config.name
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:19](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L19)
+[core/runner/src/Configuration.ts:19](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L19)
 
 ___
 
@@ -87,7 +87,7 @@ Config.nodes
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:22](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L22)
+[core/runner/src/Configuration.ts:22](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L22)
 
 ___
 
@@ -101,7 +101,7 @@ Config.steps
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:21](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L21)
+[core/runner/src/Configuration.ts:21](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L21)
 
 ___
 
@@ -115,7 +115,7 @@ Config.trigger
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:23](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L23)
+[core/runner/src/Configuration.ts:23](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L23)
 
 ___
 
@@ -129,7 +129,7 @@ Config.version
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:20](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L20)
+[core/runner/src/Configuration.ts:20](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L20)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:18](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L18)
+[core/runner/src/Configuration.ts:18](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L18)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:24](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L24)
+[core/runner/src/Configuration.ts:24](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L24)
 
 ## Methods
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:147](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L147)
+[core/runner/src/Configuration.ts:147](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L147)
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:84](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L84)
+[core/runner/src/Configuration.ts:84](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L84)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:57](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L57)
+[core/runner/src/Configuration.ts:57](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L57)
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:35](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L35)
+[core/runner/src/Configuration.ts:35](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L35)
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:219](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L219)
+[core/runner/src/Configuration.ts:219](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L219)
 
 ___
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:208](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L208)
+[core/runner/src/Configuration.ts:208](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L208)
 
 ___
 
@@ -291,7 +291,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:169](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L169)
+[core/runner/src/Configuration.ts:169](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L169)
 
 ___
 
@@ -305,7 +305,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:178](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L178)
+[core/runner/src/Configuration.ts:178](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L178)
 
 ___
 
@@ -325,4 +325,4 @@ ___
 
 #### Defined in
 
-[core/runner/src/Configuration.ts:192](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Configuration.ts#L192)
+[core/runner/src/Configuration.ts:192](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Configuration.ts#L192)

@@ -115,7 +115,7 @@ export default class NodeFileWriter {
 			const dirPath = process.cwd();
 			const nodeDir = `${dirPath}/src/nodes`;
 			const HOME_DIR = `${os.homedir()}/.nanoctl`;
-			const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
+			const GITHUB_REPO_LOCAL = `${HOME_DIR}/blok`;
 
 			// Check if the nodes directory exists, if not, create it
 			if (!fs.existsSync(nodeDir)) {

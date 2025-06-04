@@ -25,7 +25,7 @@ npx nanoctl build [options]
   ### Options
   | Option       | Alias | Type    | Description                | Default            |
   |--------------|-------|---------|----------------------------|--------------------|
-  | `--directory`| `-d`  | string  | Source directory path      | `./nanoservice-ts` |
+  | `--directory`| `-d`  | string  | Source directory path      | `./blok` |
   | `--help`     | `-h`  | boolean | Show help                  | `false`            |
  
   ### Commands

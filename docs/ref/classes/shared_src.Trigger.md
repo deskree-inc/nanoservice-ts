@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [shared/src](../modules/shared_src.md) / Trigger
+[blok - v0.1.0](../README.md) / [shared/src](../modules/shared_src.md) / Trigger
 
 # Class: Trigger
 
@@ -44,4 +44,4 @@ TriggerType.listen
 
 #### Defined in
 
-[core/shared/src/Trigger.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Trigger.ts#L6)
+[core/shared/src/Trigger.ts:6](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/Trigger.ts#L6)

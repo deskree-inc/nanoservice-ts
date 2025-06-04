@@ -12,7 +12,7 @@ jobs:
   prerelease:
     name: Changesets Prerelease
     # Prevents changesets action from creating a PR on forks
-    if: github.repository == 'deskree-inc/nanoservice-ts'
+    if: github.repository == 'deskree-inc/blok'
     runs-on: ubuntu-latest
     # Permissions necessary for Changesets to push a new branch and open PRs
     # (for automated Version Packages PRs), and request the JWT for provenance.

@@ -2,11 +2,11 @@
 title: Build
 ---
 
-The `nanoctl build` command compiles your nanoservice source code into a deployable artifact, preparing it for execution or deployment. This step ensures your code, dependencies, and configuration are packaged correctly according to the `Blok` project structure.
+The `nanoctl build` command compiles your Blok source code into a deployable artifact, preparing it for execution or deployment. This step ensures your code, dependencies, and configuration are packaged correctly according to the `Blok` project structure.
 
 Whether you're building from the default project directory, a custom location, or directly within the current folder, the CLI offers flexible options to match your development workflow. Use it as part of your standard development, testing, or deployment process.
 
-Once the build is complete, you're ready to deploy your nanoservice using the [`deploy`](./Deployment.md) command.
+Once the build is complete, you're ready to deploy your Blok using the [`deploy`](./Deployment.md) command.
 
 ## Build Blok 
 
@@ -14,12 +14,12 @@ Once the build is complete, you're ready to deploy your nanoservice using the [`
 ```bash
 npx nanoctl build [options]
 ```
-  Compiles and packages a nanoservice from source code into a deployable artifact.
+  Compiles and packages a Blok from source code into a deployable artifact.
  
   ### Options
   | Option       | Alias | Type    | Description                | Default            |
   |--------------|-------|---------|----------------------------|--------------------|
-  | `--directory`| `-d`  | string  | Source directory path      | `./nanoservice-ts` |
+  | `--directory`| `-d`  | string  | Source directory path      | `./blok` |
   | `--help`     | `-h`  | boolean | Show help                  | `false`            |
  
   ### Commands
@@ -34,7 +34,7 @@ npx nanoctl build [options]
   ```
   #### Build in specific directory:
   ```bash
-  npx nanoctl build -d ./my-nanoservice
+  npx nanoctl build -d ./my-blok
   ```
 
   #### Build in current directory:

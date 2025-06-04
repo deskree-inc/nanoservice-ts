@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / Runner
+[blok - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / Runner
 
 # Class: Runner
 
@@ -51,7 +51,7 @@ Constructs a new Runner instance.
 
 #### Defined in
 
-[core/runner/src/Runner.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Runner.ts#L15)
+[core/runner/src/Runner.ts:15](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Runner.ts#L15)
 
 ## Properties
 
@@ -61,7 +61,7 @@ Constructs a new Runner instance.
 
 #### Defined in
 
-[core/runner/src/Runner.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Runner.ts#L8)
+[core/runner/src/Runner.ts:8](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Runner.ts#L8)
 
 ## Methods
 
@@ -85,7 +85,7 @@ A promise that resolves to the final context after all steps have been executed.
 
 #### Defined in
 
-[core/runner/src/Runner.ts:26](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/Runner.ts#L26)
+[core/runner/src/Runner.ts:26](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/Runner.ts#L26)
 
 ___
 
@@ -120,4 +120,4 @@ Throws a GlobalError if any step results in an error.
 
 #### Defined in
 
-[core/runner/src/RunnerSteps.ts:15](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/RunnerSteps.ts#L15)
+[core/runner/src/RunnerSteps.ts:15](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/RunnerSteps.ts#L15)
