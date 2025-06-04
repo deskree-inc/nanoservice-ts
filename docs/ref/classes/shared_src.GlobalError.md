@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [shared/src](../modules/shared_src.md) / GlobalError
+[blok - v0.1.0](../README.md) / [shared/src](../modules/shared_src.md) / GlobalError
 
 # Class: GlobalError
 
@@ -57,7 +57,7 @@ Error.constructor
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:7](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L7)
+[core/shared/src/GlobalError.ts:7](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L7)
 
 ## Properties
 
@@ -67,7 +67,7 @@ Error.constructor
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L5)
+[core/shared/src/GlobalError.ts:5](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L5)
 
 ___
 
@@ -184,7 +184,7 @@ node_modules/.pnpm/@types+node@22.13.14/node_modules/@types/node/globals.d.ts:14
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:27](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L27)
+[core/shared/src/GlobalError.ts:27](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L27)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:14](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L14)
+[core/shared/src/GlobalError.ts:14](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L14)
 
 ___
 
@@ -224,7 +224,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:17](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L17)
+[core/shared/src/GlobalError.ts:17](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L17)
 
 ___
 
@@ -244,7 +244,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:23](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L23)
+[core/shared/src/GlobalError.ts:23](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L23)
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:20](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L20)
+[core/shared/src/GlobalError.ts:20](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L20)
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/GlobalError.ts:31](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/GlobalError.ts#L31)
+[core/shared/src/GlobalError.ts:31](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/GlobalError.ts#L31)
 
 ___
 

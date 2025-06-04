@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / JsonLikeObject
+[blok - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / JsonLikeObject
 
 # Interface: JsonLikeObject
 

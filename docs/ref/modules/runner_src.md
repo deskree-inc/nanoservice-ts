@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / runner/src
+[blok - v0.1.0](../README.md) / runner/src
 
 # Module: runner/src
 
@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[core/runner/src/types/Average.ts:1](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Average.ts#L1)
+[core/runner/src/types/Average.ts:1](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Average.ts#L1)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Condition.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Condition.ts#L3)
+[core/runner/src/types/Condition.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Condition.ts#L3)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Conditions.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Conditions.ts#L3)
+[core/runner/src/types/Conditions.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Conditions.ts#L3)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Config.ts:6](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Config.ts#L6)
+[core/runner/src/types/Config.ts:6](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Config.ts#L6)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Flow.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Flow.ts#L3)
+[core/runner/src/types/Flow.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Flow.ts#L3)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/GlobalOptions.ts:4](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/GlobalOptions.ts#L4)
+[core/runner/src/types/GlobalOptions.ts:4](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/GlobalOptions.ts#L4)
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Inputs.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Inputs.ts#L3)
+[core/runner/src/types/Inputs.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Inputs.ts#L3)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Node.ts:8](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Node.ts#L8)
+[core/runner/src/types/Node.ts:8](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Node.ts#L8)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Properties.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Properties.ts#L3)
+[core/runner/src/types/Properties.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Properties.ts#L3)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Targets.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Targets.ts#L3)
+[core/runner/src/types/Targets.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Targets.ts#L3)
 
 ___
 
@@ -224,7 +224,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Trigger.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Trigger.ts#L3)
+[core/runner/src/types/Trigger.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Trigger.ts#L3)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/TriggerHttp.ts:1](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/TriggerHttp.ts#L1)
+[core/runner/src/types/TriggerHttp.ts:1](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/TriggerHttp.ts#L1)
 
 ___
 
@@ -260,7 +260,7 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/TriggerResponse.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/TriggerResponse.ts#L3)
+[core/runner/src/types/TriggerResponse.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/TriggerResponse.ts#L3)
 
 ___
 
@@ -274,4 +274,4 @@ ___
 
 #### Defined in
 
-[core/runner/src/types/Triggers.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/types/Triggers.ts#L3)
+[core/runner/src/types/Triggers.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/types/Triggers.ts#L3)

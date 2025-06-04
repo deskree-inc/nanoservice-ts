@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / LocalStorage
+[blok - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / LocalStorage
 
 # Class: LocalStorage
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[core/runner/src/LocalStorage.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/LocalStorage.ts#L11)
+[core/runner/src/LocalStorage.ts:11](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/LocalStorage.ts#L11)
 
 ## Methods
 
@@ -71,7 +71,7 @@
 
 #### Defined in
 
-[core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/ResolverBase.ts#L9)
+[core/runner/src/ResolverBase.ts:9](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/ResolverBase.ts#L9)
 
 ___
 
@@ -97,4 +97,4 @@ ___
 
 #### Defined in
 
-[core/runner/src/LocalStorage.ts:13](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/LocalStorage.ts#L13)
+[core/runner/src/LocalStorage.ts:13](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/LocalStorage.ts#L13)

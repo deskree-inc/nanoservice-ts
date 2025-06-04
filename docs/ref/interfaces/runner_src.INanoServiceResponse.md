@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / INanoServiceResponse
+[blok - v0.1.0](../README.md) / [runner/src](../modules/runner_src.md) / INanoServiceResponse
 
 # Interface: INanoServiceResponse
 
@@ -28,4 +28,4 @@
 
 #### Defined in
 
-[core/runner/src/NanoServiceResponse.ts:5](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/runner/src/NanoServiceResponse.ts#L5)
+[core/runner/src/NanoServiceResponse.ts:5](https://github.com/deskree-inc/blok/blob/fd59582/core/runner/src/NanoServiceResponse.ts#L5)

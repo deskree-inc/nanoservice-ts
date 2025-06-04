@@ -1,17 +1,17 @@
 <a id="readme-top"></a>
 
-![GitHub Repo stars](https://img.shields.io/github/stars/deskree-inc/nanoservice-ts)
-![GitHub forks](https://img.shields.io/github/forks/deskree-inc/nanoservice-ts)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/deskree-inc/nanoservice-ts)
-![GitHub License](https://img.shields.io/github/license/deskree-inc/nanoservice-ts)
-![GitHub contributors](https://img.shields.io/github/contributors/deskree-inc/nanoservice-ts)
+![GitHub Repo stars](https://img.shields.io/github/stars/deskree-inc/blok)
+![GitHub forks](https://img.shields.io/github/forks/deskree-inc/blok)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/deskree-inc/blok)
+![GitHub License](https://img.shields.io/github/license/deskree-inc/blok)
+![GitHub contributors](https://img.shields.io/github/contributors/deskree-inc/blok)
 ![Discord](https://img.shields.io/discord/1317176082268426240)
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/deskree-inc/nanoservice-ts">
+  <a href="https://github.com/deskree-inc/blok">
     <img src="docs/assets/logo/dark.svg" alt="Logo" height="80">
   </a>
 
@@ -23,9 +23,9 @@
     <a href="https://blok.build/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/deskree-inc/nanoservice-ts/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
+    <a href="https://github.com/deskree-inc/blok/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
     ·
-    <a href="https://github.com/deskree-inc/nanoservice-ts/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
+    <a href="https://github.com/deskree-inc/blok/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
   </p>
 </div>
 
@@ -144,12 +144,12 @@ To contribute to the Blok documentation, follow these steps:
 
 1. Fork the project
 
-     - Go to the [Blok repository](https://github.com/deskree-inc/nanoservice-ts) and fork it to your GitHub account.
+     - Go to the [Blok repository](https://github.com/deskree-inc/blok) and fork it to your GitHub account.
 
 2. Clone the project to your local machine
 
 ```
-   git clone https://github.com/deskree-inc/nanoservice-ts.git
+   git clone https://github.com/deskree-inc/blok.git
 ```
 3. Navigate to the project directory
 ```
@@ -157,7 +157,7 @@ cd Blok
 ```
 4. Add the upstream remote
 ```
-git remote add upstream https://github.com/deskree-inc/nanoservice-ts.git
+git remote add upstream https://github.com/deskree-inc/blok.git
 ```
 5. Run the application in development mode
 
@@ -200,7 +200,7 @@ X: [@nanoservice_ts](https://x.com/nanoservice_ts)
 
 Reddit: [r/nanoservice](https://www.reddit.com/r/nanoservice/)
 
-Project Link: [https://github.com/deskree-inc/nanoservice-ts](https://github.com/deskree-inc/nanoservice-ts)
+Project Link: [https://github.com/deskree-inc/blok](https://github.com/deskree-inc/blok)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

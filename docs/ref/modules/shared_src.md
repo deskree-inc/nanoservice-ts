@@ -1,4 +1,4 @@
-[nanoservice-ts - v0.1.0](../README.md) / shared/src
+[blok - v0.1.0](../README.md) / shared/src
 
 # Module: shared/src
 
@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[core/shared/src/types/ConfigContext.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/ConfigContext.ts#L3)
+[core/shared/src/types/ConfigContext.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/ConfigContext.ts#L3)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/Context.ts:11](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/Context.ts#L11)
+[core/shared/src/types/Context.ts:11](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/Context.ts#L11)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/ErrorContext.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/ErrorContext.ts#L3)
+[core/shared/src/types/ErrorContext.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/ErrorContext.ts#L3)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/FunctionContext.ts:1](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/FunctionContext.ts#L1)
+[core/shared/src/types/FunctionContext.ts:1](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/FunctionContext.ts#L1)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/LoggerContext.ts:1](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/LoggerContext.ts#L1)
+[core/shared/src/types/LoggerContext.ts:1](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/LoggerContext.ts#L1)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/Metrics.ts:49](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/Metrics.ts#L49)
+[core/shared/src/Metrics.ts:49](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/Metrics.ts#L49)
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/NodeConfigContext.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/NodeConfigContext.ts#L3)
+[core/shared/src/types/NodeConfigContext.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/NodeConfigContext.ts#L3)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/RequestContext.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/RequestContext.ts#L3)
+[core/shared/src/types/RequestContext.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/RequestContext.ts#L3)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/ResponseContext.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/ResponseContext.ts#L3)
+[core/shared/src/types/ResponseContext.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/ResponseContext.ts#L3)
 
 ___
 
@@ -209,4 +209,4 @@ ___
 
 #### Defined in
 
-[core/shared/src/types/Step.ts:3](https://github.com/deskree-inc/nanoservice-ts/blob/fd59582/core/shared/src/types/Step.ts#L3)
+[core/shared/src/types/Step.ts:3](https://github.com/deskree-inc/blok/blob/fd59582/core/shared/src/types/Step.ts#L3)

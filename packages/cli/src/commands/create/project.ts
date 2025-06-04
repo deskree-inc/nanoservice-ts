@@ -22,8 +22,8 @@ import {
 const exec = util.promisify(child_process.exec);
 
 const HOME_DIR = `${os.homedir()}/.nanoctl`;
-const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
-const GITHUB_REPO_REMOTE = "https://github.com/deskree-inc/nanoservice-ts.git";
+const GITHUB_REPO_LOCAL = `${HOME_DIR}/blok`;
+const GITHUB_REPO_REMOTE = "https://github.com/deskree-inc/blok.git";
 
 fsExtra.ensureDirSync(HOME_DIR);
 const options: Partial<SimpleGitOptions> = {

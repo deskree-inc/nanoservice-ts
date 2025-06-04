@@ -4,7 +4,7 @@ Here’s a set of **Contribution Guidelines** tailored for your open-source proj
 
 # Contribution Guidelines
 
-Thank you for considering contributing to **nanoservice-ts**! We welcome contributions of all types, including bug fixes, feature implementations, documentation improvements, and feedback. These guidelines are here to make the process clear and smooth for everyone.
+Thank you for considering contributing to **Blok**! We welcome contributions of all types, including bug fixes, feature implementations, documentation improvements, and feedback. These guidelines are here to make the process clear and smooth for everyone.
 
 ---
 
@@ -19,8 +19,8 @@ Thank you for considering contributing to **nanoservice-ts**! We welcome contrib
 - Clone the forked repository to your local machine.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/nanoservice-ts.git
-cd nanoservice-ts
+git clone https://github.com/YOUR_USERNAME/blok.git
+cd blok
 ```
 
 ### 3. **Set Up Your Environment**
@@ -87,4 +87,4 @@ If you have questions or need help, feel free to:
 - Join our [Discord community](https://discord.gg/QXhHzw7azs).
 - Open an issue with the `question` label.
 
-We’re excited to collaborate with you and improve **nanoservice-ts** together!
+We’re excited to collaborate with you and improve **Blok** together!

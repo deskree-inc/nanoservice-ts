@@ -8,7 +8,7 @@ import color from "picocolors";
 import { workflow_template } from "./utils/Examples.js";
 
 const HOME_DIR = `${os.homedir()}/.nanoctl`;
-const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
+const GITHUB_REPO_LOCAL = `${HOME_DIR}/blok`;
 
 export async function createWorkflow(opts: OptionValues, currentPath = false) {
 	const isDefault = opts.name !== undefined;
