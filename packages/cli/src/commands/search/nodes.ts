@@ -75,12 +75,12 @@ export async function search(opts: OptionValues) {
 
 export default new Command()
 	.command("node")
-	.description("Publish a node to the nanoservices registry")
+	.description("Publish a node to the registry")
 	.option("-f, --format <value>", "Package format", "npm")
 	.argument("<node>", "Node name")
 	.action(async (node: string, options: OptionValues) => {
 		await trackCommandExecution({
-			command: "search",
+			command: "search node",
 			args: options,
 			execution: async () => {
 				options.node = node;

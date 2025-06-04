@@ -1,28 +1,26 @@
 import * as p from "@clack/prompts";
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
 
+import { NANOSERVICE_URL } from "../../services/constants.js";
 import { tokenManager } from "../../services/local-token-manager.js";
+
+async function verifyToken(token: string) {
+	const response = await fetch(`${NANOSERVICE_URL}/login`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	if (!response.ok) throw new Error(response.statusText);
+
+	const responseJson = await response.json();
+
+	return responseJson;
+}
 
 export async function login(opts: OptionValues) {
 	let token = tokenManager.getToken();
 	const NANOSERVICES_TOKEN = process.env.NANOSERVICES_TOKEN as string;
-
-	// const resolveTokenType = async (): Promise<string> => {
-	// 	const tokenType = await p.select({
-	// 		message: "Choose the authentication method",
-	// 		options: [
-	// 			{ value: "token", label: "Provide token manually", hint: "Recommended" },
-	// 			{ value: "token", label: "Authenticate via web", hint: "Comming soon" },
-	// 		],
-	// 	});
-
-	// 	if (p.isCancel(tokenType)) {
-	// 		p.cancel("Authentiecation cancelled.");
-	// 		process.exit(0);
-	// 	}
-
-	// 	return tokenType;
-	// };
 
 	const resolveToken = async (): Promise<string> => {
 		let token = process.env.NANOSERVICES_TOKEN;
@@ -51,8 +49,11 @@ export async function login(opts: OptionValues) {
 			token = NANOSERVICES_TOKEN;
 		}
 
+		if (!token) throw new Error("Token is required.");
 		p.log.success("Login successful.");
-		if (!token) throw new Error("NANOSERVICES_TOKEN is required.");
+
+		const isTokenValid = await verifyToken(token);
+		if (!isTokenValid.active) throw new Error("Token is inactive.");
 
 		const isStored = tokenManager.storeToken(token);
 		if (!isStored) throw new Error("Failed to store the token.");
