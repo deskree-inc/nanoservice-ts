@@ -1,17 +1,17 @@
 <a id="readme-top"></a>
 
-![GitHub Repo stars](https://img.shields.io/github/stars/deskree-inc/Blok)
-![GitHub forks](https://img.shields.io/github/forks/deskree-inc/Blok)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/deskree-inc/Blok)
-![GitHub License](https://img.shields.io/github/license/deskree-inc/Blok)
-![GitHub contributors](https://img.shields.io/github/contributors/deskree-inc/Blok)
+![GitHub Repo stars](https://img.shields.io/github/stars/deskree-inc/nanoservice-ts)
+![GitHub forks](https://img.shields.io/github/forks/deskree-inc/nanoservice-ts)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/deskree-inc/nanoservice-ts)
+![GitHub License](https://img.shields.io/github/license/deskree-inc/nanoservice-ts)
+![GitHub contributors](https://img.shields.io/github/contributors/deskree-inc/nanoservice-ts)
 ![Discord](https://img.shields.io/discord/1317176082268426240)
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/deskree-inc/Blok">
+  <a href="https://github.com/deskree-inc/nanoservice-ts">
     <img src="docs/assets/logo/dark.svg" alt="Logo" height="80">
   </a>
 
@@ -23,9 +23,9 @@
     <a href="https://blok.build/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/deskree-inc/Blok/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
+    <a href="https://github.com/deskree-inc/nanoservice-ts/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
     ·
-    <a href="https://github.com/deskree-inc/Blok/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
+    <a href="https://github.com/deskree-inc/nanoservice-ts/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
   </p>
 </div>
 
@@ -200,7 +200,7 @@ X: [@nanoservice_ts](https://x.com/nanoservice_ts)
 
 Reddit: [r/nanoservice](https://www.reddit.com/r/nanoservice/)
 
-Project Link: [https://github.com/deskree-inc/Blok](https://github.com/deskree-inc/nanoservice-ts)
+Project Link: [https://github.com/deskree-inc/nanoservice-ts](https://github.com/deskree-inc/nanoservice-ts)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
