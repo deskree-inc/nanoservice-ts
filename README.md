@@ -1,31 +1,31 @@
 <a id="readme-top"></a>
 
-![GitHub Repo stars](https://img.shields.io/github/stars/deskree-inc/nanoservice-ts)
-![GitHub forks](https://img.shields.io/github/forks/deskree-inc/nanoservice-ts)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/deskree-inc/nanoservice-ts)
-![GitHub License](https://img.shields.io/github/license/deskree-inc/nanoservice-ts)
-![GitHub contributors](https://img.shields.io/github/contributors/deskree-inc/nanoservice-ts)
+![GitHub Repo stars](https://img.shields.io/github/stars/deskree-inc/Blok)
+![GitHub forks](https://img.shields.io/github/forks/deskree-inc/Blok)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/deskree-inc/Blok)
+![GitHub License](https://img.shields.io/github/license/deskree-inc/Blok)
+![GitHub contributors](https://img.shields.io/github/contributors/deskree-inc/Blok)
 ![Discord](https://img.shields.io/discord/1317176082268426240)
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/deskree-inc/nanoservice-ts">
+  <a href="https://github.com/deskree-inc/Blok">
     <img src="docs/assets/logo/dark.svg" alt="Logo" height="80">
   </a>
 
-  <h3 align="center">Nanoservice.ts</h3>
+  <h3 align="center">Blok</h3>
 
   <p align="center">
-    Blok  is an open-source framework that enables developers to build lightweight, modular, and scalable backend applications using nanoservices.
+    Blok  is an open-source framework that enables developers to build lightweight, modular, and scalable backend applications using Blok.
     <br />
     <a href="https://blok.build/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/deskree-inc/nanoservice-ts/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
+    <a href="https://github.com/deskree-inc/Blok/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
     ·
-    <a href="https://github.com/deskree-inc/nanoservice-ts/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
+    <a href="https://github.com/deskree-inc/Blok/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=">Request Feature</a>
   </p>
 </div>
 
@@ -56,26 +56,26 @@
 
 ## About The Project  
 
-**nanoservice-ts** is an open-source framework designed to simplify backend development by enabling developers to implement the **modular architecture** effortlessly. Built with **TypeScript**, this framework helps you create lightweight, modular, and scalable backend systems that adhere to the **Single Responsibility Principle (SRP)**.  
+**Blok** is an open-source framework designed to simplify backend development by enabling developers to implement the **modular architecture** effortlessly. Built with **TypeScript**, this framework helps you create lightweight, modular, and scalable backend systems that adhere to the **Single Responsibility Principle (SRP)**.  
 
 By combining an intuitive API, programmatic workflow orchestration, and powerful tooling, blok allows you to focus on writing business logic while abstracting the complexities of infrastructure, scaling, and resource management.  
 
 ### Key Highlights  
 
-- **Nanoservices Architecture**: Divide backend logic into reusable, single-responsibility units that are easy to manage, scale, and debug.  
+- **Modular Architecture**: Divide backend logic into reusable, single-responsibility units that are easy to manage, scale, and debug.  
 - **Developer-Friendly Tools**: Use TypeScript-powered APIs, templates, and a CLI for quick project setup and workflow creation.  
-- **Efficient and Scalable**: Built to support dynamic workflows with containerized execution and independent scalability for each nanoservice.  
+- **Efficient and Scalable**: Built to support dynamic workflows with containerized execution and independent scalability for each blok.  
 - **Community-Driven**: Collaborate, share, and benefit from a growing library of community-created nodes and workflows.  
 
-### Why nanoservice-ts?  
+### Why Blok?  
 
-Modern backend development often suffers from over-engineered solutions, resource inefficiencies, and complex architectures. **nanoservice-ts** addresses these pain points by offering:  
+Modern backend development often suffers from over-engineered solutions, resource inefficiencies, and complex architectures. **Blok** addresses these pain points by offering:  
 
 - **Modular Design**: Reuse components across projects, reducing redundancy and improving productivity.  
 - **Simplified Scaling**: Focus on scaling individual bloks based on real-time demands, optimizing resource usage.  
 - **Flexibility**: Build workflows programmatically or using pre-built templates for common tasks like HTTP APIs, event processing, and scheduled jobs.  
 
-With **nanoservice-ts**, backend development becomes modular, predictable, and future-proof, making it ideal for both small projects and large-scale systems.  
+With **Blok**, backend development becomes modular, predictable, and future-proof, making it ideal for both small projects and large-scale systems.  
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -132,7 +132,7 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<!-- CONTRIBUTING TO THE NANOSERVICE DOCUMENTATION -->
+<!-- CONTRIBUTING TO THE BLOK DOCUMENTATION -->
 ## Contributing to the Blok Documentation
 
 ### Prerequisites
@@ -144,7 +144,7 @@ To contribute to the Blok documentation, follow these steps:
 
 1. Fork the project
 
-     - Go to the [Nanoservice repository](https://github.com/deskree-inc/nanoservice-ts) and fork it to your GitHub account.
+     - Go to the [Blok repository](https://github.com/deskree-inc/nanoservice-ts) and fork it to your GitHub account.
 
 2. Clone the project to your local machine
 
@@ -153,7 +153,7 @@ To contribute to the Blok documentation, follow these steps:
 ```
 3. Navigate to the project directory
 ```
-cd nanoservice-ts
+cd Blok
 ```
 4. Add the upstream remote
 ```
@@ -200,7 +200,7 @@ X: [@nanoservice_ts](https://x.com/nanoservice_ts)
 
 Reddit: [r/nanoservice](https://www.reddit.com/r/nanoservice/)
 
-Project Link: [https://github.com/deskree-inc/nanoservice-ts](https://github.com/deskree-inc/nanoservice-ts)
+Project Link: [https://github.com/deskree-inc/Blok](https://github.com/deskree-inc/nanoservice-ts)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
