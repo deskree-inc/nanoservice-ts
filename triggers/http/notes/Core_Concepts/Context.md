@@ -1,6 +1,6 @@
 # Understanding Context (`ctx`)
 
-In `nanoservice-ts`, **Context (`ctx`)** is the primary data structure that flows between nodes in a workflow. It enables nodes to **exchange data** and maintain state throughout execution.
+In `Blok`, **Context (`ctx`)** is the primary data structure that flows between nodes in a workflow. It enables nodes to **exchange data** and maintain state throughout execution.
 
 ---
 

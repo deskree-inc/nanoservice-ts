@@ -34,7 +34,7 @@ async function main() {
 			cliConfigPath: cliConfigPath,
 		});
 
-		program.version(`${version}`, "-v, --version").description(`Nanoservice CLI ${version}`);
+		program.version(`${version}`, "-v, --version").description(`Blok CLI ${version}`);
 
 		const create = new Command("create").description("Create a new nanoservice component");
 

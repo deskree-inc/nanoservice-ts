@@ -96,7 +96,7 @@ http://localhost:4000/countries
 
 ## 🔍 Next Steps
 
-Now that you understand the basics, dive deeper into `nanoservice-ts` with the following resources:
+Now that you understand the basics, dive deeper into `Blok` with the following resources:
 
 - [Context](./Core_Concepts/Context.md)
 - [Creating Workflows](./CLI_Commands/Create_Workflow.md)  

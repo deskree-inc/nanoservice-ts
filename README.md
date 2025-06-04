@@ -194,7 +194,7 @@ Distributed under the Apache License 2.0. See `LICENSE.txt` for more information
 <!-- CONTACT -->
 ## Contact
 
-Discord: [Nanoservice](https://discord.gg/uFs9bYwfM9)
+Discord: [Blok](https://discord.gg/uFs9bYwfM9)
 
 X: [@nanoservice_ts](https://x.com/nanoservice_ts)
 

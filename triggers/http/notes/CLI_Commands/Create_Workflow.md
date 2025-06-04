@@ -1,6 +1,6 @@
 # 🚀 Creating a Workflow in nanoservice-ts
 
-A **workflow** in `nanoservice-ts` is a structured JSON file that defines:
+A **workflow** in `Blok` is a structured JSON file that defines:
 
 - **A trigger** that starts the workflow execution.
 - **A sequence of steps** that execute bloks (nodes).

@@ -1,6 +1,6 @@
-# 🛠 Creating a Node in `nanoservice-ts`
+# 🛠 Creating a Node in `Blok`
 
-A **node** is the core component of a workflow in `nanoservice-ts`. It represents a reusable function that can be executed as part of a workflow.
+A **node** is the core component of a workflow in `Blok`. It represents a reusable function that can be executed as part of a workflow.
 
 This guide walks you through creating a **custom node** using **TypeScript**.
 

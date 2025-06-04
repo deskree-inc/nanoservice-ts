@@ -44,10 +44,10 @@ export default class Configuration implements Config {
 
 		if (!this.workflow) throw new Error(`No workflow found with path '${workflowNameInPath}'`);
 
-		// Instances of the Nano Services
+		// Instances of the Blok Services
 		this.steps = await this.getSteps(this.workflow.steps as RunnerNode[]);
 
-		// Configuration of the Nano Services
+		// Configuration of the Blok Services
 		this.nodes = await this.getNodes(this.workflow.nodes);
 		this.version = this.workflow.version;
 		this.name = this.workflow.name;
