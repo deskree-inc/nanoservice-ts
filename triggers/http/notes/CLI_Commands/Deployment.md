@@ -4,7 +4,7 @@
 
 ---
 
-## Deploy Nanoservice
+## Deploy Blok 
 
 ### Syntax
 ```bash

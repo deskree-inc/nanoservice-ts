@@ -18,6 +18,9 @@ import "./commands/monitor/index.js";
 import "./commands/publish/index.js";
 import "./commands/install/index.js";
 import "./commands/search/index.js";
+import "./commands/generate/index.js";
+import "./commands/config/index.js";
+import { Command } from "commander";
 
 const version = await getPackageVersion();
 
@@ -35,10 +38,9 @@ async function main() {
 
 		program.version(`${version}`, "-v, --version").description(`Nanoservice CLI ${version}`);
 
-		const create = program.command("create").description("Create a new nanoservice component");
+		const create = new Command("create").description("Create a new nanoservice component");
 
-		const project = program
-			.command("project")
+		const project = new Command("project")
 			.description("Create a new Project")
 			.option("-n, --name <value>", "Create a default Project")
 			.action(async (options: OptionValues) => {
@@ -64,8 +66,7 @@ async function main() {
 				});
 			});
 
-		const node = program
-			.command("node")
+		const node = new Command("node")
 			.description("Create a new Node")
 			.option("-n, --name <value>", "Create a default Node")
 			.action(async (options: OptionValues) => {
@@ -91,8 +92,7 @@ async function main() {
 				});
 			});
 
-		const workflow = program
-			.command("workflow")
+		const workflow = new Command("workflow")
 			.description("Create a new Workflow")
 			.option("-n, --name <value>", "Create a default Workflow")
 			.action(async (options: OptionValues) => {
@@ -121,6 +121,8 @@ async function main() {
 		create.addCommand(project);
 		create.addCommand(node);
 		create.addCommand(workflow);
+
+		program.addCommand(create);
 
 		// Dev server
 

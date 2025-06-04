@@ -1,5 +1,35 @@
 # nanoctl
 
+## 0.1.14
+
+### Patch Changes
+
+- Implemented the command search.
+
+## 0.1.13
+
+### Patch Changes
+
+- Extended the command: generate ai-node --update. To modify an existing node using ai.
+
+## 0.1.12
+
+### Patch Changes
+
+- added generate ai-node command
+
+## 0.1.11
+
+### Patch Changes
+
+- improved the web monitor
+
+## 0.1.10
+
+### Patch Changes
+
+- implemented multi package manager support
+
 ## 0.1.9
 
 ### Patch Changes

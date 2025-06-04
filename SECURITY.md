@@ -25,7 +25,7 @@ If you discover a security vulnerability, please help us address it responsibly 
    - Please avoid sharing the vulnerability publicly (e.g., via GitHub issues or social media) until it has been resolved.
 
 2. **Report Privately**
-   - Email us at **hello@nanoservice.xyz** with the following details:
+   - Email us at **hello@blok.build** with the following details:
      - A description of the vulnerability.
      - Steps to reproduce the issue.
      - Potential impact of the vulnerability.

@@ -185,7 +185,7 @@
 
 ### Minor Changes
 
-- Nanoservice code modules initialized
+- Blok code modules initialized
 
 ### Patch Changes
 

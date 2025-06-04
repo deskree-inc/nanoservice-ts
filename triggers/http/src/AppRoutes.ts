@@ -46,7 +46,7 @@ router.get("/", (_, res) => {
 				</ol>
 
 				<div class="mt-8 text-center">
-					<a href="https://nanoservice.xyz/" target="_blank" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Explore Docs</a>
+					<a href="https://blok.build/" target="_blank" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Explore Docs</a>
 				</div>
 			</div>
 		</main>

@@ -6,29 +6,26 @@ import { tokenManager } from "../../services/local-token-manager.js";
 import { install } from "../install/workflow.js";
 
 interface WorkflowSchema {
-	id: string;
-	content: {
+	name: string;
+	version: string;
+	description?: string;
+	steps?: Array<{
 		name: string;
-		version: string;
-		description?: string;
-		steps?: Array<{
-			name: string;
-			node: string;
-			type: "local" | "module" | "runtime.python3";
+		node: string;
+		type: "local" | "module" | "runtime.python3";
+		inputs?: Record<string, unknown>;
+	}>;
+	nodes?: Record<
+		string,
+		{
 			inputs?: Record<string, unknown>;
-		}>;
-		nodes?: Record<
-			string,
-			{
-				inputs?: Record<string, unknown>;
-			}
-		>;
-		trigger?: {
-			[K in "http" | "cron" | "manual" | "grpc"]?: {
-				method?: string;
-				path?: string;
-				accept?: string;
-			};
+		}
+	>;
+	trigger?: {
+		[K in "http" | "cron" | "manual" | "grpc"]?: {
+			method?: string;
+			path?: string;
+			accept?: string;
 		};
 	};
 }

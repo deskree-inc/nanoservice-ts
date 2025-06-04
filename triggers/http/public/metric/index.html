@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <title>Observability Dashboard - nanoservice-ts</title>
+    <title>Dashboard - nanoservice-ts</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -40,7 +40,6 @@
         height: 100vh !important;
         background-color: #ffffff !important;
       }
-      
     </style>
   </head>
   <body class="bg-gray-100 text-gray-900 dark:bg-[#1d2536] dark:text-white">
@@ -51,7 +50,7 @@
         <h1
           class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white"
         >
-          Nanoservice Observability
+          Observability
         </h1>
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
           Realtime usage, latency, and error insights for all workflows and
@@ -59,58 +58,129 @@
         </p>
       </div>
       <div class="flex items-center justify-center gap-1">
-    <!-- Filters container -->
-    <div class="flex items-start items-end gap-4 ml-4 md:ml-8 mt-4 md:mt-0 relative z-40 w-full flex-col xl:flex-row xl:mr-2">
-      <!-- Sections filter dropdown -->
-      <div class="relative flex items-center gap-2">
-        <label for="section-filter" class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold w-[74px] text-center">Sections</label>
-        <div class="relative">
-          <div id="section-filter-trigger" class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none">
-            <span id="section-filter-placeholder">All</span>
-            <svg id="section-filter-chevron" class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
+        <!-- Filters container -->
+        <div
+          class="flex items-start items-end gap-4 ml-4 md:ml-8 mt-4 md:mt-0 relative z-40 w-full flex-col xl:flex-row xl:mr-2"
+        >
+          <!-- Sections filter dropdown -->
+          <div class="relative flex items-center gap-2">
+            <label
+              for="section-filter"
+              class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold w-[74px] text-center"
+              >Sections</label
+            >
+            <div class="relative">
+              <div
+                id="section-filter-trigger"
+                class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none"
+              >
+                <span id="section-filter-placeholder">All</span>
+                <svg
+                  id="section-filter-chevron"
+                  class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div
+                id="section-filter-dropdown"
+                class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden"
+              >
+                <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">
+                  Selected (All)
+                </div>
+                <div id="section-filter-options" class="flex flex-col"></div>
+              </div>
+            </div>
           </div>
-          <div id="section-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden">
-            <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">Selected (All)</div>
-            <div id="section-filter-options" class="flex flex-col"></div>
+          <!-- Workflows filter dropdown -->
+          <div class="relative flex items-center gap-2">
+            <label
+              for="workflow-filter"
+              class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold w-[74px] text-center"
+              >Workflows</label
+            >
+            <div class="relative">
+              <div
+                id="workflow-filter-trigger"
+                class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none"
+              >
+                <span id="workflow-filter-placeholder">All</span>
+                <svg
+                  id="workflow-filter-chevron"
+                  class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div
+                id="workflow-filter-dropdown"
+                class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden"
+              >
+                <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">
+                  Selected (0)
+                </div>
+                <div id="workflow-filter-options" class="flex flex-col"></div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <!-- Workflows filter dropdown -->
-      <div class="relative flex items-center gap-2">
-        <label for="workflow-filter" class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold w-[74px] text-center">Workflows</label>
-        <div class="relative">
-          <div id="workflow-filter-trigger" class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none">
-            <span id="workflow-filter-placeholder">All</span>
-            <svg id="workflow-filter-chevron" class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-          <div id="workflow-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden">
-            <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">Selected (0)</div>
-            <div id="workflow-filter-options" class="flex flex-col"></div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Nodes filter dropdown -->
-      <div class="relative flex items-center gap-2">
-        <label for="node-filter" class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold w-[74px] text-center">Nodes</label>
-        <div class="relative">
-          <div id="node-filter-trigger" class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none">
-            <span id="node-filter-placeholder">All</span>
-            <svg id="node-filter-chevron" class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-          <div id="node-filter-dropdown" class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden">
-            <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">Selected (0)</div>
-            <div id="node-filter-options" class="flex flex-col"></div>
+          <!-- Nodes filter dropdown -->
+          <div class="relative flex items-center gap-2">
+            <label
+              for="node-filter"
+              class="text-xs text-gray-400 dark:text-blue-500 rounded px-[6px] py-[9.25px] bg-gray-100 dark:bg-gray-800 font-semibold w-[74px] text-center"
+              >Nodes</label
+            >
+            <div class="relative">
+              <div
+                id="node-filter-trigger"
+                class="flex items-center justify-between border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-800 dark:text-white w-56 cursor-pointer select-none"
+              >
+                <span id="node-filter-placeholder">All</span>
+                <svg
+                  id="node-filter-chevron"
+                  class="w-4 h-4 ml-2 transition-transform transform text-gray-500 dark:text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div
+                id="node-filter-dropdown"
+                class="absolute mt-1 z-50 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded shadow-md w-full md:w-56 max-h-60 overflow-y-auto hidden"
+              >
+                <div class="px-3 py-2 text-xs text-gray-400 dark:text-gray-500">
+                  Selected (0)
+                </div>
+                <div id="node-filter-options" class="flex flex-col"></div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
         <!-- Dark Mode Toggle -->
         <button
@@ -154,15 +224,17 @@
           const savedScroll = localStorage.getItem("scrollPosition");
           if (savedScroll !== null) {
             setTimeout(() => {
-              requestAnimationFrame(() => {
-              });
+              requestAnimationFrame(() => {});
             }, 200);
           }
         });
       </script>
 
       <!-- OVERVIEW -->
-      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm" data-section-id="System Overview">
+      <section
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm"
+        data-section-id="System Overview"
+      >
         <div
           class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -352,7 +424,10 @@
       </section>
 
       <!-- WORKFLOWS -->
-      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm" data-section-id="Workflow Metrics">
+      <section
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm"
+        data-section-id="Workflow Metrics"
+      >
         <div
           class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -541,7 +616,10 @@
       </section>
 
       <!-- NODES -->
-      <section class="bg-white dark:bg-gray-900 rounded-lg shadow-sm" data-section-id="Node Metrics">
+      <section
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm"
+        data-section-id="Node Metrics"
+      >
         <div
           class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -730,7 +808,8 @@
       </section>
 
       <section
-        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto" data-section-id="Workflow Table"
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto"
+        data-section-id="Workflow Table"
       >
         <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -778,15 +857,15 @@
       </section>
 
       <section
-        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto" data-section-id="Node Table"
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm mt-6 overflow-x-auto"
+        data-section-id="Node Table"
       >
         <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
             Nodes Metrics
           </h2>
           <p class="text-sm text-gray-600 dark:text-gray-400">
-            Real-time snapshot of key performance indicators across all
-            nodes.
+            Real-time snapshot of key performance indicators across all nodes.
           </p>
         </div>
 
@@ -826,7 +905,10 @@
       </section>
 
       <!-- System Logs -->
-      <section class="bg-white dark:bg-gray-900 rounded shadow" data-section-id="System Logs">
+      <section
+        class="bg-white dark:bg-gray-900 rounded shadow"
+        data-section-id="System Logs"
+      >
         <div
           class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -868,7 +950,10 @@
       </section>
 
       <!-- Error Logs -->
-      <section class="bg-white dark:bg-gray-900 rounded shadow mt-6" data-section-id="Error Logs">
+      <section
+        class="bg-white dark:bg-gray-900 rounded shadow mt-6"
+        data-section-id="Error Logs"
+      >
         <div
           class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700"
         >
@@ -915,7 +1000,6 @@
     </main>
 
     <script>
-
       const prometheusBase = "http://localhost:9090";
 
       const queries = {
@@ -1114,8 +1198,7 @@
 
         const regex = values
           .map((v) =>
-            v.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")
-              .replace(/\\/g, "\\\\")
+            v.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&").replace(/\\/g, "\\\\")
           )
           .join("|");
 
@@ -1141,7 +1224,10 @@
         let finalQuery = query;
 
         if (id.startsWith("workflow_")) {
-          const matcher = buildMatcher("workflow_path", window.selectedFilters?.workflow);
+          const matcher = buildMatcher(
+            "workflow_path",
+            window.selectedFilters?.workflow
+          );
 
           if (matcher) {
             finalQuery = query.replace(
@@ -1150,10 +1236,12 @@
             );
           }
         }
-
 
         if (id.startsWith("overview_")) {
-          const matcher = buildMatcher("workflow_path", window.selectedFilters?.workflow);
+          const matcher = buildMatcher(
+            "workflow_path",
+            window.selectedFilters?.workflow
+          );
 
           if (matcher) {
             finalQuery = query.replace(
@@ -1163,10 +1251,11 @@
           }
         }
 
-
-
         if (id.startsWith("node_")) {
-          const matcher = buildMatcher("node_name", window.selectedFilters?.node);
+          const matcher = buildMatcher(
+            "node_name",
+            window.selectedFilters?.node
+          );
 
           if (matcher) {
             finalQuery = query.replace(
@@ -1176,14 +1265,17 @@
           }
         }
 
-
         const result = await fetchMetric(finalQuery);
         const datasets = isGrouped
           ? parseSeries(result, groupLabel, forceColor)
           : [
               {
                 label: id,
-                data: result[0]?.values.map(([ts, val]) => ({ x: new Date(ts * 1000), y: parseFloat(val) })) || [],
+                data:
+                  result[0]?.values.map(([ts, val]) => ({
+                    x: new Date(ts * 1000),
+                    y: parseFloat(val),
+                  })) || [],
                 borderColor: forceColor || "#2563eb",
                 backgroundColor: (forceColor || "#2563eb") + "33",
                 fill: true,
@@ -1414,9 +1506,9 @@
         };
 
         const endpoint = "http://localhost:9090/api/v1/query";
-        const selectedWorkflows = window.selectedFilters?.workflow || new Set(["__all__"]);
+        const selectedWorkflows =
+          window.selectedFilters?.workflow || new Set(["__all__"]);
         const filterMatcher = buildMatcher("workflow_path", selectedWorkflows);
-
 
         const results = {};
 
@@ -1429,7 +1521,9 @@
                 )
               : query;
 
-            const res = await fetch(`${endpoint}?query=${encodeURIComponent(effectiveQuery)}`);
+            const res = await fetch(
+              `${endpoint}?query=${encodeURIComponent(effectiveQuery)}`
+            );
             const json = await res.json();
             if (json.status === "success") {
               for (const entry of json.data.result) {
@@ -1494,7 +1588,8 @@
         };
 
         const endpoint = "http://localhost:9090/api/v1/query";
-        const selectedNodes = window.selectedFilters?.node || new Set(["__all__"]);
+        const selectedNodes =
+          window.selectedFilters?.node || new Set(["__all__"]);
         const filterMatcher = buildMatcher("node_name", selectedNodes);
 
         const results = {};
@@ -1507,7 +1602,9 @@
                   (match) => `${match}{${filterMatcher}}`
                 )
               : query;
-            const res = await fetch(`${endpoint}?query=${encodeURIComponent(effectiveQuery)}`);
+            const res = await fetch(
+              `${endpoint}?query=${encodeURIComponent(effectiveQuery)}`
+            );
             const json = await res.json();
             if (json.status === "success") {
               for (const entry of json.data.result) {
@@ -1561,7 +1658,7 @@
             tbody.appendChild(row);
           });
       }
-      
+
       const thresholdBackgroundPlugin = {
         id: "thresholdBackground",
         beforeDraw: (chart) => {
@@ -1618,11 +1715,13 @@
 
         const allVisible = selected.has("__all__");
 
-        document.querySelectorAll("section[data-section-id]").forEach((section) => {
-          const sectionName = section.getAttribute("data-section-id");
-          const shouldShow = allVisible || selected.has(sectionName);
-          section.style.display = shouldShow ? "" : "none";
-        });
+        document
+          .querySelectorAll("section[data-section-id]")
+          .forEach((section) => {
+            const sectionName = section.getAttribute("data-section-id");
+            const shouldShow = allVisible || selected.has(sectionName);
+            section.style.display = shouldShow ? "" : "none";
+          });
       }
 
       function refreshDashboard() {
@@ -1763,11 +1862,14 @@
       });
 
       function persistSelectedFilters() {
-          const filtersToSave = {};
-          for (const key in window.selectedFilters) {
-            filtersToSave[key] = Array.from(window.selectedFilters[key]);
-          }
-          localStorage.setItem("dashboard:selectedFilters", JSON.stringify(filtersToSave));
+        const filtersToSave = {};
+        for (const key in window.selectedFilters) {
+          filtersToSave[key] = Array.from(window.selectedFilters[key]);
+        }
+        localStorage.setItem(
+          "dashboard:selectedFilters",
+          JSON.stringify(filtersToSave)
+        );
       }
 
       async function loadFilterOptionsV2() {
@@ -1795,13 +1897,14 @@
           },
         ];
 
-
         window.selectedFilters = {
           workflow: new Set(["__all__"]),
           node: new Set(["__all__"]),
         };
 
-        const savedFilters = JSON.parse(localStorage.getItem("dashboard:selectedFilters") || "{}");
+        const savedFilters = JSON.parse(
+          localStorage.getItem("dashboard:selectedFilters") || "{}"
+        );
 
         for (const filter of filters) {
           let data;
@@ -1812,25 +1915,36 @@
             data = await response.json();
           }
 
-          const optionsContainer = document.getElementById(`${filter.id}-filter-options`);
-          const placeholder = document.getElementById(`${filter.id}-filter-placeholder`);
-          const dropdown = document.getElementById(`${filter.id}-filter-dropdown`);
-          const trigger = document.getElementById(`${filter.id}-filter-trigger`);
+          const optionsContainer = document.getElementById(
+            `${filter.id}-filter-options`
+          );
+          const placeholder = document.getElementById(
+            `${filter.id}-filter-placeholder`
+          );
+          const dropdown = document.getElementById(
+            `${filter.id}-filter-dropdown`
+          );
+          const trigger = document.getElementById(
+            `${filter.id}-filter-trigger`
+          );
           const selectedLabel = dropdown.querySelector("div.text-xs");
 
           const saved = savedFilters[filter.id];
-          window.selectedFilters[filter.id] = saved ? new Set(saved) : new Set(["__all__"]);
-
+          window.selectedFilters[filter.id] = saved
+            ? new Set(saved)
+            : new Set(["__all__"]);
 
           trigger.addEventListener("click", () => {
             dropdown.classList.toggle("hidden");
-            const chevron = document.getElementById(`${filter.id}-filter-chevron`);
+            const chevron = document.getElementById(
+              `${filter.id}-filter-chevron`
+            );
             chevron.classList.toggle("rotate-180");
           });
 
-
           const allOption = document.createElement("label");
-          allOption.className = "flex items-center px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 cursor-pointer";
+          allOption.className =
+            "flex items-center px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 cursor-pointer";
           allOption.innerHTML = `
             <input type="checkbox" id="${filter.id}-opt-all" value="__all__" class="mr-2 text-blue-500 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
             All
@@ -1838,10 +1952,12 @@
           const allInput = allOption.querySelector("input");
           // Event handler for "All" checkbox item
           allInput.addEventListener("change", () => {
-            const checkboxes = optionsContainer.querySelectorAll("input[type='checkbox']");
+            const checkboxes = optionsContainer.querySelectorAll(
+              "input[type='checkbox']"
+            );
             window.selectedFilters[filter.id] = new Set();
 
-            checkboxes.forEach(cb => {
+            checkboxes.forEach((cb) => {
               cb.checked = allInput.checked;
               if (allInput.checked && cb.value !== "__all__") {
                 window.selectedFilters[filter.id].add(cb.value);
@@ -1862,14 +1978,16 @@
             applySectionFilterVisibility();
           });
 
-
           optionsContainer.appendChild(allOption);
 
-          const validItems = data.data.filter((item) => typeof item === "string" && item.trim() !== "");
+          const validItems = data.data.filter(
+            (item) => typeof item === "string" && item.trim() !== ""
+          );
           validItems.forEach((item) => {
             const id = `${filter.id}-opt-${item}`;
             const option = document.createElement("label");
-            option.className = "flex items-center px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 cursor-pointer";
+            option.className =
+              "flex items-center px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 cursor-pointer";
 
             option.innerHTML = `
               <input type="checkbox" id="${id}" value="${item}" class="mr-2 text-blue-500 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
@@ -1879,12 +1997,18 @@
             const input = option.querySelector("input");
             input.addEventListener("change", () => {
               requestAnimationFrame(() => {
-                const checkboxes = optionsContainer.querySelectorAll("input[type='checkbox']:not([value='__all__'])");
-                const checkedBoxes = optionsContainer.querySelectorAll("input[type='checkbox']:not([value='__all__']):checked");
+                const checkboxes = optionsContainer.querySelectorAll(
+                  "input[type='checkbox']:not([value='__all__'])"
+                );
+                const checkedBoxes = optionsContainer.querySelectorAll(
+                  "input[type='checkbox']:not([value='__all__']):checked"
+                );
 
                 // Limpiar y reconstruir el Set según el estado actual
                 window.selectedFilters[filter.id] = new Set();
-                checkedBoxes.forEach(cb => window.selectedFilters[filter.id].add(cb.value));
+                checkedBoxes.forEach((cb) =>
+                  window.selectedFilters[filter.id].add(cb.value)
+                );
 
                 if (checkedBoxes.length === checkboxes.length) {
                   allInput.checked = true;
@@ -1894,11 +2018,11 @@
                 } else {
                   allInput.checked = false;
                   const count = checkedBoxes.length;
-                  placeholder.textContent = count > 0 ? `${count} selected` : "Enter variable value";
+                  placeholder.textContent =
+                    count > 0 ? `${count} selected` : "Enter variable value";
                   selectedLabel.textContent = `Selected (${count})`;
                 }
 
-                
                 persistSelectedFilters();
                 refreshDashboard();
                 applySectionFilterVisibility();
@@ -1910,26 +2034,34 @@
 
           // Preseleccionar todos al cargar
           requestAnimationFrame(() => {
-            const allSelected = window.selectedFilters[filter.id].has("__all__");
-            const checkboxes = optionsContainer.querySelectorAll("input[type='checkbox']:not([value='__all__'])");
+            const allSelected =
+              window.selectedFilters[filter.id].has("__all__");
+            const checkboxes = optionsContainer.querySelectorAll(
+              "input[type='checkbox']:not([value='__all__'])"
+            );
 
             let selectedCount = 0;
-            checkboxes.forEach(cb => {
-              cb.checked = allSelected || window.selectedFilters[filter.id].has(cb.value);
+            checkboxes.forEach((cb) => {
+              cb.checked =
+                allSelected || window.selectedFilters[filter.id].has(cb.value);
               if (cb.checked) selectedCount++;
             });
 
             allInput.checked = allSelected;
-            placeholder.textContent = allSelected ? "All" : (selectedCount > 0 ? `${selectedCount} selected` : "Enter variable value");
-            selectedLabel.textContent = allSelected ? `Selected (All)` : `Selected (${selectedCount})`;
+            placeholder.textContent = allSelected
+              ? "All"
+              : selectedCount > 0
+              ? `${selectedCount} selected`
+              : "Enter variable value";
+            selectedLabel.textContent = allSelected
+              ? `Selected (All)`
+              : `Selected (${selectedCount})`;
 
             refreshDashboard();
             applySectionFilterVisibility();
           });
-
-
-    }
-  }
+        }
+      }
 
       document.addEventListener("DOMContentLoaded", async () => {
         await loadFilterOptionsV2(); // Espera a que los filtros estén cargados
@@ -1953,7 +2085,9 @@
 
             if (!trigger || !dropdown || !chevron) return;
 
-            const clickedOutside = !trigger.contains(event.target) && !dropdown.contains(event.target);
+            const clickedOutside =
+              !trigger.contains(event.target) &&
+              !dropdown.contains(event.target);
 
             if (clickedOutside) {
               dropdown.classList.add("hidden");
@@ -1962,8 +2096,6 @@
           });
         });
       });
-    
     </script>
-
   </body>
 </html>

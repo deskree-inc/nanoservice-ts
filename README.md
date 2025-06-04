@@ -18,9 +18,9 @@
   <h3 align="center">Nanoservice.ts</h3>
 
   <p align="center">
-    Nanoservice-ts is an open-source framework that enables developers to build lightweight, modular, and scalable backend applications using nanoservices.
+    Blok  is an open-source framework that enables developers to build lightweight, modular, and scalable backend applications using nanoservices.
     <br />
-    <a href="https://nanoservice.xyz/"><strong>Explore the docs »</strong></a>
+    <a href="https://blok.build/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/deskree-inc/nanoservice-ts/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">Report Bug</a>
@@ -56,9 +56,9 @@
 
 ## About The Project  
 
-**nanoservice-ts** is an open-source framework designed to simplify backend development by enabling developers to implement the **nanoservices architecture** effortlessly. Built with **TypeScript**, this framework helps you create lightweight, modular, and scalable backend systems that adhere to the **Single Responsibility Principle (SRP)**.  
+**nanoservice-ts** is an open-source framework designed to simplify backend development by enabling developers to implement the **modular architecture** effortlessly. Built with **TypeScript**, this framework helps you create lightweight, modular, and scalable backend systems that adhere to the **Single Responsibility Principle (SRP)**.  
 
-By combining an intuitive API, programmatic workflow orchestration, and powerful tooling, nanoservice-ts allows you to focus on writing business logic while abstracting the complexities of infrastructure, scaling, and resource management.  
+By combining an intuitive API, programmatic workflow orchestration, and powerful tooling, blok allows you to focus on writing business logic while abstracting the complexities of infrastructure, scaling, and resource management.  
 
 ### Key Highlights  
 
@@ -72,7 +72,7 @@ By combining an intuitive API, programmatic workflow orchestration, and powerful
 Modern backend development often suffers from over-engineered solutions, resource inefficiencies, and complex architectures. **nanoservice-ts** addresses these pain points by offering:  
 
 - **Modular Design**: Reuse components across projects, reducing redundancy and improving productivity.  
-- **Simplified Scaling**: Focus on scaling individual nanoservices based on real-time demands, optimizing resource usage.  
+- **Simplified Scaling**: Focus on scaling individual bloks based on real-time demands, optimizing resource usage.  
 - **Flexibility**: Build workflows programmatically or using pre-built templates for common tasks like HTTP APIs, event processing, and scheduled jobs.  
 
 With **nanoservice-ts**, backend development becomes modular, predictable, and future-proof, making it ideal for both small projects and large-scale systems.  
@@ -92,7 +92,7 @@ To start developing your project, simply run:
 
 And follow the instructions of the CLI
 
-_For more information and examples, visit [Getting Started](https://nanoservice.xyz/docs/d/getting-started/nanoctl)_
+_For more information and examples, visit [Getting Started](https://blok.build/docs/d/getting-started/nanoctl)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -113,7 +113,7 @@ To run the created workflow locally:
 1. Start the runner via `npm run dev`
 2. Use tools like POSTMAN, curl, or any HTTP client to test workflows at `http://localhost:4000/{workflow-name}`
 
-_For more examples, please refer to the [Executing Workflows](https://nanoservice.xyz/docs/d/core-concepts/executing-workflows)_
+_For more examples, please refer to the [Executing Workflows](https://blok.build/docs/d/core-concepts/executing-workflows)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -133,14 +133,14 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 <!-- CONTRIBUTING TO THE NANOSERVICE DOCUMENTATION -->
-## Contributing to the Nanoservice Documentation
+## Contributing to the Blok Documentation
 
 ### Prerequisites
 Make sure you have the following installed on your system:
 
 - [Node.js](https://nodejs.org/)
 
-To contribute to the Nanoservice documentation, follow these steps:
+To contribute to the Blok documentation, follow these steps:
 
 1. Fork the project
 

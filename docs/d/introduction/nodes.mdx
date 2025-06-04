@@ -4,7 +4,7 @@ title: Nodes
 
 ## Introduction
 
-Nodes are the fundamental building blocks of the Nanoservice-ts framework. They encapsulate discrete pieces of business logic that can be composed together to create complex workflows. Each Node is designed to perform a specific task, making your code more modular, maintainable, and reusable.
+Nodes are the fundamental building blocks of the Blok  framework. They encapsulate discrete pieces of business logic that can be composed together to create complex workflows. Each Node is designed to perform a specific task, making your code more modular, maintainable, and reusable.
 
 Think of Nodes as specialized microservices that:
 - Have clearly defined inputs and outputs
@@ -18,7 +18,7 @@ This modular approach allows developers to build complex applications by connect
 
 ### Using the CLI
 
-The easiest way to create a new Node is using the Nanoservice-ts CLI:
+The easiest way to create a new Node is using the Blok  CLI:
 
 ```bash
 npx nanoctl@latest create node
@@ -257,7 +257,7 @@ This allows each Node to have its own dependencies and build process.
 
 ## Testing Nodes
 
-Nanoservice-ts generates test files for your Nodes automatically. The test setup includes:
+Blok generates test files for your Nodes automatically. The test setup includes:
 
 ### Test Helper
 
@@ -362,7 +362,7 @@ npm run test
 
 ## The Context Object
 
-The Context (`ctx`) object is a crucial part of the Nanoservice-ts framework. It's passed to each Node's `handle` method and provides:
+The Context (`ctx`) object is a crucial part of the Blok  framework. It's passed to each Node's `handle` method and provides:
 
 1. **Request Data**: Information about the incoming request (for HTTP triggers).
 2. **Response Data**: Output from previous Nodes in the workflow.
@@ -374,7 +374,7 @@ The Context object facilitates data flow between Nodes in a workflow and provide
 
 ## Input and Output Validation
 
-Nanoservice-ts uses JSON Schema for input and output validation. You can define schemas in your Node's constructor:
+Blok uses JSON Schema for input and output validation. You can define schemas in your Node's constructor:
 
 ```typescript
 constructor() {
@@ -403,7 +403,7 @@ These schemas ensure that:
 
 ## Error Handling
 
-Proper error handling is essential in Nanoservice-ts. The framework provides the `GlobalError` class for standardized error reporting:
+Proper error handling is essential in Blok . The framework provides the `GlobalError` class for standardized error reporting:
 
 ```typescript
 try {
@@ -424,7 +424,7 @@ This approach ensures that errors are properly captured, logged, and can be hand
 
 ## Built-in Nodes
 
-Nanoservice-ts comes with several built-in Nodes that provide common functionality. These are registered in the `src/Nodes.ts` file:
+Blok comes with several built-in Nodes that provide common functionality. These are registered in the `src/Nodes.ts` file:
 
 ```typescript
 import ApiCall from "@nanoservice-ts/api-call";
@@ -514,7 +514,7 @@ As your application evolves, you may need to update your Nodes. Consider version
 
 ## Conclusion
 
-Nodes are the foundation of the Nanoservice-ts framework. By understanding how to create, configure, and test Nodes, you can build modular, maintainable applications that are easy to extend and adapt to changing requirements.
+Nodes are the foundation of the Blok  framework. By understanding how to create, configure, and test Nodes, you can build modular, maintainable applications that are easy to extend and adapt to changing requirements.
 
 The Node-based architecture encourages good software design practices like separation of concerns, modularity, and testability, leading to more robust and maintainable applications.
 

@@ -23,6 +23,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 	let nodeType = "";
 	let template = "";
 	let node_runtime = "";
+	let selectedManager = "npm";
 
 	if (!isDefault) {
 		console.log(
@@ -48,10 +49,24 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 			})) as string;
 		};
 
+		const resolveSelectedManager = async (): Promise<string> => {
+			if (availableManagers.length === 1) {
+				return availableManagers[0];
+			}
+			return (await p.select({
+				message: "Select the package manager",
+				options: availableManagers.map((manager) => ({
+					label: manager,
+					value: manager,
+				})),
+			})) as string;
+		};
+
 		p.intro(color.inverse(" Creating a new Node "));
 		const nanoctlNode = await p.group(
 			{
 				nodeName: () => resolveNodeName(),
+				selectedManager: () => resolveSelectedManager(),
 				nodeRuntime: () =>
 					p.select({
 						message: "Select the nanoservice runtime",
@@ -71,6 +86,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 
 		nodeName = nanoctlNode.nodeName;
 		node_runtime = nanoctlNode.nodeRuntime;
+		selectedManager = nanoctlNode.selectedManager;
 
 		if (node_runtime === "python3") {
 			// Show a warning message
@@ -122,7 +138,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		const mainDirExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (!mainDirExists)
 			throw new Error(
-				"The nanoservice-ts repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
+				"The blok repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
 			);
 
 		if (node_runtime === "typescript") {
@@ -170,17 +186,8 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 				packageJsonContent.author = "";
 				fsExtra.writeFileSync(packageJson, JSON.stringify(packageJsonContent, null, 2));
 
-				if (availableManagers.length > 1) {
-					s.message("Multiple package managers detected. Please select one.");
-					const selectedManager = await p.select({
-						message: "Select the package manager",
-						options: availableManagers.map((manager) => ({
-							label: manager,
-							value: manager,
-						})),
-					});
-					manager = await pm.getManager(selectedManager as string);
-				}
+				// Get the package manager
+				manager = await pm.getManager(selectedManager as string);
 
 				// Install Packages
 				s.message("Installing packages...");
@@ -249,7 +256,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		console.log(
 			`${currentPath ? "\n" : ""}Run the command "npm run build" or "npm run build:dev" to build the project.`,
 		);
-		console.log("For more documentation, visit https://nanoservice.xyz/docs/d/core-concepts/nodes");
+		console.log("For more documentation, visit https://blok.build/docs/d/core-concepts/nodes");
 	} catch (error) {
 		if (!isDefault) s.stop("An error occurred");
 

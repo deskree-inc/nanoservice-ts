@@ -1,0 +1,99 @@
+---
+title: Monitor
+---
+
+The `nanoctl monitor` command provides real-time visibility into your Blok applications through a metrics dashboard. It offers both terminal-based and web-based interfaces, allowing you to monitor application performance, request counts, error rates, and resource usage.
+
+This powerful observability tool connects to Prometheus metrics, making it easy to track the health and performance of your bloks whether they're running locally or deployed to the cloud.
+
+## Monitor Blok Metrics
+
+### Syntax
+```bash
+npx nanoctl@latest monitor [options]
+```
+
+Displays real-time metrics for your Blok application.
+
+### Options
+| Option       | Type    | Description                                      | Default |
+|--------------|---------|--------------------------------------------------|---------|
+| `--web`      | boolean | Launch web-based dashboard instead of terminal UI | `false` |
+| `--host`     | string  | Prometheus server URL                            | Local Prometheus URL |
+| `--token`    | string  | Bearer token for authenticated Prometheus access  | None    |
+| `--help`     | boolean | Show help                                        | `false` |
+
+### Examples
+
+#### Monitor with Terminal UI (Local Development)
+```bash
+npx nanoctl@latest monitor
+```
+
+#### Monitor with Web Dashboard (Local Development)
+```bash
+npx nanoctl@latest monitor --web
+```
+
+#### Connect to Public Prometheus Instance
+```bash
+npx nanoctl@latest monitor --host <PROMETHEUS_URL>
+```
+
+#### Connect to Private Prometheus Instance with Authentication
+```bash
+npx nanoctl@latest monitor --web --host <PROMETHEUS_URL> --token <AUTH_TOKEN>
+```
+
+## Setting Up Local Monitoring Environment
+
+To use the monitor command with a local project:
+
+1. Create a new project if you don't have one:
+   ```bash
+   npx nanoctl@latest create project
+   ```
+
+2. Start the local observability stack:
+   ```bash
+   docker-compose -f infra/metrics/docker-compose.yml up -d
+   ```
+
+3. Run your nanoservice application with docker:
+   ```bash
+   # Open a terminal and run
+   npm run infra:dev
+
+   # Open a second terminal and run
+   npm run infra:build
+   ```
+
+4. Launch the monitor:
+   ```bash
+   npx nanoctl@latest monitor
+   ```
+
+## Monitoring Cloud Deployments
+
+After deploying your nanoservice to Deskree Cloud:
+
+1. Retrieve the Prometheus URL from your deployment information.
+
+2. Generate an access token from [https://atomic.deskree.com](https://atomic.deskree.com).
+
+3. Run the monitor with the cloud Prometheus URL:
+   ```bash
+   npx nanoctl@latest monitor --web --host <PROMETHEUS_URL> --token <AUTH_TOKEN>
+   ```
+
+## Key Metrics Displayed
+
+The monitor dashboard displays several important metrics:
+
+- Request counts by endpoint
+- Response times
+- Error rates
+- Resource usage per module
+- Historical trends (web UI only)
+
+These metrics help you identify bottlenecks, troubleshoot issues, and optimize your nanoservice performance.

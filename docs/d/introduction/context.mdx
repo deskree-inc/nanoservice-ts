@@ -2,11 +2,11 @@
 title: Context Object
 ---
 
-The Context Object (`ctx`) is a crucial component in Nanoservice-TS that facilitates data sharing and state management across different [Nodes](./nodes.mdx) within a single [Workflow](./workflows.mdx) execution instance. It acts as a shared memory space, allowing Nodes to pass information to subsequent Nodes, access initial trigger data, and maintain state throughout the lifecycle of a workflow run.
+The Context Object (`ctx`) is a crucial component in Blok that facilitates data sharing and state management across different [Nodes](./nodes.mdx) within a single [Workflow](./workflows.mdx) execution instance. It acts as a shared memory space, allowing Nodes to pass information to subsequent Nodes, access initial trigger data, and maintain state throughout the lifecycle of a workflow run.
 
 ## What is the Context Object?
 
-When a [Trigger](./triggers.mdx) initiates a Workflow, Nanoservice-TS creates a unique Context Object for that specific workflow instance. This object persists throughout the execution of that instance and is accessible to every Node within it.
+When a [Trigger](./triggers.mdx) initiates a Workflow, Blok creates a unique Context Object for that specific workflow instance. This object persists throughout the execution of that instance and is accessible to every Node within it.
 
 Key characteristics of the Context Object:
 
@@ -104,7 +104,7 @@ export default class Node extends NanoService<InputType> {
 
 ## Data Flow and Immutability
 
-While the Context Object allows for shared mutable state, it's essential to be mindful of how data is modified. Some Nanoservice-TS implementations or best practices might encourage treating parts of the context (like initial trigger data) as immutable to prevent unintended side effects.
+While the Context Object allows for shared mutable state, it's essential to be mindful of how data is modified. Some Blok implementations or best practices might encourage treating parts of the context (like initial trigger data) as immutable to prevent unintended side effects.
 
 Nodes typically read the data they need from the context (or directly from their `input` which is often populated from the context by the workflow engine), perform their operations, and then write their results back to the context if those results need to be accessed by subsequent nodes.
 
@@ -223,6 +223,6 @@ This workflow **stores an API response in a variable** and **uses it in a later 
 - ✅ **Nodes can dynamically read/write to `ctx.response.data`.**  
 - ✅ **`ctx.request.params`, `ctx.request.body`, and `ctx.response` drive workflow execution.**
 
-The Context Object is a powerful mechanism that enables dynamic and flexible workflows in Nanoservice-TS. Understanding how to use it effectively is key to building robust and maintainable nanoservice applications.
+The Context Object is a powerful mechanism that enables dynamic and flexible workflows in Blok . Understanding how to use it effectively is key to building robust and maintainable nanoservice applications.
 
 Next, learn about what initiates workflows: [Triggers](./triggers.mdx).
