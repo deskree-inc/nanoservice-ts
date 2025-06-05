@@ -89,7 +89,7 @@ export async function publish(opts: OptionValues) {
 		if (!token) throw new Error("Authentication token not found. Please run 'nanoctl login' before publishing.");
 		if (!opts.directory) throw new Error("Directory is required.");
 
-		logger.start("Publishing node to the nanoservices registry...");
+		logger.start("Publishing node to the registry...");
 
 		// Special case: if node is ".", use the current directory
 		if (opts.node === ".") {

@@ -22,11 +22,12 @@ async function searchWorkflow(opts: OptionValues) {
 
 export async function install(opts: OptionValues) {
 	const token = tokenManager.getToken();
-	const npmrcFile = `${opts.directory}/.npmrc`;
 	const logger = p.spinner();
 	try {
 		if (!token) throw new Error("Token is invalid.");
 		if (!opts.workflow) throw new Error("Workflow name is required.");
+
+		opts.token = token;
 
 		const workflowInfo = await searchWorkflow(opts);
 
@@ -49,10 +50,7 @@ export async function install(opts: OptionValues) {
 
 		logger.stop("Workflow installed successfully.");
 	} catch (error) {
-		if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
 		logger.stop((error as Error).message, 1);
-	} finally {
-		if (fs.existsSync(npmrcFile)) fs.unlinkSync(npmrcFile);
 	}
 }
 
