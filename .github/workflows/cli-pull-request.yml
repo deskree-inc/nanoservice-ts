@@ -1,0 +1,85 @@
+name: Pre-release Checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  pre-release-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Copilot Code Review
+        if: github.event_name == 'pull_request'
+        uses: github/copilot-preview-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: 'packages/cli/**/*.{ts,js}'
+
+      - name: Type Check
+        run: cd packages/cli && npm run typecheck
+
+      - name: Run tests
+        run: cd packages/cli && npm test
+
+      - name: Verify build
+        run: cd packages/cli && npm run build
+
+      - name: Check for version bump
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          BASE_VERSION=$(git show origin/${{ github.base_ref }}:packages/cli/package.json | node -p "JSON.parse(require('fs').readFileSync(0)).version")
+          CURRENT_VERSION=$(node -p "require('./packages/cli/package.json').version")
+          if [ "$BASE_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "Error: Version in package.json has not been updated"
+            echo "Base version: $BASE_VERSION"
+            echo "Current version: $CURRENT_VERSION"
+            exit 1
+          fi
+
+      - name: Verify CHANGELOG update
+        if: github.event_name == 'pull_request'
+        run: |
+          CURRENT_VERSION=$(node -p "require('./packages/cli/package.json').version")
+          
+          # Check if version exists in CHANGELOG.md
+          if ! grep -q "^## ${CURRENT_VERSION}" packages/cli/CHANGELOG.md; then
+            echo "Error: CHANGELOG.md does not contain a section for version $CURRENT_VERSION"
+            exit 1
+          fi
+          
+          # Extract the section for the current version and verify it has content
+          SECTION_START=$(grep -n "^## ${CURRENT_VERSION}" packages/cli/CHANGELOG.md | cut -d: -f1)
+          NEXT_SECTION=$(tail -n +$((SECTION_START + 1)) packages/cli/CHANGELOG.md | grep -n "^## " | head -1 | cut -d: -f1)
+          
+          if [ -z "$NEXT_SECTION" ]; then
+            # If this is the last section, count lines until the end
+            SECTION_CONTENT=$(tail -n +$((SECTION_START + 1)) packages/cli/CHANGELOG.md)
+          else
+            # Extract content between this version and the next
+            SECTION_CONTENT=$(tail -n +$((SECTION_START + 1)) packages/cli/CHANGELOG.md | head -n $((NEXT_SECTION - 1)))
+          fi
+          
+          # Check if there's actual content (more than just empty lines)
+          if [ -z "$(echo "$SECTION_CONTENT" | grep "### Patch Changes")" ]; then
+            echo "Error: CHANGELOG.md section for version $CURRENT_VERSION is empty or missing 'Patch Changes' section"
+            exit 1
+          fi 

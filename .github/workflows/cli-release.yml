@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify package version matches release
+        run: |
+          RELEASE_VERSION=${{ github.event.release.tag_name }}
+          PACKAGE_VERSION=$(node -p "require('./packages/cli/package.json').version")
+          if [ "v$PACKAGE_VERSION" != "$RELEASE_VERSION" ]; then
+            echo "Package version ($PACKAGE_VERSION) does not match release version (${RELEASE_VERSION#v})"
+            exit 1
+          fi
+
+      - name: Verify CHANGELOG.md update
+        run: |
+          RELEASE_VERSION=${{ github.event.release.tag_name }}
+          if ! grep -q "${RELEASE_VERSION#v}" packages/cli/CHANGELOG.md; then
+            echo "CHANGELOG.md does not contain an entry for version ${RELEASE_VERSION#v}"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: cd packages/cli && npm test
+
+      - name: Build
+        run: cd packages/cli && npm run build
+
+      - name: Publish to NPM
+        run: cd packages/cli && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 

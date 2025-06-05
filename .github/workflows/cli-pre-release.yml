@@ -1,0 +1,107 @@
+name: Publish Pre-release
+
+on:
+  release:
+    types: [prereleased]
+
+jobs:
+  publish-prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify package version matches pre-release
+        run: |
+          RELEASE_VERSION=${{ github.event.release.tag_name }}
+          PACKAGE_VERSION=$(node -p "require('./packages/cli/package.json').version")
+          # Strip beta suffix if present for comparison
+          CLEAN_PACKAGE_VERSION=$(echo $PACKAGE_VERSION | sed 's/-beta\.[0-9]*$//')
+          if [ "v$CLEAN_PACKAGE_VERSION" != "$RELEASE_VERSION" ] && [ "v$PACKAGE_VERSION" != "$RELEASE_VERSION" ]; then
+            echo "Package version ($PACKAGE_VERSION) does not match release version (${RELEASE_VERSION#v})"
+            exit 1
+          fi
+
+      - name: Verify CHANGELOG.md update
+        run: |
+          RELEASE_VERSION=${{ github.event.release.tag_name }}
+          VERSION=${RELEASE_VERSION#v}
+          
+          # First check if version exists in CHANGELOG.md
+          if ! grep -q "^## ${VERSION}" packages/cli/CHANGELOG.md; then
+            echo "CHANGELOG.md does not contain an entry for version $VERSION"
+            exit 1
+          fi
+          
+          # Extract the section for the current version and verify it has content
+          SECTION_START=$(grep -n "^## ${VERSION}" packages/cli/CHANGELOG.md | cut -d: -f1)
+          NEXT_SECTION=$(tail -n +$((SECTION_START + 1)) packages/cli/CHANGELOG.md | grep -n "^## " | head -1 | cut -d: -f1)
+          
+          if [ -z "$NEXT_SECTION" ]; then
+            # If this is the last section, count lines until the end
+            SECTION_CONTENT=$(tail -n +$((SECTION_START + 1)) packages/cli/CHANGELOG.md)
+          else
+            # Extract content between this version and the next
+            SECTION_CONTENT=$(tail -n +$((SECTION_START + 1)) packages/cli/CHANGELOG.md | head -n $((NEXT_SECTION - 1)))
+          fi
+          
+          # Check if there's actual content (more than just empty lines)
+          if [ -z "$(echo "$SECTION_CONTENT" | grep "### Patch Changes")" ]; then
+            echo "Error: CHANGELOG.md section for version $VERSION is empty or missing 'Patch Changes' section"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: cd packages/cli && npm test
+
+      - name: Build
+        run: cd packages/cli && npm run build
+
+      - name: Set pre-release version
+        run: |
+          RELEASE_VERSION=${{ github.event.release.tag_name }}
+          # Remove 'v' prefix if present
+          VERSION=${RELEASE_VERSION#v}
+          
+          if [[ $VERSION == *"-beta."* ]]; then
+            # If version already contains beta, use it as is
+            BETA_VERSION="$VERSION"
+          else
+            # Get all existing beta versions for this version
+            EXISTING_VERSIONS=$(npm view nanoctl@"$VERSION-beta.*" version 2>/dev/null || echo "")
+            
+            # Find the highest beta number
+            HIGHEST_BETA=-1
+            if [ ! -z "$EXISTING_VERSIONS" ]; then
+              while read -r ver; do
+                if [[ $ver =~ $VERSION-beta\.([0-9]+) ]]; then
+                  beta_num=${BASH_REMATCH[1]}
+                  if (( beta_num > HIGHEST_BETA )); then
+                    HIGHEST_BETA=$beta_num
+                  fi
+                fi
+              done <<< "$EXISTING_VERSIONS"
+            fi
+            
+            # Increment the highest beta number
+            NEXT_BETA=$((HIGHEST_BETA + 1))
+            BETA_VERSION="$VERSION-beta.$NEXT_BETA"
+          fi
+          
+          echo "Setting version to $BETA_VERSION"
+          cd packages/cli && npm version $BETA_VERSION --no-git-tag-version
+
+      - name: Publish to NPM with beta tag
+        run: cd packages/cli && npm publish --tag beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
