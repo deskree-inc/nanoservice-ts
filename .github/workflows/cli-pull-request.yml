@@ -3,8 +3,12 @@ name: Pre-release Checks
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'packages/cli/**'
   push:
     branches: [main]
+    paths:
+      - 'packages/cli/**'
 
 jobs:
   pre-release-check:

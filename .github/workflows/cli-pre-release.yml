@@ -12,16 +12,28 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check for CLI changes
+        id: check-cli
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -q "^packages/cli/"; then
+            echo "has_cli_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_cli_changes=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Node.js
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         run: npm ci
 
       - name: Verify package version matches pre-release
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         run: |
           RELEASE_VERSION=${{ github.event.release.tag_name }}
           PACKAGE_VERSION=$(node -p "require('./packages/cli/package.json').version")
@@ -33,6 +45,7 @@ jobs:
           fi
 
       - name: Verify CHANGELOG.md update
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         run: |
           RELEASE_VERSION=${{ github.event.release.tag_name }}
           VERSION=${RELEASE_VERSION#v}
@@ -62,12 +75,15 @@ jobs:
           fi
 
       - name: Run tests
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         run: cd packages/cli && npm test
 
       - name: Build
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         run: cd packages/cli && npm run build
 
       - name: Set pre-release version
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         run: |
           RELEASE_VERSION=${{ github.event.release.tag_name }}
           # Remove 'v' prefix if present
@@ -102,6 +118,7 @@ jobs:
           cd packages/cli && npm version $BETA_VERSION --no-git-tag-version
 
       - name: Publish to NPM with beta tag
+        if: steps.check-cli.outputs.has_cli_changes == 'true'
         run: cd packages/cli && npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
