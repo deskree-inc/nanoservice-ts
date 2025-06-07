@@ -1,9 +1,9 @@
 {
-	"name": "nanoctl",
+	"name": "blokctl",
 	"version": "0.1.14",
 	"author": "Deskree Technologies Inc.",
 	"license": "Apache-2.0",
-	"description": "cli for nanoservice-ts",
+	"description": "cli for blok",
 	"engines": {
 		"node": ">=18.0.0"
 	},
@@ -11,7 +11,7 @@
 	"types": "dist/index.d.ts",
 	"type": "module",
 	"bin": {
-		"nanoctl": "./dist/index.js"
+		"blokctl": "./dist/index.js"
 	},
 	"files": ["dist", "node_modules"],
 	"scripts": {
@@ -22,11 +22,11 @@
 		"typecheck": "tsc --noEmit --incremental",
 		"clean": "rm -rf dist && rm -rf node_modules",
 		"install:local": "npm link",
-		"uninstall:local": "npm rm --global nanoctl",
-		"dev": "npm run uninstall:local && npm run install:local && npm run build:dev && nanoctl --help",
+		"uninstall:local": "npm rm --global blokctl",
+		"dev": "npm run uninstall:local && npm run install:local && npm run build:dev && blokctl --help",
 		"postbuild": "cp -r ./src/commands/monitor/static ./dist/commands/monitor/"
 	},
-	"keywords": ["nanoctl", "cli", "nanoservice", "nanoservice-ts"],
+	"keywords": ["blokctl", "cli", "nanoservice", "nanoservice-ts"],
 	"dependencies": {
 		"@clack/prompts": "^0.9.1",
 		"chalk": "^5.4.1",

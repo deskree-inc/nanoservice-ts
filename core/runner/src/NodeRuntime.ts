@@ -1,12 +1,12 @@
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
-import NanoService from "./NanoService";
-import NanoServiceResponse, { type INanoServiceResponse } from "./NanoServiceResponse";
+import NodeBlok from "./NodeBlok";
+import NodeBlokResponse, { type INodeBlokResponse } from "./NodeBlokResponse";
 import type { NodeRequest, NodeResponse } from "./NodeGrpcClient";
 import NodeGrpcNativeClient from "./NodeGrpcNativeClient";
 import type RunnerNode from "./RunnerNode";
+import { type Context, GlobalError } from "./shared";
 import type ParamsDictionary from "./types/ParamsDictionary";
 
-export default class NodeRuntime extends NanoService<ParamsDictionary> {
+export default class NodeRuntime extends NodeBlok<ParamsDictionary> {
 	protected host: string;
 	protected port: number;
 
@@ -23,8 +23,8 @@ export default class NodeRuntime extends NanoService<ParamsDictionary> {
 		this.port = port;
 	}
 
-	async handle(ctx: Context, inputs: ParamsDictionary): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: ParamsDictionary): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 
 		try {
 			const context = this.createContext(ctx, inputs);

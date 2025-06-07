@@ -6,8 +6,8 @@ import { getPackageVersion } from "./utils.js";
 const version = await getPackageVersion();
 const program = new Command();
 
-const HOME_DIR = `${os.homedir()}/.nanoctl`;
-const cliConfigPath = `${HOME_DIR}/nanoctl.json`;
+const HOME_DIR = `${os.homedir()}/.blokctl`;
+const cliConfigPath = `${HOME_DIR}/blokctl.json`;
 
 const analytics = new PosthogAnalytics({
 	version: version,

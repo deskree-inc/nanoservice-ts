@@ -36,13 +36,13 @@ router.get("/", (_, res) => {
 				<h1 class="text-3xl font-semibold mb-6 text-center text-blue-700">🚀 Welcome to <span class="text-black">nanoservice-ts</span></h1>
 				<p class="text-lg mb-4">You're ready to start building fast and modular applications. Here's how to get started:</p>
 				<ol class="list-decimal list-inside mb-6 space-y-2 text-base text-gray-700">
-					<li><strong>Create</strong> a new <strong>node</strong> using <code class="bg-gray-100 px-2 py-1 rounded">npx nanoctl@latest create node</code>.</li>
-					<li><strong>Create</strong> a new <strong>workflow</strong> using <code class="bg-gray-100 px-2 py-1 rounded">npx nanoctl@latest create workflow</code>.</li>
+					<li><strong>Create</strong> a new <strong>node</strong> using <code class="bg-gray-100 px-2 py-1 rounded">npx blokctl@latest create node</code>.</li>
+					<li><strong>Create</strong> a new <strong>workflow</strong> using <code class="bg-gray-100 px-2 py-1 rounded">npx blokctl@latest create workflow</code>.</li>
 					<li><strong>Extend</strong> the routing system in <code class="bg-gray-100 px-2 py-1 rounded">src/AppRoutes.ts</code> to expose new logic.</li>
 					<li><strong>Initialize</strong> the metrics stack with Prometheus using <code class="bg-gray-100 px-2 py-1 rounded">docker compose -f infra/metrics/docker-compose.yml up</code>.</li>
 					<li><strong>Start</strong> the Docker development environment by running <code class="bg-gray-100 px-2 py-1 rounded">npm run infra:dev</code>.</li>
 					<li><strong>Start</strong> the TypeScript watcher to regenerate the dist folder by running <code class="bg-gray-100 px-2 py-1 rounded">npm run infra:build</code>.</li>
-					<li><strong>Monitor</strong> built-in performance metrics with <code class="bg-gray-100 px-2 py-1 rounded">npx nanoctl@latest monitor</code>.</li>
+					<li><strong>Monitor</strong> built-in performance metrics with <code class="bg-gray-100 px-2 py-1 rounded">npx blokctl@latest monitor</code>.</li>
 				</ol>
 
 				<div class="mt-8 text-center">

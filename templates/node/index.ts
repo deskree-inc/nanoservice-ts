@@ -1,5 +1,5 @@
-import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 
 type InputType = {
 	message?: string;
@@ -10,7 +10,7 @@ type InputType = {
  * This class is responsible for handling requests and providing responses
  * with automated validation using JSON Schema.
  */
-export default class Node extends NanoService<InputType> {
+export default class Node extends NodeBlok<InputType> {
 	/**
 	 * Initializes a new instance of the Node class.
 	 * Sets up the input and output JSON Schema for automated validation.
@@ -34,8 +34,8 @@ export default class Node extends NanoService<InputType> {
 	 * If an error occurs, it catches the error, creates a GlobalError object, sets the error details,
 	 * and sets the error in the response.
 	 */
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 
 		try {
 			// Your code here

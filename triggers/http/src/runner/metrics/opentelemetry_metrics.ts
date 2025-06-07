@@ -1,4 +1,4 @@
-import { DefaultLogger } from "@nanoservice-ts/runner";
+import { DefaultLogger } from "@blok-ts/runner";
 import { metrics } from "@opentelemetry/api";
 import { PrometheusExporter } from "@opentelemetry/exporter-prometheus";
 import { Resource } from "@opentelemetry/resources";

@@ -1,14 +1,14 @@
 const node_file = `
-import ApiCall from "@nanoservice-ts/api-call";
-import IfElse from "@nanoservice-ts/if-else";
-import type { NodeBase } from "@nanoservice-ts/shared";
+import ApiCall from "@blok-ts/api-call";
+import IfElse from "@blok-ts/if-else";
+import type { NodeBase } from "@blok-ts/shared";
 import ExampleNodes from "./nodes/examples";
 
 const nodes: {
 	[key: string]: NodeBase;
 } = {
-	"@nanoservice-ts/api-call": new ApiCall(),
-	"@nanoservice-ts/if-else": new IfElse(),
+	"@blok-ts/api-call": new ApiCall(),
+	"@blok-ts/if-else": new IfElse(),
 	...ExampleNodes,
 };
 
@@ -114,7 +114,7 @@ stdout_logfile=/var/log/nodejs.out.log
 
 const supervisord_python = `
 [program:python_app]
-command=python3 /app/.nanoctl/runtimes/python3/server.py
+command=python3 /app/.blokctl/runtimes/python3/server.py
 directory=/app
 autostart=true
 autorestart=true

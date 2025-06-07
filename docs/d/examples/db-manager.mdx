@@ -34,7 +34,7 @@ Before running this example, ensure you have:
 If you haven't created a project yet, you can do so with:
 
 ```bash
-npx nanoctl@latest create project
+npx blokctl@latest create project
 ```
 
 Follow the prompts:
@@ -130,7 +130,7 @@ The DB Manager workflow is defined in `workflows/json/db-manager.json`:
   "steps": [
     {
       "name": "filter-request",
-      "node": "@nanoservice-ts/if-else",
+      "node": "@blok-ts/if-else",
       "type": "module"
     }
   ],
@@ -252,7 +252,7 @@ The DB Manager workflow is defined in `workflows/json/db-manager.json`:
 
 ## UI Rendering with If-Else Node
 
-One of the most powerful features of Blok  is the ability to serve different content based on request conditions. The DB Manager example demonstrates this by using the `@nanoservice-ts/if-else` node to render the UI and handle API requests within a single workflow.
+One of the most powerful features of Blok  is the ability to serve different content based on request conditions. The DB Manager example demonstrates this by using the `@blok-ts/if-else` node to render the UI and handle API requests within a single workflow.
 
 ### How UI Rendering Works in Blok 
 
@@ -309,8 +309,8 @@ import {
   type INanoServiceResponse,
   NanoService,
   NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+} from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/shared";
 import fs from 'fs';
 import path from 'path';
 
@@ -410,8 +410,8 @@ import {
   type JsonLikeObject,
   NanoService,
   NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+} from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/shared";
 import pg from "pg";
 
 type PostgresQueryInputs = {
@@ -495,8 +495,8 @@ import {
   NanoService,
   NanoServiceResponse,
   type ParamsDictionary,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+} from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/shared";
 import { generateText } from "ai";
 
 type InputType = {
@@ -597,8 +597,8 @@ import {
   type JsonLikeObject,
   NanoService,
   NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+} from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/shared";
 
 type InputType = {
   model: object;

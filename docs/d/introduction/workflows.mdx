@@ -31,10 +31,10 @@ Each format has its advantages, but they all achieve the same goal: defining the
 
 ### Using the CLI
 
-The easiest way to create a new workflow is using the `nanoctl` CLI:
+The easiest way to create a new workflow is using the `blokctl` CLI:
 
 ```bash
-npx nanoctl@latest create workflow
+npx blokctl@latest create workflow
 ```
 
 When you run this command, you'll see the following interactive prompts:
@@ -85,7 +85,7 @@ JSON is the default format for defining workflows in Blok . A typical workflow J
   "steps": [
     {
       "name": "get-countries-api",
-      "node": "@nanoservice-ts/api-call",
+      "node": "@blok-ts/api-call",
       "type": "module"
     }
   ],
@@ -107,7 +107,7 @@ JSON is the default format for defining workflows in Blok . A typical workflow J
 In this example:
 1. The workflow is named "World Countries".
 2. It's triggered by a GET request to the root path ("/").
-3. It has one step that uses the built-in `@nanoservice-ts/api-call` node to fetch country data from an external API.
+3. It has one step that uses the built-in `@blok-ts/api-call` node to fetch country data from an external API.
 
 ### TOML and YAML Formats
 
@@ -124,15 +124,15 @@ Blok comes with several built-in nodes that provide common functionality. These 
 
 ```typescript
 // src/Nodes.ts
-import ApiCall from "@nanoservice-ts/api-call";
-import IfElse from "@nanoservice-ts/if-else";
-import type { NodeBase } from "@nanoservice-ts/shared";
+import ApiCall from "@blok-ts/api-call";
+import IfElse from "@blok-ts/if-else";
+import type { NodeBase } from "@blok-ts/shared";
 
 const nodes: {
   [key: string]: NodeBase;
 } = {
-  "@nanoservice-ts/api-call": new ApiCall(),
-  "@nanoservice-ts/if-else": new IfElse(),
+  "@blok-ts/api-call": new ApiCall(),
+  "@blok-ts/if-else": new IfElse(),
 };
 
 export default nodes;
@@ -140,10 +140,10 @@ export default nodes;
 
 The key built-in nodes include:
 
-1. **`@nanoservice-ts/api-call`**: Makes HTTP requests to external APIs and services.
-2. **`@nanoservice-ts/if-else`**: Provides conditional branching in workflows based on specified conditions.
+1. **`@blok-ts/api-call`**: Makes HTTP requests to external APIs and services.
+2. **`@blok-ts/if-else`**: Provides conditional branching in workflows based on specified conditions.
 
-You can use these built-in nodes directly in your workflow definitions by referencing their names (e.g., `"@nanoservice-ts/api-call"`) in the `node` property of a step.
+You can use these built-in nodes directly in your workflow definitions by referencing their names (e.g., `"@blok-ts/api-call"`) in the `node` property of a step.
 
 ## Workflow Execution
 

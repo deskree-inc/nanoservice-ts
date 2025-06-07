@@ -24,7 +24,7 @@
 					"steps": [
 						{
 							"name": "get-countries",
-							"node": "@nanoservice-ts/api-call",
+							"node": "@blok-ts/api-call",
 							"type": "module"
 						}
 					],
@@ -35,7 +35,7 @@
 					"steps": [
 						{
 							"name": "get-facts",
-							"node": "@nanoservice-ts/api-call",
+							"node": "@blok-ts/api-call",
 							"type": "module"
 						}
 					]

@@ -90,7 +90,7 @@ export class PosthogAnalytics {
 
 	private isTelemetryEnabled(): boolean {
 		// Check environment variable first
-		if (process.env.NO_NANOCTL_TELEMETRY) {
+		if (process.env.NO_BLOKCTL_TELEMETRY) {
 			return false;
 		}
 		// Default to enabled
@@ -101,7 +101,7 @@ export class PosthogAnalytics {
 		// Use machine-id or generate a persistent ID
 		// This helps track unique CLI installations
 		const machineId = os.hostname();
-		return `nanoctl-${machineId}`;
+		return `blokctl-${machineId}`;
 	}
 
 	private getSystemProperties(): Record<string, unknown> {

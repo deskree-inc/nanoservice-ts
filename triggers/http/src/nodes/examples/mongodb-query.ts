@@ -1,10 +1,5 @@
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, type JsonLikeObject, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import { MongoClient, ObjectId, type OptionalId, type Sort } from "mongodb";
 
 type InputType = {
@@ -17,7 +12,7 @@ type InputType = {
 	filter?: JsonLikeObject;
 };
 
-export default class MongoQuery extends NanoService<InputType> {
+export default class MongoQuery extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.inputSchema = {
@@ -36,8 +31,8 @@ export default class MongoQuery extends NanoService<InputType> {
 		};
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 		const client = new MongoClient(process.env.MONGODB_URI as string);
 
 		try {

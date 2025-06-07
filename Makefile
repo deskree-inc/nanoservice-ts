@@ -3,4 +3,4 @@ prepare:
 	echo VITE_NODES_PATH=${PWD}/triggers/http/src/nodes >> ${PWD}/core/runner/.env.local
 
 cli-dev:
-	pnpm --filter nanoctl -r run dev
+	pnpm --filter blokctl -r run dev

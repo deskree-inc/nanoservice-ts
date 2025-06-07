@@ -1,6 +1,6 @@
+import { DefaultLogger } from "@blok-ts/runner";
 import type { ConnectRouter } from "@connectrpc/connect";
 import { fastifyConnectPlugin } from "@connectrpc/connect-fastify";
-import { DefaultLogger } from "@nanoservice-ts/runner";
 import { type Span, metrics, trace } from "@opentelemetry/api";
 import GRpcTrigger from "./GRpcTrigger";
 

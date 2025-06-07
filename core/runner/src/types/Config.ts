@@ -1,5 +1,5 @@
-import type { NodeBase } from "@nanoservice-ts/shared";
 import type RunnerNode from "../RunnerNode";
+import type { NodeBase } from "../shared";
 import type Node from "./Node";
 import type Trigger from "./Trigger";
 

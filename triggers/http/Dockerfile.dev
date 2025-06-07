@@ -21,7 +21,7 @@ COPY tsconfig.json tsconfig.json
 ENV NODE_ENV=production
 ENV PROJECT_NAME=trigger-http-server
 ENV PROJECT_VERSION=0.0.1
-ENV APP_NAME=nanoservice-http
+ENV APP_NAME=blok-http
 ENV PORT=4000
 ENV WORKFLOWS_PATH=/usr/src/app/workflows
 ENV NODES_PATH=/usr/src/app/src/nodes

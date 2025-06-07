@@ -1,5 +1,5 @@
-import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import createTool from "./tool";
 import importEsModule from "./util";
 
@@ -19,7 +19,7 @@ type MastraAgentInputs = {
 // This is the main class that will be exported
 // This class will be used to create a new instance of the node
 // This class must be created using the extends NanoService
-export default class MastraAgent extends NanoService<MastraAgentInputs> {
+export default class MastraAgent extends NodeBlok<MastraAgentInputs> {
 	constructor() {
 		super();
 
@@ -62,9 +62,9 @@ export default class MastraAgent extends NanoService<MastraAgentInputs> {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: Context, inputs: MastraAgentInputs): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: MastraAgentInputs): Promise<INodeBlokResponse> {
 		// Create a new instance of the response
-		const response: NanoServiceResponse = new NanoServiceResponse();
+		const response: NodeBlokResponse = new NodeBlokResponse();
 
 		try {
 			if (!process.versions.bun) {

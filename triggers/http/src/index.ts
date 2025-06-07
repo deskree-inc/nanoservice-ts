@@ -1,4 +1,4 @@
-import { DefaultLogger } from "@nanoservice-ts/runner";
+import { DefaultLogger } from "@blok-ts/runner";
 import { type Span, metrics, trace } from "@opentelemetry/api";
 import HttpTrigger from "./runner/HttpTrigger";
 

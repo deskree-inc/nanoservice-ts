@@ -87,12 +87,12 @@ With **nanoservice-ts**, backend development becomes modular, predictable, and f
 To start developing your project, simply run:
 
 ```bash
-  npx nanoctl@latest create project
+  npx blokctl@latest create project
 ```
 
 And follow the instructions of the CLI
 
-_For more information and examples, visit [Getting Started](https://blok.build/docs/d/getting-started/nanoctl)_
+_For more information and examples, visit [Getting Started](https://blok.build/docs/d/getting-started/blokctl)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

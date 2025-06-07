@@ -30,9 +30,7 @@
 		"nodemon": "^3.1.9"
 	},
 	"dependencies": {
-		"@nanoservice-ts/shared": "^0.0.9",
-		"@nanoservice-ts/runner": "^0.1.21",
-		"@nanoservice-ts/helper": "^0.1.4",
+		"@blok-ts/runner": "workspace:*",
 		"ejs": "^3.1.10"
 	},
 	"private": true

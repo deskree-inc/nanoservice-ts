@@ -1,5 +1,5 @@
-import { type Context, GlobalError, type NodeBase, type Step } from "@nanoservice-ts/shared";
-import type NanoServiceResponse from "./NanoServiceResponse";
+import type NodeBlokResponse from "./NodeBlokResponse";
+import { type Context, GlobalError, type NodeBase, type Step } from "./shared";
 
 export default abstract class RunnerSteps {
 	/**
@@ -30,7 +30,7 @@ export default abstract class RunnerSteps {
 
 				if (!step.flow) {
 					const model = await step.process(ctx, step as unknown as Step);
-					ctx.response = model.data as NanoServiceResponse;
+					ctx.response = model.data as NodeBlokResponse;
 					if (ctx.response.error) throw ctx.response.error;
 				} else {
 					stepName = step.name;

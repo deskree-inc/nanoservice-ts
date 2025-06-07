@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <title>Dashboard - nanoservice-ts</title>
+    <title>Dashboard - Blok</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -628,7 +628,7 @@
               Node Metrics
             </h2>
             <p class="text-sm text-gray-500 dark:text-gray-400">
-              Monitor nanoservice performance and health by individual node.
+              Monitor blok performance and health by individual node.
             </p>
           </div>
           <button
@@ -1415,7 +1415,7 @@
           const start = end - 3600n * 1000000000n;
 
           const params = new URLSearchParams({
-            query: '{service_name="nanoservice-http"} | json | level="info"',
+            query: '{service_name="blok-http"} | json | level="info"',
             limit: "50",
             start: start.toString(),
             end: end.toString(),
@@ -1462,7 +1462,7 @@
           const start = end - 3600n * 1000000000n;
 
           const params = new URLSearchParams({
-            query: '{service_name="nanoservice-http"} | json | level="error"',
+            query: '{service_name="blok-http"} | json | level="error"',
             limit: "50",
             start: start.toString(),
             end: end.toString(),

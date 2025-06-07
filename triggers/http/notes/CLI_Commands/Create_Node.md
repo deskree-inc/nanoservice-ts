@@ -11,7 +11,7 @@ This guide walks you through creating a **custom node** using **TypeScript**.
 To create a new node, run the following command from the **root directory** of your nanoservice project:
 
 ```bash
-npx nanoctl@latest create node
+npx blokctl@latest create node
 ```
 
 ### 📥 CLI Inputs
@@ -72,16 +72,16 @@ export default class Fetch extends NanoService {
 To make your node available in workflows, **register it inside `src/Nodes.ts`**:
 
 ```typescript
-import ApiCall from "@nanoservice-ts/api-call";
-import IfElse from "@nanoservice-ts/if-else";
-import type { NodeBase } from "@nanoservice-ts/shared";
+import ApiCall from "@blok-ts/api-call";
+import IfElse from "@blok-ts/if-else";
+import type { NodeBase } from "@blok-ts/shared";
 import Fetch from "./nodes/fetch";
 
 const nodes: {
      [key: string]: NodeBase;
 } = {
-     "@nanoservice-ts/api-call": new ApiCall(),
-     "@nanoservice-ts/if-else": new IfElse(),
+     "@blok-ts/api-call": new ApiCall(),
+     "@blok-ts/if-else": new IfElse(),
      "fetch": new Fetch()
 };
 

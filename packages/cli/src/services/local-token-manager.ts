@@ -9,7 +9,7 @@ class LocalTokenManager {
 
 	constructor() {
 		// Set up secure storage directory
-		this.storageDir = path.join(os.homedir(), ".nanoctl/token");
+		this.storageDir = path.join(os.homedir(), ".blokctl/token");
 		this.tokenFile = path.join(this.storageDir, "token.enc");
 
 		// Ensure storage directory exists with proper permissions

@@ -1,16 +1,15 @@
-import type { ConditionOpts } from "@nanoservice-ts/helper";
-import { type Condition, type INanoServiceResponse, NanoService } from "@nanoservice-ts/runner";
-import type { Context, NodeBase } from "@nanoservice-ts/shared";
-import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
+import type { ConditionOpts, ParamsDictionary } from "@blok-ts/runner";
+import { type Condition, type INodeBlokResponse, NodeBlok } from "@blok-ts/runner";
+import type { Context, NodeBase } from "@blok-ts/runner";
 
-export default class IfElse extends NanoService<Array<Condition>> {
+export default class IfElse extends NodeBlok<Array<Condition>> {
 	constructor() {
 		super();
 		this.flow = true;
 		this.contentType = "";
 	}
 
-	async handle(ctx: Context, inputs: Array<Condition>): Promise<INanoServiceResponse | NanoService<Condition[]>[]> {
+	async handle(ctx: Context, inputs: Array<Condition>): Promise<INodeBlokResponse | NodeBlok<Condition[]>[]> {
 		let steps: NodeBase[] = [];
 		const conditions = inputs;
 
@@ -38,7 +37,7 @@ export default class IfElse extends NanoService<Array<Condition>> {
 			}
 		}
 
-		return steps as unknown as NanoService<Condition[]>[];
+		return steps as unknown as NodeBlok<Condition[]>[];
 	}
 }
 

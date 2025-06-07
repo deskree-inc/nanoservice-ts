@@ -1,11 +1,11 @@
-import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 
 type ErrorNodeInputs = {
 	message: string;
 };
 
-export default class ErrorNode extends NanoService<ErrorNodeInputs> {
+export default class ErrorNode extends NodeBlok<ErrorNodeInputs> {
 	constructor() {
 		super();
 
@@ -31,9 +31,9 @@ export default class ErrorNode extends NanoService<ErrorNodeInputs> {
 		this.contentType = "text/html";
 	}
 
-	async handle(ctx: Context, inputs: ErrorNodeInputs): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: ErrorNodeInputs): Promise<INodeBlokResponse> {
 		// Create a new instance of the response
-		const response = new NanoServiceResponse();
+		const response = new NodeBlokResponse();
 		const message = inputs.message as string;
 
 		try {

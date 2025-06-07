@@ -1,8 +1,8 @@
-import type { Context, LoggerContext } from "@nanoservice-ts/shared";
 import { beforeAll, expect, test } from "vitest";
+import type { Context, LoggerContext } from "../src";
 import DefaultLogger from "../src/DefaultLogger";
-import NanoService from "../src/NanoService";
-import NanoServiceResponse, { type INanoServiceResponse } from "../src/NanoServiceResponse";
+import NodeBlok from "../src/NodeBlok";
+import NodeBlokResponse, { type INodeBlokResponse } from "../src/NodeBlokResponse";
 import type JsonLikeObject from "../src/types/JsonLikeObject";
 
 let context = <Context>{};
@@ -30,8 +30,8 @@ beforeAll(() => {
 });
 
 test("Execute nanoService implementation", async () => {
-	const nano = new AddCreatedAtProperty();
-	const response = ((await nano.run(context)) as NanoServiceResponse).data as JsonLikeObject;
+	const node = new AddCreatedAtProperty();
+	const response = ((await node.run(context)) as NodeBlokResponse).data as JsonLikeObject;
 
 	expect(response.success).toBe(true);
 	expect(response.data).toHaveProperty("name");
@@ -41,18 +41,18 @@ test("Execute nanoService implementation", async () => {
 });
 
 test("Execute nanoService wrong inputs", async () => {
-	const nano = new AddCreatedAtProperty();
+	const node = new AddCreatedAtProperty();
 	// @ts-ignore
 	context.config["add-property"].inputs.data = undefined;
 	try {
-		await nano.run(context);
+		await node.run(context);
 	} catch (e) {
 		// @ts-ignore
 		expect(e.message).toBe('instance requires property "data"');
 	}
 });
 
-class AddCreatedAtProperty extends NanoService<InputType> {
+class AddCreatedAtProperty extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.name = "add-property";
@@ -80,8 +80,8 @@ class AddCreatedAtProperty extends NanoService<InputType> {
 		};
 	}
 
-	public async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse | NanoService<InputType>[]> {
-		const response = new NanoServiceResponse();
+	public async handle(ctx: Context, inputs: JsonLikeObject): Promise<INodeBlokResponse | NodeBlok<InputType>[]> {
+		const response = new NodeBlokResponse();
 		const data = inputs.data as JsonLikeObject;
 		data.createdAt = true;
 		response.setSuccess(data);

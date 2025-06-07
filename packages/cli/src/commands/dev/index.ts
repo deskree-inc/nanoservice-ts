@@ -15,10 +15,10 @@ export async function devProject(opts: OptionValues) {
 			args: [
 				"nodemon@3.1.9",
 				"--config",
-				"./.nanoctl/runtimes/python3/nodemon.json",
+				"./.blokctl/runtimes/python3/nodemon.json",
 				"--exec",
-				"./.nanoctl/runtimes/python3/python3_runtime/bin/python3",
-				"./.nanoctl/runtimes/python3/server.py",
+				"./.blokctl/runtimes/python3/python3_runtime/bin/python3",
+				"./.blokctl/runtimes/python3/server.py",
 			],
 			name: "Python3 Runner",
 		},

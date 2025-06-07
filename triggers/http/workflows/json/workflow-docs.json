@@ -12,7 +12,7 @@
 	"steps": [
 		{
 			"name": "filter-request",
-			"node": "@nanoservice-ts/if-else",
+			"node": "@blok-ts/if-else",
 			"type": "module"
 		}
 	],

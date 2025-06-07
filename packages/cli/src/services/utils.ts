@@ -17,7 +17,7 @@ export async function getPackageVersion() {
 
 export function getPreferredEditor(): string {
 	// Try to load user config
-	const configPath = `${os.homedir()}/.nanoctl/config.json`;
+	const configPath = `${os.homedir()}/.blokctl/config.json`;
 	try {
 		if (fs.existsSync(configPath)) {
 			const config = JSON.parse(fs.readFileSync(configPath, "utf8"));

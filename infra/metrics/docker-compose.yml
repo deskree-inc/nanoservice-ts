@@ -103,9 +103,9 @@ services:
     networks:
       - shared-network
 
-  # nanoservice-http:
-  #   container_name: nanoservice-http
-  #   hostname: nanoservice-http
+  # blok-http:
+  #   container_name: blok-http
+  #   hostname: blok-http
   #   build:
   #     context: ../../triggers/http
   #     dockerfile: Dockerfile

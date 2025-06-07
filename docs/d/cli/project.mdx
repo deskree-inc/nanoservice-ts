@@ -2,11 +2,11 @@
 title: Project
 ---
 
-Managing **nanoservice-ts** projects effectively starts with the `nanoctl` CLI. This section focuses on commands related to project creation and overall project lifecycle management, primarily the `create project` command.
+Managing **nanoservice-ts** projects effectively starts with the `blokctl` CLI. This section focuses on commands related to project creation and overall project lifecycle management, primarily the `create project` command.
 
 ## `create project`
 
-This is typically the first `nanoctl` command you will use when starting a new **nanoservice-ts** application.
+This is typically the first `blokctl` command you will use when starting a new **nanoservice-ts** application.
 
 > <sub>**Purpose**: To scaffold a new **nanoservice-ts** project with a predefined directory structure, necessary configuration files, and optional templates.</sub>
 
@@ -14,16 +14,16 @@ This is typically the first `nanoctl` command you will use when starting a new *
 
 ```bash
 # This command creates a new project and automatically generates a new directory for it.
-npx nanoctl@latest create project
+npx blokctl@latest create project
 ```
 ```bash
 # Use this command to create a new project inside the current (empty) directory.
-npx nanoctl@latest create project .
+npx blokctl@latest create project .
 ```
 
 **Interactive Prompts & Options**:
 
-When you run `npx nanoctl@latest create project`, the CLI will typically guide you through a series of prompts:
+When you run `npx blokctl@latest create project`, the CLI will typically guide you through a series of prompts:
 
 1. Assign a project name.
 2. Select **HTTP trigger** (default).
@@ -32,7 +32,7 @@ When you run `npx nanoctl@latest create project`, the CLI will typically guide y
 
 **What it Does**:
 
-Upon completion, the `npx nanoctl@latest create project` command will:
+Upon completion, the `npx blokctl@latest create project` command will:
 
 1.  Create a new directory with your desired project name, or use the current directory instead.
 2.  Populate this directory with the standard **nanoservice-ts** project structure based on the chosen template. This typically includes:

@@ -1,5 +1,5 @@
 {
-	"name": "@nanoservice-ts/if-else",
+	"name": "@blok-ts/if-else",
 	"version": "0.0.30",
 	"description": "nanoservice if-else",
 	"engines": {
@@ -26,9 +26,7 @@
 		"vitest": "^3.1.4"
 	},
 	"dependencies": {
-		"@nanoservice-ts/helper": "workspace:*",
-		"@nanoservice-ts/runner": "workspace:*",
-		"@nanoservice-ts/shared": "workspace:*",
+		"@blok-ts/runner": "workspace:*",
 		"lodash": "^4.17.21"
 	},
 	"private": false

@@ -2,7 +2,7 @@
 title: Node
 ---
 
-**Nodes** are the core building blocks of your **nanoservice-ts** applications, encapsulating specific pieces of logic. The `nanoctl` CLI provides commands to help you create and manage these Nodes efficiently, primarily through the `create node` command.
+**Nodes** are the core building blocks of your **nanoservice-ts** applications, encapsulating specific pieces of logic. The `blokctl` CLI provides commands to help you create and manage these Nodes efficiently, primarily through the `create node` command.
 
 ## `create node`
 
@@ -14,11 +14,11 @@ This command is used to scaffold a new Node within your **nanoservice-ts** proje
 
 ```bash
 # This command creates a new node and automatically generates a new directory for it.
-npx nanoctl@latest create node
+npx blokctl@latest create node
 ```
 ```bash
 # Use this command to create a new node inside the current (empty) directory.
-npx nanoctl@latest create node .
+npx blokctl@latest create node .
 ```
 
 ### 1. Interactive Prompts & Options
@@ -73,16 +73,16 @@ export default class Fetch extends NanoService {
 To make your node available in workflows, **register it inside `src/Nodes.ts`**:
 
 ```typescript
-import ApiCall from "@nanoservice-ts/api-call";
-import IfElse from "@nanoservice-ts/if-else";
-import type { NodeBase } from "@nanoservice-ts/shared";
+import ApiCall from "@blok-ts/api-call";
+import IfElse from "@blok-ts/if-else";
+import type { NodeBase } from "@blok-ts/shared";
 import Fetch from "./nodes/fetch";
 
 const nodes: {
      [key: string]: NodeBase;
 } = {
-     "@nanoservice-ts/api-call": new ApiCall(),
-     "@nanoservice-ts/if-else": new IfElse(),
+     "@blok-ts/api-call": new ApiCall(),
+     "@blok-ts/if-else": new IfElse(),
      "fetch": new Fetch()
 };
 

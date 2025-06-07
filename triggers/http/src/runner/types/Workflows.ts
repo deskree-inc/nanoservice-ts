@@ -1,4 +1,4 @@
-import type { HelperResponse } from "@nanoservice-ts/helper";
+import type { HelperResponse } from "@blok-ts/runner";
 
 type Workflows = {
 	[key: string]: HelperResponse;

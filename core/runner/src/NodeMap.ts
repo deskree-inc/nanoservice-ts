@@ -1,4 +1,4 @@
-import type { NodeBase } from "@nanoservice-ts/shared";
+import type { NodeBase } from "./shared";
 
 export default class NodeMap {
 	public nodes: Map<string, NodeBase> = new Map<string, NodeBase>();

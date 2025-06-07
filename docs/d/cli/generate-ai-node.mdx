@@ -2,7 +2,7 @@
 title: Generate AI Node
 ---
 
-The `nanoctl generate ai-node` command leverages OpenAI to automatically generate Blok Nodes based on natural language prompts. This powerful tool helps developers quickly scaffold production-ready bloks that follow the framework's structural conventions.
+The `blokctl generate ai-node` command leverages OpenAI to automatically generate Blok Nodes based on natural language prompts. This powerful tool helps developers quickly scaffold production-ready bloks that follow the framework's structural conventions.
 
 By combining AI code generation with automatic registration in your project, this command significantly accelerates the Node development process while ensuring adherence to Blok standards.
 
@@ -10,7 +10,7 @@ By combining AI code generation with automatic registration in your project, thi
 
 ### Syntax
 ```bash
-npx nanoctl@latest generate ai-node [options]
+npx blokctl@latest generate ai-node [options]
 ```
 
 Creates a new Node using OpenAI's API based on a natural language prompt.
@@ -29,14 +29,14 @@ Creates a new Node using OpenAI's API based on a natural language prompt.
 #### Generate a Basic Node
 ```bash
 # Execution of this command requires the OPENAI_API_KEY environment variable.
-npx nanoctl@latest generate ai-node \
+npx blokctl@latest generate ai-node \
   --name "mapper" \
   --prompt "Generate a mapper function that transforms an array of objects from one type to another"
 ```
 
 #### Generate a Node with Specific API Key
 ```bash
-npx nanoctl@latest generate ai-node \
+npx blokctl@latest generate ai-node \
   --name "file-reader" \
   --prompt "Create a nanoservice that reads a file from disk" \
   --api-key "your-openai-api-key"
@@ -45,7 +45,7 @@ npx nanoctl@latest generate ai-node \
 #### Generate a Node with Custom Type
 ```bash
 # Execution of this command requires the OPENAI_API_KEY environment variable.
-npx nanoctl@latest generate ai-node \
+npx blokctl@latest generate ai-node \
   --name "data-processor" \
   --prompt "Generate a nanoservice that receives a JSON array, filters out invalid entries based on a validation schema, and returns a cleaned version of the array." \
   --type "module"

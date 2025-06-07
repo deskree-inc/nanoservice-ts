@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import ejs from "ejs";
 import { inputSchema } from "./inputSchema";
 
@@ -17,7 +17,7 @@ type InputType = {
 
 const rootDir = path.resolve(__dirname, ".");
 
-export default class React extends NanoService<InputType> {
+export default class React extends NodeBlok<InputType> {
 	constructor() {
 		super();
 
@@ -40,9 +40,9 @@ export default class React extends NanoService<InputType> {
 		return path.resolve(rootDir, relPath);
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
 		// Create a new instance of the response
-		const response = new NanoServiceResponse();
+		const response = new NodeBlokResponse();
 		let file_path = inputs.react_app;
 		if (file_path === undefined || file_path === "") file_path = "./app/index.merged.min.js";
 		const react_script_template = '<script type="text/babel">REACT_SCRIPT</script>';

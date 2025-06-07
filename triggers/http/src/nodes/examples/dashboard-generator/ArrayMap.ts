@@ -1,18 +1,18 @@
 import {
-	type INanoServiceResponse,
+	type INodeBlokResponse,
 	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
+	NodeBlok,
+	NodeBlokResponse,
 	type ParamsDictionary,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+} from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 
 type InputType = {
 	array: Array<object>;
 	map: string;
 };
 
-export default class ArrayMapNode extends NanoService<InputType> {
+export default class ArrayMapNode extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.inputSchema = {
@@ -26,8 +26,8 @@ export default class ArrayMapNode extends NanoService<InputType> {
 		};
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 
 		try {
 			if (!Array.isArray(inputs.array)) throw new Error("Array is not an array");

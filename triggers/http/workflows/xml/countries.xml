@@ -10,7 +10,7 @@
 </trigger>
 <steps>
     <name>get-countries-api</name>
-    <node>@nanoservice-ts/api-call</node>
+    <node>@blok-ts/api-call</node>
     <type>module</type>
 </steps>
 <nodes>

@@ -2,7 +2,7 @@
 title: Login
 ---
 
-To interact securely with the `nanoctl` CLI, users must authenticate using one of the supported methods. Depending on your use case—whether it's CI/CD automation, local development, or quick testing—`nanoctl` offers flexible authentication options to suit your workflow. Each method supports the use of API tokens, with varying levels of interactivity, security, and persistence:
+To interact securely with the `blokctl` CLI, users must authenticate using one of the supported methods. Depending on your use case—whether it's CI/CD automation, local development, or quick testing—`blokctl` offers flexible authentication options to suit your workflow. Each method supports the use of API tokens, with varying levels of interactivity, security, and persistence:
 
 * **Environment Variable**: Ideal for headless or automated environments.
 * **Token Flag**: Useful for short-lived sessions or scripting.
@@ -18,7 +18,7 @@ Choose the method that best aligns with your development or deployment context.
         **Usage**:
         ```bash
         export NANOSERVICES_TOKEN="your_api_token_here"
-        npx nanoctl@latest login
+        npx blokctl@latest login
         ```
 
         **Behavior**:
@@ -32,8 +32,8 @@ Choose the method that best aligns with your development or deployment context.
 
         **Usage**:
         ```bash
-        npx nanoctl@latest login --token "your_api_token_here"
-        npx nanoctl@latest login -t "your_api_token_here"
+        npx blokctl@latest login --token "your_api_token_here"
+        npx blokctl@latest login -t "your_api_token_here"
         ```
 
         **Behavior**:
@@ -46,7 +46,7 @@ Choose the method that best aligns with your development or deployment context.
   - **Best for**: First-time setup, most secure local use
     **Usage**:
     ```bash
-    npx nanoctl@latest login
+    npx blokctl@latest login
     ```
 
     **Interactive Flow**:
@@ -67,7 +67,7 @@ Choose the method that best aligns with your development or deployment context.
 To remove the stored authentication token and end the session, run:
 
 ```bash
-npx nanoctl@latest logout
+npx blokctl@latest logout
 ```
 
-This command deletes the locally saved token, ensuring that future `nanoctl` operations require re-authentication. It's a recommended practice when switching users or revoking access on a shared environment.
+This command deletes the locally saved token, ensuring that future `blokctl` operations require re-authentication. It's a recommended practice when switching users or revoking access on a shared environment.

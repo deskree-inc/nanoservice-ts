@@ -41,7 +41,7 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @nanoservice-ts/helper@0.1.5
+  - @blok-ts/helper@0.1.5
 
 ## 0.1.19
 
@@ -49,7 +49,7 @@
 
 - Python3 runtime implemented in the runner
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.9
+  - @blok-ts/shared@0.0.9
 
 ## 0.1.18
 
@@ -57,7 +57,7 @@
 
 - Added examples and create project' command to include examples and 'create node' command with options for type ('module' or 'class') and template ('class' or 'ui')
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.8
+  - @blok-ts/shared@0.0.8
 
 ## 0.1.17
 
@@ -71,8 +71,8 @@
 
 - Added support for YAML, XML and TOML in the workflow file. Upgraded package version recommended by Dependabot.
 - Updated dependencies
-  - @nanoservice-ts/helper@0.1.4
-  - @nanoservice-ts/shared@0.0.7
+  - @blok-ts/helper@0.1.4
+  - @blok-ts/shared@0.0.7
 
 ## 0.1.15
 
@@ -85,7 +85,7 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.6
+  - @blok-ts/shared@0.0.6
 
 ## 0.1.13
 
@@ -93,7 +93,7 @@
 
 - Implemented a react node and the chatbot demo page
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.5
+  - @blok-ts/shared@0.0.5
 
 ## 0.1.12
 
@@ -101,7 +101,7 @@
 
 - Improved Loki metrics
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.4
+  - @blok-ts/shared@0.0.4
 
 ## 0.1.11
 
@@ -121,7 +121,7 @@
 
 - Improved and extended the open telemetry feature
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.3
+  - @blok-ts/shared@0.0.3
 
 ## 0.1.8
 
@@ -129,7 +129,7 @@
 
 - Fixed open telemetry issues and types
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.2
+  - @blok-ts/shared@0.0.2
 
 ## 0.1.7
 
@@ -137,7 +137,7 @@
 
 - Fixed issue with the cli node creation test
 - Updated dependencies
-  - @nanoservice-ts/shared@0.0.1
+  - @blok-ts/shared@0.0.1
 
 ## 0.1.6
 
@@ -157,7 +157,7 @@
 
 - Updated the imports with new scope
 - Updated dependencies
-  - @nanoservice-ts/helper@0.1.3
+  - @blok-ts/helper@0.1.3
 
 ## 0.1.3
 
@@ -165,7 +165,7 @@
 
 - Changed the module scope to nanoservice-ts
 - Updated dependencies
-  - @nanoservice-ts/helper@0.1.2
+  - @blok-ts/helper@0.1.2
 
 ## 0.1.2
 

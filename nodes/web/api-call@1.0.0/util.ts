@@ -1,4 +1,4 @@
-import type { JsonLikeObject } from "@nanoservice-ts/runner";
+import type { JsonLikeObject } from "@blok-ts/runner";
 
 export const runApiCall = async (
 	url: string,

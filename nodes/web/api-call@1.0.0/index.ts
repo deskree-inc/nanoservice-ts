@@ -1,10 +1,5 @@
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, type JsonLikeObject, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import { inputSchema } from "./inputSchema";
 import { runApiCall } from "./util";
 
@@ -16,7 +11,7 @@ export type InputType = {
 	body: JsonLikeObject;
 };
 
-export default class ApiCall extends NanoService<InputType> {
+export default class ApiCall extends NodeBlok<InputType> {
 	constructor() {
 		super();
 
@@ -24,8 +19,8 @@ export default class ApiCall extends NanoService<InputType> {
 		this.outputSchema = {};
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 
 		try {
 			const method = inputs.method;

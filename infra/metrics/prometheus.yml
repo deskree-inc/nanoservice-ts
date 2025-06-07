@@ -11,9 +11,9 @@ scrape_configs:
     static_configs:
       - targets: ["cadvisor:8080"]
 
-  - job_name: "nanoservice-http"
+  - job_name: "blok-http"
     static_configs:
-      - targets: ["nanoservice-http:4000"]
+      - targets: ["blok-http:4000"]
 
   # - job_name: 'nanoservice-http'
   #   static_configs:

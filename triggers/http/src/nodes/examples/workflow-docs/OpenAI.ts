@@ -1,6 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai";
-import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import { generateText } from "ai";
 import InMemory from "./InMemory";
 
@@ -10,7 +10,7 @@ type InputType = {
 	prompt: string[];
 };
 
-export default class OpenAI extends NanoService<InputType> {
+export default class OpenAI extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.inputSchema = {
@@ -37,8 +37,8 @@ export default class OpenAI extends NanoService<InputType> {
 		this.contentType = "text/html";
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 
 		try {
 			const cache = InMemory.getInstance();

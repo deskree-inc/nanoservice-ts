@@ -1,4 +1,3 @@
-import type { ConnectRouter } from "@connectrpc/connect";
 import {
 	DefaultLogger,
 	type GlobalOptions,
@@ -6,8 +5,9 @@ import {
 	type ParamsDictionary,
 	TriggerBase,
 	type TriggerResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+} from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
+import type { ConnectRouter } from "@connectrpc/connect";
 import { type Span, SpanStatusCode, metrics, trace } from "@opentelemetry/api";
 import fastify from "fastify";
 import { v4 as uuid } from "uuid";
@@ -16,8 +16,8 @@ import nodes from "./Nodes";
 import workflows from "./Workflows";
 import type RuntimeWorkflow from "./types/RuntimeWorkflow";
 
-import { type Step, Workflow } from "@nanoservice-ts/helper";
-import type { TriggerOpts } from "@nanoservice-ts/helper/dist/types/TriggerOpts";
+import { type StepHelper, Workflow } from "@blok-ts/runner";
+import type { TriggerOpts } from "@blok-ts/runner";
 import {
 	MessageEncoding,
 	MessageType,
@@ -115,7 +115,7 @@ export default class GRpcTrigger extends TriggerBase {
 					const trigger_config =
 						((workflowModel.trigger as unknown as ParamsDictionary)[trigger] as unknown as TriggerOpts) || {};
 
-					const step: Step = Workflow({
+					const step: StepHelper = Workflow({
 						name: `Remote Node: ${name}`,
 						version: "1.0.0",
 						description: "Remote Node",

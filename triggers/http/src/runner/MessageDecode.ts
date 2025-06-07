@@ -1,5 +1,5 @@
-import type { JsonLikeObject } from "@nanoservice-ts/runner";
-import type { Context } from "@nanoservice-ts/shared";
+import type { JsonLikeObject } from "@blok-ts/runner";
+import type { Context } from "@blok-ts/runner";
 import type WorkflowRequest from "./types/WorkflowRequest";
 import type WorkflowResponse from "./types/WorkflowResponse";
 

@@ -20,8 +20,8 @@ COPY . .
 
 
 # Install Python dependencies
-RUN if [ -f ./.nanoctl/runtimes/python3/requirements.txt ]; then \
-    pip install --no-cache-dir -r ./.nanoctl/runtimes/python3/requirements.txt; \
+RUN if [ -f ./.blokctl/runtimes/python3/requirements.txt ]; then \
+    pip install --no-cache-dir -r ./.blokctl/runtimes/python3/requirements.txt; \
     fi
 
 # Install Node.js dependencies

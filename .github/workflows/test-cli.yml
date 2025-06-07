@@ -9,7 +9,7 @@ on:
       - '.github/workflows/test-cli.yml'
   push:
     branches: 
-      - nanoctl-cicd
+      - blokctl-cicd
     paths:
       - 'cli/**'
       - '.github/workflows/test-cli.yml'

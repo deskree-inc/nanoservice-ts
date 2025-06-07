@@ -1,5 +1,5 @@
-import type { Context, GlobalLogger } from "@nanoservice-ts/shared";
 import DefaultLogger from "./DefaultLogger";
+import type { Context, GlobalLogger } from "./shared";
 import type Config from "./types/Config";
 import type { WorkflowLocator } from "./types/GlobalOptions";
 

@@ -11,13 +11,13 @@ This SDK is designed specifically for **browser environments** and distributed v
 ### 📥 Include via CDN
 
 ```html
-<script src="https://cdn.yourdomain.com/nanosdk.min.js"></script>
+<script src="https://cdn.yourdomain.com/bloksdk.min.js"></script>
 ```
 
-This will make `NanoSDK` available globally in the browser:
+This will make `BlokSDK` available globally in the browser:
 
 ```js
-const client = new NanoSDK().createHttpClient("https://your-atomic-app.com", "your-access-token");
+const client = new BlokSDK().createHttpClient("https://your-atomic-app.com", "your-access-token");
 ```
 
 ---
@@ -28,7 +28,7 @@ const client = new NanoSDK().createHttpClient("https://your-atomic-app.com", "yo
 
 ```html
 <script>
-  const client = new NanoSDK().createHttpClient("https://your-atomic-app.com", "your-access-token");
+  const client = new BlokSDK().createHttpClient("https://your-atomic-app.com", "your-access-token");
 
   async function run() {
     const response = await client.python3("my-python-node", {
@@ -51,7 +51,7 @@ const client = new NanoSDK().createHttpClient("https://your-atomic-app.com", "yo
 ### Execute a Node.js Blok (as module)
 
 ```js
-await client.nodejs("@nanoservice-ts/api-call", {
+await client.nodejs("@blok-ts/api-call", {
   url: "https://catfact.ninja/fact",
   method: "GET",
   responseType: "application/json"
@@ -116,7 +116,7 @@ client.setHeaders({
 
 Enable debug logging:
 ```js
-const client = new NanoSDK().createHttpClient("https://your-host", "your-token", true);
+const client = new BlokSDK().createHttpClient("https://your-host", "your-token", true);
 ```
 
 Console will log:

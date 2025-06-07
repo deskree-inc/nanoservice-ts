@@ -1,5 +1,5 @@
 {
-	"name": "@nanoservice-ts/trigger-http",
+	"name": "@blok-ts/trigger-http",
 	"version": "0.0.34",
 	"description": "Trigger for HTTP requests",
 	"engines": {
@@ -26,14 +26,14 @@
 		"nodemon": "^3.1.9",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.8.2"
+		"typescript": "^5.8.2",
+		"@types/ejs": "^3.1.5",
+		"@types/pg": "^8.11.11"
 	},
 	"dependencies": {
-		"@nanoservice-ts/api-call": "^0.1.29",
-		"@nanoservice-ts/helper": "^0.1.5",
-		"@nanoservice-ts/if-else": "^0.0.30",
-		"@nanoservice-ts/runner": "^0.1.26",
-		"@nanoservice-ts/shared": "^0.0.9",
+		"@blok-ts/api-call": "workspace:*",
+		"@blok-ts/if-else": "workspace:*",
+		"@blok-ts/runner": "workspace:*",
 		"@opentelemetry/api": "^1.9.0",
 		"@opentelemetry/exporter-prometheus": "^0.57.2",
 		"@opentelemetry/resources": "^1.30.1",
@@ -41,11 +41,17 @@
 		"@opentelemetry/sdk-trace-base": "^1.30.1",
 		"@opentelemetry/sdk-trace-web": "^1.30.1",
 		"@opentelemetry/semantic-conventions": "^1.30.0",
+		"@modelcontextprotocol/sdk": "^1.12.1",
 		"body-parser": "1.20.3",
 		"cors": "2.8.5",
 		"express": "4.21.2",
 		"uuid": "^11.1.0",
-		"zod": "^3.24.2"
+		"zod": "^3.24.2",
+		"ai": "^4.1.50",
+		"@ai-sdk/openai": "^1.2.0",
+		"ejs": "^3.1.10",
+		"pg": "^8.13.3",
+		"mongodb": "^6.14.2"
 	},
 	"private": true
 }

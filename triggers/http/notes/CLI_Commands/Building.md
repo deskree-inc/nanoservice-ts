@@ -18,7 +18,7 @@
 
 ### Syntax
 ```bash
-npx nanoctl build [options]
+npx blokctl build [options]
 ```
   Compiles and packages a blok from source code into a deployable artifact.
  
@@ -36,16 +36,16 @@ npx nanoctl build [options]
   ### Examples
   #### Build in default directory:
   ``` bash
-  npx nanoctl build
+  npx blokctl build
   ```
   #### Build in specific directory:
   ```bash
-  npx nanoctl build -d ./my-nanoservice
+  npx blokctl build -d ./my-nanoservice
   ```
 
   #### Build in current directory:
   ```bash
-  npx nanoctl build .
+  npx blokctl build .
   ```
 
 ---

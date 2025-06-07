@@ -1,5 +1,5 @@
-import type { JsonLikeObject } from "@nanoservice-ts/runner";
-import type { Context } from "@nanoservice-ts/shared";
+import type { JsonLikeObject } from "@blok-ts/runner";
+import type { Context } from "@blok-ts/runner";
 import { MessageEncoding, MessageType, type WorkflowRequest, type WorkflowResponse } from "./gen/workflow_pb";
 const { XMLParser, XMLBuilder } = require("fast-xml-parser");
 

@@ -1,17 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, type JsonLikeObject, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import ejs from "ejs";
 
 const rootDir = path.resolve(__dirname, ".");
 
-export default class ImageCaptureUI extends NanoService<JsonLikeObject> {
+export default class ImageCaptureUI extends NodeBlok<JsonLikeObject> {
 	constructor() {
 		super();
 
@@ -34,9 +29,9 @@ export default class ImageCaptureUI extends NanoService<JsonLikeObject> {
 		return path.resolve(rootDir, relPath);
 	}
 
-	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INanoServiceResponse> {
+	async handle(ctx: Context, inputs: JsonLikeObject): Promise<INodeBlokResponse> {
 		// Create a new instance of the response
-		const response = new NanoServiceResponse();
+		const response = new NodeBlokResponse();
 		const index_html = "index.html";
 
 		try {

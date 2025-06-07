@@ -1,5 +1,5 @@
-import type { Condition, JsonLikeObject, ParamsDictionary } from "@nanoservice-ts/runner";
-import type { Context, NodeBase, ResponseContext } from "@nanoservice-ts/shared";
+import type { Condition, JsonLikeObject, ParamsDictionary } from "@blok-ts/runner";
+import type { Context, NodeBase, ResponseContext } from "@blok-ts/runner";
 import { describe, expect, it } from "vitest";
 import IfElse from "../index";
 

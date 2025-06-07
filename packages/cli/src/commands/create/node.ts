@@ -12,8 +12,8 @@ import { python3_file } from "./utils/Examples.js";
 
 const exec = util.promisify(child_process.exec);
 
-const HOME_DIR = `${os.homedir()}/.nanoctl`;
-const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
+const HOME_DIR = `${os.homedir()}/.blokctl`;
+const GITHUB_REPO_LOCAL = `${HOME_DIR}/blok`;
 
 export async function createNode(opts: OptionValues, currentPath = false) {
 	const availableManagers = await pm.getAvailableManagers();
@@ -27,7 +27,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 
 	if (!isDefault) {
 		console.log(
-			figlet.textSync("nanoservice-ts CLI".toUpperCase(), {
+			figlet.textSync("Blok CLI".toUpperCase(), {
 				font: "Digital",
 				horizontalLayout: "default",
 				verticalLayout: "default",
@@ -63,13 +63,13 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		};
 
 		p.intro(color.inverse(" Creating a new Node "));
-		const nanoctlNode = await p.group(
+		const blokctlNode = await p.group(
 			{
 				nodeName: () => resolveNodeName(),
 				selectedManager: () => resolveSelectedManager(),
 				nodeRuntime: () =>
 					p.select({
-						message: "Select the nanoservice runtime",
+						message: "Select the blok runtime",
 						options: [
 							{ label: "Typescript", value: "typescript", hint: "recommended" },
 							{ label: "Python3", value: "python3", hint: "Alpha - Limited to MacOS and Linux" },
@@ -84,9 +84,9 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 			},
 		);
 
-		nodeName = nanoctlNode.nodeName;
-		node_runtime = nanoctlNode.nodeRuntime;
-		selectedManager = nanoctlNode.selectedManager;
+		nodeName = blokctlNode.nodeName;
+		node_runtime = blokctlNode.nodeRuntime;
+		selectedManager = blokctlNode.selectedManager;
 
 		if (node_runtime === "python3") {
 			// Show a warning message
@@ -98,11 +98,11 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		}
 
 		if (node_runtime !== "python3") {
-			const nanoctlNodeExtension = await p.group(
+			const blokctlNodeExtension = await p.group(
 				{
 					nodeType: () =>
 						p.select({
-							message: "Select the nanoservice type",
+							message: "Select the blok type",
 							options: [
 								{ label: "Module", value: "module", hint: "recommended" },
 								{ label: "Class", value: "class" },
@@ -125,8 +125,8 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 				},
 			);
 
-			nodeType = nanoctlNodeExtension.nodeType;
-			template = nanoctlNodeExtension.template;
+			nodeType = blokctlNodeExtension.nodeType;
+			template = blokctlNodeExtension.template;
 		}
 	}
 
@@ -138,7 +138,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 		const mainDirExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (!mainDirExists)
 			throw new Error(
-				"The blok repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
+				"The blok repository was not found. Please run 'npx blokctl@latest create project' to clone the repository.",
 			);
 
 		if (node_runtime === "typescript") {
@@ -265,7 +265,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 			console.log(
 				"Oops! It seems like you haven't created a project yet... or have you? 🤔\n" +
 					"If you already did, you can navigate to it using: cd project-name\n" +
-					"Otherwise, you can create a new project with: npx nanoctl@latest create project",
+					"Otherwise, you can create a new project with: npx blokctl@latest create project",
 			);
 		}
 		if (message === "ops2") {
@@ -278,7 +278,7 @@ export async function createNode(opts: OptionValues, currentPath = false) {
 			console.log(
 				"Oops! It seems like you haven't created a project with python3 support yet... or have you? 🤔\n" +
 					"If you already did, you can navigate to it using: cd project-name\n" +
-					"Otherwise, you can create a new project with: npx nanoctl@latest create project",
+					"Otherwise, you can create a new project with: npx blokctl@latest create project",
 			);
 		}
 		if (message !== "ops1" && message !== "ops2") {

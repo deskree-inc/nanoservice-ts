@@ -39,7 +39,7 @@ COPY --from=prerelease /usr/src/app/public public
 ENV WORKFLOWS_PATH=/usr/src/app/workflows
 ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
-ENV APP_NAME=nanoservice-http
+ENV APP_NAME=blok-http
 
 # run the app
 USER node

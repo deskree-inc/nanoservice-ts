@@ -1,5 +1,5 @@
 const generateNodeManifestSystemPrompt = {
-	prompt: `You are a senior developer assistant. Your task is to generate a manifest JSON configuration for a newly created nanoservice node using the @nanoservice-ts framework.
+	prompt: `You are a senior developer assistant. Your task is to generate a manifest JSON configuration for a newly created blok node using the @blok-ts framework.
   
   You will receive:
   - The complete TypeScript source code of the node (including the InputType, inputSchema, and handle logic).

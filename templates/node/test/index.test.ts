@@ -1,4 +1,4 @@
-import type ParamsDictionary from "@nanoservice-ts/shared/dist/types/ParamsDictionary";
+import type { ParamsDictionary } from "@blok-ts/runner";
 import { beforeAll, expect, test } from "vitest";
 import Node from "../index";
 import ctx from "./helper";

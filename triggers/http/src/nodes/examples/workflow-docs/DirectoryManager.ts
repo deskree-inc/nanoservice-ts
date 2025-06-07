@@ -1,17 +1,12 @@
 import fs from "node:fs";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, type JsonLikeObject, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 
 type InputType = {
 	path: string;
 };
 
-export default class DirectoryManager extends NanoService<InputType> {
+export default class DirectoryManager extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.inputSchema = {
@@ -24,8 +19,8 @@ export default class DirectoryManager extends NanoService<InputType> {
 		};
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 
 		try {
 			const files: string[] = fs.readdirSync(inputs.path);

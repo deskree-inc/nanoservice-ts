@@ -1,4 +1,4 @@
-import type { Context, MetricsType } from "@nanoservice-ts/shared";
+import type { Context, MetricsType } from "../shared";
 
 type TriggerResponse = {
 	ctx: Context;

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package nanoservice.workflow.v1;
+package blok.workflow.v1;
 
 message NodeRequest {
     string Name = 1;

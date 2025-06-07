@@ -2,7 +2,7 @@
 title: Build
 ---
 
-The `nanoctl build` command compiles your nanoservice source code into a deployable artifact, preparing it for execution or deployment. This step ensures your code, dependencies, and configuration are packaged correctly according to the `nanoservice-ts` project structure.
+The `blokctl build` command compiles your nanoservice source code into a deployable artifact, preparing it for execution or deployment. This step ensures your code, dependencies, and configuration are packaged correctly according to the `nanoservice-ts` project structure.
 
 Whether you're building from the default project directory, a custom location, or directly within the current folder, the CLI offers flexible options to match your development workflow. Use it as part of your standard development, testing, or deployment process.
 
@@ -12,7 +12,7 @@ Once the build is complete, you're ready to deploy your nanoservice using the [`
 
 ### Syntax
 ```bash
-npx nanoctl build [options]
+npx blokctl build [options]
 ```
   Compiles and packages a nanoservice from source code into a deployable artifact.
  
@@ -30,14 +30,14 @@ npx nanoctl build [options]
   ### Examples
   #### Build in default directory:
   ``` bash
-  npx nanoctl build
+  npx blokctl build
   ```
   #### Build in specific directory:
   ```bash
-  npx nanoctl build -d ./my-nanoservice
+  npx blokctl build -d ./my-nanoservice
   ```
 
   #### Build in current directory:
   ```bash
-  npx nanoctl build .
+  npx blokctl build .
   ```

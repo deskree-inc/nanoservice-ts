@@ -1,5 +1,5 @@
-import { NanoServiceResponse } from "@nanoservice-ts/runner";
-import type { Context, GlobalError } from "@nanoservice-ts/shared";
+import { NodeBlokResponse } from "@blok-ts/runner";
+import type { Context, GlobalError } from "@blok-ts/runner";
 import { describe, expect, it, vi } from "vitest";
 import ApiCall, { type InputType } from "../index";
 import { runApiCall } from "../util";
@@ -40,7 +40,7 @@ describe("ApiCall Node", () => {
 		vi.mocked(runApiCall).mockResolvedValue(mockResult);
 
 		const result = await apiCallNode.handle(mockContext, validInputs);
-		expect(result).toBeInstanceOf(NanoServiceResponse);
+		expect(result).toBeInstanceOf(NodeBlokResponse);
 		expect(result.success).toBe(true);
 		expect(result.data).toEqual(mockResult);
 	});
@@ -54,7 +54,7 @@ describe("ApiCall Node", () => {
 		vi.mocked(runApiCall).mockResolvedValue(mockResult);
 
 		const result = await apiCallNode.handle(mockContext, inputsWithoutBody);
-		expect(result).toBeInstanceOf(NanoServiceResponse);
+		expect(result).toBeInstanceOf(NodeBlokResponse);
 		expect(result.success).toBe(true);
 		expect(result.data).toEqual(mockResult);
 	});
@@ -66,7 +66,7 @@ describe("ApiCall Node", () => {
 		vi.mocked(runApiCall).mockRejectedValue(mockError);
 
 		const result = await apiCallNode.handle(mockContext, validInputs);
-		expect(result).toBeInstanceOf(NanoServiceResponse);
+		expect(result).toBeInstanceOf(NodeBlokResponse);
 		expect(result.success).toBe(false);
 		expect(result.error).toBeDefined();
 		expect((result.error as GlobalError).message).toBe("API request failed");

@@ -11,7 +11,7 @@ Ensure the following are installed:
 ### Step 1: Create a New Project
 Run the command below to create a project:
 ```sh
-npx nanoctl@latest create project
+npx blokctl@latest create project
 ```
 Follow the prompts:
 1. Assign a project name.

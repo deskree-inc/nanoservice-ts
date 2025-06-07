@@ -1,4 +1,4 @@
-import type { Trigger } from "@nanoservice-ts/shared";
+import type { Trigger } from "../shared";
 
 type Triggers = {
 	[key: string]: Trigger;

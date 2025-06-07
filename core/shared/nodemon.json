@@ -1,6 +1,0 @@
-{
-	"watch": ["src"],
-	"ext": "ts",
-	"ignore": ["src/**/*.test.ts"],
-	"exec": "npm run build && npx ts-node ./src/index.ts"
-}

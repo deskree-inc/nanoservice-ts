@@ -10,7 +10,7 @@ Before you begin, make sure you have:
 
 - A Blok project ready for deployment
 - Node.js (v18 or later) and npm installed
-- The Blok CLI installed (`npx nanoctl@latest`)
+- The Blok CLI installed (`npx blokctl@latest`)
 
 ## Step 1: Sign Up for Deskree Atomic
 
@@ -37,7 +37,7 @@ Before you begin, make sure you have:
 Use the Blok CLI to log in with your token:
 
 ```bash
-npx nanoctl@latest login
+npx blokctl@latest login
 ```
 
 When prompted, paste your access token. You should see a confirmation message that you've successfully logged in.
@@ -47,7 +47,7 @@ When prompted, paste your access token. You should see a confirmation message th
 Once authenticated, you can deploy your Blok project with a single command:
 
 ```bash
-npx nanoctl@latest deploy --build --name YOUR_PROJECT_NAME
+npx blokctl@latest deploy --build --name YOUR_PROJECT_NAME
 ```
 
 Replace `YOUR_PROJECT_NAME` with a unique name for your project. This name will be used in the URL for accessing your deployed service.
@@ -81,25 +81,25 @@ Here's a quick reference of all the CLI commands used for deployment:
 ### Login to Deskree
 
 ```bash
-npx nanoctl@latest login
+npx blokctl@latest login
 ```
 
 ### Deploy a Project
 
 ```bash
-npx nanoctl@latest deploy --build --name YOUR_PROJECT_NAME
+npx blokctl@latest deploy --build --name YOUR_PROJECT_NAME
 ```
 
 ### List Deployments
 
 ```bash
-npx nanoctl@latest list-deployments
+npx blokctl@latest list-deployments
 ```
 
 ### Delete a Deployment
 
 ```bash
-npx nanoctl@latest delete-deployment --name YOUR_PROJECT_NAME
+npx blokctl@latest delete-deployment --name YOUR_PROJECT_NAME
 ```
 
 ## Monitoring and Logs

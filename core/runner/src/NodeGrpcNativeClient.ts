@@ -4,7 +4,7 @@ import type ParamsDictionary from "./types/ParamsDictionary";
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
 
-const packageDefinition = protoLoader.loadSync(`${__dirname}/proto/node.proto`, {
+const packageDefinition = protoLoader.loadSync(`${__dirname}/../proto/node.proto`, {
 	keepCase: true,
 	longs: String,
 	enums: String,

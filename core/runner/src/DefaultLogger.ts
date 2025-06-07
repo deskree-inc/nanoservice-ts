@@ -1,4 +1,4 @@
-import { GlobalLogger } from "@nanoservice-ts/shared";
+import { GlobalLogger } from "./shared";
 
 /**
  * DefaultLogger class extends GlobalLogger to provide logging functionality

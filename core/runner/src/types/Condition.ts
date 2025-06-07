@@ -1,4 +1,4 @@
-import type { NodeBase } from "@nanoservice-ts/shared";
+import type { NodeBase } from "../shared";
 
 type Condition = {
 	type?: string;

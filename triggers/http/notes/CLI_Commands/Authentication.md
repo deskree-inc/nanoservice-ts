@@ -16,7 +16,7 @@
         **Usage**:
         ```bash
         export NANOSERVICES_TOKEN="your_api_token_here"
-        npx nanoctl@latest login
+        npx blokctl@latest login
         ```
 
         **Behavior**:
@@ -30,8 +30,8 @@
 
         **Usage**:
         ```bash
-        npx nanoctl@latest login --token "your_api_token_here"
-        npx nanoctl@latest login -t "your_api_token_here"
+        npx blokctl@latest login --token "your_api_token_here"
+        npx blokctl@latest login -t "your_api_token_here"
         ```
 
         **Behavior**:
@@ -44,7 +44,7 @@
   - **Best for**: First-time setup, most secure local use
     **Usage**:
     ```bash
-    npx nanoctl@latest login
+    npx blokctl@latest login
     ```
 
     **Interactive Flow**:
@@ -64,7 +64,7 @@
 ## How to logout
 
 ```bash
-npx nanoctl@latest logout
+npx blokctl@latest logout
 ```
 
 Removes the authentication token from the local machine.

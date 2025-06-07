@@ -4,7 +4,7 @@ import * as p from "@clack/prompts";
 import fs from "fs-extra";
 import { type OptionValues, program, trackCommandExecution } from "../../services/commander.js";
 
-import { NANOSERVICE_URL } from "../../services/constants.js";
+import { BLOK_URL } from "../../services/constants.js";
 import { tokenManager } from "../../services/local-token-manager.js";
 
 type StatusType =
@@ -21,7 +21,7 @@ type StatusType =
 	  }
 	| undefined;
 
-const nanoserviceJsonModel = {
+const blokJsonModel = {
 	name: "",
 	builds: [],
 	lastBuild: {},
@@ -30,7 +30,7 @@ const nanoserviceJsonModel = {
 };
 
 async function initBuild(opts: OptionValues) {
-	const initBuild = await fetch(`${NANOSERVICE_URL}/build-init`, {
+	const initBuild = await fetch(`${BLOK_URL}/build-init`, {
 		method: "GET",
 		headers: {
 			Authorization: `Bearer ${opts.token}`,
@@ -69,12 +69,12 @@ async function createTarBall(opts: OptionValues) {
 		"-C",
 		opts.directory,
 		`--exclude=${fileName}`,
-		"--exclude=.nanoservice.json",
+		"--exclude=.blok.json",
 		"--exclude=.git",
 		"--exclude=node_modules",
 		"--exclude=package-lock.json",
 		"--exclude=README.md",
-		"--exclude=.nanoctl/runtimes/python3/python3_runtime/lib",
+		"--exclude=.blokctl/runtimes/python3/python3_runtime/lib",
 		".",
 	];
 
@@ -101,7 +101,7 @@ async function storeFiles(opts: OptionValues) {
 }
 
 async function building(opts: OptionValues) {
-	const build = await fetch(`${NANOSERVICE_URL}/build/${opts.id}`, {
+	const build = await fetch(`${BLOK_URL}/build/${opts.id}`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -117,7 +117,7 @@ async function building(opts: OptionValues) {
 }
 
 async function getBuildStatus(opts: OptionValues) {
-	const buildStatus = await fetch(`${NANOSERVICE_URL}/build-status/${opts.id}`, {
+	const buildStatus = await fetch(`${BLOK_URL}/build-status/${opts.id}`, {
 		method: "GET",
 		headers: {
 			Authorization: `Bearer ${opts.token}`,
@@ -131,27 +131,27 @@ async function getBuildStatus(opts: OptionValues) {
 export async function build(opts: OptionValues) {
 	const logger = p.spinner();
 	try {
-		logger.start(`Building nanoservice in ${opts.directory}...`);
+		logger.start(`Building Blok in ${opts.directory}...`);
 		// get token
 		logger.message("Validating authentication...");
 		opts.token = tokenManager.getToken();
 		if (!opts.token) throw new Error("No token found. Please login first.");
 
-		// check if the directory is a nanoservice
-		const nanoserviceFile = `${opts.directory}/.nanoservice.json`;
+		// check if the directory is a blok
+		const blokFile = `${opts.directory}/.blok.json`;
 
 		// Check if the directory exists
 		logger.message("Checking files...");
 		if (!fs.existsSync(opts.directory)) throw new Error(`Directory ${opts.directory} does not exist`);
 		if (!fs.existsSync(`${opts.directory}/Dockerfile`)) throw new Error(`Dockerfile not found in ${opts.directory}`);
-		if (!fs.existsSync(nanoserviceFile)) {
-			fs.ensureFileSync(nanoserviceFile);
-			fs.writeJSONSync(nanoserviceFile, nanoserviceJsonModel, { spaces: 2 });
-			logger.message("Creating .nanoservice.json file...");
+		if (!fs.existsSync(blokFile)) {
+			fs.ensureFileSync(blokFile);
+			fs.writeJSONSync(blokFile, blokJsonModel, { spaces: 2 });
+			logger.message("Creating .blok.json file...");
 		}
 
-		logger.message("Loading .nanoservice.json file...");
-		const json = fs.readJSONSync(nanoserviceFile);
+		logger.message("Loading .blok.json file...");
+		const json = fs.readJSONSync(blokFile);
 
 		// Compressing the directory
 		logger.message("Creating tarball...");
@@ -174,7 +174,7 @@ export async function build(opts: OptionValues) {
 		logger.message("Files stored");
 
 		// call build
-		logger.message("Building nanoservice...");
+		logger.message("Building blok...");
 		const build = await building(opts);
 
 		// Check build status
@@ -202,7 +202,7 @@ export async function build(opts: OptionValues) {
 		};
 		json.builds.push(initBuildModel);
 		json.lastBuild = initBuildModel;
-		fs.writeJSONSync(nanoserviceFile, json, { spaces: 2 });
+		fs.writeJSONSync(blokFile, json, { spaces: 2 });
 
 		if (status?.status?.condition?.status !== "True") throw new Error(status?.status?.condition?.message);
 		logger.stop("Build completed successfully", 0);
@@ -218,8 +218,8 @@ export async function build(opts: OptionValues) {
 
 const buildCmd = program
 	.command("build")
-	.option("-d, --directory [value]", "Directory of the nanoservice (defaults to current directory)", process.cwd())
-	.description("Build nanoservice")
+	.option("-d, --directory [value]", "Directory of the blok (defaults to current directory)", process.cwd())
+	.description("Build blok")
 	.action(async (options: OptionValues) => {
 		await trackCommandExecution({
 			command: "build",
@@ -232,7 +232,7 @@ const buildCmd = program
 
 buildCmd
 	.command(".")
-	.description("Build nanoservice in the current directory")
+	.description("Build blok in the current directory")
 	.action(async (options: OptionValues) => {
 		await trackCommandExecution({
 			command: "build .",

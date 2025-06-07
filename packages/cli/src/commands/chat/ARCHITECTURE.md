@@ -2,7 +2,7 @@
 
 ## Overview
 
-This architecture defines a scalable CLI-based multi-agent system built on top of LangChain.js, designed to support AI-driven generation of nanoservice nodes, workflows, and configurations. It includes support for:
+This architecture defines a scalable CLI-based multi-agent system built on top of LangChain.js, designed to support AI-driven generation of blok nodes, workflows, and configurations. It includes support for:
 
 * Terminal-based chat interface
 * LangChain.js
@@ -54,7 +54,7 @@ This architecture defines a scalable CLI-based multi-agent system built on top o
 Command:
 
 ```bash
-npx nanoctl@latest chat
+npx blokctl@latest chat
 ```
 
 Opens a REPL chat where the user can ask for:
@@ -78,7 +78,7 @@ LangChain.js orchestrates:
 
 Each agent has a single responsibility. Example agents:
 
-* **NodeAgent**: Generates new nanoservice node code.
+* **NodeAgent**: Generates new blok node code.
 * **WorkflowAgent**: Creates JSON workflows.
 * **ValidatorAgent**: Validates user-generated content.
 * **FileAgent**: Writes or reads files.
@@ -141,7 +141,7 @@ Example intents:
 User runs:
 
 ```bash
-npx nanoctl@latest chat
+npx blokctl@latest chat
 ```
 
 User types:
@@ -168,7 +168,7 @@ Flow:
 ## Example Commands for Developers
 
 ```bash
-npx nanoctl chat                           # Start terminal chat
+npx blokctl chat                           # Start terminal chat
 ```
 
 > Note: These commands route to agents, not directly to prompts. The system decides which system prompt/tool to apply.

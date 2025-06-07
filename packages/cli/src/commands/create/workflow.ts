@@ -7,8 +7,8 @@ import fsExtra from "fs-extra";
 import color from "picocolors";
 import { workflow_template } from "./utils/Examples.js";
 
-const HOME_DIR = `${os.homedir()}/.nanoctl`;
-const GITHUB_REPO_LOCAL = `${HOME_DIR}/nanoservice-ts`;
+const HOME_DIR = `${os.homedir()}/.blokctl`;
+const GITHUB_REPO_LOCAL = `${HOME_DIR}/blok`;
 
 export async function createWorkflow(opts: OptionValues, currentPath = false) {
 	const isDefault = opts.name !== undefined;
@@ -16,7 +16,7 @@ export async function createWorkflow(opts: OptionValues, currentPath = false) {
 
 	if (!isDefault) {
 		console.log(
-			figlet.textSync("nanoservice-ts CLI".toUpperCase(), {
+			figlet.textSync("Blok CLI".toUpperCase(), {
 				font: "Digital",
 				horizontalLayout: "default",
 				verticalLayout: "default",
@@ -39,7 +39,7 @@ export async function createWorkflow(opts: OptionValues, currentPath = false) {
 		};
 
 		p.intro(color.inverse(" Creating a new Workflow "));
-		const nanoctlNode = await p.group(
+		const blokctlNode = await p.group(
 			{
 				workflowName: () => resolveWorkflowName(),
 			},
@@ -51,7 +51,7 @@ export async function createWorkflow(opts: OptionValues, currentPath = false) {
 			},
 		);
 
-		workflowName = nanoctlNode.workflowName;
+		workflowName = blokctlNode.workflowName;
 	}
 
 	const s = p.spinner();
@@ -62,7 +62,7 @@ export async function createWorkflow(opts: OptionValues, currentPath = false) {
 		const mainDirExists = fsExtra.existsSync(GITHUB_REPO_LOCAL);
 		if (!mainDirExists)
 			throw new Error(
-				"The blok repository was not found. Please run 'npx nanoctl@latest create project' to clone the repository.",
+				"The blok repository was not found. Please run 'npx blokctl@latest create project' to clone the repository.",
 			);
 
 		let dirPath = process.cwd();
@@ -110,7 +110,7 @@ export async function createWorkflow(opts: OptionValues, currentPath = false) {
 			console.log(
 				"Oops! It seems like you haven't created a project yet... or have you? 🤔\n" +
 					"If you already did, you can navigate to it using: cd project-name\n" +
-					"Otherwise, you can create a new project with: npx nanoctl@latest create project",
+					"Otherwise, you can create a new project with: npx blokctl@latest create project",
 			);
 		}
 		if (message === "ops2") {

@@ -16,8 +16,8 @@ coverage*
 runtimes
 .DS_Store
 *.log
-.nanoctl/runtimes/python3/python3_runtime
-.nanoctl/runtimes/python3/tests
-.nanoctl/runtimes/python3/Makefile
-.nanoctl/runtimes/python3/nodemon.json
-.nanoctl/runtimes/python3/node_modules
+.blokctl/runtimes/python3/python3_runtime
+.blokctl/runtimes/python3/tests
+.blokctl/runtimes/python3/Makefile
+.blokctl/runtimes/python3/nodemon.json
+.blokctl/runtimes/python3/node_modules

@@ -48,7 +48,7 @@ jobs:
             //registry.npmjs.org/:_authToken=$NPM_TOKEN
           EOF
         env:
-          NPM_TOKEN: ${{ secrets.NANOCTL_NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.BLOKCTL_NPM_TOKEN }}
 
       - name: Build
         run: pnpm pnpm build:cli

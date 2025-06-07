@@ -8,7 +8,7 @@
 
 ### Syntax
 ```bash
-npx nanoctl deploy [options]
+npx blokctl deploy [options]
 ```
 
 
@@ -27,17 +27,17 @@ npx nanoctl deploy [options]
 
 #### Deploy with build:
 ```bash
-npx nanoctl deploy -n my-service --build
+npx blokctl deploy -n my-service --build
 ```
 
 #### Deploy existing build:
 ```bash
-npx nanoctl deploy -n my-service -d ./build-output
+npx blokctl deploy -n my-service -d ./build-output
 ```
 
 #### Deploy from current directory:
 ```bash
-npx nanoctl deploy -n my-service .
+npx blokctl deploy -n my-service .
 ```
 
 <br />
@@ -50,20 +50,20 @@ npx nanoctl deploy -n my-service .
 #### Build and deploy workflow:
 ```bash
 # Build first
-npx nanoctl build -d ./src
+npx blokctl build -d ./src
 
 # Then deploy
-npx nanoctl deploy -n my-service -d ./src
+npx blokctl deploy -n my-service -d ./src
 ```
 
 #### Single-command build & deploy:
 ```bash
-npx nanoctl deploy -n my-service --build
+npx blokctl deploy -n my-service --build
 ```
 
 #### CI/CD Pipeline Example:
 ```bash
 # In your deployment script
-npx nanoctl build -d $CODE_DIR
-npx nanoctl deploy -n $SERVICE_NAME -d $CODE_DIR
+npx blokctl build -d $CODE_DIR
+npx blokctl deploy -n $SERVICE_NAME -d $CODE_DIR
 ```

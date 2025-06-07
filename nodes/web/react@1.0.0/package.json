@@ -1,5 +1,5 @@
 {
-	"name": "@nanoservice-ts/react",
+	"name": "@blok-ts/react",
 	"version": "0.0.17",
 	"description": "",
 	"engines": {
@@ -30,10 +30,8 @@
 		"nodemon": "^3.1.9"
 	},
 	"dependencies": {
-		"@nanoservice-ts/shared": "workspace:*",
-		"@nanoservice-ts/runner": "workspace:*",
-		"@nanoservice-ts/helper": "workspace:*",
+		"@blok-ts/runner": "workspace:*",
 		"ejs": "^3.1.10"
 	},
-	"private": false
+	"private": true
 }

@@ -24,7 +24,7 @@ create
 		},
 	)
 	.action(async (options: OptionValues) => {
-		const configDir = `${os.homedir()}/.nanoctl`;
+		const configDir = `${os.homedir()}/.blokctl`;
 		const configPath = `${configDir}/config.json`;
 
 		// Ensure config directory exists
@@ -49,7 +49,7 @@ create
 	.command("list")
 	.description("Show current CLI configuration")
 	.action(() => {
-		const configPath = `${os.homedir()}/.nanoctl/config.json`;
+		const configPath = `${os.homedir()}/.blokctl/config.json`;
 		if (fs.existsSync(configPath)) {
 			const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 			console.log("Current configuration:");

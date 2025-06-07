@@ -1,5 +1,5 @@
-import type { ParamsDictionary } from "@nanoservice-ts/runner";
-import type { NodeBase, Step } from "@nanoservice-ts/shared";
+import type { ParamsDictionary } from "@blok-ts/runner";
+import type { NodeBase, Step } from "@blok-ts/runner";
 import type { Request } from "express";
 
 export function validateRoute(dynamicRoute: string, actualRoute: string) {

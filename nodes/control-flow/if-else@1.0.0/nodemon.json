@@ -2,5 +2,5 @@
 	"watch": ["src"],
 	"ext": ".ts,.js",
 	"ignore": [],
-	"exec": "pnpm --filter @nanoservice-ts/if-else run build"
+	"exec": "pnpm --filter @blok-ts/if-else run build"
 }

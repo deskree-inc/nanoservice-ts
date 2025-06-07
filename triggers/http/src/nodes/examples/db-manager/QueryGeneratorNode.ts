@@ -1,11 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai";
-import {
-	type INanoServiceResponse,
-	NanoService,
-	NanoServiceResponse,
-	type ParamsDictionary,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, NodeBlok, NodeBlokResponse, type ParamsDictionary } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import { generateText } from "ai";
 
 type InputType = {
@@ -20,7 +15,7 @@ type Column = {
 	primary_key: string;
 };
 
-export default class QueryGeneratorNode extends NanoService<InputType> {
+export default class QueryGeneratorNode extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.inputSchema = {
@@ -45,8 +40,8 @@ export default class QueryGeneratorNode extends NanoService<InputType> {
 		};
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 		const { table_name: tableName, columns, prompt } = inputs;
 
 		try {

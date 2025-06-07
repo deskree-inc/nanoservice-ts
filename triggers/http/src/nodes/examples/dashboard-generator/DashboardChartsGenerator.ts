@@ -1,11 +1,6 @@
 import { openai } from "@ai-sdk/openai";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, type JsonLikeObject, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import { generateObject } from "ai";
 import { z } from "zod";
 
@@ -17,7 +12,7 @@ type InputType = {
 	set_var?: boolean;
 };
 
-export default class DashboardChartsGenerator extends NanoService<InputType> {
+export default class DashboardChartsGenerator extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.inputSchema = {
@@ -34,8 +29,8 @@ export default class DashboardChartsGenerator extends NanoService<InputType> {
 		};
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 		const { tables, records, queries, prompt } = inputs;
 
 		try {

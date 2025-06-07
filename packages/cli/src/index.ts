@@ -24,8 +24,8 @@ const version = await getPackageVersion();
 
 async function main() {
 	try {
-		const HOME_DIR = `${os.homedir()}/.nanoctl`;
-		const cliConfigPath = `${HOME_DIR}/nanoctl.json`;
+		const HOME_DIR = `${os.homedir()}/.blokctl`;
+		const cliConfigPath = `${HOME_DIR}/blokctl.json`;
 
 		fsExtra.ensureDirSync(HOME_DIR);
 
@@ -34,9 +34,9 @@ async function main() {
 			cliConfigPath: cliConfigPath,
 		});
 
-		program.version(`${version}`, "-v, --version").description(`Nanoservice CLI ${version}`);
+		program.version(`${version}`, "-v, --version").description(`Blok CLI ${version}`);
 
-		const create = new Command("create").description("Create a new nanoservice component");
+		const create = new Command("create").description("Create a new blok component");
 
 		const project = new Command("project")
 			.description("Create a new Project")

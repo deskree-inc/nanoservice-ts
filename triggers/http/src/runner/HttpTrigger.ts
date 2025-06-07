@@ -1,10 +1,10 @@
-import { type Step, Workflow } from "@nanoservice-ts/helper";
-import type { TriggerOpts } from "@nanoservice-ts/helper/dist/types/TriggerOpts";
-import type { GlobalOptions, ParamsDictionary, TriggerResponse } from "@nanoservice-ts/runner";
-import { TriggerBase } from "@nanoservice-ts/runner";
-import { NodeMap } from "@nanoservice-ts/runner";
-import { DefaultLogger } from "@nanoservice-ts/runner";
-import { type Context, GlobalError, type RequestContext } from "@nanoservice-ts/shared";
+import { type StepHelper, Workflow } from "@blok-ts/runner";
+import type { TriggerOpts } from "@blok-ts/runner";
+import type { GlobalOptions, ParamsDictionary, TriggerResponse } from "@blok-ts/runner";
+import { TriggerBase } from "@blok-ts/runner";
+import { NodeMap } from "@blok-ts/runner";
+import { DefaultLogger } from "@blok-ts/runner";
+import { type Context, GlobalError, type RequestContext } from "@blok-ts/runner";
 import { type Span, SpanStatusCode, metrics, trace } from "@opentelemetry/api";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -130,7 +130,7 @@ export default class HttpTrigger extends TriggerBase {
 								remoteNodeName = remoteNodeName.substring(0, remoteNodeName.length - 1);
 							}
 
-							const step: Step = Workflow({
+							const step: StepHelper = Workflow({
 								name: `Remote Node: ${remoteNodeName}`,
 								version: "1.0.0",
 								description: "Remote Node",

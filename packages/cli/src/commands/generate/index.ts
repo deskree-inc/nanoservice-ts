@@ -31,7 +31,7 @@ create
 			args: options,
 			execution: async () => {
 				console.log(
-					figlet.textSync("nanoservice-ts CLI".toUpperCase(), {
+					figlet.textSync("Blok CLI".toUpperCase(), {
 						font: "Digital",
 						horizontalLayout: "default",
 						verticalLayout: "default",

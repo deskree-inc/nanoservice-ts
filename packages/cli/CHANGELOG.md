@@ -1,4 +1,4 @@
-# nanoctl
+# blokctl
 
 ## 0.1.14
 
@@ -112,7 +112,7 @@
 
 ### Patch Changes
 
-- Dynamically retrieve nanoctl version in new project setup
+- Dynamically retrieve blokctl version in new project setup
 
 ## 0.0.16
 

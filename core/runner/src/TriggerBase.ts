@@ -1,9 +1,9 @@
-import { type Context, type LoggerContext, Metrics, Trigger } from "@nanoservice-ts/shared";
 import { metrics } from "@opentelemetry/api";
 import { v4 as uuid } from "uuid";
 import Configuration from "./Configuration";
 import DefaultLogger from "./DefaultLogger";
 import Runner from "./Runner";
+import { type Context, type LoggerContext, Metrics, Trigger } from "./shared";
 import type TriggerResponse from "./types/TriggerResponse";
 
 export default abstract class TriggerBase extends Trigger {

@@ -1,5 +1,5 @@
-import type { Context, NodeBase } from "@nanoservice-ts/shared";
 import RunnerSteps from "./RunnerSteps";
+import type { Context, NodeBase } from "./shared";
 
 /**
  * Runner class that extends RunnerSteps to execute a series of NanoService steps.

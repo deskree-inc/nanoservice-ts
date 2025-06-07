@@ -2,7 +2,7 @@
 
 ## Overview
 
-This architecture defines the design of a multi-agent system to generate and manage nanoservice Nodes and Workflows through a terminal-based chat interface using LangChain.js. It supports multiple LLMs via **MCP Clients** (Model Context Protocol) and is designed for scalability, separation of concerns, and developer extensibility.
+This architecture defines the design of a multi-agent system to generate and manage blok Nodes and Workflows through a terminal-based chat interface using LangChain.js. It supports multiple LLMs via **MCP Clients** (Model Context Protocol) and is designed for scalability, separation of concerns, and developer extensibility.
 
 ---
 
@@ -24,7 +24,7 @@ To build an intelligent CLI assistant with:
 ### 1. CLI Entry Point
 
 ```bash
-npx nanoctl@latest chat
+npx blokctl@latest chat
 ```
 
 * Launches the terminal chat experience.
@@ -97,7 +97,7 @@ Agents:
 1. User runs:
 
    ```bash
-   npx nanoctl@latest chat
+   npx blokctl@latest chat
    ```
 2. Types:
 
@@ -136,12 +136,12 @@ Agents:
 
 ## 📝 Summary
 
-This architecture provides the foundation for an extensible, intelligent CLI that leverages LangChain.js and MCP Client integration to support multi-agent AI development for nanoservice applications.
+This architecture provides the foundation for an extensible, intelligent CLI that leverages LangChain.js and MCP Client integration to support multi-agent AI development for blok applications.
 
 You launch once with:
 
 ```bash
-npx nanoctl@latest chat
+npx blokctl@latest chat
 ```
 
 And let the agents do the rest.

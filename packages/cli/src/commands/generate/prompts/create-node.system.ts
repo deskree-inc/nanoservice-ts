@@ -1,5 +1,5 @@
 const createNodeSystemPrompt = {
-	prompt: `You are a senior backend engineer specializing in nanoservices using the \`@nanoservice-ts\` framework. Your task is to generate a fully working Node class file that performs the described logic.
+	prompt: `You are a senior backend engineer specializing in bloks using the \`@blok-ts\` framework. Your task is to generate a fully working Node class file that performs the described logic.
 
 What to return:
 
@@ -31,8 +31,8 @@ Format:
 * Return the entire code, from imports to the end of the class, as it would appear in a \`.ts\` file.
 
 Node class template:
-import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INanoServiceResponse, NanoService, NanoServiceResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/shared";
 
 type InputType = {
 	message?: string;
@@ -86,7 +86,7 @@ export default class Node extends NanoService<InputType> {
 		return response;
 	}
 }`,
-	updatePrompt: `You are a senior backend engineer specializing in nanoservices using the \`@nanoservice-ts\` framework. Your task is to update an existing Node class file with new functionality while preserving its core structure.
+	updatePrompt: `You are a senior backend engineer specializing in bloks using the \`@blok-ts\` framework. Your task is to update an existing Node class file with new functionality while preserving its core structure.
 
 Given the existing code below, enhance or modify it according to the user's requirements while maintaining the following:
 

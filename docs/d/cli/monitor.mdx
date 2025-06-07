@@ -2,7 +2,7 @@
 title: Monitor
 ---
 
-The `nanoctl monitor` command provides real-time visibility into your Blok applications through a metrics dashboard. It offers both terminal-based and web-based interfaces, allowing you to monitor application performance, request counts, error rates, and resource usage.
+The `blokctl monitor` command provides real-time visibility into your Blok applications through a metrics dashboard. It offers both terminal-based and web-based interfaces, allowing you to monitor application performance, request counts, error rates, and resource usage.
 
 This powerful observability tool connects to Prometheus metrics, making it easy to track the health and performance of your bloks whether they're running locally or deployed to the cloud.
 
@@ -10,7 +10,7 @@ This powerful observability tool connects to Prometheus metrics, making it easy 
 
 ### Syntax
 ```bash
-npx nanoctl@latest monitor [options]
+npx blokctl@latest monitor [options]
 ```
 
 Displays real-time metrics for your Blok application.
@@ -27,22 +27,22 @@ Displays real-time metrics for your Blok application.
 
 #### Monitor with Terminal UI (Local Development)
 ```bash
-npx nanoctl@latest monitor
+npx blokctl@latest monitor
 ```
 
 #### Monitor with Web Dashboard (Local Development)
 ```bash
-npx nanoctl@latest monitor --web
+npx blokctl@latest monitor --web
 ```
 
 #### Connect to Public Prometheus Instance
 ```bash
-npx nanoctl@latest monitor --host <PROMETHEUS_URL>
+npx blokctl@latest monitor --host <PROMETHEUS_URL>
 ```
 
 #### Connect to Private Prometheus Instance with Authentication
 ```bash
-npx nanoctl@latest monitor --web --host <PROMETHEUS_URL> --token <AUTH_TOKEN>
+npx blokctl@latest monitor --web --host <PROMETHEUS_URL> --token <AUTH_TOKEN>
 ```
 
 ## Setting Up Local Monitoring Environment
@@ -51,7 +51,7 @@ To use the monitor command with a local project:
 
 1. Create a new project if you don't have one:
    ```bash
-   npx nanoctl@latest create project
+   npx blokctl@latest create project
    ```
 
 2. Start the local observability stack:
@@ -70,7 +70,7 @@ To use the monitor command with a local project:
 
 4. Launch the monitor:
    ```bash
-   npx nanoctl@latest monitor
+   npx blokctl@latest monitor
    ```
 
 ## Monitoring Cloud Deployments
@@ -83,7 +83,7 @@ After deploying your nanoservice to Deskree Cloud:
 
 3. Run the monitor with the cloud Prometheus URL:
    ```bash
-   npx nanoctl@latest monitor --web --host <PROMETHEUS_URL> --token <AUTH_TOKEN>
+   npx blokctl@latest monitor --web --host <PROMETHEUS_URL> --token <AUTH_TOKEN>
    ```
 
 ## Key Metrics Displayed

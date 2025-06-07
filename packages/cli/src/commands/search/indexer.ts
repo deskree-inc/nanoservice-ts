@@ -15,7 +15,7 @@ interface JsonContent {
 }
 
 export class Indexer {
-	private readonly INDEX_PATH = `${os.homedir()}/.nanoctl/search_indexes.json`;
+	private readonly INDEX_PATH = `${os.homedir()}/.blokctl/search_indexes.json`;
 	private readonly ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 	private extractKeywords(text: string): string[] {
@@ -266,14 +266,14 @@ export class Indexer {
 
 	private async buildIndex() {
 		const HOME_DIR = os.homedir();
-		const NANOCTL_DIR = path.join(HOME_DIR, ".nanoctl");
-		const GITHUB_REPO_LOCAL = path.join(NANOCTL_DIR, "nanoservice-ts");
+		const BLOKCTL_DIR = path.join(HOME_DIR, ".blokctl");
+		const GITHUB_REPO_LOCAL = path.join(BLOKCTL_DIR, "blok");
 		const homeDocsPath = path.join(GITHUB_REPO_LOCAL, "docs");
 		const userNodesPath = path.resolve(process.cwd(), "src/nodes");
 		const notesPath = path.resolve(process.cwd(), "notes");
 		const jsonPath = path.resolve(process.cwd(), "workflows/json");
 
-		await fs.mkdir(NANOCTL_DIR, { recursive: true });
+		await fs.mkdir(BLOKCTL_DIR, { recursive: true });
 
 		const docsMap = await this.indexDirectory(homeDocsPath, "docs");
 		const userMap = await this.indexDirectory(userNodesPath, "user-nodes");

@@ -9,7 +9,7 @@ trigger:
     accept: application/json
 steps:
 - name: get-countries-api
-  node: "@nanoservice-ts/api-call"
+  node: "@blok-ts/api-call"
   type: module
 nodes:
   get-countries-api:

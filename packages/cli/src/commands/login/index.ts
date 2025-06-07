@@ -5,7 +5,7 @@ import { tokenManager } from "../../services/local-token-manager.js";
 
 export async function login(opts: OptionValues) {
 	let token = tokenManager.getToken();
-	const NANOSERVICES_TOKEN = process.env.NANOSERVICES_TOKEN as string;
+	const BLOK_TOKEN = process.env.BLOK_TOKEN as string;
 
 	// const resolveTokenType = async (): Promise<string> => {
 	// 	const tokenType = await p.select({
@@ -25,7 +25,7 @@ export async function login(opts: OptionValues) {
 	// };
 
 	const resolveToken = async (): Promise<string> => {
-		let token = process.env.NANOSERVICES_TOKEN;
+		let token = process.env.BLOK_TOKEN;
 		if (token) return token;
 		token = (await p.password({
 			message:
@@ -41,22 +41,22 @@ export async function login(opts: OptionValues) {
 	};
 
 	try {
-		if (!token && !NANOSERVICES_TOKEN && !opts.token) {
+		if (!token && !BLOK_TOKEN && !opts.token) {
 			// const tokenType = await resolveTokenType();
 			// if (tokenType === "token")
 			token = await resolveToken();
 		} else if (opts.token) {
 			token = opts.token;
-		} else if (NANOSERVICES_TOKEN) {
-			token = NANOSERVICES_TOKEN;
+		} else if (BLOK_TOKEN) {
+			token = BLOK_TOKEN;
 		}
 
 		p.log.success("Login successful.");
-		if (!token) throw new Error("NANOSERVICES_TOKEN is required.");
+		if (!token) throw new Error("BLOK_TOKEN is required.");
 
 		const isStored = tokenManager.storeToken(token);
 		if (!isStored) throw new Error("Failed to store the token.");
-		p.log.info("You can now use the CLI commands. For help, run: nanoctl --help");
+		p.log.info("You can now use the CLI commands. For help, run: blokctl --help");
 	} catch (error) {
 		p.log.error("Login failed. Please try again.");
 		p.log.error((error as Error).message);
@@ -67,7 +67,7 @@ export async function login(opts: OptionValues) {
 // Login command
 program
 	.command("login")
-	.description("Login to Nanoservices")
+	.description("Login to Bloks")
 	.option("-t, --token <value>", "Login with a token")
 	.action(async (options: OptionValues) => {
 		await trackCommandExecution({

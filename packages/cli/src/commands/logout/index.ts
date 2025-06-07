@@ -6,13 +6,13 @@ import { tokenManager } from "../../services/local-token-manager.js";
 export async function logout(opts: OptionValues) {
 	tokenManager.clearToken();
 	p.log.success("Logged out successfully.");
-	p.log.info("You can log in again using: nanoctl login");
+	p.log.info("You can log in again using: blokctl login");
 }
 
 // Logout command
 program
 	.command("logout")
-	.description("Logout from Nanoservices")
+	.description("Logout from Blok")
 	.action(async (options: OptionValues) => {
 		await trackCommandExecution({
 			command: "logout",

@@ -1,11 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai";
-import {
-	type INanoServiceResponse,
-	type JsonLikeObject,
-	NanoService,
-	NanoServiceResponse,
-} from "@nanoservice-ts/runner";
-import { type Context, GlobalError } from "@nanoservice-ts/shared";
+import { type INodeBlokResponse, type JsonLikeObject, NodeBlok, NodeBlokResponse } from "@blok-ts/runner";
+import { type Context, GlobalError } from "@blok-ts/runner";
 import { generateObject } from "ai";
 import { z } from "zod";
 
@@ -28,7 +23,7 @@ type Entry = {
 	items: JsonLikeObject[];
 };
 
-export default class MultipleQueryGeneratorNode extends NanoService<InputType> {
+export default class MultipleQueryGeneratorNode extends NodeBlok<InputType> {
 	constructor() {
 		super();
 		this.inputSchema = {
@@ -76,8 +71,8 @@ export default class MultipleQueryGeneratorNode extends NanoService<InputType> {
 		return result;
 	}
 
-	async handle(ctx: Context, inputs: InputType): Promise<INanoServiceResponse> {
-		const response: NanoServiceResponse = new NanoServiceResponse();
+	async handle(ctx: Context, inputs: InputType): Promise<INodeBlokResponse> {
+		const response: NodeBlokResponse = new NodeBlokResponse();
 		const { columns, prompt, relationships } = inputs;
 
 		try {
