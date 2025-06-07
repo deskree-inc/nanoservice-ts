@@ -4,3 +4,4 @@ packages:
 - "triggers/*"
 - "templates/**/**"
 - "packages/*"
+- "packages/cli/projects/*"

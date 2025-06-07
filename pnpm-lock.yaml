@@ -299,6 +299,106 @@ importers:
         specifier: ^3.1.4
         version: 3.1.4(@types/node@22.15.21)(yaml@2.7.0)
 
+  packages/cli/projects/demo:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^1.2.0
+        version: 1.3.22(zod@3.24.2)
+      '@blok-ts/api-call':
+        specifier: workspace:*
+        version: link:../../../../nodes/web/api-call@1.0.0
+      '@blok-ts/if-else':
+        specifier: workspace:*
+        version: link:../../../../nodes/control-flow/if-else@1.0.0
+      '@blok-ts/runner':
+        specifier: workspace:*
+        version: link:../../../../core/runner
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.12.1
+        version: 1.12.1
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@opentelemetry/exporter-prometheus':
+        specifier: ^0.57.2
+        version: 0.57.2(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources':
+        specifier: ^1.30.1
+        version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-metrics':
+        specifier: ^1.30.1
+        version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base':
+        specifier: ^1.30.1
+        version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-web':
+        specifier: ^1.30.1
+        version: 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions':
+        specifier: ^1.30.0
+        version: 1.30.0
+      ai:
+        specifier: ^4.1.50
+        version: 4.3.16(react@18.3.1)(zod@3.24.2)
+      body-parser:
+        specifier: 1.20.3
+        version: 1.20.3
+      cors:
+        specifier: 2.8.5
+        version: 2.8.5
+      ejs:
+        specifier: ^3.1.10
+        version: 3.1.10
+      express:
+        specifier: 4.21.2
+        version: 4.21.2
+      mongodb:
+        specifier: ^6.14.2
+        version: 6.17.0
+      pg:
+        specifier: ^8.13.3
+        version: 8.16.0
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
+    devDependencies:
+      '@types/body-parser':
+        specifier: ^1.19.5
+        version: 1.19.5
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.17
+      '@types/ejs':
+        specifier: ^3.1.5
+        version: 3.1.5
+      '@types/express':
+        specifier: ^5.0.0
+        version: 5.0.1
+      '@types/node':
+        specifier: ^22.13.4
+        version: 22.15.21
+      '@types/pg':
+        specifier: ^8.11.11
+        version: 8.15.4
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
+      nodemon:
+        specifier: ^3.1.9
+        version: 3.1.9
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@22.15.21)(typescript@5.8.3)
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.3
+
   templates/node:
     dependencies:
       '@blok-ts/runner':
