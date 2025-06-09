@@ -37,10 +37,13 @@ ENV WORKFLOWS_PATH=/app/workflows
 ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
 ENV APP_NAME=nanoservice-http
+ENV ENABLE_METRICS=true
+ENV OTEL_METRICS_EXPORTER=prometheus
 
-# Expose ports (Node.js on 3000, Python on 8000)
-EXPOSE 4000/tcp
+
+EXPOSE 4000/tcp 
 EXPOSE 9091/tcp
+EXPOSE 9092/tcp
 
 # Start Supervisor
-ENTRYPOINT ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-e", "debug"]
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

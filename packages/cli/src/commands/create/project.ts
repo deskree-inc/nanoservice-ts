@@ -177,6 +177,7 @@ export async function createProject(opts: OptionValues, version: string, current
 		if (githubLocalExists) {
 			fsExtra.removeSync(GITHUB_REPO_LOCAL);
 		}
+
 		await git.clone(GITHUB_REPO_REMOTE, GITHUB_REPO_LOCAL);
 
 		if (!isDefault) s.message("Copying project files...");

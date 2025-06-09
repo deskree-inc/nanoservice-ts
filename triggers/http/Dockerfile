@@ -40,10 +40,13 @@ ENV WORKFLOWS_PATH=/usr/src/app/workflows
 ENV CONSOLE_LOG_ACTIVE=true
 ENV NODE_ENV=production
 ENV APP_NAME=nanoservice-http
+ENV ENABLE_METRICS=true
 
 # run the app
 USER node
 EXPOSE 4000/tcp
 EXPOSE 9091/tcp
+EXPOSE 9092/tcp
 
-ENTRYPOINT [ "node", "-r", "./dist/runner/metrics/opentelemetry_metrics.js", "dist/index.js" ]
+# Start Supervisor
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

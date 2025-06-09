@@ -4,7 +4,11 @@
 	"ignore": ["node_modules", ".git"],
 	"exec": "python3 server.py",
 	"env": {
-		"NODE_ENV": "local"
+		"NODE_ENV": "local",
+		"OTEL_TRACES_EXPORTER": "none",
+		"OTEL_METRICS_EXPORTER": "prometheus",
+		"OTEL_LOGS_EXPORTER": "none",
+		"ENABLE_METRICS": "true"
 	},
 	"ignoreRoot": [".git"]
 }
